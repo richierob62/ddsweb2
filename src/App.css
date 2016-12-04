@@ -1,0 +1,10 @@
+h1 {
+  margin: 0;
+}
+
+.Header {
+    background-color: #767676;
+    color: white;
+    text-align: center;
+    padding: 10px 5px;
+}
