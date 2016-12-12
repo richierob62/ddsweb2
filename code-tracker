@@ -1,32 +1,28 @@
 completed
 ===============================
+Menu
 
 
+left off working o...
+=================================
+CustomerList
 
 
-
-
-
-
-
-
-
-
-
-
-wip
+started..
 =================================
 App
 Header
+ContextMenu
+Details
+Page
+PageList
+Login
+Customers
 
 
 
-
-
-
-
-
-
-
-to do
+to do..
 =======================================
+load data on PAGE_CHANGE
+load data on CHANGE_CUSTOMER_SORT
+load data on CHANGE_CUSTOMER_FILTER

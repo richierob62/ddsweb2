@@ -1,0 +1,8 @@
+exports[`test renders without crashing 1`] = `
+<div
+  className="ContextMenu">
+  <h1>
+    This is the ContextMenu
+  </h1>
+</div>
+`;

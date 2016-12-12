@@ -1,0 +1,144 @@
+exports[`test renders without crashing 1`] = `
+<div
+  className="Menu">
+  <h2>
+    Main
+  </h2>
+  <ul
+    className="menu-group">
+    <li
+      className="sub-menu">
+      Main Activity
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/customers">
+        Customers
+      </Link>
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/orders">
+        Orders
+      </Link>
+    </li>
+    <li
+      className="sub-menu">
+      Supporting Files
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/headings">
+        Headings
+      </Link>
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/findinglines">
+        Finding Lines
+      </Link>
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/categories">
+        Categories
+      </Link>
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/localforeign">
+        Local/Foreign
+      </Link>
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/udacs">
+        Udacs
+      </Link>
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/primarybooks">
+        Primary Books
+      </Link>
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/sourcebooks">
+        Source Books
+      </Link>
+    </li>
+    <li
+      className="sub-menu">
+      Admin
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/users">
+        Users/Reps
+      </Link>
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/payplans">
+        Pay Plans
+      </Link>
+    </li>
+  </ul>
+</div>
+`;

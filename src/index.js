@@ -1,9 +1,23 @@
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap-theme.css';
+import './fa/css/font-awesome.min.css';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import { browserHistory } from 'react-router';
+import { getRoutes } from './routes';
+import configureStore from './configureStore';
+import Root from './Root';
 import './index.css';
 
+const store = configureStore();
+// store.runSaga(rootSaga);
+
 ReactDOM.render(
-  <App />,
+  <Root
+    store={store}
+    history={browserHistory}
+    routes={ getRoutes(store) } />,
   document.getElementById('root')
 );
+

@@ -1,10 +1,10 @@
 import React from 'react';
-import Header from './Header';
+import Menu from './Menu';
 import { shallow } from 'enzyme';
 import { shallowToJson } from 'enzyme-to-json';
 
 it('renders without crashing', () => {
-  const el = shallow(<Header />);
+  const el = shallow(<Menu />);
   expect(shallowToJson(el)).toMatchSnapshot();
 });
 

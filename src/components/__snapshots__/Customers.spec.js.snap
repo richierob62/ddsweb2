@@ -1,0 +1,18 @@
+exports[`test renders without crashing 1`] = `
+<div
+  className="Customers">
+  <h1
+    className="page-title">
+    Customers
+  </h1>
+  <div
+    className="Page-vertical">
+    <Connect(customerTable) />
+    <div
+      className="Page-lower">
+      <Details />
+      <ContextMenu />
+    </div>
+  </div>
+</div>
+`;

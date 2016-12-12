@@ -1,0 +1,8 @@
+exports[`test renders without crashing 1`] = `
+<div
+  className="PageList">
+  <h1>
+    This is the PageList
+  </h1>
+</div>
+`;

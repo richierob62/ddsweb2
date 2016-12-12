@@ -1,5 +1,11 @@
 h1 {
-  margin: 0;
+    margin: 0;
+    color: #1a1a1a;
+}
+
+.App {
+    display: flex;
+    flex-direction: column;
 }
 
 .Header {
@@ -7,4 +13,282 @@ h1 {
     color: white;
     text-align: center;
     padding: 10px 5px;
+}
+
+.App-main {
+    display: flex;
+}
+
+.Menu {
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 10px;
+    align-self: flex-start;
+}
+
+.Menu h2 {
+    margin-bottom: 5px;
+}
+
+.menu-group {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sub-menu {
+    font-weight: bold;
+    padding: 14px 0 5px 0;
+}
+
+.link-item {
+    text-decoration: none;
+    color: #525252;
+    font-size: 1.1rem;
+    line-height: 1.2rem;
+    margin-left: .5rem;
+    transition: margin-left 300ms;
+}
+
+.link-item:hover,
+.active-link {
+    color: chocolate;
+    text-decoration: underline;
+    margin-left: 1rem;
+}
+
+.Page {
+    flex: 1;
+    background-color: white;
+    border-left: 1px solid cadetblue;
+    padding: 1rem;
+}
+
+.page-title {
+    margin: 0;
+    color: #1a1a1a;
+    font-weight: normal;
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.47);
+    margin-bottom: 10px;
+}
+
+.Page-vertical {
+    display: flex;
+    flex-direction: column;
+}
+
+.Page-lower {
+    display: flex;
+}
+
+.Details {
+    flex: 1;
+}
+
+.ContextMenu {
+    width: 20%;
+}
+
+.table {
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.table-striped>tbody>tr.selected {
+    background-color: palegoldenrod;
+}
+
+table,
+table>thead,
+table>tbody,
+table>thead>tr,
+table>thead>tr>th,
+table>tbody>td 
+{
+    display: block;
+}
+
+table>thead>tr:after,
+table>tbody>tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+table>tbody {
+    overflow-y: scroll;
+    height: 200px;
+}
+
+table>tbody>tr {
+    display: flex;
+}
+
+table>thead {
+    overflow-y: scroll;
+}
+
+table>thead::-webkit-scrollbar {
+    background-color: inherit;
+}
+
+table>thead>tr>th:after,
+table>tbody>tr>td:after {
+    content: ' ';
+    display: table-cell;
+    visibility: hidden;
+    clear: both;
+}
+
+table>thead tr th,
+table>tbody tr td {
+    float: left;
+    word-wrap: break-word;
+}
+
+#table-filter-customer-col-1 {
+    display: inline-block;
+    width: 19.5%
+}
+
+#table-filter-customer-col-2 {
+    display: inline-block;
+    width: 22.4%
+}
+
+#table-filter-customer-col-3 {
+    display: inline-block;
+    width: 11.7%
+}
+
+#table-filter-customer-col-4 {
+    display: inline-block;
+    width: 5.9%
+}
+
+#table-filter-customer-col-5 {
+    display: inline-block;
+    width: 5.9%
+}
+
+#table-filter-customer-col-6 {
+    display: inline-block;
+    width: 5.8%
+}
+
+#table-filter-customer-col-7 {
+    display: inline-block;
+    width: 7.9%
+}
+
+#table-filter-customer-col-8 {
+    display: inline-block;
+    width: 8.7%
+}
+
+#table-filter-customer-col-9 {
+    display: inline-block;
+    width: 11.5%
+}
+
+/*=================================================*/
+
+#table-head-customer-col-1 {
+    display: inline-block;
+    width: 19.5%
+}
+
+#table-head-customer-col-2 {
+    display: inline-block;
+    width: 22.4%
+}
+
+#table-head-customer-col-3 {
+    display: inline-block;
+    width: 11.7%
+}
+
+#table-head-customer-col-4 {
+    display: inline-block;
+    width: 5.9%
+}
+
+#table-head-customer-col-5 {
+    display: inline-block;
+    width: 5.9%
+}
+
+#table-head-customer-col-6 {
+    display: inline-block;
+    width: 5.8%
+}
+
+#table-head-customer-col-7 {
+    display: inline-block;
+    width: 7.9%
+}
+
+#table-head-customer-col-8 {
+    display: inline-block;
+    width: 8.7%
+}
+
+#table-head-customer-col-9 {
+    display: inline-block;
+    width: 11.5%
+}
+
+/*=================================================*/
+
+#table-body-customer-col-1 {
+    display: inline-block;
+    width: 20%
+}
+
+#table-body-customer-col-2 {
+    display: inline-block;
+    width: 23%
+}
+
+#table-body-customer-col-3 {
+    display: inline-block;
+    width: 12%
+}
+
+#table-body-customer-col-4 {
+    display: inline-block;
+    width: 6%
+}
+
+#table-body-customer-col-5 {
+    display: inline-block;
+    width: 6%
+}
+
+#table-body-customer-col-6 {
+    display: inline-block;
+    width: 6%
+}
+
+#table-body-customer-col-7 {
+    display: inline-block;
+    width: 8%
+}
+
+#table-body-customer-col-8 {
+    display: inline-block;
+    width: 9%
+}
+
+#table-body-customer-col-9 {
+    display: inline-block;
+    width: 12%
+}
+
+th > input {
+    width: 100%
 }
