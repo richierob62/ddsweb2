@@ -7,7 +7,7 @@ exports[`test renders without crashing 1`] = `
   </h1>
   <div
     className="Page-vertical">
-    <Connect(customerTable) />
+    <Connect(cl) />
     <div
       className="Page-lower">
       <Details />

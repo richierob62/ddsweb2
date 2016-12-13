@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as sel from '../selectors';
 import * as act from '../actions';
 
-const customerTable = (props) => {
+const cl = (props) => {
 
     const isSelected = (id) => props.selected_id === id ? 'selected' : '';
 
@@ -17,7 +17,8 @@ const customerTable = (props) => {
     const renderRows = () => {
         return props.list.map(row => {
             return (
-                <tr key={row.get('id')}
+                <tr id={'data-row-' + row.get('id') }
+                    key={row.get('id')}
                     className={isSelected(row.get('id'))}
                     onClick={props.setSelected.bind(null, row.get('id'))}>
                     <td id={'table-body-customer-col-1'}>{row.get('name')}</td>
@@ -42,7 +43,7 @@ const customerTable = (props) => {
         <Table striped bordered condensed hover className={'table-fixedheader'}>
             <thead>
                 <tr>
-                    <th id={'table-filter-customer-col-1'} ><input type='text' value={setFilterValue('name')} onChange={filterChange.bind(null, 'name')} /></th>
+                    <th id={'table-filter-customer-col-1'} ><input id={'rass'} type='text' value={setFilterValue('name')} onChange={filterChange.bind(null, 'name')} /></th>
                     <th id={'table-filter-customer-col-2'} ><input type='text' value={setFilterValue('address')} onChange={filterChange.bind(null, 'address')} /></th>
                     <th id={'table-filter-customer-col-3'} ><input type='text' value={setFilterValue('city')} onChange={filterChange.bind(null, 'city')} /></th>
                     <th id={'table-filter-customer-col-4'} ><input type='text' value={setFilterValue('state')} onChange={filterChange.bind(null, 'state')} /></th>
@@ -89,4 +90,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(customerTable);
+export default connect(mapStateToProps, mapDispatchToProps)(cl);
