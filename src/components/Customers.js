@@ -1,21 +1,12 @@
-import React from 'react';
-import CustomerList from './CustomerList';
-import Details from './Details';
-import ContextMenu from './ContextMenu';
+import { connect } from 'react-redux';
+import * as act from '../actions';
+import { pageBuilder } from '../utils/page_builder';
 
-const Customers = () => {
-    return (
-        <div className="Customers">
-            <h1 className="page-title">Customers</h1>
-            <div className="Page-vertical">
-                <CustomerList />
-                <div className="Page-lower">
-                    <Details />
-                    <ContextMenu />
-                </div>
-            </div>            
-        </div>
-    );
-}
+const state_part = 'customers';
 
-export default Customers;
+const comp = (props) => pageBuilder(props)
+
+const mapStateToProps = (state) => ({ data: state[state_part] });
+const mapDispatchToProps = (dispatch) => ({ dispatch, act });
+
+export default connect(mapStateToProps, mapDispatchToProps)(comp);

@@ -1,5 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
 import './fa/css/font-awesome.min.css';
 
 import React from 'react';
@@ -17,7 +15,6 @@ ReactDOM.render(
   <Root
     store={store}
     history={browserHistory}
-    routes={ getRoutes(store) } />,
+    routes={getRoutes(store)} />,
   document.getElementById('root')
 );
-

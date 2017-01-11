@@ -13,3 +13,7 @@ export const changeCustomerSort = (payload) => {
 export const changeCustomerFilter = (column, value) => {
     return { type: 'CHANGE_CUSTOMER_FILTER', column, value }
 }
+
+export const updateCustomer = (payload) => {
+    return { type: 'UPDATE_CUSTOMER', payload }
+}

@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 const Menu = () => {
     return (
         <div className="Menu">
-            <h2>Main</h2>
+            <h2>M E N U</h2>
             <ul className="menu-group">
                 <li className="sub-menu" >Main Activity</li>
                 <li className="menu-item">

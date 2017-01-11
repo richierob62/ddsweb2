@@ -1,6 +1,4 @@
-import Immutable from 'immutable';
-
-const initial_state = Immutable.fromJS({
+const initial_state = {
     list: [
         { id: 1, name: 'L\'Oréal', address: '10 Leeton Ridge Ave. ', city: 'Wisconsin Rapids', state: 'WI', zip: '54494', area: '494', phone: '487-8119', account_num: '4041234', sales_rep: 3 },
         { id: 2, name: 'Adobe Systems', address: '121 NW. Indian Spring Street ', city: 'Lebanon', state: 'PA', zip: '17042', area: '664', phone: '810-1662', account_num: '4130144', sales_rep: 7 },
@@ -12,7 +10,7 @@ const initial_state = Immutable.fromJS({
     sort_field: 'address',
     sort_direction: 'DESC',
     current_filters: {}
-});
+};
 
 const customers = (state = initial_state, action) => {
     switch (action.type) {

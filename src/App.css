@@ -17,6 +17,7 @@ h1 {
 
 .App-main {
     display: flex;
+    width: 100%
 }
 
 .Menu {
@@ -30,6 +31,10 @@ h1 {
 
 .Menu h2 {
     margin-bottom: 5px;
+    font-size: 1.6rem;
+    color: rgba(0, 0, 0, 0.41);
+    margin-top: 2rem;
+    font-weight: lighter;
 }
 
 .menu-group {
@@ -39,14 +44,15 @@ h1 {
 }
 
 .sub-menu {
-    font-weight: bold;
+    font-weight: normal;
     padding: 14px 0 5px 0;
+    color: #767676;
 }
 
 .link-item {
     text-decoration: none;
     color: #525252;
-    font-size: 1.1rem;
+    font-size: .8rem;
     line-height: 1.2rem;
     margin-left: .5rem;
     transition: margin-left 300ms;
@@ -59,7 +65,7 @@ h1 {
     margin-left: 1rem;
 }
 
-.Page {
+.page {
     flex: 1;
     background-color: white;
     border-left: 1px solid cadetblue;
@@ -68,19 +74,19 @@ h1 {
 
 .page-title {
     margin: 0;
-    color: #1a1a1a;
-    font-weight: normal;
-    font-size: 1.75rem;
+    color: rgba(26, 26, 26, 0.45);
+    font-weight: lighter;
+    font-size: 1.5rem;
     border-bottom: 1px solid rgba(128, 128, 128, 0.47);
     margin-bottom: 10px;
 }
 
-.Page-vertical {
+.page-vertical {
     display: flex;
     flex-direction: column;
 }
 
-.Page-lower {
+.page-lower {
     display: flex;
 }
 
@@ -106,8 +112,7 @@ table>thead,
 table>tbody,
 table>thead>tr,
 table>thead>tr>th,
-table>tbody>td 
-{
+table>tbody>td {
     display: block;
 }
 
@@ -150,145 +155,9 @@ table>tbody tr td {
     word-wrap: break-word;
 }
 
-#table-filter-customer-col-1 {
-    display: inline-block;
-    width: 19.5%
+.form-control {
+    padding: .2rem .4rem;
+    font-size: .75rem;
+    font-weight: normal;    
 }
 
-#table-filter-customer-col-2 {
-    display: inline-block;
-    width: 22.4%
-}
-
-#table-filter-customer-col-3 {
-    display: inline-block;
-    width: 11.7%
-}
-
-#table-filter-customer-col-4 {
-    display: inline-block;
-    width: 5.9%
-}
-
-#table-filter-customer-col-5 {
-    display: inline-block;
-    width: 5.9%
-}
-
-#table-filter-customer-col-6 {
-    display: inline-block;
-    width: 5.8%
-}
-
-#table-filter-customer-col-7 {
-    display: inline-block;
-    width: 7.9%
-}
-
-#table-filter-customer-col-8 {
-    display: inline-block;
-    width: 8.7%
-}
-
-#table-filter-customer-col-9 {
-    display: inline-block;
-    width: 11.5%
-}
-
-/*=================================================*/
-
-#table-head-customer-col-1 {
-    display: inline-block;
-    width: 19.5%
-}
-
-#table-head-customer-col-2 {
-    display: inline-block;
-    width: 22.4%
-}
-
-#table-head-customer-col-3 {
-    display: inline-block;
-    width: 11.7%
-}
-
-#table-head-customer-col-4 {
-    display: inline-block;
-    width: 5.9%
-}
-
-#table-head-customer-col-5 {
-    display: inline-block;
-    width: 5.9%
-}
-
-#table-head-customer-col-6 {
-    display: inline-block;
-    width: 5.8%
-}
-
-#table-head-customer-col-7 {
-    display: inline-block;
-    width: 7.9%
-}
-
-#table-head-customer-col-8 {
-    display: inline-block;
-    width: 8.7%
-}
-
-#table-head-customer-col-9 {
-    display: inline-block;
-    width: 11.5%
-}
-
-/*=================================================*/
-
-#table-body-customer-col-1 {
-    display: inline-block;
-    width: 20%
-}
-
-#table-body-customer-col-2 {
-    display: inline-block;
-    width: 23%
-}
-
-#table-body-customer-col-3 {
-    display: inline-block;
-    width: 12%
-}
-
-#table-body-customer-col-4 {
-    display: inline-block;
-    width: 6%
-}
-
-#table-body-customer-col-5 {
-    display: inline-block;
-    width: 6%
-}
-
-#table-body-customer-col-6 {
-    display: inline-block;
-    width: 6%
-}
-
-#table-body-customer-col-7 {
-    display: inline-block;
-    width: 8%
-}
-
-#table-body-customer-col-8 {
-    display: inline-block;
-    width: 9%
-}
-
-#table-body-customer-col-9 {
-    display: inline-block;
-    width: 12%
-}
-
-th > input {
-    width: 100%
-}

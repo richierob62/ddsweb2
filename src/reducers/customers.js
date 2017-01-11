@@ -1,6 +1,6 @@
-import Immutable from 'immutable';
+import R from 'ramda';
 
-const initial_state = Immutable.fromJS({
+const initial_state = {
     list: [
         { id: 1, name: 'L\'Oréal', address: '10 Leeton Ridge Ave. ', city: 'Wisconsin Rapids', state: 'WI', zip: '54494', area: '494', phone: '487-8119', account_num: '4041234', sales_rep: 3 },
         { id: 2, name: 'Adobe Systems', address: '121 NW. Indian Spring Street ', city: 'Lebanon', state: 'PA', zip: '17042', area: '664', phone: '810-1662', account_num: '4130144', sales_rep: 7 },
@@ -53,29 +53,221 @@ const initial_state = Immutable.fromJS({
         { id: 49, name: 'Wal-Mart', address: '9519 Arnold St. ', city: 'Highland Park', state: 'IL', zip: '60035', area: '463', phone: '462-7023', account_num: '1500730', sales_rep: 3 },
         { id: 50, name: 'Yahoo!', address: '970 Pine St. ', city: 'Centreville', state: 'VA', zip: '20120', area: '139', phone: '865-2178', account_num: '9283560', sales_rep: 1 }
     ],
+    page_title: 'Customers',
+    action_word: 'Customer',
     selected_id: -1,
-    sort_field: 'name',
-    sort_direction: 'ASC',
-    current_filters: {}
-});
+    current_sort: {
+        field_name: 'name',
+        direction: 'ASC'
+    },
+    current_filters: {},
+    mode: 'display',
+    fields: [
+        { field_name: 'account_num', label: 'Acc #', input_type: 'text', ref_table: null },
+        { field_name: 'address', label: 'Address', input_type: 'text', ref_table: undefined },
+        { field_name: 'advanced_training', label: 'Advanced Training', input_type: 'text', ref_table: undefined },
+        { field_name: 'affiliated_clinics', label: 'Affiliated Clinics', input_type: 'text', ref_table: undefined },
+        { field_name: 'affiliated_networks', label: 'Affiliated Networks', input_type: 'text', ref_table: undefined },
+        { field_name: 'area', label: 'Area', input_type: 'text', ref_table: undefined },
+        { field_name: 'billing_address', label: 'Billing Address', input_type: 'text', ref_table: undefined },
+        { field_name: 'billing_area', label: 'Billing Area', input_type: 'text', ref_table: undefined },
+        { field_name: 'billing_city', label: 'Billing City', input_type: 'text', ref_table: undefined },
+        { field_name: 'billing_contact', label: 'Billing Contact', input_type: 'text', ref_table: undefined },
+        { field_name: 'billing_email', label: 'Billing Email', input_type: 'text', ref_table: undefined },
+        { field_name: 'billing_name', label: 'Billing Name', input_type: 'text', ref_table: undefined },
+        { field_name: 'billing_phone', label: 'Billing Phone', input_type: 'text', ref_table: undefined },
+        { field_name: 'billing_state', label: 'Billing State', input_type: 'text', ref_table: undefined },
+        { field_name: 'billing_zip', label: 'Billing Zip', input_type: 'text', ref_table: undefined },
+        { field_name: 'building', label: 'Building', input_type: 'text', ref_table: undefined },
+        { field_name: 'category', label: 'Category', input_type: 'select', ref_table: 'category' },
+        { field_name: 'certification', label: 'Certification', input_type: 'text', ref_table: undefined },
+        { field_name: 'city', label: 'City', input_type: 'text', ref_table: undefined },
+        { field_name: 'department', label: 'Department', input_type: 'text', ref_table: undefined },
+        { field_name: 'director', label: 'Director', input_type: 'text', ref_table: undefined },
+        { field_name: 'email', label: 'Email', input_type: 'text', ref_table: undefined },
+        { field_name: 'entered_public_practice', label: 'Entered Public Practice', input_type: 'text', ref_table: undefined },
+        { field_name: 'fax_area', label: 'Fax Area', input_type: 'text', ref_table: undefined },
+        { field_name: 'fax_phone', label: 'Fax Phone', input_type: 'text', ref_table: undefined },
+        { field_name: 'fellowship', label: 'Fellowship', input_type: 'text', ref_table: undefined },
+        { field_name: 'hospital_affiliations', label: 'Hospital Affiliations', input_type: 'text', ref_table: undefined },
+        { field_name: 'hours', label: 'Hours', input_type: 'text', ref_table: undefined },
+        { field_name: 'local_foreign', label: 'Local Foreign', input_type: 'select', ref_table: 'local_foreign' },
+        { field_name: 'medical_director', label: 'Medical Director', input_type: 'text', ref_table: undefined },
+        { field_name: 'medical_education', label: 'Medical Education', input_type: 'text', ref_table: undefined },
+        { field_name: 'name', label: 'Name', input_type: 'text', ref_table: undefined },
+        { field_name: 'other_1', label: 'Other 1', input_type: 'text', ref_table: undefined },
+        { field_name: 'other_2', label: 'Other 2', input_type: 'text', ref_table: undefined },
+        { field_name: 'outreach_locations', label: 'Outreach Locations', input_type: 'text', ref_table: undefined },
+        { field_name: 'pay_plan', label: 'Pay Plan', input_type: 'select', ref_table: 'pay_plan' },
+        { field_name: 'phone', label: 'Phone', input_type: 'text', ref_table: undefined },
+        { field_name: 'primary_book', label: 'Primary Book', input_type: 'select', ref_table: 'primary_book' },
+        { field_name: 'residency', label: 'Residency', input_type: 'text', ref_table: undefined },
+        { field_name: 'room_num', label: 'Room Number', input_type: 'text', ref_table: undefined },
+        { field_name: 'sales_rep', label: 'Sales Rep', input_type: 'select', ref_table: 'sales_rep' },
+        { field_name: 'special_interest', label: 'Special Interest', input_type: 'text', ref_table: undefined },
+        { field_name: 'state', label: 'St', input_type: 'text', ref_table: undefined },
+        { field_name: 'undergraduate_education', label: 'Undergraduate Education', input_type: 'text', ref_table: undefined },
+        { field_name: 'website', label: 'Website', input_type: 'text', ref_table: undefined },
+        { field_name: 'zip', label: 'Zip', input_type: 'text', ref_table: undefined }
+    ],
+    list_template: [
+        { field_name: 'name', width: '26%' },
+        { field_name: 'address', width: '24%' },
+        { field_name: 'city', width: '18%' },
+        { field_name: 'state', width: '6%' },
+        { field_name: 'account_num', width: '10%' },
+        { field_name: 'sales_rep', width: '15%' }
+    ],
+    details_template: {
+        tabs: [
+            {
+                name: 'Contact Info',
+                rows: [
+                    [
+                        { field_name: 'name', cols: 12 }
+                    ],
+                    [
+                        { field_name: 'address', cols: 6 },
+                        { field_name: 'city', cols: 3 },
+                        { field_name: 'state', cols: 2 },
+                        { field_name: 'zip', cols: 1 }
+                    ],
+                    [
+                        { field_name: 'email', cols: 6 },
+                        { field_name: 'website', cols: 6 }
+                    ],
+                    [
+                        { field_name: 'area', cols: 2 },
+                        { field_name: 'phone', cols: 4 },
+                        { field_name: 'fax_area', cols: 2 },
+                        { field_name: 'fax_phone', cols: 4 }
+                    ]
+                ]
+            },
+            {
+                name: 'Billing Info',
+                rows: [
+                    [
+                        { field_name: 'billing_name', cols: 12 }
+                    ],
+                    [
+                        { field_name: 'billing_address', cols: 6 },
+                        { field_name: 'billing_city', cols: 3 },
+                        { field_name: 'billing_state', cols: 2 },
+                        { field_name: 'billing_zip', cols: 1 }
+                    ],
+                    [
+                        { field_name: 'billing_contact', cols: 12 }
+                    ],
+                    [
+                        { field_name: 'billing_email', cols: 12 }
+                    ],
+                    [
+                        { field_name: 'billing_area', cols: 2 },
+                        { field_name: 'billing_phone', cols: 4 }
+                    ]
+                ]
+            },
+            {
+                name: 'Classification',
+                rows: [
+                    [
+                        { field_name: 'account_num', cols: 6 },
+                        { field_name: 'sales_rep', cols: 6 }
+                    ],
+                    [
+                        { field_name: 'local_foreign', cols: 6 },
+                        { field_name: 'pay_plan', cols: 6 }
+                    ],
+                    [
+                        { field_name: 'primary_book', cols: 6 },
+                        { field_name: 'category', cols: 6 }
+                    ]
+                ]
+            },
+            {
+                name: 'Credentials',
+                rows: [
+                    [
+                        { field_name: 'building', cols: 6 },
+                        { field_name: 'department', cols: 6 }
+                    ],
+                    [
+                        { field_name: 'room_num', cols: 6 },
+                        { field_name: 'hours', cols: 6 }
+                    ],
+                    [
+                        { field_name: 'hospital_affiliations', cols: 6 },
+                        { field_name: 'special_interest', cols: 6 }
+                    ],
+                    [
+                        { field_name: 'medical_education', cols: 6 },
+                        { field_name: 'undergraduate_education', cols: 6 }
+                    ],
+                    [
+                        { field_name: 'certification', cols: 6 },
+                        { field_name: 'fellowship', cols: 6 }
+                    ],
+                    [
+                        { field_name: 'residency', cols: 6 },
+                        { field_name: 'advanced_training', cols: 6 }
+                    ],
+                    [
+                        { field_name: 'entered_public_practice', cols: 6 },
+                        { field_name: 'outreach_locations', cols: 6 }
+                    ],
+                    [
+                        { field_name: 'affiliated_clinics', cols: 6 },
+                        { field_name: 'medical_director', cols: 6 }
+                    ],
+                    [
+                        { field_name: 'director', cols: 6 },
+                        { field_name: 'affiliated_networks', cols: 6 }
+                    ],
+                    [
+                        { field_name: 'other_1', cols: 6 },
+                        { field_name: 'other_2', cols: 6 }
+                    ]
+                ]
+            }
+        ]
+    }
+};
 
 const customers = (state = initial_state, action) => {
     switch (action.type) {
         case 'SELECT_CUSTOMER': {
-            return state.set('selected_id', action.payload);
+            return R.evolve(
+                {
+                    selected_id: () => action.payload
+                },
+                state);
         }
         case 'CHANGE_CUSTOMER_SORT': {
-            const new_direction = action.payload === state.get('sort_field') ?
-                (
-                    state.get('sort_direction') === 'ASC' ?
-                        'DESC' :
-                        'ASC'
-                ) :
-                'ASC'
-            return state.set('sort_field', action.payload).set('sort_direction', new_direction);
+            const new_direction = action.payload === state.current_sort.field_name
+                ? (state.current_sort.direction === 'ASC'
+                    ? 'DESC'
+                    : 'ASC')
+                : 'ASC';
+
+            return R.evolve(
+                {
+                    current_sort: {
+                        field_name: () => action.payload,
+                        direction: () => new_direction
+                    }
+                },
+                state);
         }
         case 'CHANGE_CUSTOMER_FILTER': {
-            return state.setIn(['current_filters', action.column], action.value);
+            return R.evolve(
+                {
+                    current_filters: (curr) => {
+                        curr[action.column] = action.value
+                        return curr;
+                    }
+                },
+                state);
         }
         default: return state;
     }

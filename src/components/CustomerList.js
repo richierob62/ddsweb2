@@ -1,5 +1,4 @@
 import React from 'react';
-import Table from 'react-bootstrap/lib/Table';
 import { connect } from 'react-redux';
 import * as sel from '../selectors';
 import * as act from '../actions';
@@ -40,7 +39,7 @@ const cl = (props) => {
     const setFilterValue = (column) => props.current_filters.get(column) ? props.current_filters.get(column) : '';
 
     return (
-        <Table striped bordered condensed hover className={'table-fixedheader'}>
+        <table striped bordered condensed hover className={'table-fixedheader'}>
             <thead>
                 <tr>
                     <th id={'table-filter-customer-col-1'} ><input id={'rass'} type='text' value={setFilterValue('name')} onChange={filterChange.bind(null, 'name')} /></th>
@@ -68,7 +67,7 @@ const cl = (props) => {
             <tbody>
                 {renderRows()}
             </tbody>
-        </Table>
+        </table>
     );
 };
 
