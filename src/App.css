@@ -90,11 +90,11 @@ h1 {
     display: flex;
 }
 
-.Details {
+.details {
     flex: 1;
 }
 
-.ContextMenu {
+.context-menu {
     width: 20%;
 }
 

@@ -6,22 +6,21 @@ import { buildPage } from '../utils/page_builder'
 
 const state_part = 'customers'
 
-const comp = (props) => buildPage(props)
+const comp = props => buildPage(props)
 
 const mapStateToProps = (state) => (
     {
         data: state[state_part],
         ref_hash: {
             sales_rep: sel.getDisplayValueFromID(state['sales_reps'].get('ref_list'))
-        }
+        },
+        ref_lists: {
+            sales_rep: state['sales_reps'].get('ref_list').toJS()
+        },        
+        current: sel.getCurrent(state[state_part])
     }
 )
 
 const mapDispatchToProps = (dispatch) => ({ dispatch, act })
-
-comp.propTypes = {
-  data: React.PropTypes.object.isRequired,
-  ref_hash: React.PropTypes.object.isRequired
-}
 
 export default connect(mapStateToProps, mapDispatchToProps)(comp)

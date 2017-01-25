@@ -17,3 +17,11 @@ export const changeCustomerFilter = (payload) => {
 export const updateCustomer = (payload) => {
     return { type: 'UPDATE_CUSTOMER', payload }
 }
+
+export const selectCustomerTab = (payload) => {
+    return { type: 'SELECT_CUSTOMER_TAB', payload }
+}
+
+export const changeCustomer = (payload) => {
+    return { type: 'CHANGE_CUSTOMER', payload }
+}

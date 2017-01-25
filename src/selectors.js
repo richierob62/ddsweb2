@@ -7,6 +7,12 @@ export const getDisplayValueFromID = (list) => {
     }
 }
 
+export const getCurrent = (state) => {
+    const id = state.get('selected_id')
+    if (id === -1) return null;
+    return state.get('list').find( cust => cust.get('id') === id) 
+};
+
 // export const getCustomerList = (state) => {
 //     return state['customers'].get('list')
 // }
