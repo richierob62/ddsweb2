@@ -10,8 +10,8 @@ export const changeCustomerSort = (payload) => {
     return { type: 'CHANGE_CUSTOMER_SORT', payload }
 }
 
-export const changeCustomerFilter = (column, value) => {
-    return { type: 'CHANGE_CUSTOMER_FILTER', column, value }
+export const changeCustomerFilter = (payload) => {
+    return { type: 'CHANGE_CUSTOMER_FILTER', payload }
 }
 
 export const updateCustomer = (payload) => {

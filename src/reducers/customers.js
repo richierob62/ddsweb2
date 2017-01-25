@@ -1,6 +1,6 @@
-import R from 'ramda';
+import Immutable from 'immutable'
 
-const initial_state = {
+const initial_state = Immutable.fromJS({
     list: [
         { id: 1, name: 'L\'Oréal', address: '10 Leeton Ridge Ave. ', city: 'Wisconsin Rapids', state: 'WI', zip: '54494', area: '494', phone: '487-8119', account_num: '4041234', sales_rep: 3 },
         { id: 2, name: 'Adobe Systems', address: '121 NW. Indian Spring Street ', city: 'Lebanon', state: 'PA', zip: '17042', area: '664', phone: '810-1662', account_num: '4130144', sales_rep: 7 },
@@ -63,7 +63,7 @@ const initial_state = {
     current_filters: {},
     mode: 'display',
     fields: [
-        { field_name: 'account_num', label: 'Acc #', input_type: 'text', ref_table: null },
+        { field_name: 'account_num', label: 'Acc #', input_type: 'text', ref_table: undefined },
         { field_name: 'address', label: 'Address', input_type: 'text', ref_table: undefined },
         { field_name: 'advanced_training', label: 'Advanced Training', input_type: 'text', ref_table: undefined },
         { field_name: 'affiliated_clinics', label: 'Affiliated Clinics', input_type: 'text', ref_table: undefined },
@@ -232,45 +232,29 @@ const initial_state = {
             }
         ]
     }
-};
+})
 
 const customers = (state = initial_state, action) => {
     switch (action.type) {
         case 'SELECT_CUSTOMER': {
-            return R.evolve(
-                {
-                    selected_id: () => action.payload
-                },
-                state);
+            return state.set('selected_id', action.payload)
         }
         case 'CHANGE_CUSTOMER_SORT': {
-            const new_direction = action.payload === state.current_sort.field_name
-                ? (state.current_sort.direction === 'ASC'
+            const sorted_on = state.getIn(['current_sort', 'field_name'])
+            const sorted_dir = state.getIn(['current_sort', 'direction'])
+            const new_direction = action.payload === sorted_on
+                ? (sorted_dir === 'ASC'
                     ? 'DESC'
                     : 'ASC')
-                : 'ASC';
-
-            return R.evolve(
-                {
-                    current_sort: {
-                        field_name: () => action.payload,
-                        direction: () => new_direction
-                    }
-                },
-                state);
+                : 'ASC'
+            return state.setIn(['current_sort', 'field_name'], action.payload)
+                .setIn(['current_sort', 'direction'], new_direction)
         }
         case 'CHANGE_CUSTOMER_FILTER': {
-            return R.evolve(
-                {
-                    current_filters: (curr) => {
-                        curr[action.column] = action.value
-                        return curr;
-                    }
-                },
-                state);
+            return state.setIn(['current_filters', action.payload.column], action.payload.value)
         }
-        default: return state;
+        default: return state
     }
-};
+}
 
-export default customers;
+export default customers
