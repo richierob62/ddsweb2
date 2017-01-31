@@ -183,7 +183,7 @@ const buildPageDetails = p => {
         .filter(tab => tab.name === current_tab)[0].rows
     const labels_and_types = p.data.get('fields').toJS()
     const ref_lists = p.ref_lists
-    const change_handler = createEventDispatcher('change', '', p)
+    const change_handler = createEventDispatcher('change', 'Data', p)
     const fields = layOutFields(current, mode, rows, labels_and_types, ref_lists, change_handler)
     const tab_style = {
         display: 'flex',
