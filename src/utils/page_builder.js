@@ -55,31 +55,68 @@ const editableTextInput = (field_name, current_value, change_handler) => {
     const input_style = {
         flex: 1,
         fontSize: '.75rem',
-        color: 'blue'
+        color: 'blue',
+        border: 'none',
+        borderBottom: '1px solid #767676'
     }
     const clickHandler = (field, e) => {
         change_handler({
             field,
             value: e.currentTarget.value
         })
-    }    
+    }
     return <input style={input_style} type="text" value={current_value} onChange={clickHandler.bind(null, field_name)} />
 }
 
-const select = (current_value, ref_list, change_handler) => <div>select</div>
+const select = (field_name, current_value, ref_list, change_handler) => {
+
+    const select_rows = () => {
+        if (!ref_list) return null;
+        return ref_list.map(option => {
+            return <option key={option.id} value={option.id}>{option.display}</option>
+        })
+    }
+    const select_style = {
+        flex: 1,
+        fontSize: '.75rem',
+        color: 'blue',
+        height: 'calc(2rem - 2px)',
+        borderBottom: '1px solid #767676',
+        marginTop: '-5px',
+    }
+    const clickHandler = (field, e) => {
+        change_handler({
+            field,
+            value: parseInt(e.currentTarget.value)
+        })
+    }
+    const selected_id = ref_list ?
+        ref_list.find(option => option.display === current_value) ?
+            ref_list.find(option => option.display === current_value).id :
+            undefined :
+        undefined
+    return (
+        <select value={selected_id} style={select_style} className="custom-select" onChange={clickHandler.bind(null, field_name)}>
+            {select_rows()}
+        </select>
+    )
+}
+
 const typeahead = (current_value, ref_list, change_handler) => <div>typeahead</div>
 const dateInput = (current_value, change_handler) => <div>date</div>
 const checkbox = (current_value, change_handler) => <div>checkbox</div>
 const radio = (current_value, change_handler) => <div>radio</div>
 
 const buildMatchingElement = (field_name, current_value, type, ref_list, change_handler) => {
+
     switch (type) {
         case 'text': return editableTextInput(field_name, current_value, change_handler)
-        case 'select': return select(current_value, ref_list, change_handler)
+        case 'select': return select(field_name, current_value, ref_list, change_handler)
         case 'typeahead': return typeahead(current_value, ref_list, change_handler)
         case 'date': return dateInput(current_value, change_handler)
         case 'checkbox': return checkbox(current_value, change_handler)
         case 'radio': return radio(current_value, change_handler)
+        default: return <div>{current_value}</div>
     }
 }
 
@@ -114,7 +151,9 @@ const buildField = (field_name, current_value, mode, label, type, ref_list, chan
 const buildDetailRow = (current, row, mode, labels_and_types, ref_lists, change_handler) => {
     return row.map(field => {
         const field_style = {
-            flex: 1
+            flex: 1,
+            marginTop: '9px',
+            marginBottom: '3px',
         }
         const label = labels_and_types.find(fld => fld.field_name === field).label
         const type = labels_and_types.find(fld => fld.field_name === field).input_type
@@ -201,7 +240,7 @@ const buildPageDetails = p => {
         justifyContent: 'flex-start'
     }
     const field_section_style = {
-        marginTop: '25px'
+
     }
     return (
         <div style={details_style}>
@@ -383,9 +422,6 @@ const buildPageTitle = p => {
 
 export const buildPage = props => {
 
-    const working_object = {
-        action_word: props.data.get('action_word')
-    }
     const page_title = buildPageTitle(props)
     const page_list = buildPageList(props)
     const page_detail = buildPageDetails(props)

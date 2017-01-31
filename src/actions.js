@@ -22,6 +22,6 @@ export const selectCustomerTab = (payload) => {
     return { type: 'SELECT_CUSTOMER_TAB', payload }
 }
 
-export const changeCustomer = (payload) => {
-    return { type: 'CHANGE_CUSTOMER', payload }
+export const changeCustomerData = (payload) => {
+    return { type: 'CHANGE_CUSTOMER_DATA', payload }
 }
