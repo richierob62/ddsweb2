@@ -161,3 +161,6 @@ table>tbody tr td {
     font-weight: normal;    
 }
 
+.option-item:hover {
+    background: #b9cae3;
+}

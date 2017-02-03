@@ -7,21 +7,194 @@ const createEventDispatcher = (fst, last, props) => {
     return (payload) => dispatch(func(payload))
 }
 
-const buildDetailsHeader = current => {
-    const header_style = {
-        color: 'rgba(26, 26, 26, 0.74)',
-        fontWeight: 'lighter',
-        fontSize: '1rem',
-        marginBottom: '10px',
-        marginTop: '10px'
+const createTypeaheadEventDispatcher = (p, field) => {
+    const { dispatch, act } = p
+    const action = field + 'TypeaheadChange'
+    const func = act[action]
+    return (payload) => dispatch(func(payload))
+}
+
+const editableTextInput = (p, field, value) => {
+    const input_style = {
+        flex: 1,
+        fontSize: '.75rem',
+        color: 'blue',
+        border: 'none',
+        borderBottom: '1px solid #767676',
+        paddingLeft: '.75rem',
     }
+
+    const change_handler = createEventDispatcher('change', 'Data', p)
+
+    const changeHandler = (field, e) => {
+        change_handler({
+            field,
+            value: e.currentTarget.value
+        })
+    }
+    return <input style={input_style} type="text" value={value} onChange={changeHandler.bind(null, field)} />
+}
+
+const select = (p, field, value) => {
+
+    const ref_list = p.ref_lists[field]
+
+    const select_rows = () => {
+        if (!ref_list) return null;
+        return ref_list.map(option => {
+            return <option className="select-option" key={option.id} value={option.id}>{option.display}</option>
+        })
+    }
+
+    const select_style = {
+        flex: 1,
+        fontSize: '.75rem',
+        color: 'blue',
+        height: 'calc(2rem - 2px)',
+        borderBottom: '1px solid #767676',
+        marginTop: '-5px',
+    }
+
+    const change_handler = createEventDispatcher('change', 'Data', p)
+
+    const clickHandler = (field, e) => {
+        change_handler({
+            field,
+            value: parseInt(e.currentTarget.value, 10)
+        })
+    }
+
+    const selected_id = ref_list ?
+        ref_list.find(option => option.display === value) ?
+            ref_list.find(option => option.display === value).id :
+            undefined :
+        undefined
+
     return (
-        current
-            ? <h5 style={header_style}>{current.name + ' - Acc# ' + current.account_num}</h5>
-            : <h5 style={header_style}>No current selection</h5>
+        <select value={selected_id} style={select_style} className="custom-select" onChange={clickHandler.bind(null, field)}>
+            {select_rows()}
+        </select>
     )
 }
 
+const typeahead = (p, field, value) => {
+
+    const current_value = value || p.typeaheads[field]
+
+    const typeahead_style = {
+        flex: 1,
+        display: 'flex',
+        fontSize: '0.75rem',
+        color: 'blue',
+        height: 'calc(2rem - 2px)',
+        marginTop: '-5px',
+        position: 'relative',
+    }
+
+    const input_style = {
+        flex: 1,
+        color: 'blue',
+        padding: '.375rem 1.75rem .375rem .75rem',
+        verticalAlign: 'middle',
+        border: '1px solid rgba(0,0,0,.15)',
+        borderBottom: '1px solid rgb(118, 118, 118)',
+        borderRadius: '.25rem',
+    }
+
+    const options_box_style = {
+        position: 'absolute',
+        background: 'white',
+        top: '2rem',
+        width: '100%',
+        border: '1px solid rgba(0,0,0,.15)',
+        borderRadius: '.25rem',
+    }
+
+    const option_style = {
+        cursor: 'pointer',
+        paddingLeft: '.75rem',
+    }
+
+    const change_handler = createEventDispatcher('change', 'Data', p)
+
+    const typeahead_handler = createTypeaheadEventDispatcher(p, field)
+
+    const name_list_needed = p.data.get('fields')
+        .toJS()
+        .find(fld => fld.field_name === field).ref_table
+
+    const value_is_exact_match = (val) => {
+        const count = p.ref_lists[name_list_needed]
+            .filter(item => item.display.toUpperCase().indexOf(val.toUpperCase()) >= 0)
+            .length
+        return count === 1
+    }
+
+    const changeHandler = (field, e) => {
+
+        const new_val = e.currentTarget.value
+
+        if (value_is_exact_match(new_val)) {
+            // changed to an exact match
+            const new_id = p.ref_lists[name_list_needed]
+                .find(item => item.display.toUpperCase().indexOf(new_val.toUpperCase()) >= 0)
+                .id
+            typeahead_handler('')
+            change_handler({
+                field,
+                value: new_id
+            })
+
+
+        } else {
+            // not changed to an exact match
+            typeahead_handler(new_val)
+            change_handler({
+                field,
+                value: undefined
+            })
+
+        }
+    }
+
+    const optionSelectHandler = (id) => {
+        typeahead_handler('')
+        change_handler({
+            field,
+            value: id
+        })
+    }
+
+    const renderOptionsBox = () => {
+        const option_items = p.ref_lists[name_list_needed]
+            .map(option => {
+                return (
+                    <div
+                        style={option_style}
+                        key={option.id}
+                        onClick={optionSelectHandler.bind(null, option.id)}
+                        className='option-item'
+                        >
+                        {option.display}
+                    </div>
+                )
+            })
+        return <div style={options_box_style}>{option_items}</div>
+    }
+
+    return (
+        <div style={typeahead_style}>
+            <input type="text" style={input_style} value={current_value} onChange={changeHandler.bind(null, field)} />
+            {!value_is_exact_match(current_value) && renderOptionsBox()}
+        </div>
+    )
+}
+
+//====================== CLEAN LINE ===================================
+
+const radio = (p, field, value) => <div>radio</div>
+const dateInput = (p, field, value) => <div>date</div>
+const checkbox = (p, field, value) => <div>checkbox</div>
 
 const buildDisplayField = (current_value, label) => {
     const label_style = {
@@ -51,77 +224,22 @@ const buildDisplayField = (current_value, label) => {
     )
 }
 
-const editableTextInput = (field_name, current_value, change_handler) => {
-    const input_style = {
-        flex: 1,
-        fontSize: '.75rem',
-        color: 'blue',
-        border: 'none',
-        borderBottom: '1px solid #767676'
-    }
-    const clickHandler = (field, e) => {
-        change_handler({
-            field,
-            value: e.currentTarget.value
-        })
-    }
-    return <input style={input_style} type="text" value={current_value} onChange={clickHandler.bind(null, field_name)} />
-}
-
-const select = (field_name, current_value, ref_list, change_handler) => {
-
-    const select_rows = () => {
-        if (!ref_list) return null;
-        return ref_list.map(option => {
-            return <option key={option.id} value={option.id}>{option.display}</option>
-        })
-    }
-    const select_style = {
-        flex: 1,
-        fontSize: '.75rem',
-        color: 'blue',
-        height: 'calc(2rem - 2px)',
-        borderBottom: '1px solid #767676',
-        marginTop: '-5px',
-    }
-    const clickHandler = (field, e) => {
-        change_handler({
-            field,
-            value: parseInt(e.currentTarget.value)
-        })
-    }
-    const selected_id = ref_list ?
-        ref_list.find(option => option.display === current_value) ?
-            ref_list.find(option => option.display === current_value).id :
-            undefined :
-        undefined
-    return (
-        <select value={selected_id} style={select_style} className="custom-select" onChange={clickHandler.bind(null, field_name)}>
-            {select_rows()}
-        </select>
-    )
-}
-
-const typeahead = (current_value, ref_list, change_handler) => <div>typeahead</div>
-const dateInput = (current_value, change_handler) => <div>date</div>
-const checkbox = (current_value, change_handler) => <div>checkbox</div>
-const radio = (current_value, change_handler) => <div>radio</div>
-
-const buildMatchingElement = (field_name, current_value, type, ref_list, change_handler) => {
-
+const buildMatchingElement = (p, field, value) => {
+    const type = p.data.get('fields')
+        .toJS()
+        .find(fld => fld.field_name === field).input_type
     switch (type) {
-        case 'text': return editableTextInput(field_name, current_value, change_handler)
-        case 'select': return select(field_name, current_value, ref_list, change_handler)
-        case 'typeahead': return typeahead(current_value, ref_list, change_handler)
-        case 'date': return dateInput(current_value, change_handler)
-        case 'checkbox': return checkbox(current_value, change_handler)
-        case 'radio': return radio(current_value, change_handler)
-        default: return <div>{current_value}</div>
+        case 'text': return editableTextInput(p, field, value)
+        case 'select': return select(p, field, value)
+        case 'typeahead': return typeahead(p, field, value)
+        case 'date': return dateInput(p, field, value)
+        case 'checkbox': return checkbox(p, field, value)
+        case 'radio': return radio(p, field, value)
+        default: return <div>{value}</div>
     }
 }
 
-const buildEditField = (field_name, current_value, label, type, ref_list, change_handler) => {
-    // label
+const buildEditField = (p, field, value, label) => {
     const label_style = {
         color: 'rgba(26, 26, 26, 0.75)',
         fontWeight: 'lighter',
@@ -135,53 +253,55 @@ const buildEditField = (field_name, current_value, label, type, ref_list, change
     const holder_style = {
         display: 'flex'
     }
-    const element = buildMatchingElement(field_name, current_value, type, ref_list, change_handler)
     return (
         <div style={holder_style}>
             <label style={label_style}>{label}:</label>
-            {element}
+            {buildMatchingElement(p, field, value)}
         </div>
     )
 }
 
-const buildField = (field_name, current_value, mode, label, type, ref_list, change_handler) => {
-    return mode === 'display' ? buildDisplayField(current_value, label) : buildEditField(field_name, current_value, label, type, ref_list, change_handler)
+const buildField = (p, field) => {
+    const mode = p.data.get('mode')
+    const label = p.data.get('fields')
+        .toJS()
+        .find(fld => fld.field_name === field).label
+    const value = p.ref_hash[field] && p.current.get(field)
+        ? p.ref_hash[field](p.current.get(field))
+        : p.current.get(field)
+    return mode === 'display'
+        ? buildDisplayField(value, label)
+        : buildEditField(p, field, value, label)
 }
 
-const buildDetailRow = (current, row, mode, labels_and_types, ref_lists, change_handler) => {
+const buildDetailRow = (p, row) => {
     return row.map(field => {
         const field_style = {
             flex: 1,
             marginTop: '9px',
             marginBottom: '3px',
         }
-        const label = labels_and_types.find(fld => fld.field_name === field).label
-        const type = labels_and_types.find(fld => fld.field_name === field).input_type
-        const name_list_needed = labels_and_types.find(fld => fld.field_name === field).ref_table
-        const ref_list = ref_lists[name_list_needed]
-        return <div style={field_style} key={field}>{buildField(field, current[field], mode, label, type, ref_list, change_handler)}</div>
+        return <div style={field_style} key={field}>{buildField(p, field)}</div>
     })
 }
 
-const layOutFields = (current, mode, rows, labels_and_types, ref_lists, change_handler) => {
-    if (!current) return null
-    const row_style = {
-        display: 'flex',
-        fontSize: '0.7rem',
-        width: '100%',
-        flexWrap: 'nowrap'
+const buildDetailsHeader = p => {
+    const header_style = {
+        color: 'rgba(26, 26, 26, 0.74)',
+        fontWeight: 'lighter',
+        fontSize: '1rem',
+        marginBottom: '10px',
+        marginTop: '10px'
     }
-    return rows.map((row, idx) => {
-        return (
-            <div style={row_style} key={idx}>
-                {buildDetailRow(current, row, mode, labels_and_types, ref_lists, change_handler)}
-            </div>
-        )
-    })
+    return (
+        p.current
+            ? <h5 style={header_style}>`{p.current.name} - Acc# {p.current.account_num}`</h5>
+            : <h5 style={header_style}>No current selection</h5>
+    )
 }
 
-const buildTabs = (p, current) => {
-    if (!current) return null
+const buildTabs = (p) => {
+    if (!p.current) return null
     const tabs = p.data.getIn(['details_template', 'tabs']).toJS()
     const current_tab = p.data.getIn(['details_template', 'current_tab'])
     const tab_select_handler = createEventDispatcher('select', 'Tab', p)
@@ -203,102 +323,29 @@ const buildTabs = (p, current) => {
     })
 }
 
-const convertDetailsData = (current, ref_hash) => {
-    Object.keys(current).forEach(key => {
-        if (ref_hash[key] !== undefined) {
-            current[key] = ref_hash[key](current[key])
-        }
-    })
-    return current
-}
-
-const buildPageDetails = p => {
-    const current = p.current ? convertDetailsData(p.current.toJS(), p.ref_hash) : null
-    const mode = p.data.get('mode')
-    const details_title = buildDetailsHeader(current)
-    const tabs = buildTabs(p, current)
+const layOutFields = (p) => {
+    if (!p.current) return null
     const current_tab = p.data.getIn(['details_template', 'current_tab'])
     const rows = p.data.getIn(['details_template', 'tabs']).toJS()
         .filter(tab => tab.name === current_tab)[0].rows
-    const labels_and_types = p.data.get('fields').toJS()
-    const ref_lists = p.ref_lists
-    const change_handler = createEventDispatcher('change', 'Data', p)
-    const fields = layOutFields(current, mode, rows, labels_and_types, ref_lists, change_handler)
-    const tab_style = {
+    const row_style = {
         display: 'flex',
-        color: 'rgb(162, 156, 156)',
-        fontWeight: '100',
-        fontSize: '.9rem',
-        marginBottom: '10px',
-        paddingTop: '.5rem',
-        borderBottom: current ? '2px solid rgb(89, 140, 215)' : 'none'
+        fontSize: '0.7rem',
+        width: '100%',
+        flexWrap: 'nowrap'
     }
-    const details_style = {
-        width: '90%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-start'
-    }
-    const field_section_style = {
-
-    }
-    return (
-        <div style={details_style}>
-            <div>{details_title}</div>
-            <div style={tab_style}>{tabs}</div>
-            <div style={field_section_style}>{fields}</div>
-        </div>
-    )
-}
-
-const buildPageContextMenu = p => {
-    const menu_style = {
-        width: '10%'
-    }
-    return <div style={menu_style}>context menu</div>
+    return rows.map((row, idx) => {
+        return (
+            <div style={row_style} key={idx}>
+                {buildDetailRow(p, row)}
+            </div>
+        )
+    })
 }
 
 const buildFieldObject = (acc, field) => {
     acc[field.get('field_name')] = field.get('label')
     return acc
-}
-
-const createFilterCells = p => {
-    const list_template = p.data.get('list_template').toJS()
-    const filter_handler = createEventDispatcher('change', 'Filter', p)
-    const current_filters = p.data.get('current_filters').toJS()
-    return list_template.map(col => {
-        const cell_value = current_filters[col.field_name] ? current_filters[col.field_name] : ''
-        const th_style = {
-            width: col.width,
-            paddingBottom: '0px',
-            paddingTop: '0px',
-            marginBottom: '0px',
-            border: 'none'
-        }
-        const input_style = {
-            marginTop: '0px',
-            marginBottom: '0px'
-        }
-        const call_handler = (col, e) => {
-            filter_handler({ column: col, value: e.currentTarget.value })
-        }
-        return (
-            <th key={'filter-' + col.field_name} style={th_style} className="">
-                <input type='text'
-                    style={input_style}
-                    className="form-control"
-                    value={cell_value}
-                    onChange={call_handler.bind(null, col.field_name)}
-                    />
-            </th>
-        )
-    })
-}
-
-const buildFilterRow = p => {
-    const cells = createFilterCells(p)
-    return <tr>{cells}</tr>
 }
 
 const createLabelCells = p => {
@@ -342,20 +389,37 @@ const createLabelCells = p => {
     })
 }
 
-const buildLabelRow = p => {
-    const cells = createLabelCells(p)
-    return <tr>{cells}</tr>
-}
-
-const buildListHeader = p => {
-    const filter_row = buildFilterRow(p)
-    const label_row = buildLabelRow(p)
-    return (
-        <thead style={{ paddingBottom: '.5rem' }}>
-            {label_row}
-            {filter_row}
-        </thead>
-    )
+const createFilterCells = p => {
+    const list_template = p.data.get('list_template').toJS()
+    const filter_handler = createEventDispatcher('change', 'Filter', p)
+    const current_filters = p.data.get('current_filters').toJS()
+    return list_template.map(col => {
+        const cell_value = current_filters[col.field_name] ? current_filters[col.field_name] : ''
+        const th_style = {
+            width: col.width,
+            paddingBottom: '0px',
+            paddingTop: '0px',
+            marginBottom: '0px',
+            border: 'none'
+        }
+        const input_style = {
+            marginTop: '0px',
+            marginBottom: '0px'
+        }
+        const call_handler = (col, e) => {
+            filter_handler({ column: col, value: e.currentTarget.value })
+        }
+        return (
+            <th key={'filter-' + col.field_name} style={th_style} className="">
+                <input type='text'
+                    style={input_style}
+                    className="form-control"
+                    value={cell_value}
+                    onChange={call_handler.bind(null, col.field_name)}
+                    />
+            </th>
+        )
+    })
 }
 
 const convertLineData = p => {
@@ -364,7 +428,7 @@ const convertLineData = p => {
     return line_data.map(line => {
         Object.keys(line).forEach(key => {
             if (ref_functions[key] !== undefined) {
-                line[key] = ref_functions[key](line[key])
+                line[key] = line[key] ? ref_functions[key](line[key]) : undefined
             }
         })
         return line
@@ -397,19 +461,50 @@ const createDataRows = p => {
     })
 }
 
-const buildListBody = p => {
-    const rows = createDataRows(p)
-    return <tbody>{rows}</tbody>
+const buildPageDetails = p => {
+    const tab_style = {
+        display: 'flex',
+        color: 'rgb(162, 156, 156)',
+        fontWeight: '100',
+        fontSize: '.9rem',
+        marginBottom: '10px',
+        paddingTop: '.5rem',
+        borderBottom: p.current ? '2px solid rgb(89, 140, 215)' : 'none'
+    }
+    const details_style = {
+        width: '90%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start'
+    }
+    const field_section_style = {
+
+    }
+    return (
+        <div style={details_style}>
+            <div>{buildDetailsHeader(p)}</div>
+            <div style={tab_style}>{p.current ? buildTabs(p) : ''}</div>
+            <div style={field_section_style}>{layOutFields(p)}</div>
+        </div>
+    )
+}
+
+const buildPageContextMenu = p => {
+    const menu_style = {
+        width: '10%'
+    }
+    return <div style={menu_style}>context menu</div>
 }
 
 const buildPageList = p => {
-    const list_header = buildListHeader(p)
-    const list_body = buildListBody(p)
     return (
         <div>
             <table className={'table table-sm table-striped table-hover'} style={{ border: 'none' }} >
-                {list_header}
-                {list_body}
+                <thead style={{ paddingBottom: '.5rem' }}>
+                    <tr>{createLabelCells(p)}</tr>
+                    <tr>{createFilterCells(p)}</tr>
+                </thead>
+                <tbody>{createDataRows(p)}</tbody>
             </table>
         </div>
     )
@@ -421,20 +516,14 @@ const buildPageTitle = p => {
 }
 
 export const buildPage = props => {
-
-    const page_title = buildPageTitle(props)
-    const page_list = buildPageList(props)
-    const page_detail = buildPageDetails(props)
-    const page_context_menu = buildPageContextMenu(props)
-
     return (
         <div className={'page_title'}>
-            {page_title}
+            {buildPageTitle(props)}
             <div className="page-vertical">
-                {page_list}
+                {buildPageList(props)}
                 <div className="page-lower">
-                    {page_detail}
-                    {page_context_menu}
+                    {buildPageDetails(props)}
+                    {buildPageContextMenu(props)}
                 </div>
             </div>
         </div>

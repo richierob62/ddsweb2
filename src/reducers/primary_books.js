@@ -12,7 +12,8 @@ const initial_state = Immutable.fromJS({
         {id: 8, display: 'Primary Book 8'},
         {id: 9, display: 'Primary Book 9'},
         {id: 10, display: 'Primary Book 10'}
-    ]
+    ],
+    typeahead: ''
 })
 
 const primary_books = (state = initial_state, action) => {

@@ -19,11 +19,18 @@ const mapStateToProps = (state) => (
             primary_book: sel.getDisplayValueFromID(state['primary_books'].get('ref_list'))
         },
         ref_lists: {
-            sales_rep: state['sales_reps'].get('ref_list').toJS(),
-            category: state['categories'].get('ref_list').toJS(),
-            local_foreign: state['local_foreigns'].get('ref_list').toJS(),
-            pay_plan: state['pay_plans'].get('ref_list').toJS(),
-            primary_book: state['primary_books'].get('ref_list').toJS()
+            sales_rep:  sel.getFilteredRefList(state['sales_reps']),  
+            category: sel.getFilteredRefList(state['categories']),
+            local_foreign: sel.getFilteredRefList(state['local_foreigns']),
+            pay_plan: sel.getFilteredRefList(state['pay_plans']),
+            primary_book: sel.getFilteredRefList(state['primary_books']),
+        },
+        typeaheads: {
+            sales_rep:  state['sales_reps'].get('typeahead'),
+            category: state['categories'].get('typeahead'),
+            local_foreign: state['local_foreigns'].get('typeahead'),
+            pay_plan: state['pay_plans'].get('typeahead'),
+            primary_book: state['primary_books'].get('typeahead')
         },
         current: sel.getCurrent(state[state_part])
     }
@@ -35,6 +42,7 @@ comp.propTypes = {
     data: React.PropTypes.object.isRequired,
     ref_hash: React.PropTypes.object,
     ref_lists: React.PropTypes.object,
+    typeaheads: React.PropTypes.object,
     current: React.PropTypes.object
 }
 

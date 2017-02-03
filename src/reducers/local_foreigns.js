@@ -12,7 +12,8 @@ const initial_state = Immutable.fromJS({
         {id: 8, display: 'Loc/Foreign 8'},
         {id: 9, display: 'Loc/Foreign 9'},
         {id: 10, display: 'Loc/Foreign 10'}
-    ]
+    ],
+    typeahead: ''
 })
 
 const local_foreigns = (state = initial_state, action) => {

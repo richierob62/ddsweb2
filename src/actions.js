@@ -25,3 +25,7 @@ export const selectCustomerTab = (payload) => {
 export const changeCustomerData = (payload) => {
     return { type: 'CHANGE_CUSTOMER_DATA', payload }
 }
+
+export const sales_repTypeaheadChange = (payload) => {
+    return { type: 'SALES_REP_TYPEAHEAD', payload }
+}

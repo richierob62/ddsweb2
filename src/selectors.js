@@ -13,6 +13,17 @@ export const getCurrent = (state) => {
     return state.get('list').find( cust => cust.get('id') === id) 
 };
 
+
+export const getFilteredRefList = (state) => {
+    const filter = state.get('typeahead')
+
+    const filtered_list = state.get('ref_list').toJS().filter( item => {
+        return item.display.toUpperCase().indexOf(filter.toUpperCase()) >= 0
+    })
+
+    return filtered_list.length > 0 ? filtered_list : state.get('ref_list').toJS()    
+}
+
 // export const getCustomerList = (state) => {
 //     return state['customers'].get('list')
 // }

@@ -12,7 +12,8 @@ const initial_state = Immutable.fromJS({
         {id: 8, display: 'Pay Plan 8'},
         {id: 9, display: 'Pay Plan 9'},
         {id: 10, display: 'Pay Plan 10'}
-    ]
+    ],
+    typeahead: ''
 })
 
 const pay_plans = (state = initial_state, action) => {
