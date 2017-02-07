@@ -1,3 +1,18 @@
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4 {
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 300;
+}
+
 h1 {
     margin: 0;
     color: #1a1a1a;
@@ -9,10 +24,14 @@ h1 {
 }
 
 .Header {
-    background-color: #767676;
+    background-color: #9c27b0;
     color: white;
     text-align: center;
     padding: 10px 5px;
+}
+
+.Header h1 {
+    color: white;
 }
 
 .App-main {
@@ -46,23 +65,33 @@ h1 {
 .sub-menu {
     font-weight: normal;
     padding: 14px 0 5px 0;
-    color: #767676;
+    color: #9c27b0
 }
 
 .link-item {
-    text-decoration: none;
+    text-decoration: none !important;
     color: #525252;
     font-size: .8rem;
     line-height: 1.2rem;
     margin-left: .5rem;
     transition: margin-left 300ms;
+    padding: 5px;
 }
 
-.link-item:hover,
 .active-link {
-    color: chocolate;
-    text-decoration: underline;
+    background-color: #9c27b0;
+    color: #FFFFFF !important;
+    box-shadow: 0 16px 26px -10px rgba(156, 39, 176, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(156, 39, 176, 0.2);
+    text-decoration: none !important;
     margin-left: 1rem;
+}
+
+
+.link-item:hover {
+    background-color: rgb(216, 133, 231);
+    color: #FFFFFF;
+    box-shadow: 0 16px 26px -10px rgba(156, 39, 176, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(156, 39, 176, 0.2);
+    text-decoration: none;
 }
 
 .page {
@@ -158,9 +187,22 @@ table>tbody tr td {
 .form-control {
     padding: .2rem .4rem;
     font-size: .75rem;
-    font-weight: normal;    
+    font-weight: normal;
 }
 
 .option-item:hover {
     background: #b9cae3;
+}
+
+input:focus {
+    outline: none !important;
+}
+
+.react-datepicker__input-container input,
+input.react-datepicker-ignore-onclickoutside  {
+    color: blue;
+    padding: .1rem 1.75rem .31rem .75rem;
+    vertical-align: middle;
+    border: none;
+    border-bottom: 1px solid rgb(118, 118, 118);
 }

@@ -1,4 +1,7 @@
 import React from 'react'
+import DatePicker from 'react-datepicker'
+import moment from 'moment'
+import 'react-datepicker/dist/react-datepicker.css'
 
 const createEventDispatcher = (fst, last, props) => {
     const { dispatch, act } = props
@@ -12,6 +15,17 @@ const createTypeaheadEventDispatcher = (p, field) => {
     const action = field + 'TypeaheadChange'
     const func = act[action]
     return (payload) => dispatch(func(payload))
+}
+
+const hasRadioGroup = (p, field) => (p.data.get('radio_groups').toJS().find(grp => grp.field_name === field)) !== undefined ? true : false
+
+const radioGroupDisplayValue = (p, field) => {
+    return p.data.get('radio_groups')
+        .toJS()
+        .find(grp => grp.field_name === field)
+        .options
+        .find(opt => opt.id === p.current.get(field))
+        .display
 }
 
 const editableTextInput = (p, field, value) => {
@@ -174,7 +188,7 @@ const typeahead = (p, field, value) => {
                         key={option.id}
                         onClick={optionSelectHandler.bind(null, option.id)}
                         className='option-item'
-                        >
+                    >
                         {option.display}
                     </div>
                 )
@@ -190,10 +204,64 @@ const typeahead = (p, field, value) => {
     )
 }
 
-//====================== CLEAN LINE ===================================
+const radio = (p, field) => {
 
-const radio = (p, field, value) => <div>radio</div>
-const dateInput = (p, field, value) => <div>date</div>
+    const radio_group_style = {
+
+    }
+
+    const change_handler = createEventDispatcher('change', 'Data', p)
+
+    const optionSelectHandler = (id) => {
+        change_handler({
+            field,
+            value: id
+        })
+    }
+
+    const isSelected = value => p.current.get(field) === value ? true : false
+
+    const renderOptions = () => {
+        return p.data.get('radio_groups')
+            .toJS()
+            .find(grp => grp.field_name === field)
+            .options.map(option => {
+                return (
+                    <label className="custom-control custom-radio" key={option.id} >
+                        <input name={'radio_' + field} type="radio"
+                            className="custom-control-input"
+                            checked={isSelected(option.id)}
+                            onChange={optionSelectHandler.bind(null, option.id)}
+                        />
+                        <span className="custom-control-indicator"></span>
+                        <span className="custom-control-description">{option.display}</span>
+                    </label>
+                )
+            })
+    }
+
+    return (
+        <div style={radio_group_style}>
+            {renderOptions()}
+        </div>
+    )
+}
+
+const dateInput = (p, field, value) => {
+    const change_handler = createEventDispatcher('change', 'Data', p)
+    const handleChange = date => {
+        change_handler({
+            field,
+            value: date.format('YYYY-MM-DD')
+        })
+    }
+    return (
+        <DatePicker
+            selected={moment(value)}
+            onChange={handleChange} />
+    )
+}
+
 const checkbox = (p, field, value) => <div>checkbox</div>
 
 const buildDisplayField = (current_value, label) => {
@@ -210,6 +278,7 @@ const buildDisplayField = (current_value, label) => {
     const input_style = {
         flex: 1,
         border: 'none',
+        borderColor: 'transparent',
         fontSize: '.75rem',
         color: 'blue'
     }
@@ -219,7 +288,7 @@ const buildDisplayField = (current_value, label) => {
     return (
         <div style={holder_style}>
             <label style={label_style}>{label}:</label>
-            <input style={input_style} type="text" value={current_value} onChange={() => { } } />
+            <input style={input_style} type="text" value={current_value} onChange={() => { }} />
         </div>
     )
 }
@@ -234,7 +303,7 @@ const buildMatchingElement = (p, field, value) => {
         case 'typeahead': return typeahead(p, field, value)
         case 'date': return dateInput(p, field, value)
         case 'checkbox': return checkbox(p, field, value)
-        case 'radio': return radio(p, field, value)
+        case 'radio': return radio(p, field)
         default: return <div>{value}</div>
     }
 }
@@ -266,9 +335,10 @@ const buildField = (p, field) => {
     const label = p.data.get('fields')
         .toJS()
         .find(fld => fld.field_name === field).label
-    const value = p.ref_hash[field] && p.current.get(field)
-        ? p.ref_hash[field](p.current.get(field))
-        : p.current.get(field)
+
+    const value = p.ref_hash[field] && p.current.get(field) ? p.ref_hash[field](p.current.get(field))
+        : (hasRadioGroup(p, field) ? radioGroupDisplayValue(p, field) : p.current.get(field))
+
     return mode === 'display'
         ? buildDisplayField(value, label)
         : buildEditField(p, field, value, label)
@@ -295,7 +365,7 @@ const buildDetailsHeader = p => {
     }
     return (
         p.current
-            ? <h5 style={header_style}>`{p.current.name} - Acc# {p.current.account_num}`</h5>
+            ? <h5 style={header_style}>`{p.current.get('name')} - Acc# {p.current.get('account_num')}`</h5>
             : <h5 style={header_style}>No current selection</h5>
     )
 }
@@ -381,7 +451,7 @@ const createLabelCells = p => {
             <th key={'label-' + col.field_name}
                 style={th_style}
                 onClick={sort_handler.bind(null, col.field_name)}
-                >
+            >
                 <span style={label_style} className="text-uppercase">{labels[col.field_name]}</span>
                 <span style={sort_style}>{sort_indicator}</span>
             </th>
@@ -416,7 +486,7 @@ const createFilterCells = p => {
                     className="form-control"
                     value={cell_value}
                     onChange={call_handler.bind(null, col.field_name)}
-                    />
+                />
             </th>
         )
     })
@@ -442,7 +512,10 @@ const createDataRows = p => {
     const converted_line_data = convertLineData(p)
 
     return converted_line_data.map(line => {
-        const line_style = (selected_id === line.id) ? { backgroundColor: 'rgba(4, 66, 155, 0.28)' } : {}
+        const line_style = (selected_id === line.id) ? {
+            backgroundColor: 'rgb(201, 71, 225)',
+            color: 'white'
+        } : {}
         const tds = list_template.map(col => {
             const td_style = {
                 width: col.width,
@@ -452,7 +525,7 @@ const createDataRows = p => {
             return (
                 <td key={'body-' + col.field_name + line.id}
                     style={td_style}
-                    >
+                >
                     {line[col.field_name]}
                 </td>
             )
