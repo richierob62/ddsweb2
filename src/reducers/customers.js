@@ -204,7 +204,7 @@ const initial_state = Immutable.fromJS({
         { field_name: 'residency', label: 'Residency', input_type: 'text', ref_table: undefined },
         { field_name: 'room_num', label: 'Room Number', input_type: 'text', ref_table: undefined },
         { field_name: 'sales_rep', label: 'Sales Rep', input_type: 'select', ref_table: 'sales_rep' },
-        { field_name: 'special_interest', label: 'Special Int', input_type: 'text', ref_table: undefined },
+        { field_name: 'special_interest', label: 'Special Int', input_type: 'checkbox', ref_table: undefined },
         { field_name: 'state', label: 'State', input_type: 'text', ref_table: undefined },
         { field_name: 'undergraduate_education', label: 'Undergrad Ed', input_type: 'text', ref_table: undefined },
         { field_name: 'website', label: 'Website', input_type: 'text', ref_table: undefined },
@@ -279,7 +279,7 @@ const initial_state = Immutable.fromJS({
                 { id: 2, display: 'option 2' },
             ]
         },
-    ]
+    ]   
 })
 
 const customers = (state = initial_state, action) => {

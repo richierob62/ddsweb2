@@ -19,6 +19,8 @@ const createTypeaheadEventDispatcher = (p, field) => {
 
 const hasRadioGroup = (p, field) => (p.data.get('radio_groups').toJS().find(grp => grp.field_name === field)) !== undefined ? true : false
 
+const isCheckBox = (p, field) => (p.data.get('fields').toJS().find(fld => fld.field_name === field).input_type) === 'checkbox' ? true : false
+
 const radioGroupDisplayValue = (p, field) => {
     return p.data.get('radio_groups')
         .toJS()
@@ -27,6 +29,8 @@ const radioGroupDisplayValue = (p, field) => {
         .find(opt => opt.id === p.current.get(field))
         .display
 }
+
+const checkboxDisplayValue = (p, field) => p.current.toJS()[field] !== 0 ? 'Yes' : 'No'
 
 const editableTextInput = (p, field, value) => {
     const input_style = {
@@ -262,7 +266,27 @@ const dateInput = (p, field, value) => {
     )
 }
 
-const checkbox = (p, field, value) => <div>checkbox</div>
+const checkbox = (p, field, value) => {
+    const change_handler = createEventDispatcher('change', 'Data', p)
+    const handleChange = (field, e) => {
+        change_handler({
+            field,
+            value: e.currentTarget.value === 'on' ? 0 : 1
+        })
+    }
+    return (
+        <label className="custom-control custom-checkbox" style={{ marginLeft: '.375rem'}}>
+            <input
+                type="checkbox"
+                value={value === 'Yes' ? 'on' : 'off'}
+                className="custom-control-input"
+                checked={value === 'Yes' ? 'checked' : ''}
+                onChange={handleChange.bind(null, field)} />
+            <span className="custom-control-indicator"></span>
+            <span className="custom-control-description">{value}</span>
+        </label>
+    )
+}
 
 const buildDisplayField = (current_value, label) => {
     const label_style = {
@@ -337,7 +361,9 @@ const buildField = (p, field) => {
         .find(fld => fld.field_name === field).label
 
     const value = p.ref_hash[field] && p.current.get(field) ? p.ref_hash[field](p.current.get(field))
-        : (hasRadioGroup(p, field) ? radioGroupDisplayValue(p, field) : p.current.get(field))
+        : (hasRadioGroup(p, field) ? radioGroupDisplayValue(p, field)
+            : (isCheckBox(p, field)) ? checkboxDisplayValue(p, field)
+                : p.current.get(field))
 
     return mode === 'display'
         ? buildDisplayField(value, label)

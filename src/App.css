@@ -86,7 +86,6 @@ h1 {
     margin-left: 1rem;
 }
 
-
 .link-item:hover {
     background-color: rgb(216, 133, 231);
     color: #FFFFFF;
@@ -199,10 +198,20 @@ input:focus {
 }
 
 .react-datepicker__input-container input,
-input.react-datepicker-ignore-onclickoutside  {
+input.react-datepicker-ignore-onclickoutside {
     color: blue;
     padding: .1rem 1.75rem .31rem .75rem;
     vertical-align: middle;
     border: none;
     border-bottom: 1px solid rgb(118, 118, 118);
+}
+
+span.custom-control-description {
+    font-size: .75rem;
+    color: blue;
+    border: none;
+    vertical-align: middle;
+    display: inline-block;
+    margin-top: 2px;
+    margin-bottom: -2px;
 }
