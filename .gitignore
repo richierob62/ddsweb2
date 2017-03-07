@@ -2,6 +2,10 @@
 
 # dependencies
 node_modules
+ddsweb-api/vendor
+ddsweb-api/vendor
+ddsweb-api/.idea
+ddsweb-api/.env
 
 # testing
 coverage

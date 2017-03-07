@@ -10,9 +10,8 @@ export const getDisplayValueFromID = (list) => {
 export const getCurrent = (state) => {
     const id = state.get('selected_id')
     if (id === -1) return null;
-    return state.get('list').find( cust => cust.get('id') === id) 
+    return state.get('list').find( item => item.get('id') === id) 
 };
-
 
 export const getFilteredRefList = (state) => {
     const filter = state.get('typeahead')

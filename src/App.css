@@ -189,6 +189,7 @@ table>tbody tr td {
     font-weight: normal;
 }
 
+.option-item:focus,
 .option-item:hover {
     background: #b9cae3;
 }
@@ -214,4 +215,38 @@ span.custom-control-description {
     display: inline-block;
     margin-top: 2px;
     margin-bottom: -2px;
+}
+
+.context-item {
+    text-decoration: none !important;
+    color: #525252;
+    font-size: .75rem;
+    padding: 2px;
+}
+
+.active-context-item {
+    background-color: #9c27b0;
+    color: #FFFFFF !important;
+    box-shadow: 0 16px 26px -10px rgba(156, 39, 176, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(156, 39, 176, 0.2);
+    text-decoration: none !important;
+    margin-left: 1rem;
+}
+
+.context-item:hover {
+    background-color: rgb(216, 133, 231);
+    color: #FFFFFF;
+    box-shadow: 0 16px 26px -10px rgba(156, 39, 176, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(156, 39, 176, 0.2);
+    text-decoration: none;
+}
+
+.btn-collection .btn-sm {
+    font-size: .7rem;
+    margin: 2px 2px;
+}
+
+.btn-collection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
 }

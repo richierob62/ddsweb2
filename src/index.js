@@ -8,9 +8,10 @@ import { getRoutes } from './routes';
 import configureStore from './configureStore';
 import Root from './Root';
 import './index.css';
+import root_saga from './reducers/root_saga'
 
 const store = configureStore();
-// store.runSaga(rootSaga);
+store.runSaga(root_saga);
 
 ReactDOM.render(
   <Root
