@@ -17,6 +17,7 @@ SETUP DEV ENVIRONMENT
     cd ~/Homestead
     vagrant up
     vagrant suspend
+    vagrant resume
     vagrant reload --provision
     vagrant provision
     vagrant destroy --force
@@ -33,6 +34,8 @@ SETUP DEV ENVIRONMENT
     vagrant ssh
     2222 → Forwards To 22
     ------------------------------------------------------
+    /.homestead/aliases
+    ------------------------------------------------------
     Database
     127.0.0.1
     Navicat: port 33060 (MySQL)
@@ -44,6 +47,7 @@ SETUP DEV ENVIRONMENT
     lumen new projectname
     .env
     composer update
+    composer require laravel/dusk
 
 
 
@@ -728,11 +732,25 @@ TESTING
                         'created' => true,
                     ]);
             $this->assertEquals(200, $response->status());
+            $this->assertNotRegExp('/regex_here/',$this->response->getContent(), 'Test message');            
             $this->seeInDatabase('users', ['email' => 'sally@foo.com']);
             $this->withoutEvents();
             $this->expectsEvents('App\Events\UserRegistered');
             $this->expectsJobs('App\Jobs\PurchasePodcast');
         }
     }
+
+
+
+WORKFLOW
+===============================================================================================================
+Controller tests
+    migrations & models to support
+        php artisan make:migration create_customers_table --create=customers
+        php artisan migrate
+        composer dump-autoload
+        php artisan migrate:refresh
+        php artisan db:seed
+
 
 

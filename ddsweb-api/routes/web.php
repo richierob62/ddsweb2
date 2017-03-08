@@ -17,3 +17,6 @@ $app->get('/', function () use ($app) {
         'hey' => 'there'
     ]);
 });
+
+$app->post('customers', 'CustomersController@allCustomers');
+$app->post('customer', 'CustomersController@customerByID');
