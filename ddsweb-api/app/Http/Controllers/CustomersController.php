@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
+use Validator;
 use Illuminate\Http\Request;
-// use App\Transformer\CustomerTransformer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
 
 /**
 * Class CustomersController
@@ -14,9 +15,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class CustomersController extends Controller
 {
     
-    public function allCustomers()
+    public function customers()
     {
-        return Customer::all();
+        return ['data' => Customer::all()->toArray()];
         // return $this->collection(Customer::all(), new CustomerTransformer());
     }
     
@@ -25,80 +26,81 @@ class CustomersController extends Controller
     {
         $id = $request->input('id');
         try {
-            return Customer::findOrFail($id);
+            return ['data' => Customer::findOrFail($id)->toArray()];
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Not Found'],404);
         }
         // return $this->item(Customer::findOrFail($id), new CustomerTransformer());
     }
     
-    //     /**
-    //     * POST /customers
-    //     *
-    //     * @param Request $request
-    //     * @return \Illuminate\Http\JsonResponse
-    //     */
-    //     public function store(Request $request)
-    //     {
-    //         $this->validate($request, [
-    //         'title' => 'required|max:255',
-    //         'description' => 'required',
-    //         'author_id' => 'required|exists:authors,id'
-    //         ], [
-    //         'description.required' => 'Please provide a :attribute.'
-    //         ]);
-    //         $customer = Customer::create($request->all());
-    //         $data = $this->item($customer, new CustomerTransformer());
-    //         return response()->json($data, 201, [
-    //         'Location' => route('customers.show', ['id' => $customer->id])
-    //         ]);
-    //     }
-    //     /**
-    //     * PUT /customers/{id}
-    //     *
-    //     * @param Request $request
-    //     * @param $id
-    //     * @return mixed
-    //     */
-    //     public function update(Request $request, $id)
-    //     {
-    //         try {
-    //             $customer = Customer::findOrFail($id);
-    //         } catch (ModelNotFoundException $e) {
-    //             return response()->json([
-    //             'error' => [
-    //             'message' => 'Customer not found'
-    //             ]
-    //             ], 404);
-    //         }
-    //         $this->validate($request, [
-    //         'title' => 'required|max:255',
-    //         'description' => 'required',
-    //         'author_id' => 'exists:authors,id'
-    //         ], [
-    //         'description.required' => 'Please provide a :attribute.'
-    //         ]);
-    //         $customer->fill($request->all());
-    //         $customer->save();
-    //         return $this->item($customer, new CustomerTransformer());
-    //     }
-    //     /**
-    //     * DELETE /customers/{id}
-    //     * @param $id
-    //     * @return \Illuminate\Http\JsonResponse
-    //     */
-    //     public function destroy($id)
-    //     {
-    //         try {
-    //             $customer = Customer::findOrFail($id);
-    //         } catch (ModelNotFoundException $e) {
-    //             return response()->json([
-    //             'error' => [
-    //             'message' => 'Customer not found'
-    //             ]
-    //             ], 404);
-    //         }
-    //         $customer->delete();
-    //         return response(null, 204);
-    //     }
+    public function newCustomer(Request $request)
+    {
+        $validator = Validator::make(
+        $request->all(),
+        Customer::rules(),
+        Customer::errorMessages()
+        );
+        
+        if($validator->fails()) {
+            return response()->json(['errors' => $validator->messages()], 422);
+        }
+        
+        try {
+            
+            $customer = Customer::create($request->all());
+            return response()->json([
+            'created' => true,
+            'data' => $customer->toArray()
+            ], 201);
+            
+        } catch (ModelNotFoundException $e) {
+            
+            return response()->json(['error' => 'Not Created'],404);
+            
+        };
+        
+    }
+    
+    public function editCustomer(Request $request)
+    {
+        $id = $request->input('id');
+        
+        $validator = Validator::make(
+        $request->all(),
+        Customer::rules($id),
+        Customer::errorMessages()
+        );
+        
+        if($validator->fails()) {
+            return response()->json(['errors' => $validator->messages()], 422);
+        }
+        
+        try {
+            $customer = Customer::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Not Found'],404);
+        }
+        
+        $customer->fill($request->all());
+        $customer->save();
+        return response()->json([
+        'updated' => true,
+        'data' => $customer->toArray()
+        ], 201);
+    }
+    
+    public function deleteCustomer(Request $request)
+    {
+        $id = $request->input('id');
+        try {
+            $customer = Customer::findOrFail($id);
+            $customer->delete();
+            return response()->json([
+            'deleted' => true,
+            'id' => $id
+            ], 201);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Not Found'],404);
+        }
+    }
 }

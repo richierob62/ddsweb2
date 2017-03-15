@@ -674,7 +674,7 @@ SERVICE PROVIDERS
 VALIDATION
 ===============================================================================================================
     $this->validate($request, ['name' => 'required', 'email' => 'required|email|unique:users']);
-
+    https://lumen.laravel.com/docs/5.1/validation#available-validation-rules
 
     
 
@@ -732,13 +732,19 @@ TESTING
                         'created' => true,
                     ]);
             $this->assertEquals(200, $response->status());
-            $this->assertNotRegExp('/regex_here/',$this->response->getContent(), 'Test message');            
+            $this->assertNotRegExp('/regex_here/',$this->response->getContent(), 'Test message');     
+            $this->assertTrue( $this->response->headers->has($header),"Response should have the header '{$header}' but does not.");                   
             $this->seeInDatabase('users', ['email' => 'sally@foo.com']);
             $this->withoutEvents();
             $this->expectsEvents('App\Events\UserRegistered');
             $this->expectsJobs('App\Jobs\PurchasePodcast');
         }
     }
+
+    $faker
+    ------------------------------------------------------
+    \vendor\fzaninotto\faker\src\Faker\Generator.php
+
 
 
 
@@ -754,3 +760,12 @@ Controller tests
 
 
 
+tests to do
+--------------------
++ create category
++ create local_foreign
++ create pay_plan
++ create primary_book
++ create sales_rep
++ validate reference fields on customer create, edit
++ filter customers on name, address, city, state, account_num, sales_rep

@@ -18,5 +18,8 @@ $app->get('/', function () use ($app) {
     ]);
 });
 
-$app->post('customers', 'CustomersController@allCustomers');
+$app->post('customers', 'CustomersController@customers');
 $app->post('customer', 'CustomersController@customerByID');
+$app->post('new_customer', 'CustomersController@newCustomer');
+$app->post('edit_customer', 'CustomersController@editCustomer');
+$app->post('delete_customer', 'CustomersController@deleteCustomer');
