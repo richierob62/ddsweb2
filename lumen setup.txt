@@ -339,7 +339,7 @@ QUERIES & MODELS
     bootstrap/app.php
     $app->withEloquent()
     ------------------------------------------------------
-    models
+    model class
         namespace App
         use Illuminate\Database\Eloquent\Model
         use Illuminate\Notifications\Notifiable;
@@ -370,6 +370,21 @@ QUERIES & MODELS
             public $timestamps = false
             public function scopeMyLocalScope($query) {...}
             public function scopeMyLocalScope($query, $param) {..}
+
+            public function phone() { return $this->hasOne('App\Phone');  }
+
+            public function comments() { return $this->hasMany('App\Comment');  }
+            public function roles() { return $this->belongsToMany('App\Role'); }            
+            public function roles() { return $this->belongsToMany('App\Role', 'user_roles', 'user_id', 'role_id'); }  
+
+            public function posts() { return $this->hasManyThrough('App\Post', 'App\User'); }
+
+            public function imageable() { return $this->morphTo(); }
+            public function photos()  { return $this->morphMany('App\Photo', 'imageable'); }
+
+            public function tags() { return $this->morphToMany('App\Tag', 'taggable'); }
+            public function posts() { return $this->morphedByMany('App\Post', 'taggable'); }
+
         }
     ------------------------------------------------------
     Model
@@ -410,6 +425,8 @@ QUERIES & MODELS
     relationships
         $model->history()->withTrashed()->get();
         $model->history()->forceDelete();
+        $book->author()->associate($someAuthorModelInstance); //belongsTo 
+        $user->roles()->sync([1,2,3]); //belongsToMany 
     ------------------------------------------------------
     global scope
         use Illuminate\Database\Eloquent\Scope;
@@ -712,6 +729,7 @@ TESTING
     $users = factory('App\User', 3)
         ->create()
         ->each(function($u) {$u->posts()->save(factory('App\Post')->make());});    
+    $author->books()->save(factory(App\Book::class)->make());        
     ------------------------------------------------------
     use Laravel\Lumen\Testing\DatabaseMigrations;
     use Laravel\Lumen\Testing\DatabaseTransactions;
@@ -745,6 +763,11 @@ TESTING
     ------------------------------------------------------
     \vendor\fzaninotto\faker\src\Faker\Generator.php
 
+    phpunit.xml
+    ------------------------------------------------------
+    <php>
+        <env name="DB_DATABASE" value="ddsweb2_testing"/>
+    </php>
 
 
 
@@ -752,7 +775,7 @@ WORKFLOW
 ===============================================================================================================
 Controller tests
     migrations & models to support
-        php artisan make:migration create_customers_table --create=customers
+        php artisan make:migration create_categories_table --create=categories
         php artisan migrate
         composer dump-autoload
         php artisan migrate:refresh
@@ -760,12 +783,18 @@ Controller tests
 
 
 
-tests to do
+to do
 --------------------
-+ create category
-+ create local_foreign
-+ create pay_plan
-+ create primary_book
-+ create sales_rep
-+ validate reference fields on customer create, edit
-+ filter customers on name, address, city, state, account_num, sales_rep
+lumen
+    + create category
+    + create local_foreign
+    + create pay_plan
+    + create primary_book
+    + create sales_rep
+    + validate reference fields on customer create, edit
+    + filter customers on name, address, city, state, account_num, sales_rep
+
+react
+    + sagas to access apis after apis done
+    
+

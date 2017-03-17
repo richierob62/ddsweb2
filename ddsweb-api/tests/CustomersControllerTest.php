@@ -10,7 +10,8 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function index_status_code_should_be_200()
     {
-        $customers = factory('App\Customer', 2)->create();
+        
+        $customers = $this->customerFactory(2);
         $this
         ->post('/customers')
         ->seeStatusCode(200);
@@ -19,7 +20,7 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_collection_of_records()
     {
-        $customers = factory('App\Customer', 2)->create();
+        $customers = $this->customerFactory(2);
         $this->post('/customers');
         
         $expected = [
@@ -32,7 +33,7 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function it_returns_a_valid_book()
     {
-        $customer = factory('App\Customer')->create();
+        $customer = $this->customerFactory();
         
         $expected = [
         'data' => $customer->toArray()
@@ -61,13 +62,20 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function it_saves_new_customer_in_the_database()
     {
+        
+        $category = factory(App\Category::class)->create();
+        $pay_plan = factory(App\PayPlan::class)->create();
+        $primary_book = factory(App\PrimaryBook::class)->create();
+        $sales_rep = factory(App\SalesRep::class)->create();
+        $local_foreign = factory(App\LocalForeign::class)->create();
+        
         $this->post('/new_customer', [
         'account_num' => '12345',
-        'category' => 1,
-        'local_foreign' => 1,
-        'pay_plan' => 1,
-        'primary_book' => 1,
-        'sales_rep' => 1,
+        'category' => $category->id,
+        'local_foreign' => $local_foreign->id,
+        'pay_plan' => $pay_plan->id,
+        'primary_book' => $primary_book->id,
+        'sales_rep' => $sales_rep->id,
         'name' => 'foo'
         ]);
         
@@ -89,26 +97,24 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function update_should_pass_with_a_valid_id()
     {
-        $this->post('/new_customer', [
-        'account_num' => '12345',
-        'category' => 1,
-        'local_foreign' => 1,
-        'pay_plan' => 1,
-        'primary_book' => 1,
-        'sales_rep' => 1,
-        'name' => 'foo_new'
-        ]);
+        $customer = $this->customerFactory();
         
-        $id = json_decode($this->response->getContent(), true)['data']['id'];
+        $id = $customer->id;
+        
+        $category = factory(App\Category::class)->create();
+        $pay_plan = factory(App\PayPlan::class)->create();
+        $primary_book = factory(App\PrimaryBook::class)->create();
+        $sales_rep = factory(App\SalesRep::class)->create();
+        $local_foreign = factory(App\LocalForeign::class)->create();
         
         $this->post('/edit_customer', [
         'id' => $id,
         'account_num' => '44444',
-        'category' => 2,
-        'local_foreign' => 2,
-        'pay_plan' => 2,
-        'primary_book' => 2,
-        'sales_rep' => 2,
+        'category' => $category->id,
+        'local_foreign' => $local_foreign->id,
+        'pay_plan' => $pay_plan->id,
+        'primary_book' => $primary_book->id,
+        'sales_rep' => $sales_rep->id,
         'name' => 'foo_edited'
         ]);
         
@@ -125,14 +131,20 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function update_should_fail_with_an_invalid_id()
     {
+        $category = factory(App\Category::class)->create();
+        $pay_plan = factory(App\PayPlan::class)->create();
+        $primary_book = factory(App\PrimaryBook::class)->create();
+        $sales_rep = factory(App\SalesRep::class)->create();
+        $local_foreign = factory(App\LocalForeign::class)->create();
+        
         $this->post('/edit_customer', [
-        'id' => 999999,
-        'account_num' => '12345',
-        'category' => 2,
-        'local_foreign' => 2,
-        'pay_plan' => 2,
-        'primary_book' => 2,
-        'sales_rep' => 2,
+        'id' => 9999999,
+        'account_num' => '44444',
+        'category' => $category->id,
+        'local_foreign' => $local_foreign->id,
+        'pay_plan' => $pay_plan->id,
+        'primary_book' => $primary_book->id,
+        'sales_rep' => $sales_rep->id,
         'name' => 'foo_edited'
         ]);
         
@@ -145,17 +157,8 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function delete_should_remove_a_valid_book()
     {
-        $this->post('/new_customer', [
-        'category' => 1,
-        'account_num' => '12345',
-        'local_foreign' => 1,
-        'pay_plan' => 1,
-        'primary_book' => 1,
-        'sales_rep' => 1,
-        'name' => 'foo'
-        ]);
-        
-        $id = json_decode($this->response->getContent(), true)['data']['id'];
+        $customer = $this->customerFactory();
+        $id = $customer->id;
         
         $this->seeInDatabase('customers', ['id' => $id]);
         
@@ -214,7 +217,7 @@ class CustomersControllerTest extends TestCase
     public function it_validates_required_fields_when_updating_a_customer()
     {
         
-        $customer = factory(\App\Customer::class)->create();
+        $customer = $this->customerFactory();
         
         $this->post('/edit_customer', ['id' => $customer->id], ['Accept' => 'application/json']);
         
@@ -245,23 +248,29 @@ class CustomersControllerTest extends TestCase
     public function it_rejects_duplicate_data_on_create()
     {
         
+        $category = factory(App\Category::class)->create();
+        $pay_plan = factory(App\PayPlan::class)->create();
+        $primary_book = factory(App\PrimaryBook::class)->create();
+        $sales_rep = factory(App\SalesRep::class)->create();
+        $local_foreign = factory(App\LocalForeign::class)->create();
+        
         $this->post('/new_customer', [
         'account_num' => '12345',
-        'category' => 1,
-        'local_foreign' => 1,
-        'pay_plan' => 1,
-        'primary_book' => 1,
-        'sales_rep' => 1,
+        'category' => $category->id,
+        'local_foreign' => $local_foreign->id,
+        'pay_plan' => $pay_plan->id,
+        'primary_book' => $primary_book->id,
+        'sales_rep' => $sales_rep->id,
         'name' => 'foo'
         ]);
         
         $this->post('/new_customer', [
         'account_num' => '12345',
-        'category' => 1,
-        'local_foreign' => 1,
-        'pay_plan' => 1,
-        'primary_book' => 1,
-        'sales_rep' => 1,
+        'category' => $category->id,
+        'local_foreign' => $local_foreign->id,
+        'pay_plan' => $pay_plan->id,
+        'primary_book' => $primary_book->id,
+        'sales_rep' => $sales_rep->id,
         'name' => 'foo'
         ]);
         
@@ -282,24 +291,30 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function it_rejects_duplicate_names_on_edit()
     {
+        $category = factory(App\Category::class)->create();
+        $pay_plan = factory(App\PayPlan::class)->create();
+        $primary_book = factory(App\PrimaryBook::class)->create();
+        $sales_rep = factory(App\SalesRep::class)->create();
+        $local_foreign = factory(App\LocalForeign::class)->create();
+        
         
         $this->post('/new_customer', [
         'account_num' => '11111',
-        'category' => 1,
-        'local_foreign' => 1,
-        'pay_plan' => 1,
-        'primary_book' => 1,
-        'sales_rep' => 1,
+        'category' => $category->id,
+        'local_foreign' => $local_foreign->id,
+        'pay_plan' => $pay_plan->id,
+        'primary_book' => $primary_book->id,
+        'sales_rep' => $sales_rep->id,
         'name' => 'foo'
         ]);
         
         $this->post('/new_customer', [
         'account_num' => '22222',
-        'category' => 1,
-        'local_foreign' => 1,
-        'pay_plan' => 1,
-        'primary_book' => 1,
-        'sales_rep' => 1,
+        'category' => $category->id,
+        'local_foreign' => $local_foreign->id,
+        'pay_plan' => $pay_plan->id,
+        'primary_book' => $primary_book->id,
+        'sales_rep' => $sales_rep->id,
         'name' => 'bar'
         ]);
         
@@ -308,11 +323,11 @@ class CustomersControllerTest extends TestCase
         $this->post('/edit_customer', [
         'id' => $id,
         'account_num' => '11111',
-        'category' => 2,
-        'local_foreign' => 2,
-        'pay_plan' => 2,
-        'primary_book' => 2,
-        'sales_rep' => 2,
+        'category' => $category->id,
+        'local_foreign' => $local_foreign->id,
+        'pay_plan' => $pay_plan->id,
+        'primary_book' => $primary_book->id,
+        'sales_rep' => $sales_rep->id,
         'name' => 'foo'
         ]);
         
@@ -335,13 +350,19 @@ class CustomersControllerTest extends TestCase
     public function it_validates_type_on_create()
     {
         
+        $category = factory(App\Category::class)->create();
+        $pay_plan = factory(App\PayPlan::class)->create();
+        $primary_book = factory(App\PrimaryBook::class)->create();
+        $sales_rep = factory(App\SalesRep::class)->create();
+        $local_foreign = factory(App\LocalForeign::class)->create();
+        
         $this->post('/new_customer', [
         'account_num' => '11111',
-        'category' => 1,
-        'local_foreign' => 1,
-        'pay_plan' => 1,
-        'primary_book' => 1,
-        'sales_rep' => 1,
+        'category' => $category->id,
+        'local_foreign' => $local_foreign->id,
+        'pay_plan' => $pay_plan->id,
+        'primary_book' => $primary_book->id,
+        'sales_rep' => $sales_rep->id,
         'name' => 'foo',
         'billing_email' => 'foo',
         'email' => 'foo@'
@@ -363,14 +384,19 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function it_validates_type_on_edit()
     {
+        $category = factory(App\Category::class)->create();
+        $pay_plan = factory(App\PayPlan::class)->create();
+        $primary_book = factory(App\PrimaryBook::class)->create();
+        $sales_rep = factory(App\SalesRep::class)->create();
+        $local_foreign = factory(App\LocalForeign::class)->create();
         
         $this->post('/new_customer', [
         'account_num' => '11111',
-        'category' => 1,
-        'local_foreign' => 1,
-        'pay_plan' => 1,
-        'primary_book' => 1,
-        'sales_rep' => 1,
+        'category' => $category->id,
+        'local_foreign' => $local_foreign->id,
+        'pay_plan' => $pay_plan->id,
+        'primary_book' => $primary_book->id,
+        'sales_rep' => $sales_rep->id,
         'name' => 'foo',
         'billing_email' => 'foo@example.com',
         'email' => 'foo@example.com'
@@ -398,8 +424,6 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function it_validates_reference_fields_on_create()
     {
-        $this->markTestIncomplete();
-
         $this->post('/new_customer', [
         'account_num' => '11111',
         'category' => '1',
@@ -420,11 +444,11 @@ class CustomersControllerTest extends TestCase
         $this->assertArrayHasKey('primary_book', $errors);
         $this->assertArrayHasKey('sales_rep', $errors);
         
-        $this->assertEquals(["You must select a valid category"], $errors['category']);
-        $this->assertEquals(["You must select a valid local/foreign"], $errors['local_foreign']);
-        $this->assertEquals(["You must select a valid pay plan"], $errors['pay_plan']);
-        $this->assertEquals(["You must select a valid primary book"], $errors['primary_book']);
-        $this->assertEquals(["You must select a valid sales rep"], $errors['sales_rep']);
+        $this->assertEquals(["You must select a valid category."], $errors['category']);
+        $this->assertEquals(["You must select a valid local/foreign."], $errors['local_foreign']);
+        $this->assertEquals(["You must select a valid pay plan."], $errors['pay_plan']);
+        $this->assertEquals(["You must select a valid primary book."], $errors['primary_book']);
+        $this->assertEquals(["You must select a valid sales rep."], $errors['sales_rep']);
     }
     
     
@@ -432,24 +456,27 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function it_validates_reference_fields_on_edit()
     {
+
+        $category = factory(App\Category::class)->create();
+        $pay_plan = factory(App\PayPlan::class)->create();
+        $primary_book = factory(App\PrimaryBook::class)->create();
+        $sales_rep = factory(App\SalesRep::class)->create();
+        $local_foreign = factory(App\LocalForeign::class)->create();
         
-        $this->markTestIncomplete();
         
         $this->post('/new_customer', [
         'account_num' => '11111',
-        'category' => 1,
-        'local_foreign' => 1,
-        'pay_plan' => 1,
-        'primary_book' => 1,
-        'sales_rep' => 1,
-        'name' => 'foo',
-        'billing_email' => 'foo@example.com',
-        'email' => 'foo@example.com'
+        'category' => $category->id,
+        'local_foreign' => $local_foreign->id,
+        'pay_plan' => $pay_plan->id,
+        'primary_book' => $primary_book->id,
+        'sales_rep' => $sales_rep->id,
+        'name' => 'foo'
         ]);
-        
+
         $data = json_decode($this->response->getContent(), true)['data'];
         
-        $data['category'] = '1';
+        $data['category'] = 'rass';
         $data['local_foreign'] = 'junk';
         $data['pay_plan'] = 'junk';
         $data['primary_book'] = '253698741112255';
@@ -460,18 +487,18 @@ class CustomersControllerTest extends TestCase
         $this->assertEquals(422, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
-        
+
         $this->assertArrayHasKey('category', $errors);
         $this->assertArrayHasKey('local_foreign', $errors);
         $this->assertArrayHasKey('pay_plan', $errors);
         $this->assertArrayHasKey('primary_book', $errors);
         $this->assertArrayHasKey('sales_rep', $errors);
         
-        $this->assertEquals(["You must select a valid category"], $errors['category']);
-        $this->assertEquals(["You must select a valid local/foreign"], $errors['local_foreign']);
-        $this->assertEquals(["You must select a valid pay plan"], $errors['pay_plan']);
-        $this->assertEquals(["You must select a valid primary book"], $errors['primary_book']);
-        $this->assertEquals(["You must select a valid sales rep"], $errors['sales_rep']);
+        $this->assertEquals(["You must select a valid category."], $errors['category']);
+        $this->assertEquals(["You must select a valid local/foreign."], $errors['local_foreign']);
+        $this->assertEquals(["You must select a valid pay plan."], $errors['pay_plan']);
+        $this->assertEquals(["You must select a valid primary book."], $errors['primary_book']);
+        $this->assertEquals(["You must select a valid sales rep."], $errors['sales_rep']);
     }
     
 }
