@@ -19,7 +19,15 @@ $app->get('/', function () use ($app) {
 });
 
 $app->post('customers', 'CustomersController@customers');
+$app->post('customer_reference', 'CustomersController@referenceList');
 $app->post('customer', 'CustomersController@customerByID');
 $app->post('new_customer', 'CustomersController@newCustomer');
 $app->post('edit_customer', 'CustomersController@editCustomer');
 $app->post('delete_customer', 'CustomersController@deleteCustomer');
+
+$app->post('sales_reps', 'SalesRepsController@salesReps');
+$app->post('sales_rep_reference', 'SalesRepsController@referenceList');
+$app->post('sales_rep', 'SalesRepsController@salesRepByID');
+$app->post('new_sales_rep', 'SalesRepsController@newSalesRep');
+$app->post('edit_sales_rep', 'SalesRepsController@editSalesRep');
+$app->post('delete_sales_rep', 'SalesRepsController@deleteSalesRep');

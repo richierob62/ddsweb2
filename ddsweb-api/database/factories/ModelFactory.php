@@ -20,11 +20,11 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Customer::class, function ($faker) {
     
-    $category = \App\Category::first()->id;
-    $local_foreign = \App\LocalForeign::first()->id;
-    $pay_plan = \App\PayPlan::first()->id;
-    $primary_book = \App\PrimaryBook::first()->id;
-    $sales_rep = \App\SalesRep::first()->id;
+    $category = factory(App\Category::class)->create()->id;
+    $local_foreign = factory(App\LocalForeign::class)->create()->id;
+    $pay_plan = factory(App\PayPlan::class)->create()->id;
+    $primary_book = factory(App\PrimaryBook::class)->create()->id;
+    $sales_rep = factory(App\SalesRep::class)->create()->id;
     
     return [
     'account_num' => (string)$faker->randomNumber(6),

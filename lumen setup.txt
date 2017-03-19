@@ -786,15 +786,8 @@ Controller tests
 to do
 --------------------
 lumen
-    + create category
-    + create local_foreign
-    + create pay_plan
-    + create primary_book
-    + create sales_rep
-    + validate reference fields on customer create, edit
     + filter customers on name, address, city, state, account_num, sales_rep
 
 react
     + sagas to access apis after apis done
     
-

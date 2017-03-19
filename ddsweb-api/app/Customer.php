@@ -12,11 +12,11 @@ class Customer extends Model
         return [
         'name' => 'required|unique:customers,name,'.$id,
         'account_num' => 'required|unique:customers,account_num,'.$id,
-        'category'  => 'required|exists:categories,id',
-        'local_foreign' => 'required|exists:local_foreigns,id',
-        'pay_plan' => 'required|exists:pay_plans,id',
-        'primary_book'  => 'required|exists:primary_books,id',
-        'sales_rep' => 'required|exists:sales_reps,id',
+        'category'  => 'exists:categories,id',
+        'local_foreign' => 'exists:local_foreigns,id',
+        'pay_plan' => 'exists:pay_plans,id',
+        'primary_book'  => 'exists:primary_books,id',
+        'sales_rep' => 'exists:sales_reps,id',
         'billing_email' => 'email',
         'email' => 'email'
         ];
@@ -28,29 +28,66 @@ class Customer extends Model
         'account_num.unique' => 'That account number has already been used.',
         
         'account_num.required' => 'An account number is required.',
-        'category.required' => 'You must select a category.',
-        'local_foreign.required' => 'You must select local/foreign.',
         'name.required' => 'A company name is required.',
-        'pay_plan.required' => 'You must select a pay plan.',
-        'primary_book.required' => 'You must select a primary book.',
-        'sales_rep.required' => 'You must select a sales rep.',
-
+        
         'category.exists' => 'You must select a valid category.',
         'local_foreign.exists' => 'You must select a valid local/foreign.',
         'pay_plan.exists' => 'You must select a valid pay plan.',
         'primary_book.exists' => 'You must select a valid primary book.',
         'sales_rep.exists' => 'You must select a valid sales rep.',
-
+        
         'billing_email.email' => 'The billing email must be a valid email address.',
         'email.email' => 'The email must be a valid email address.'
         
         ];
     }
+    
+    public function category() { return $this->belongsTo(Category::class, 'category');  }
+    public function local_foreign() { return $this->belongsTo(LocalForeign::class, 'local_foreign');  }
+    public function pay_plan() { return $this->belongsTo(PayPlan::class, 'pay_plan');  }
+    public function primary_book() { return $this->belongsTo(PrimaryBook::class, 'primary_book');  }
+    public function sales_rep() { return $this->belongsTo(SalesRep::class, 'sales_rep');  }
+    
+    static public function filterOn($key, $filter, $query)
+    {
+        switch ($key) {
+            case 'name':
+                return $query->where('name', 'LIKE', '%'.$filter.'%');
+                break;
+            case 'address':
+                return $query->where('address', 'LIKE', '%'.$filter.'%');
+                break;
+            case 'city':
+                return $query->where('city', 'LIKE', '%'.$filter.'%');
+                break;
+            case 'state':
+                return $query->where('state', 'LIKE', '%'.$filter.'%');
+                break;
+            case 'account_num':
+                return $query->where('account_num', 'LIKE', '%'.$filter.'%');
+                break;
+            case 'sales_rep':
+                return $query->whereHas('sales_rep', function($q) use ($filter) {
+                    $q->where('name', 'LIKE', '%'.$filter.'%');
+                });
+                break;
+            case 'id':
+                return $query->where('id', $filter);
+                break;
+            default:
+                return $query;
+        }
+    }
 
-    public function category() { return $this->hasOne(Category::class);  }
-    public function local_foreign() { return $this->hasOne(LocalForeign::class);  }
-    public function pay_plan() { return $this->hasOne(PayPlan::class);  }
-    public function primary_book() { return $this->hasOne(PrimaryBook::class);  }
-    public function sales_rep() { return $this->hasOne(SalesRep::class);  }
-
+    static public function sortResultsBy($sort_name, $sort_dir, $query) {
+        switch ($sort_name) {
+            case 'sales_rep':
+                return $query->whereHas('sales_rep', function($q) use ($filter, $sort_dir) {
+                    $q->orderBy('name', $sort_dir);
+                });
+                break;
+            default:
+                return $query->orderBy($sort_name, $sort_dir);
+        }        
+    }
 }

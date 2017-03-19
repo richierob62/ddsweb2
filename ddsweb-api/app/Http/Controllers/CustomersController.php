@@ -15,12 +15,39 @@ use Illuminate\Validation\ValidationException;
 class CustomersController extends Controller
 {
     
-    public function customers()
+    public function customers(Request $request)
     {
-        return ['data' => Customer::all()->toArray()];
-        // return $this->collection(Customer::all(), new CustomerTransformer());
+        $query = Customer::where('id','>',-1);
+        $filters = $request->input('filters');
+        
+        $sort_name = $request->input('sort_name');
+        if(sizeof($sort_name) == 0) {
+            $sort_name = 'name';
+        }
+        
+        $sort_dir = $request->input('sort_dir');
+        if(sizeof($sort_dir) == 0) {
+            $sort_dir = 'asc';
+        }
+        
+        if(sizeof($filters) > 0) {
+            foreach( $filters as $key => $filter) {
+                $query = Customer::filterOn($key, $filter, $query);
+            }
+        }
+        
+        $query = Customer::sortResultsBy($sort_name, $sort_dir, $query);
+        
+        return response()->json(['data' => $query->get()]);
     }
     
+    public function referenceList() {
+        $refs =  Customer::orderBy('name')->get(['id', 'name'])
+        ->map( function ($item) {
+            return ['id' => $item->id, 'display' => $item->name ];
+        });
+        return response()->json(['data' => $refs]);
+    }
     
     public function customerByID(Request $request)
     {
@@ -30,7 +57,6 @@ class CustomersController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Not Found'],404);
         }
-        // return $this->item(Customer::findOrFail($id), new CustomerTransformer());
     }
     
     public function newCustomer(Request $request)
@@ -63,6 +89,7 @@ class CustomersController extends Controller
     
     public function editCustomer(Request $request)
     {
+        
         $id = $request->input('id');
         
         $validator = Validator::make(
