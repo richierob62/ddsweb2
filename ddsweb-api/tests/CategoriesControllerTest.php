@@ -3,7 +3,7 @@
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
-class SalesRepsControllerTest extends TestCase
+class CategoriesControllerTest extends TestCase
 {
     use DatabaseMigrations;
     
@@ -15,21 +15,21 @@ class SalesRepsControllerTest extends TestCase
     /** @test **/
     public function index_status_code_should_be_200()
     {
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
+        factory(App\Category::class)->create();
+        factory(App\Category::class)->create();
+        factory(App\Category::class)->create();
         $this
-        ->post('/sales_reps')
+        ->post('/categories')
         ->seeStatusCode(200);
     }
     
     /** @test **/
     public function index_should_return_a_collection_of_records()
     {
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        $this->post('/sales_reps');
+        factory(App\Category::class)->create();
+        factory(App\Category::class)->create();
+        factory(App\Category::class)->create();
+        $this->post('/categories');
         $data = json_decode($this->response->getContent(), true)['data'];
         $expected = [
         'data' => $data
@@ -41,10 +41,10 @@ class SalesRepsControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_reference_list()
     {
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        $this->post('/sales_rep_reference');
+        factory(App\Category::class)->create();
+        factory(App\Category::class)->create();
+        factory(App\Category::class)->create();
+        $this->post('/category_reference');
         $data = json_decode($this->response->getContent(), true);
         $this->seeJsonEquals($data);
     }
@@ -53,22 +53,22 @@ class SalesRepsControllerTest extends TestCase
     public function index_should_return_a_collection_of_filtered_and_ordered__records()
     {
         
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        $sales_rep = factory(App\SalesRep::class)->create()->toArray();
-        $sales_rep['name'] = '0000something-123name-something';
-        $sales_rep['email'] = '0000something-123email@something.com';
-        $this->post('/edit_sales_rep', $sales_rep);
+        factory(App\Category::class)->create();
+        factory(App\Category::class)->create();
+        factory(App\Category::class)->create();
+        factory(App\Category::class)->create();
+        factory(App\Category::class)->create();
+        factory(App\Category::class)->create();
+        $category = factory(App\Category::class)->create()->toArray();
+        $category['name'] = '0000something-123name-something';
+        $category['code'] = '0000something-123code';
+        $this->post('/edit_category', $category);
         
-        $this->post('/sales_reps', [
+        $this->post('/categories', [
         'filters' => [
         'name' => '123name',
-        'email' => '123email',
-        'id' => $sales_rep['id']
+        'code' => '123code',
+        'id' => $category['id']
         ],
         'sort_name' => 'name',
         'sort_dir' => 'desc'
@@ -76,7 +76,7 @@ class SalesRepsControllerTest extends TestCase
         $data = json_decode($this->response->getContent(), true)['data'];
         $this->assertEquals(1, sizeOf($data));
         
-        $this->post('/sales_reps', [
+        $this->post('/categories', [
         'filters' => [],
         'sort_name' => NULL,
         'sort_dir' => NULL
@@ -84,26 +84,26 @@ class SalesRepsControllerTest extends TestCase
         $data = json_decode($this->response->getContent(), true)['data'];
         $this->assertEquals(7, sizeOf($data));
         
-        $this->post('/sales_reps', [
+        $this->post('/categories', [
         'filters' => [],
         'sort_name' => 'name',
         'sort_dir' => 'asc'
         ]);
         $data = json_decode($this->response->getContent(), true)['data'];
         $first_rec = $data[0];
-        $this->assertEquals($first_rec['name'], $sales_rep['name']);
+        $this->assertEquals($first_rec['name'], $category['name']);
         
-        $this->post('/sales_reps');
+        $this->post('/categories');
         $data = json_decode($this->response->getContent(), true)['data'];
         $this->assertEquals(7, sizeOf($data));
         
     }
     
     /** @test **/
-    public function it_returns_a_valid_rep()
+    public function it_returns_a_valid_category()
     {
-        factory(App\SalesRep::class)->create();
-        $this->post('/sales_reps');
+        factory(App\Category::class)->create();
+        $this->post('/categories');
         $data = json_decode($this->response->getContent(), true)['data'];
         $id = $data[0]['id'];
         
@@ -112,7 +112,7 @@ class SalesRepsControllerTest extends TestCase
         'data' => $data[0]
         ];
         $this
-        ->post('/sales_rep', ['id' => $id])
+        ->post('/category', ['id' => $id])
         ->seeStatusCode(200)
         ->seeJsonEquals($expected);
         
@@ -125,21 +125,21 @@ class SalesRepsControllerTest extends TestCase
     }
     
     /** @test **/
-    public function returns_an_error_when_the_rep_id_does_not_exist()
+    public function returns_an_error_when_the_category_id_does_not_exist()
     {
         $this
-        ->post('/sales_rep', ['id' => 999999])
+        ->post('/category', ['id' => 999999])
         ->seeStatusCode(404)
         ->seeJson(['error' => 'Not Found']);
     }
     
     /** @test **/
-    public function it_saves_new_sales_rep_in_the_database()
+    public function it_saves_new_category_in_the_database()
     {
         
-        $this->post('/new_sales_rep', [
+        $this->post('/new_category', [
         'name' => 'foo',
-        'email' => 'foo@example.com'
+        'code' => 'foo'
         ]);
         
         $body = json_decode($this->response->getContent(), true);
@@ -147,27 +147,30 @@ class SalesRepsControllerTest extends TestCase
         
         $data = $body['data'];
         $this->assertEquals('foo', $data['name']);
-        $this->assertEquals('foo@example.com', $data['email']);
+        $this->assertEquals('foo', $data['code']);
         $this->assertTrue($data['id'] > 0);
         
         $this
         ->seeStatusCode(201)
         ->seeJson(['created' => true])
-        ->seeInDatabase('sales_reps', ['name' => 'foo']);
+        ->seeInDatabase('categories', [
+        'name' => 'foo',
+        'code' => 'foo'
+        ]);
         
     }
     
     /** @test **/
     public function update_should_pass_with_a_valid_id()
     {
-        $sales_rep = factory(App\SalesRep::class)->create();
+        $category = factory(App\Category::class)->create();
         
-        $id = $sales_rep->id;
+        $id = $category->id;
         
-        $this->post('/edit_sales_rep', [
-        'id' => $id,
-        'email' => 'bar@example.com',
-        'name' => 'foo_edited'
+        $this->post('/edit_category', [
+        'id' => $category->id,
+        'name' => 'foo_edited',
+        'code' => 'foo_edited'
         ]);
         
         $body = json_decode($this->response->getContent(), true);
@@ -176,7 +179,7 @@ class SalesRepsControllerTest extends TestCase
         $this
         ->seeStatusCode(201)
         ->seeJson(['updated' => true, 'id' => $id])
-        ->seeInDatabase('sales_reps', ['name' => 'foo_edited']);
+        ->seeInDatabase('categories', ['name' => 'foo_edited']);
         
     }
     
@@ -184,10 +187,10 @@ class SalesRepsControllerTest extends TestCase
     public function update_should_fail_with_an_invalid_id()
     {
         
-        $this->post('/edit_sales_rep', [
+        $this->post('/edit_category', [
         'id' => 9999999,
-        'email' => 'foo@email.com',
-        'name' => 'foo_edited'
+        'name' => 'foo_edited',
+        'code' => 'foo_edited'
         ]);
         
         $this
@@ -197,29 +200,29 @@ class SalesRepsControllerTest extends TestCase
     
     
     /** @test **/
-    public function delete_should_remove_a_valid_rep()
+    public function delete_should_remove_a_valid_category()
     {
-        $sales_rep = factory(App\SalesRep::class)->create();
+        $category = factory(App\Category::class)->create();
         
-        $id = $sales_rep->id;
+        $id = $category->id;
         
-        $this->seeInDatabase('sales_reps', ['id' => $id]);
+        $this->seeInDatabase('categories', ['id' => $id]);
         
         $this
-        ->post('/delete_sales_rep', ['id' => $id])
+        ->post('/delete_category', ['id' => $id])
         ->seeStatusCode(201)
         ->seeJson(['deleted' => true]);
         
         $data = json_decode($this->response->getContent(), true);
         $this->assertArrayhasKey('id', $data);
         
-        $this->notSeeInDatabase('sales_reps', ['id' => $id]);
+        $this->notSeeInDatabase('categories', ['id' => $id]);
     }
     
     /** @test **/
     public function delete_should_fail_with_an_invalid_id()
     {
-        $this->post('/delete_sales_rep', ['id' => 999999 ]);
+        $this->post('/delete_category', ['id' => 999999 ]);
         
         $this
         ->seeStatusCode(404)
@@ -228,37 +231,41 @@ class SalesRepsControllerTest extends TestCase
     
     // required - create
     /** @test **/
-    public function it_validates_required_fields_when_creating_a_new_sales_rep()
+    public function it_validates_required_fields_when_creating_a_new_category()
     {
-        $this->post('/new_sales_rep', [], ['Accept' => 'application/json']);
+        $this->post('/new_category', [], ['Accept' => 'application/json']);
         
         $this->assertEquals(422, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
+        $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["A sales rep name is required."], $errors['name']);
+        $this->assertEquals(["A category name is required."], $errors['name']);
+        $this->assertEquals(["A category code is required."], $errors['code']);
         
     }
     
     
     // required - edit
     /** @test **/
-    public function it_validates_required_fields_when_updating_a_sales_rep()
+    public function it_validates_required_fields_when_updating_a_category()
     {
         
-        $sales_rep = factory(App\SalesRep::class)->create();
+        $category = factory(App\Category::class)->create();
         
-        $this->post('/edit_sales_rep', ['id' => $sales_rep->id], ['Accept' => 'application/json']);
+        $this->post('/edit_category', ['id' => $category->id], ['Accept' => 'application/json']);
         
         $this->assertEquals(422, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
+        $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["A sales rep name is required."], $errors['name']);
+        $this->assertEquals(["A category name is required."], $errors['name']);
+        $this->assertEquals(["A category code is required."], $errors['code']);
         
     }
     
@@ -267,13 +274,13 @@ class SalesRepsControllerTest extends TestCase
     public function it_rejects_duplicate_data_on_create()
     {
         
-        $this->post('/new_sales_rep', [
-        'email' => 'foo@example.com',
+        $this->post('/new_category', [
+        'code' => 'foo',
         'name' => 'foo'
         ]);
         
-        $this->post('/new_sales_rep', [
-        'email' => 'foo@example.com',
+        $this->post('/new_category', [
+        'code' => 'foo',
         'name' => 'foo'
         ]);
         
@@ -282,11 +289,11 @@ class SalesRepsControllerTest extends TestCase
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
-        $this->assertArrayHasKey('email', $errors);
         $this->assertArrayHasKey('name', $errors);
+        $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["That email has already been used."], $errors['email']);
         $this->assertEquals(["That name has already been used."], $errors['name']);
+        $this->assertEquals(["That code has already been used."], $errors['code']);
         
     }
     
@@ -295,14 +302,14 @@ class SalesRepsControllerTest extends TestCase
     public function it_rejects_duplicate_names_on_edit()
     {
         
-        $sales_rep_1 = factory(App\SalesRep::class)->create();
+        $category_1 = factory(App\Category::class)->create();
         
-        $sales_rep_2 = factory(App\SalesRep::class)->create();
+        $category_2 = factory(App\Category::class)->create();
         
-        $this->post('/edit_sales_rep', [
-        'id' => $sales_rep_2->id,
-        'email' => $sales_rep_1->email,
-        'name' => $sales_rep_1->name
+        $this->post('/edit_category', [
+        'id' => $category_2->id,
+        'name' => $category_1->name,
+        'code' => $category_1->code
         ]);
         
         
@@ -310,10 +317,10 @@ class SalesRepsControllerTest extends TestCase
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
-        $this->assertArrayHasKey('email', $errors);
         $this->assertArrayHasKey('name', $errors);
+        $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["That email has already been used."], $errors['email']);
+        $this->assertEquals(["That code has already been used."], $errors['code']);
         $this->assertEquals(["That name has already been used."], $errors['name']);
         
     }
@@ -323,19 +330,7 @@ class SalesRepsControllerTest extends TestCase
     /** @test **/
     public function it_validates_type_on_create()
     {
-        
-        $this->post('/new_sales_rep', [
-        'name' => 'foo',
-        'email' => 'foo@'
-        ]);
-        
-        $this->assertEquals(422, $this->response->getStatusCode());
-        
-        $errors = json_decode($this->response->getContent(), true)['errors'];
-        
-        $this->assertArrayHasKey('email', $errors);
-        
-        $this->assertEquals(["The email must be a valid email address."], $errors['email']);
+        // no types on this one
     }
     
     
@@ -343,19 +338,7 @@ class SalesRepsControllerTest extends TestCase
     /** @test **/
     public function it_validates_type_on_edit()
     {
-        $sales_rep = factory(App\SalesRep::class)->create()->toArray();
-        
-        $sales_rep['email'] = 'foo';
-        
-        $this->post('/edit_sales_rep', $sales_rep);
-        
-        $this->assertEquals(422, $this->response->getStatusCode());
-        
-        $errors = json_decode($this->response->getContent(), true)['errors'];
-        
-        $this->assertArrayHasKey('email', $errors);
-        
-        $this->assertEquals(["The email must be a valid email address."], $errors['email']);
+        // no types on this one
     }
     
 }

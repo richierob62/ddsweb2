@@ -31,3 +31,10 @@ $app->post('sales_rep', 'SalesRepsController@salesRepByID');
 $app->post('new_sales_rep', 'SalesRepsController@newSalesRep');
 $app->post('edit_sales_rep', 'SalesRepsController@editSalesRep');
 $app->post('delete_sales_rep', 'SalesRepsController@deleteSalesRep');
+
+$app->post('categories', 'CategoriesController@categories');
+$app->post('category_reference', 'CategoriesController@referenceList');
+$app->post('category', 'CategoriesController@categoryByID');
+$app->post('new_category', 'CategoriesController@newCategory');
+$app->post('edit_category', 'CategoriesController@editCategory');
+$app->post('delete_category', 'CategoriesController@deleteCategory');
