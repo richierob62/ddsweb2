@@ -15,7 +15,8 @@ class CreatePayPlansTable extends Migration
     {
         Schema::create('pay_plans', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->index();            
+            $table->string('code')->index();
+            $table->string('name')->index();       
             $table->timestamps();
         });
     }

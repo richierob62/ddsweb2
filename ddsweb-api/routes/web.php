@@ -38,3 +38,10 @@ $app->post('category', 'CategoriesController@categoryByID');
 $app->post('new_category', 'CategoriesController@newCategory');
 $app->post('edit_category', 'CategoriesController@editCategory');
 $app->post('delete_category', 'CategoriesController@deleteCategory');
+
+$app->post('pay_plans', 'PayPlansController@payPlans');
+$app->post('pay_plan_reference', 'PayPlansController@referenceList');
+$app->post('pay_plan', 'PayPlansController@payPlanByID');
+$app->post('new_pay_plan', 'PayPlansController@newPayPlan');
+$app->post('edit_pay_plan', 'PayPlansController@editPayPlan');
+$app->post('delete_pay_plan', 'PayPlansController@deletePayPlan');

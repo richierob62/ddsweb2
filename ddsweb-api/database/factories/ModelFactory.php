@@ -128,7 +128,8 @@ $factory->define(App\LocalForeign::class, function ($faker) {
 
 $factory->define(App\PayPlan::class, function ($faker) {
     return [
-    'name' => $faker->word
+    'name' => $faker->word,
+    'code' => $faker->word,    
     ];
 });
 
