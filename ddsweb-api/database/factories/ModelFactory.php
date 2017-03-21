@@ -109,7 +109,8 @@ $factory->define(App\Customer::class, function ($faker) {
 
 $factory->define(App\CompensationPlan::class, function ($faker) {
     return [
-    'name' => $faker->word
+    'name' => $faker->word,
+    'code' => $faker->word,
     ];
 });
 
@@ -136,7 +137,15 @@ $factory->define(App\PayPlan::class, function ($faker) {
 
 $factory->define(App\PrimaryBook::class, function ($faker) {
     return [
-    'name' => $faker->word
+    'name' => $faker->word,
+    'code' => $faker->word,
+    ];
+});
+
+$factory->define(App\PageType::class, function ($faker) {
+    return [
+    'name' => $faker->word,
+    'code' => $faker->word,
     ];
 });
 

@@ -775,7 +775,7 @@ WORKFLOW
 ===============================================================================================================
 Controller tests
     migrations & models to support
-        php artisan make:migration create_primary_books_table --create=primary_books
+        php artisan make:migration create_page_types_table --create=page_types
         php artisan migrate
         composer dump-autoload
         php artisan migrate:refresh

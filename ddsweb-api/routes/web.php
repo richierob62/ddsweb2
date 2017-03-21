@@ -66,3 +66,10 @@ $app->post('primary_book', 'PrimaryBooksController@primaryBookByID');
 $app->post('new_primary_book', 'PrimaryBooksController@newPrimaryBook');
 $app->post('edit_primary_book', 'PrimaryBooksController@editPrimaryBook');
 $app->post('delete_primary_book', 'PrimaryBooksController@deletePrimaryBook');
+
+$app->post('page_types', 'PageTypesController@pageTypes');
+$app->post('page_type_reference', 'PageTypesController@referenceList');
+$app->post('page_type', 'PageTypesController@pageTypeByID');
+$app->post('new_page_type', 'PageTypesController@newPageType');
+$app->post('edit_page_type', 'PageTypesController@editPageType');
+$app->post('delete_page_type', 'PageTypesController@deletePageType');
