@@ -174,3 +174,14 @@ $factory->define(App\SourceBook::class, function ($faker) {
     'sales_close' => $faker->date
     ];
 });
+
+$factory->define(App\PrimaryBook::class, function ($faker) {
+    return [
+    'code' => $faker->word,
+    'name' => $faker->word,
+    'yppa_num'=> $faker->word,
+    'pub_month' => $faker->date,
+    'sales_start' => $faker->date,
+    'sales_close' => $faker->date
+    ];
+});

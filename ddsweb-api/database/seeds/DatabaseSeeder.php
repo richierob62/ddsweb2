@@ -17,10 +17,10 @@ class DatabaseSeeder extends Seeder
         factory('App\Category', 10)->create();
         factory('App\LocalForeign', 5)->create();
         factory('App\PayPlan', 10)->create();
-        factory('App\PrimaryBook', 25)->create();
+        factory('App\PrimaryBook', 50)->create();
         factory('App\CompensationPlan', 5)->create();
-        factory('App\SalesRep', 10)->create();
-        factory('App\SourceBook', 25)->create();
+        factory('App\SalesRep', 20)->create();
+        factory('App\SourceBook', 50)->create();
         factory('App\Customer', 500)->create();
         Model::reguard();
     }

@@ -15,7 +15,12 @@ class CreatePrimaryBooksTable extends Migration
     {
         Schema::create('primary_books', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->index();            
+            $table->string('code');
+            $table->string('name');
+            $table->string('yppa_num')->nullable();
+            $table->date('pub_month');
+            $table->date('sales_start');
+            $table->date('sales_close');          
             $table->timestamps();
         });
     }

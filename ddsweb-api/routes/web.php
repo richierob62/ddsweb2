@@ -59,3 +59,10 @@ $app->post('source_book', 'SourceBooksController@sourceBookByID');
 $app->post('new_source_book', 'SourceBooksController@newSourceBook');
 $app->post('edit_source_book', 'SourceBooksController@editSourceBook');
 $app->post('delete_source_book', 'SourceBooksController@deleteSourceBook');
+
+$app->post('primary_books', 'PrimaryBooksController@primaryBooks');
+$app->post('primary_book_reference', 'PrimaryBooksController@referenceList');
+$app->post('primary_book', 'PrimaryBooksController@primaryBookByID');
+$app->post('new_primary_book', 'PrimaryBooksController@newPrimaryBook');
+$app->post('edit_primary_book', 'PrimaryBooksController@editPrimaryBook');
+$app->post('delete_primary_book', 'PrimaryBooksController@deletePrimaryBook');
