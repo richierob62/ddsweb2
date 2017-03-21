@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         factory('App\PrimaryBook', 25)->create();
         factory('App\CompensationPlan', 5)->create();
         factory('App\SalesRep', 10)->create();
+        factory('App\SourceBook', 25)->create();
         factory('App\Customer', 500)->create();
         Model::reguard();
     }

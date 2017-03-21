@@ -156,29 +156,24 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function it_saves_new_customer_in_the_database()
     {
+        $new = factory(App\Customer::class)->raw();
+        $name = $new['name'];
+        $category = $new['category'];
         
-        $this->post('/new_customer', [
-        'account_num' => '12345',
-        'category' => $this->category->id,
-        'local_foreign' => $this->local_foreign->id,
-        'pay_plan' => $this->pay_plan->id,
-        'primary_book' => $this->primary_book->id,
-        'sales_rep' => $this->sales_rep->id,
-        'name' => 'foo'
-        ]);
+        $this->post('/new_customer', $new);
         
         $body = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('data', $body);
         
         $data = $body['data'];
-        $this->assertEquals('foo', $data['name']);
-        $this->assertEquals(1, $data['category']);
+        $this->assertEquals($name, $data['name']);
+        $this->assertEquals($category, $data['category']);
         $this->assertTrue($data['id'] > 0);
         
         $this
         ->seeStatusCode(201)
         ->seeJson(['created' => true])
-        ->seeInDatabase('customers', ['name' => 'foo']);
+        ->seeInDatabase('customers', ['name' => $name]);
         
     }
     
@@ -187,18 +182,13 @@ class CustomersControllerTest extends TestCase
     {
         $customer = factory(App\Customer::class)->create();
         
+        $edited = factory(App\Customer::class)->raw();
+        $name = $edited['name'];
+        $category = $edited['category'];
         $id = $customer->id;
+        $edited['id'] = $id;
         
-        $this->post('/edit_customer', [
-        'id' => $id,
-        'account_num' => '44444',
-        'category' => $this->category->id,
-        'local_foreign' => $this->local_foreign->id,
-        'pay_plan' => $this->pay_plan->id,
-        'primary_book' => $this->primary_book->id,
-        'sales_rep' => $this->sales_rep->id,
-        'name' => 'foo_edited'
-        ]);
+        $this->post('/edit_customer',$edited);
         
         $body = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('data', $body);
@@ -206,7 +196,7 @@ class CustomersControllerTest extends TestCase
         $this
         ->seeStatusCode(201)
         ->seeJson(['updated' => true, 'id' => $id])
-        ->seeInDatabase('customers', ['name' => 'foo_edited']);
+        ->seeInDatabase('customers', ['name' => $name ]);
         
     }
     
@@ -214,16 +204,10 @@ class CustomersControllerTest extends TestCase
     public function update_should_fail_with_an_invalid_id()
     {
         
-        $this->post('/edit_customer', [
-        'id' => 9999999,
-        'account_num' => '44444',
-        'category' => $this->category->id,
-        'local_foreign' => $this->local_foreign->id,
-        'pay_plan' => $this->pay_plan->id,
-        'primary_book' => $this->primary_book->id,
-        'sales_rep' => $this->sales_rep->id,
-        'name' => 'foo_edited'
-        ]);
+        $updated = factory(App\Customer::class)->raw();
+        $updated['id'] = 999999;
+        
+        $this->post('/edit_customer', $updated);
         
         $this
         ->seeStatusCode(404)
@@ -305,26 +289,11 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function it_rejects_duplicate_data_on_create()
     {
+        $new = factory(App\Customer::class)->raw();
         
-        $this->post('/new_customer', [
-        'account_num' => '12345',
-        'category' => $this->category->id,
-        'local_foreign' => $this->local_foreign->id,
-        'pay_plan' => $this->pay_plan->id,
-        'primary_book' => $this->primary_book->id,
-        'sales_rep' => $this->sales_rep->id,
-        'name' => 'foo'
-        ]);
+        $this->post('/new_customer', $new);
         
-        $this->post('/new_customer', [
-        'account_num' => '12345',
-        'category' => $this->category->id,
-        'local_foreign' => $this->local_foreign->id,
-        'pay_plan' => $this->pay_plan->id,
-        'primary_book' => $this->primary_book->id,
-        'sales_rep' => $this->sales_rep->id,
-        'name' => 'foo'
-        ]);
+        $this->post('/new_customer', $new);
         
         $this->assertEquals(422, $this->response->getStatusCode());
         
@@ -377,18 +346,11 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function it_validates_type_on_create()
     {
+        $new = factory(App\Customer::class)->raw();
+        $new['email'] = 'foo';
+        $new['billing_email'] = 'foo';
         
-        $this->post('/new_customer', [
-        'account_num' => '11111',
-        'category' => $this->category->id,
-        'local_foreign' => $this->local_foreign->id,
-        'pay_plan' => $this->pay_plan->id,
-        'primary_book' => $this->primary_book->id,
-        'sales_rep' => $this->sales_rep->id,
-        'name' => 'foo',
-        'billing_email' => 'foo',
-        'email' => 'foo@'
-        ]);
+        $this->post('/new_customer', $new);
         
         $this->assertEquals(422, $this->response->getStatusCode());
         
@@ -428,15 +390,14 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function it_validates_reference_fields_on_create()
     {
-        $this->post('/new_customer', [
-        'account_num' => '11111',
-        'category' => 888888,
-        'local_foreign' => NULL,
-        'pay_plan' => 888888,
-        'primary_book' => NULL,
-        'sales_rep' => 888888,
-        'name' => 'foo'
-        ]);
+        $new = factory(App\Customer::class)->raw();
+        $new['category'] = 888888;
+        $new['local_foreign'] = NULL;
+        $new['pay_plan'] = 888888;
+        $new['primary_book'] = NULL;
+        $new['sales_rep'] = 888888;
+        
+        $this->post('/new_customer', $new);
         
         $this->assertEquals(422, $this->response->getStatusCode());
         

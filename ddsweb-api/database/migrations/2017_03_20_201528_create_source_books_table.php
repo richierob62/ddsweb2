@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLocalForeignsTable extends Migration
+class CreateSourceBooksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,14 @@ class CreateLocalForeignsTable extends Migration
      */
     public function up()
     {
-        Schema::create('local_foreigns', function (Blueprint $table) {
+        Schema::create('source_books', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code')->index();
-            $table->string('name')->index();            
+            $table->string('code');
+            $table->string('name');
+            $table->string('yppa_num')->nullable();
+            $table->date('pub_month');
+            $table->date('sales_start');
+            $table->date('sales_close');
             $table->timestamps();
         });
     }
@@ -28,6 +32,6 @@ class CreateLocalForeignsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('local_foreigns');
+        Schema::dropIfExists('source_books');
     }
 }

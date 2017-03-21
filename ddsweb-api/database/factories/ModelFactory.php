@@ -116,20 +116,21 @@ $factory->define(App\CompensationPlan::class, function ($faker) {
 $factory->define(App\Category::class, function ($faker) {
     return [
     'name' => $faker->word,
-    'code' => $faker->word,
+    'code' => $faker->word
     ];
 });
 
 $factory->define(App\LocalForeign::class, function ($faker) {
     return [
-    'name' => $faker->word
+    'name' => $faker->word,
+    'code' => $faker->word
     ];
 });
 
 $factory->define(App\PayPlan::class, function ($faker) {
     return [
     'name' => $faker->word,
-    'code' => $faker->word,    
+    'code' => $faker->word,
     ];
 });
 
@@ -160,5 +161,16 @@ $factory->define(App\SalesRep::class, function (Faker\Generator $faker) {
     'compensation_plan' => $compensation_plan,
     'commission_new' => $faker->randomNumber(2),
     'commission_renew' => $faker->randomNumber(2)
+    ];
+});
+
+$factory->define(App\SourceBook::class, function ($faker) {
+    return [
+    'code' => $faker->word,
+    'name' => $faker->word,
+    'yppa_num'=> $faker->word,
+    'pub_month' => $faker->date,
+    'sales_start' => $faker->date,
+    'sales_close' => $faker->date
     ];
 });

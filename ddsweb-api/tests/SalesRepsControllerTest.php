@@ -146,35 +146,31 @@ class SalesRepsControllerTest extends TestCase
     public function it_saves_new_sales_rep_in_the_database()
     {
         
-        $this->post('/new_sales_rep', [
-        'name' => 'foo',
-        'code' => 'foo',
-        'email' => 'foo@example.com',
-        'phone' => '555 555-5555',
-        'compensation_plan' => $this->compensation_plan->id
-        ]);
+        $new = factory(App\SalesRep::class)->raw();
+        $name = $new['name'];
+        $code = $new['code'];
+        $email = $new['email'];
+        $phone = $new['phone'];
+        
+        $this->post('/new_customer', $new);
+        
+        
+        $this->post('/new_sales_rep', $new);
         
         $body = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('data', $body);
         
         $data = $body['data'];
-        $this->assertEquals('foo', $data['name']);
-        $this->assertEquals('foo@example.com', $data['email']);
-        $this->assertEquals('555 555-5555', $data['phone']);
+        $this->assertEquals($name, $data['name']);
+        $this->assertEquals($email, $data['email']);
+        $this->assertEquals($phone, $data['phone']);
+        $this->assertEquals($code, $data['code']);
         $this->assertTrue($data['id'] > 0);
         
         $this
         ->seeStatusCode(201)
         ->seeJson(['created' => true])
-        ->seeInDatabase('sales_reps', [
-        'name' => 'foo',
-        'code' => 'foo',
-        'email' => 'foo@example.com',
-        'phone' => '555 555-5555',
-        'is_rep' => 1,
-        'is_admin' => 0,
-        'is_active' => 1
-        ]);
+        ->seeInDatabase('sales_reps', $new);
         
     }
     
