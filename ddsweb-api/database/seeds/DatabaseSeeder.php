@@ -14,6 +14,8 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
         // $this->call('UsersTableSeeder');
+        factory('App\PageType', 2)->create();
+        factory('App\Heading', 200)->create();
         factory('App\Category', 10)->create();
         factory('App\LocalForeign', 5)->create();
         factory('App\PayPlan', 10)->create();

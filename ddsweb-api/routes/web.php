@@ -73,3 +73,10 @@ $app->post('page_type', 'PageTypesController@pageTypeByID');
 $app->post('new_page_type', 'PageTypesController@newPageType');
 $app->post('edit_page_type', 'PageTypesController@editPageType');
 $app->post('delete_page_type', 'PageTypesController@deletePageType');
+
+$app->post('headings', 'HeadingsController@Headings');
+$app->post('heading_reference', 'HeadingsController@referenceList');
+$app->post('heading', 'HeadingsController@HeadingByID');
+$app->post('new_heading', 'HeadingsController@newHeading');
+$app->post('edit_heading', 'HeadingsController@editHeading');
+$app->post('delete_heading', 'HeadingsController@deleteHeading');

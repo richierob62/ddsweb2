@@ -149,6 +149,24 @@ $factory->define(App\PageType::class, function ($faker) {
     ];
 });
 
+$factory->define(App\Heading::class, function ($faker) {
+
+    $page_type = \App\PageType::all();
+    if($page_type->count() < 2) {
+        $page_type = factory(App\PageType::class)->create()->id;
+    } else {
+        $page_type = $page_type->random()->id;
+    }
+
+    return [
+    'name' => $faker->word,
+    'sort_name' => $faker->word,
+    'heading_num' => $faker->randomNumber(4),
+    'page_type' => $page_type
+    ];
+
+});
+
 $factory->define(App\SalesRep::class, function (Faker\Generator $faker) {
     
     $compensation_plan = \App\CompensationPlan::all();
@@ -161,15 +179,20 @@ $factory->define(App\SalesRep::class, function (Faker\Generator $faker) {
     return [
     'name' => $faker->name,
     'code' => $faker->word,
+    'email' => $faker->email,
     'address' => $faker->streetAddress,
     'city' => $faker->city,
     'state' => $faker->word,
     'zip' => $faker->postcode,
     'phone' => $faker->phoneNumber,
     'email' => $faker->email,
+    'is_rep' => 1,
+    'is_admin' => 1,
+    'is_active' => 1,
     'compensation_plan' => $compensation_plan,
     'commission_new' => $faker->randomNumber(2),
     'commission_renew' => $faker->randomNumber(2)
+
     ];
 });
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCompensationPlansTable extends Migration
+class CreateHeadingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,16 @@ class CreateCompensationPlansTable extends Migration
      */
     public function up()
     {
-        Schema::create('compensation_plans', function (Blueprint $table) {
+        Schema::create('headings', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->index();            
-            $table->string('code')->index();            
+
+            $table->integer('page_type')->unsigned()->index();
+            
+            $table->string('name')->index();
+            $table->string('sort_name')->index();
+
+            $table->string('heading_num')->index();
+
             $table->timestamps();
         });
     }
@@ -28,6 +34,6 @@ class CreateCompensationPlansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('compensation_plans');
+        Schema::dropIfExists('headings');
     }
 }
