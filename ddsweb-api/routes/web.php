@@ -80,3 +80,10 @@ $app->post('heading', 'HeadingsController@HeadingByID');
 $app->post('new_heading', 'HeadingsController@newHeading');
 $app->post('edit_heading', 'HeadingsController@editHeading');
 $app->post('delete_heading', 'HeadingsController@deleteHeading');
+
+$app->post('order_statuses', 'OrderStatusesController@OrderStatuses');
+$app->post('order_status_reference', 'OrderStatusesController@referenceList');
+$app->post('order_status', 'OrderStatusesController@OrderStatusByID');
+$app->post('new_order_status', 'OrderStatusesController@newOrderStatus');
+$app->post('edit_order_status', 'OrderStatusesController@editOrderStatus');
+$app->post('delete_order_status', 'OrderStatusesController@deleteOrderStatus');

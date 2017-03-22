@@ -149,6 +149,13 @@ $factory->define(App\PageType::class, function ($faker) {
     ];
 });
 
+$factory->define(App\OrderStatus::class, function ($faker) {
+    return [
+    'name' => $faker->word,
+    'code' => $faker->word,
+    ];
+});
+
 $factory->define(App\Heading::class, function ($faker) {
 
     $page_type = \App\PageType::all();
