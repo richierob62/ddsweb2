@@ -160,9 +160,9 @@ class SourceBooksControllerTest extends TestCase
         $this->assertEquals('foo', $data['name']);
         $this->assertEquals('12345', $data['code']);
         $this->assertEquals('abc', $data['yppa_num']);
-        $this->assertEquals('2017-01-01 00:00:00', $data['pub_month']);
-        $this->assertEquals('2017-02-01 00:00:00', $data['sales_start']);
-        $this->assertEquals('2017-10-31 00:00:00', $data['sales_close']);
+        $this->assertEquals('2017-01-01', $data['pub_month']);
+        $this->assertEquals('2017-02-01', $data['sales_start']);
+        $this->assertEquals('2017-10-31', $data['sales_close']);
         $this->assertTrue($data['id'] > 0);
         
         $this

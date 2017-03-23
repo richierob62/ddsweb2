@@ -157,21 +157,21 @@ $factory->define(App\OrderStatus::class, function ($faker) {
 });
 
 $factory->define(App\Heading::class, function ($faker) {
-
+    
     $page_type = \App\PageType::all();
     if($page_type->count() < 2) {
         $page_type = factory(App\PageType::class)->create()->id;
     } else {
         $page_type = $page_type->random()->id;
     }
-
+    
     return [
     'name' => $faker->word,
     'sort_name' => $faker->word,
     'heading_num' => $faker->randomNumber(4),
     'page_type' => $page_type
     ];
-
+    
 });
 
 $factory->define(App\SalesRep::class, function (Faker\Generator $faker) {
@@ -199,7 +199,7 @@ $factory->define(App\SalesRep::class, function (Faker\Generator $faker) {
     'compensation_plan' => $compensation_plan,
     'commission_new' => $faker->randomNumber(2),
     'commission_renew' => $faker->randomNumber(2)
-
+    
     ];
 });
 
@@ -222,5 +222,47 @@ $factory->define(App\PrimaryBook::class, function ($faker) {
     'pub_month' => $faker->date,
     'sales_start' => $faker->date,
     'sales_close' => $faker->date
+    ];
+});
+
+$factory->define(App\Order::class, function ($faker) {
+    
+    $primary_book = \App\PrimaryBook::all();
+    if($primary_book->count() < 10) {
+        $primary_book = factory(App\PrimaryBook::class)->create()->id;
+    } else {
+        $primary_book = $primary_book->random()->id;
+    }
+    
+    $customer = \App\Customer::all();
+    if($customer->count() < 10) {
+        $customer = factory(App\Customer::class)->create()->id;
+    } else {
+        $customer = $customer->random()->id;
+    }
+    
+    $sales_rep = \App\SalesRep::all();
+    if($sales_rep->count() < 10) {
+        $sales_rep = factory(App\SalesRep::class)->create()->id;
+    } else {
+        $sales_rep = $sales_rep->random()->id;
+    }
+    
+    
+    $order_status = \App\OrderStatus::all();
+    if($order_status->count() < 10) {
+        $order_status = factory(App\OrderStatus::class)->create()->id;
+    } else {
+        $order_status = $order_status->random()->id;
+    }
+    
+    return [
+    'order_num' => (string)$faker->randomNumber(6),
+    'order_date' => $faker->date,
+    'primary_book' => $primary_book,
+    'customer' => $customer,
+    'sales_rep' => $sales_rep,
+    'order_status' => $order_status
+    
     ];
 });

@@ -74,16 +74,23 @@ $app->post('new_page_type', 'PageTypesController@newPageType');
 $app->post('edit_page_type', 'PageTypesController@editPageType');
 $app->post('delete_page_type', 'PageTypesController@deletePageType');
 
-$app->post('headings', 'HeadingsController@Headings');
+$app->post('headings', 'HeadingsController@headings');
 $app->post('heading_reference', 'HeadingsController@referenceList');
-$app->post('heading', 'HeadingsController@HeadingByID');
+$app->post('heading', 'HeadingsController@headingByID');
 $app->post('new_heading', 'HeadingsController@newHeading');
 $app->post('edit_heading', 'HeadingsController@editHeading');
 $app->post('delete_heading', 'HeadingsController@deleteHeading');
 
-$app->post('order_statuses', 'OrderStatusesController@OrderStatuses');
+$app->post('order_statuses', 'OrderStatusesController@orderStatuses');
 $app->post('order_status_reference', 'OrderStatusesController@referenceList');
-$app->post('order_status', 'OrderStatusesController@OrderStatusByID');
+$app->post('order_status', 'OrderStatusesController@orderStatusByID');
 $app->post('new_order_status', 'OrderStatusesController@newOrderStatus');
 $app->post('edit_order_status', 'OrderStatusesController@editOrderStatus');
 $app->post('delete_order_status', 'OrderStatusesController@deleteOrderStatus');
+
+$app->post('orders', 'OrdersController@orders');
+$app->post('order_reference', 'OrdersController@referenceList');
+$app->post('order', 'OrdersController@orderByID');
+$app->post('new_order', 'OrdersController@newOrder');
+$app->post('edit_order', 'OrdersController@editOrder');
+$app->post('delete_order', 'OrdersController@deleteOrder');

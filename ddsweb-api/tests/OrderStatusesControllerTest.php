@@ -242,8 +242,8 @@ class OrderStatusesControllerTest extends TestCase
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["A order status name is required."], $errors['name']);
-        $this->assertEquals(["A order status code is required."], $errors['code']);
+        $this->assertEquals(["An order status name is required."], $errors['name']);
+        $this->assertEquals(["An order status code is required."], $errors['code']);
         
     }
     
@@ -264,8 +264,8 @@ class OrderStatusesControllerTest extends TestCase
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["A order status name is required."], $errors['name']);
-        $this->assertEquals(["A order status code is required."], $errors['code']);
+        $this->assertEquals(["An order status name is required."], $errors['name']);
+        $this->assertEquals(["An order status code is required."], $errors['code']);
         
     }
     

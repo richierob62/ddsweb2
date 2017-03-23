@@ -18,9 +18,9 @@ class OrderStatus extends Model
     static public function errorMessages() {
         return [
         'name.unique' => 'That name has already been used.',
-        'name.required' => 'A order status name is required.',
+        'name.required' => 'An order status name is required.',
         'code.unique' => 'That code has already been used.',
-        'code.required' => 'A order status code is required.'
+        'code.required' => 'An order status code is required.'
         ];
     }
     

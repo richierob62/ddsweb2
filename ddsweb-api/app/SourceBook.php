@@ -13,9 +13,9 @@ class SourceBook extends Model
     'created_at',
     'updated_at',
     'deleted_at',
-    'pub_month',
-    'sales_start',
-    'sales_close'
+    // 'pub_month',
+    // 'sales_start',
+    // 'sales_close'
     ];
     
     static public function rules($id = null) {
