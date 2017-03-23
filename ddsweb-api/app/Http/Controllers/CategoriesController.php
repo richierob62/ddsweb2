@@ -130,4 +130,5 @@ class CategoriesController extends Controller
             return response()->json(['error' => 'Not Found'],404);
         }
     }
+
 }

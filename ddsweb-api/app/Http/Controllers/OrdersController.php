@@ -130,4 +130,10 @@ class OrdersController extends Controller
             return response()->json(['error' => 'Not Found'],404);
         }
     }
+
+    public function nextOrderNumber()
+    {
+        $last_order_num = Order::orderBy('order_num', 'desc')->first()->order_num;
+        return (string) ((int) $last_order_num + 1);
+    }
 }

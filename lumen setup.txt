@@ -781,12 +781,18 @@ Controller tests
         php artisan migrate:refresh
         php artisan db:seed
 
+file creation order
+    web.php
+    create_my_things_table migration
+    MyThing.php
+    ModelFactory.php
+    MyThingsControllerTest.php
+    MyThingsController.php
 
 
 to do
 --------------------
 lumen
-    + filter customers on name, address, city, state, account_num, sales_rep
 
 react
     + sagas to access apis after apis done

@@ -448,4 +448,20 @@ class CustomersControllerTest extends TestCase
         $this->assertEquals(["You must select a valid sales rep."], $errors['sales_rep']);
     }
     
+    /** @test **/
+    public function it_returns_the_next_available_account_number()
+    {
+        $customer = factory(App\Customer::class)->create();
+        $customer['account_num'] = '100';
+        $this->post('/edit_customer', $customer->toArray());
+
+        $customer = factory(App\Customer::class)->create();
+        $customer['account_num'] = '200';
+        $this->post('/edit_customer', $customer->toArray());
+
+        $this->post('/next_customer_number');
+        $data = json_decode($this->response->getContent(), true);
+
+        $this->assertEquals('201', $data);
+    }
 }

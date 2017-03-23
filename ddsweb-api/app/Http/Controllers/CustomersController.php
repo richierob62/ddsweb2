@@ -130,4 +130,11 @@ class CustomersController extends Controller
             return response()->json(['error' => 'Not Found'],404);
         }
     }
+
+    public function nextCustomerNumber()
+    {
+        $last_acc_num = Customer::orderBy('account_num', 'desc')->first()->account_num;
+        return (string) ((int) $last_acc_num + 1);
+    }
+    
 }

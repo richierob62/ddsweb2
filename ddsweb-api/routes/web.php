@@ -24,6 +24,8 @@ $app->post('customer', 'CustomersController@customerByID');
 $app->post('new_customer', 'CustomersController@newCustomer');
 $app->post('edit_customer', 'CustomersController@editCustomer');
 $app->post('delete_customer', 'CustomersController@deleteCustomer');
+$app->post('next_customer_number', 'CustomersController@nextCustomerNumber');
+
 
 $app->post('sales_reps', 'SalesRepsController@salesReps');
 $app->post('sales_rep_reference', 'SalesRepsController@referenceList');
@@ -94,3 +96,4 @@ $app->post('order', 'OrdersController@orderByID');
 $app->post('new_order', 'OrdersController@newOrder');
 $app->post('edit_order', 'OrdersController@editOrder');
 $app->post('delete_order', 'OrdersController@deleteOrder');
+$app->post('next_order_number', 'OrdersController@nextOrderNumber');

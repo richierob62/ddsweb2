@@ -440,4 +440,21 @@ class OrdersControllerTest extends TestCase
         $this->assertEquals(["You must select a sales rep."], $errors['sales_rep']);
     }
     
+    /** @test **/
+    public function it_returns_the_next_available_order_number()
+    {
+        $order = factory(App\Order::class)->create();
+        $order['order_num'] = '100';
+        $this->post('/edit_order', $order->toArray());
+
+        $order = factory(App\Order::class)->create();
+        $order['order_num'] = '200';
+        $this->post('/edit_order', $order->toArray());
+
+        $this->post('/next_order_number');
+        $data = json_decode($this->response->getContent(), true);
+
+        $this->assertEquals('201', $data);
+    }
+
 }
