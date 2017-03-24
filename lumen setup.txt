@@ -775,7 +775,7 @@ WORKFLOW
 ===============================================================================================================
 Controller tests
     migrations & models to support
-        php artisan make:migration create_orders_table --create=orders
+        php artisan make:migration create_ad_types_table --create=ad_types
         php artisan migrate
         composer dump-autoload
         php artisan migrate:refresh
@@ -795,5 +795,11 @@ to do
 lumen
 
 react
+    + order_details 
+        defineField('order_num', 'Order #', 'text'),
+        defineField('udac', 'Primary Book', 'select', 'udac'),
+        defineField('heading', 'heading', 'typeahead', 'heading'),
+        defineField('sequence', 'sequence', 'text' )
+        
     + sagas to access apis after apis done
     

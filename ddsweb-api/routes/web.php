@@ -97,3 +97,10 @@ $app->post('new_order', 'OrdersController@newOrder');
 $app->post('edit_order', 'OrdersController@editOrder');
 $app->post('delete_order', 'OrdersController@deleteOrder');
 $app->post('next_order_number', 'OrdersController@nextOrderNumber');
+
+$app->post('ad_types', 'AdTypesController@adTypes');
+$app->post('ad_type_reference', 'AdTypesController@referenceList');
+$app->post('ad_type', 'AdTypesController@adTypeByID');
+$app->post('new_ad_type', 'AdTypesController@newAdType');
+$app->post('edit_ad_type', 'AdTypesController@editAdType');
+$app->post('delete_ad_type', 'AdTypesController@deleteAdType');
