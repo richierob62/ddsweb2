@@ -54,9 +54,9 @@ class HeadingsControllerTest extends TestCase
     public function index_should_return_a_collection_of_filtered_and_ordered__records()
     {
         
-        $page_type = factory(App\PageType::class)->create()->toArray();
-        $page_type['name'] = 'something-123page_type_name-something';
-        $this->post('/edit_page_type', $page_type);
+        $page_type_2 = factory(App\PageType::class)->create()->toArray();
+        $page_type_2['name'] = 'something-123page_type_name-something';
+        $this->post('/edit_page_type', $page_type_2);
         
         factory(App\Heading::class)->create();
         factory(App\Heading::class)->create();
@@ -68,7 +68,7 @@ class HeadingsControllerTest extends TestCase
         $heading['name'] = '0000something-123name-something';
         $heading['heading_num'] = '0000something-123heading_num-something';
         $heading['sort_name'] = 'something-123sort_name-something';
-        $heading['page_type'] = $page_type['id'];
+        $heading['page_type'] = $page_type_2['id'];
         $this->post('/edit_heading', $heading);
         
         $this->post('/headings', [

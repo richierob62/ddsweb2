@@ -104,3 +104,10 @@ $app->post('ad_type', 'AdTypesController@adTypeByID');
 $app->post('new_ad_type', 'AdTypesController@newAdType');
 $app->post('edit_ad_type', 'AdTypesController@editAdType');
 $app->post('delete_ad_type', 'AdTypesController@deleteAdType');
+
+$app->post('udacs', 'UdacsController@udacs');
+$app->post('udac_reference', 'UdacsController@referenceList');
+$app->post('udac', 'UdacsController@udacByID');
+$app->post('new_udac', 'UdacsController@newUdac');
+$app->post('edit_udac', 'UdacsController@editUdac');
+$app->post('delete_udac', 'UdacsController@deleteUdac');

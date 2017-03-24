@@ -106,7 +106,6 @@ $factory->define(App\Customer::class, function ($faker) {
     ];
 });
 
-
 $factory->define(App\CompensationPlan::class, function ($faker) {
     return [
     'name' => $faker->word,
@@ -177,6 +176,32 @@ $factory->define(App\Heading::class, function ($faker) {
     'sort_name' => $faker->word,
     'heading_num' => $faker->randomNumber(4),
     'page_type' => $page_type
+    ];
+    
+});
+
+$factory->define(App\Udac::class, function ($faker) {
+    
+    $primary_book = \App\PrimaryBook::all();
+    if($primary_book->count() < 10) {
+        $primary_book = factory(App\PrimaryBook::class)->create()->id;
+    } else {
+        $primary_book = $primary_book->random()->id;
+    }
+    
+    $ad_type = \App\AdType::all();
+    if($ad_type->count() < 10) {
+        $ad_type = factory(App\AdType::class)->create()->id;
+    } else {
+        $ad_type = $ad_type->random()->id;
+    }
+    
+    return [
+    'name' => $faker->word,
+    'code' => $faker->word,
+    'rate' => $faker->randomNumber(5)/100,
+    'primary_book' => $primary_book,
+    'ad_type' => $ad_type
     ];
     
 });

@@ -61,9 +61,9 @@ class CustomersControllerTest extends TestCase
         factory(App\SalesRep::class)->create();
         factory(App\SalesRep::class)->create();
         factory(App\SalesRep::class)->create();
-        $sales_rep = factory(App\SalesRep::class)->create()->toArray();
-        $sales_rep['name'] = 'something-123rep_name-something';
-        $this->post('/edit_sales_rep', $sales_rep);
+        $sales_rep_2 = factory(App\SalesRep::class)->create()->toArray();
+        $sales_rep_2['name'] = 'something-123rep_name-something';
+        $this->post('/edit_sales_rep', $sales_rep_2);
         
         factory(App\Customer::class)->create();
         factory(App\Customer::class)->create();
@@ -77,7 +77,7 @@ class CustomersControllerTest extends TestCase
         $customer['city'] = 'something-123city-something';
         $customer['state'] = 'something-123state-something';
         $customer['account_num'] = 'something-123account_num-something';
-        $customer['sales_rep'] = $sales_rep['id'];
+        $customer['sales_rep'] = $sales_rep_2['id'];
         $this->post('/edit_customer', $customer);
         
         $this->post('/customers', [

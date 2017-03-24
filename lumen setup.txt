@@ -775,7 +775,7 @@ WORKFLOW
 ===============================================================================================================
 Controller tests
     migrations & models to support
-        php artisan make:migration create_ad_types_table --create=ad_types
+        php artisan make:migration create_udacs_table --create=udacs
         php artisan migrate
         composer dump-autoload
         php artisan migrate:refresh
@@ -792,14 +792,24 @@ file creation order
 
 to do
 --------------------
+react
+
+
 lumen
 
-react
+    + change all migrations to cascade delete for foreign keys
+
+    + udac
+        code
+        name
+        rate
+        primary_book
+        ad_type
     + order_details 
-        defineField('order_num', 'Order #', 'text'),
-        defineField('udac', 'Primary Book', 'select', 'udac'),
-        defineField('heading', 'heading', 'typeahead', 'heading'),
-        defineField('sequence', 'sequence', 'text' )
+        order_num
+        udac
+        heading
+        sequence
         
     + sagas to access apis after apis done
     

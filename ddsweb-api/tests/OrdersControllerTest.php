@@ -58,21 +58,21 @@ class OrdersControllerTest extends TestCase
     public function index_should_return_a_collection_of_filtered_and_ordered__records()
     {
         
-        $primary_book = factory(App\PrimaryBook::class)->create()->toArray();
-        $primary_book['name'] = 'something-123pb';
-        $this->post('/edit_primary_book', $primary_book);
+        $primary_book_2 = factory(App\PrimaryBook::class)->create()->toArray();
+        $primary_book_2['name'] = 'something-123pb';
+        $this->post('/edit_primary_book', $primary_book_2);
         
-        $customer = factory(App\Customer::class)->create()->toArray();
-        $customer['name'] = 'something-123cu';
-        $this->post('/edit_customer', $customer);
+        $customer_2 = factory(App\Customer::class)->create()->toArray();
+        $customer_2['name'] = 'something-123cu';
+        $this->post('/edit_customer', $customer_2);
         
-        $sales_rep = factory(App\SalesRep::class)->create()->toArray();
-        $sales_rep['name'] = 'something-123sr';
-        $this->post('/edit_sales_rep', $sales_rep);
+        $sales_rep_2 = factory(App\SalesRep::class)->create()->toArray();
+        $sales_rep_2['name'] = 'something-123sr';
+        $this->post('/edit_sales_rep', $sales_rep_2);
         
-        $order_status = factory(App\OrderStatus::class)->create()->toArray();
-        $order_status['name'] = 'something-123st';
-        $this->post('/edit_order_status', $order_status);
+        $order_status_2 = factory(App\OrderStatus::class)->create()->toArray();
+        $order_status_2['name'] = 'something-123st';
+        $this->post('/edit_order_status', $order_status_2);
         
         factory(App\Order::class)->create();
         factory(App\Order::class)->create();
@@ -83,10 +83,10 @@ class OrdersControllerTest extends TestCase
         $order = factory(App\Order::class)->create()->toArray();
         $order['order_num'] = '000111111111';
         $order['order_date'] = new Carbon('2017-12-31');
-        $order['primary_book'] = $primary_book['id'];
-        $order['customer'] = $customer['id'];
-        $order['sales_rep'] = $sales_rep['id'];
-        $order['order_status'] = $order_status['id'];
+        $order['primary_book'] = $primary_book_2['id'];
+        $order['customer'] = $customer_2['id'];
+        $order['sales_rep'] = $sales_rep_2['id'];
+        $order['order_status'] = $order_status_2['id'];
 
         $this->post('/edit_order', $order);
         
