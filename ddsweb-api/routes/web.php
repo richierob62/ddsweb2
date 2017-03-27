@@ -111,3 +111,11 @@ $app->post('udac', 'UdacsController@udacByID');
 $app->post('new_udac', 'UdacsController@newUdac');
 $app->post('edit_udac', 'UdacsController@editUdac');
 $app->post('delete_udac', 'UdacsController@deleteUdac');
+
+$app->post('order_lines', 'OrderLinesController@orderLines');
+$app->post('order_line_reference', 'OrderLinesController@referenceList');
+$app->post('order_line', 'OrderLinesController@orderLineByID');
+$app->post('new_order_line', 'OrderLinesController@newOrderLine');
+$app->post('edit_order_line', 'OrderLinesController@editOrderLine');
+$app->post('delete_order_line', 'OrderLinesController@deleteOrderLine');
+$app->post('next_sequence_number', 'OrderLinesController@nextSequenceNumber');

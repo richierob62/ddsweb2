@@ -775,7 +775,7 @@ WORKFLOW
 ===============================================================================================================
 Controller tests
     migrations & models to support
-        php artisan make:migration create_udacs_table --create=udacs
+        php artisan make:migration create_order_lines_table --create=order_lines
         php artisan migrate
         composer dump-autoload
         php artisan migrate:refresh
@@ -799,14 +799,8 @@ lumen
 
     + change all migrations to cascade delete for foreign keys
 
-    + udac
-        code
-        name
-        rate
-        primary_book
-        ad_type
     + order_details 
-        order_num
+        order
         udac
         heading
         sequence

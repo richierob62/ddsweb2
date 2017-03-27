@@ -298,3 +298,35 @@ $factory->define(App\Order::class, function ($faker) {
     
     ];
 });
+
+$factory->define(App\OrderLine::class, function ($faker) {
+    
+    $order = \App\Order::all();
+    if($order->count() < 10) {
+        $order = factory(App\Order::class)->create()->id;
+    } else {
+        $order = $order->random()->id;
+    }
+    
+    $udac = \App\Udac::all();
+    if($udac->count() < 10) {
+        $udac = factory(App\Udac::class)->create()->id;
+    } else {
+        $udac = $udac->random()->id;
+    }
+    
+    $heading = \App\Heading::all();
+    if($heading->count() < 10) {
+        $heading = factory(App\Heading::class)->create()->id;
+    } else {
+        $heading = $heading->random()->id;
+    }
+    
+    
+    return [
+    'sequence' => $faker->randomNumber(2),
+    'order' => $order,
+    'udac' => $udac,
+    'heading' => $heading
+    ];
+});
