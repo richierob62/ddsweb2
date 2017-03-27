@@ -7,25 +7,28 @@ use Illuminate\Database\Migrations\Migration;
 class CreateAdTypesTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+    * Run the migrations.
+    *
+    * @return void
+    */
     public function up()
     {
         Schema::create('ad_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code')->index();
-            $table->string('name')->index();              
+            $table->string('name')->index();
+            
+            $table->integer('page_type')->unsigned()->index();
+            
             $table->timestamps();
         });
     }
-
+    
     /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+    * Reverse the migrations.
+    *
+    * @return void
+    */
     public function down()
     {
         Schema::dropIfExists('ad_types');

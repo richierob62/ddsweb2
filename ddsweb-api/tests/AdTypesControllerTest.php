@@ -53,6 +53,10 @@ class AdTypesControllerTest extends TestCase
     public function index_should_return_a_collection_of_filtered_and_ordered__records()
     {
         
+        $page_type_2 = factory(App\PageType::class)->create()->toArray();
+        $page_type_2['name'] = 'something-123page_type_name-something';
+        $this->post('/edit_page_type', $page_type_2);
+        
         factory(App\AdType::class)->create();
         factory(App\AdType::class)->create();
         factory(App\AdType::class)->create();
@@ -62,12 +66,14 @@ class AdTypesControllerTest extends TestCase
         $ad_type = factory(App\AdType::class)->create()->toArray();
         $ad_type['name'] = '0000something-123name-something';
         $ad_type['code'] = '0000something-123code';
+        $ad_type['page_type'] = $page_type_2['id'];
         $this->post('/edit_ad_type', $ad_type);
         
         $this->post('/ad_types', [
         'filters' => [
         'name' => '123name',
         'code' => '123code',
+        'page_type' => '123page_type',
         'id' => $ad_type['id']
         ],
         'sort_name' => 'name',
@@ -137,9 +143,13 @@ class AdTypesControllerTest extends TestCase
     public function it_saves_new_ad_type_in_the_database()
     {
         
+        
+        $page_type_2 = factory(App\PageType::class)->create()->toArray();
+        
         $this->post('/new_ad_type', [
         'name' => 'foo',
-        'code' => 'foo'
+        'code' => 'foo',
+        'page_type' => $page_type_2['id']
         ]);
         
         $body = json_decode($this->response->getContent(), true);
@@ -148,6 +158,7 @@ class AdTypesControllerTest extends TestCase
         $data = $body['data'];
         $this->assertEquals('foo', $data['name']);
         $this->assertEquals('foo', $data['code']);
+        $this->assertEquals($page_type_2['id'], $data['page_type']);
         $this->assertTrue($data['id'] > 0);
         
         $this
@@ -274,18 +285,15 @@ class AdTypesControllerTest extends TestCase
     public function it_rejects_duplicate_data_on_create()
     {
         
-        $this->post('/new_ad_type', [
-        'code' => 'foo',
-        'name' => 'foo'
-        ]);
+        $ad_type = factory(App\AdType::class)->create();
         
         $this->post('/new_ad_type', [
-        'code' => 'foo',
-        'name' => 'foo'
+        'code' => $ad_type['code'],
+        'name' => $ad_type['name'],
+        'page_type' => $ad_type['page_type']
         ]);
         
         $this->assertEquals(422, $this->response->getStatusCode());
-        
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
@@ -309,7 +317,8 @@ class AdTypesControllerTest extends TestCase
         $this->post('/edit_ad_type', [
         'id' => $ad_type_2->id,
         'name' => $ad_type_1->name,
-        'code' => $ad_type_1->code
+        'code' => $ad_type_1->code,
+        'page_type' => $ad_type_2->page_type
         ]);
         
         
@@ -341,4 +350,41 @@ class AdTypesControllerTest extends TestCase
         // no types on this one
     }
     
+    // type - create
+    /** @test **/
+    public function it_validates_reference_fields_on_create()
+    {
+        $new = factory(App\AdType::class)->raw();
+        $new['page_type'] = 888888;
+        
+        $this->post('/new_heading', $new);
+        
+        $this->assertEquals(422, $this->response->getStatusCode());
+        
+        $errors = json_decode($this->response->getContent(), true)['errors'];
+        
+        $this->assertArrayHasKey('page_type', $errors);
+        
+        $this->assertEquals(["You must select a valid page type."], $errors['page_type']);
+    }
+    
+    
+    // type - edit
+    /** @test **/
+    public function it_validates_reference_fields_on_edit()
+    {
+        $heading = factory(App\AdType::class)->create()->toArray();
+        
+        $heading['page_type'] = NULL;
+        
+        $this->post('/edit_heading', $heading);
+        
+        $this->assertEquals(422, $this->response->getStatusCode());
+        
+        $errors = json_decode($this->response->getContent(), true)['errors'];
+        
+        $this->assertArrayHasKey('page_type', $errors);
+        
+        $this->assertEquals(["You must select a valid page type."], $errors['page_type']);
+    }
 }

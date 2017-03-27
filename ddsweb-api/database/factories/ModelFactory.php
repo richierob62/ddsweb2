@@ -149,9 +149,18 @@ $factory->define(App\PageType::class, function ($faker) {
 });
 
 $factory->define(App\AdType::class, function ($faker) {
+
+    $page_type = \App\PageType::all();
+    if($page_type->count() < 2) {
+        $page_type = factory(App\PageType::class)->create()->id;
+    } else {
+        $page_type = $page_type->random()->id;
+    }
+
     return [
     'name' => $faker->word,
     'code' => $faker->word,
+    'page_type' => $page_type
     ];
 });
 
