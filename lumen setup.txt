@@ -775,7 +775,7 @@ WORKFLOW
 ===============================================================================================================
 Controller tests
     migrations & models to support
-        php artisan make:migration create_order_lines_table --create=order_lines
+        php artisan make:migration create_finding_lines_table --create=finding_lines
         php artisan migrate
         composer dump-autoload
         php artisan migrate:refresh

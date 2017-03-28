@@ -119,3 +119,10 @@ $app->post('new_order_line', 'OrderLinesController@newOrderLine');
 $app->post('edit_order_line', 'OrderLinesController@editOrderLine');
 $app->post('delete_order_line', 'OrderLinesController@deleteOrderLine');
 $app->post('next_sequence_number', 'OrderLinesController@nextSequenceNumber');
+
+$app->post('finding_lines', 'FindingLinesController@findingLines');
+$app->post('finding_line_reference', 'FindingLinesController@referenceList');
+$app->post('finding_line', 'FindingLinesController@findingLineByID');
+$app->post('new_finding_line', 'FindingLinesController@newFindingLine');
+$app->post('edit_finding_line', 'FindingLinesController@editFindingLine');
+$app->post('delete_finding_line', 'FindingLinesController@deleteFindingLine');

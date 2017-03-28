@@ -339,3 +339,10 @@ $factory->define(App\OrderLine::class, function ($faker) {
     'heading' => $heading
     ];
 });
+
+$factory->define(App\FindingLine::class, function ($faker) {
+    return [
+    'name' => $faker->word,
+    'code' => $faker->word
+    ];
+});
