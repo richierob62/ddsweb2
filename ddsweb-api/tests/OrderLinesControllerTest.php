@@ -18,9 +18,7 @@ class OrderLinesControllerTest extends TestCase
     /** @test **/
     public function index_status_code_should_be_200()
     {
-        factory(App\OrderLine::class)->create();
-        factory(App\OrderLine::class)->create();
-        factory(App\OrderLine::class)->create();
+        factory(App\OrderLine::class, 3)->create();
         $this
         ->post('/order_lines')
         ->seeStatusCode(200);
@@ -29,9 +27,7 @@ class OrderLinesControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_collection_of_records()
     {
-        factory(App\OrderLine::class)->create();
-        factory(App\OrderLine::class)->create();
-        factory(App\OrderLine::class)->create();
+        factory(App\OrderLine::class, 3)->create();
         $this->post('/order_lines');
         $data = json_decode($this->response->getContent(), true)['data'];
         $expected = [
@@ -44,9 +40,7 @@ class OrderLinesControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_reference_list()
     {
-        factory(App\OrderLine::class)->create();
-        factory(App\OrderLine::class)->create();
-        factory(App\OrderLine::class)->create();
+        factory(App\OrderLine::class, 3)->create();
         $this->post('/order_line_reference');
         $data = json_decode($this->response->getContent(), true);
         $this->seeJsonEquals($data);
@@ -68,12 +62,7 @@ class OrderLinesControllerTest extends TestCase
         $udac_2['name'] = 'something-123udac-something';
         $this->post('/edit_udac', $udac_2);
         
-        factory(App\OrderLine::class)->create();
-        factory(App\OrderLine::class)->create();
-        factory(App\OrderLine::class)->create();
-        factory(App\OrderLine::class)->create();
-        factory(App\OrderLine::class)->create();
-        factory(App\OrderLine::class)->create();
+        factory(App\OrderLine::class, 6)->create();
         $order_line = factory(App\OrderLine::class)->create()->toArray();
         $order_line['sequence'] = 1;
         $order_line['order'] = $order_2['id'];

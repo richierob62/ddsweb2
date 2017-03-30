@@ -15,9 +15,7 @@ class FindingLinesControllerTest extends TestCase
     /** @test **/
     public function index_status_code_should_be_200()
     {
-        factory(App\FindingLine::class)->create();
-        factory(App\FindingLine::class)->create();
-        factory(App\FindingLine::class)->create();
+        factory(App\FindingLine::class, 3)->create();
         $this
         ->post('/finding_lines')
         ->seeStatusCode(200);
@@ -26,9 +24,7 @@ class FindingLinesControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_collection_of_records()
     {
-        factory(App\FindingLine::class)->create();
-        factory(App\FindingLine::class)->create();
-        factory(App\FindingLine::class)->create();
+        factory(App\FindingLine::class, 3)->create();
         $this->post('/finding_lines');
         $data = json_decode($this->response->getContent(), true)['data'];
         $expected = [
@@ -41,9 +37,7 @@ class FindingLinesControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_reference_list()
     {
-        factory(App\FindingLine::class)->create();
-        factory(App\FindingLine::class)->create();
-        factory(App\FindingLine::class)->create();
+        factory(App\FindingLine::class, 3)->create();
         $this->post('/finding_line_reference');
         $data = json_decode($this->response->getContent(), true);
         $this->seeJsonEquals($data);
@@ -53,12 +47,7 @@ class FindingLinesControllerTest extends TestCase
     public function index_should_return_a_collection_of_filtered_and_ordered__records()
     {
         
-        factory(App\FindingLine::class)->create();
-        factory(App\FindingLine::class)->create();
-        factory(App\FindingLine::class)->create();
-        factory(App\FindingLine::class)->create();
-        factory(App\FindingLine::class)->create();
-        factory(App\FindingLine::class)->create();
+        factory(App\FindingLine::class, 6)->create();
         $finding_line = factory(App\FindingLine::class)->create()->toArray();
         $finding_line['name'] = '0000something-123name-something';
         $finding_line['code'] = '0000something-123code';

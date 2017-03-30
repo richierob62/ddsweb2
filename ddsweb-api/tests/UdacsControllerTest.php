@@ -17,9 +17,7 @@ class UdacsControllerTest extends TestCase
     /** @test **/
     public function index_status_code_should_be_200()
     {
-        factory(App\Udac::class)->create();
-        factory(App\Udac::class)->create();
-        factory(App\Udac::class)->create();
+        factory(App\Udac::class, 3)->create();
         $this
         ->post('/udacs')
         ->seeStatusCode(200);
@@ -28,9 +26,7 @@ class UdacsControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_collection_of_records()
     {
-        factory(App\Udac::class)->create();
-        factory(App\Udac::class)->create();
-        factory(App\Udac::class)->create();
+        factory(App\Udac::class, 3)->create();
         $this->post('/udacs');
         $data = json_decode($this->response->getContent(), true)['data'];
         $expected = [
@@ -43,9 +39,7 @@ class UdacsControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_reference_list()
     {
-        factory(App\Udac::class)->create();
-        factory(App\Udac::class)->create();
-        factory(App\Udac::class)->create();
+        factory(App\Udac::class, 3)->create();
         $this->post('/udac_reference');
         $data = json_decode($this->response->getContent(), true);
         $this->seeJsonEquals($data);
@@ -63,12 +57,7 @@ class UdacsControllerTest extends TestCase
         $ad_type_2['name'] = 'something-123ad_type_name-something';
         $this->post('/edit_ad_type', $ad_type_2);
 
-        factory(App\Udac::class)->create();
-        factory(App\Udac::class)->create();
-        factory(App\Udac::class)->create();
-        factory(App\Udac::class)->create();
-        factory(App\Udac::class)->create();
-        factory(App\Udac::class)->create();
+        factory(App\Udac::class, 6)->create();
         $udac = factory(App\Udac::class)->create()->toArray();
         $udac['name'] = '0000something-123name-something';
         $udac['code'] = '0000something-123code-something';

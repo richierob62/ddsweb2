@@ -20,9 +20,7 @@ class OrdersControllerTest extends TestCase
     /** @test **/
     public function index_status_code_should_be_200()
     {
-        factory(App\Order::class)->create();
-        factory(App\Order::class)->create();
-        factory(App\Order::class)->create();
+        factory(App\Order::class, 3)->create();
         $this
         ->post('/orders')
         ->seeStatusCode(200);
@@ -31,9 +29,7 @@ class OrdersControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_collection_of_records()
     {
-        factory(App\Order::class)->create();
-        factory(App\Order::class)->create();
-        factory(App\Order::class)->create();
+        factory(App\Order::class, 3)->create();
         $this->post('/orders');
         $data = json_decode($this->response->getContent(), true)['data'];
         $expected = [
@@ -46,9 +42,7 @@ class OrdersControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_reference_list()
     {
-        factory(App\Order::class)->create();
-        factory(App\Order::class)->create();
-        factory(App\Order::class)->create();
+        factory(App\Order::class, 3)->create();
         $this->post('/order_reference');
         $data = json_decode($this->response->getContent(), true);
         $this->seeJsonEquals($data);
@@ -74,12 +68,7 @@ class OrdersControllerTest extends TestCase
         $order_status_2['name'] = 'something-123st';
         $this->post('/edit_order_status', $order_status_2);
         
-        factory(App\Order::class)->create();
-        factory(App\Order::class)->create();
-        factory(App\Order::class)->create();
-        factory(App\Order::class)->create();
-        factory(App\Order::class)->create();
-        factory(App\Order::class)->create();
+        factory(App\Order::class, 6)->create();
         $order = factory(App\Order::class)->create()->toArray();
         $order['order_num'] = '000111111111';
         $order['order_date'] = new Carbon('2017-12-31');

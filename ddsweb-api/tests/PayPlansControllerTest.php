@@ -15,9 +15,7 @@ class PayPlansControllerTest extends TestCase
     /** @test **/
     public function index_status_code_should_be_200()
     {
-        factory(App\PayPlan::class)->create();
-        factory(App\PayPlan::class)->create();
-        factory(App\PayPlan::class)->create();
+        factory(App\PayPlan::class, 3)->create();
         $this
         ->post('/pay_plans')
         ->seeStatusCode(200);
@@ -26,9 +24,7 @@ class PayPlansControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_collection_of_records()
     {
-        factory(App\PayPlan::class)->create();
-        factory(App\PayPlan::class)->create();
-        factory(App\PayPlan::class)->create();
+        factory(App\PayPlan::class, 3)->create();
         $this->post('/pay_plans');
         $data = json_decode($this->response->getContent(), true)['data'];
         $expected = [
@@ -41,9 +37,7 @@ class PayPlansControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_reference_list()
     {
-        factory(App\PayPlan::class)->create();
-        factory(App\PayPlan::class)->create();
-        factory(App\PayPlan::class)->create();
+        factory(App\PayPlan::class, 3)->create();
         $this->post('/pay_plan_reference');
         $data = json_decode($this->response->getContent(), true);
         $this->seeJsonEquals($data);
@@ -53,12 +47,7 @@ class PayPlansControllerTest extends TestCase
     public function index_should_return_a_collection_of_filtered_and_ordered__records()
     {
         
-        factory(App\PayPlan::class)->create();
-        factory(App\PayPlan::class)->create();
-        factory(App\PayPlan::class)->create();
-        factory(App\PayPlan::class)->create();
-        factory(App\PayPlan::class)->create();
-        factory(App\PayPlan::class)->create();
+        factory(App\PayPlan::class, 6)->create();
         $pay_plan = factory(App\PayPlan::class)->create()->toArray();
         $pay_plan['name'] = '0000something-123name-something';
         $pay_plan['code'] = '0000something-123code';

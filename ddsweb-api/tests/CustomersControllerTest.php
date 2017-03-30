@@ -20,9 +20,7 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function index_status_code_should_be_200()
     {
-        factory(App\Customer::class)->create();
-        factory(App\Customer::class)->create();
-        factory(App\Customer::class)->create();
+        factory(App\Customer::class, 3)->create();
         $this
         ->post('/customers')
         ->seeStatusCode(200);
@@ -31,9 +29,7 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_collection_of_records()
     {
-        factory(App\Customer::class)->create();
-        factory(App\Customer::class)->create();
-        factory(App\Customer::class)->create();
+        factory(App\Customer::class, 3)->create();
         $this->post('/customers');
         $data = json_decode($this->response->getContent(), true)['data'];
         $expected = [
@@ -46,9 +42,7 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_reference_list()
     {
-        factory(App\Customer::class)->create();
-        factory(App\Customer::class)->create();
-        factory(App\Customer::class)->create();
+        factory(App\Customer::class, 3)->create();
         $this->post('/customer_reference');
         $data = json_decode($this->response->getContent(), true);
         $this->seeJsonEquals($data);
@@ -58,19 +52,12 @@ class CustomersControllerTest extends TestCase
     public function index_should_return_a_collection_of_filtered_and_ordered__records()
     {
         
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
+        factory(App\SalesRep::class, 3)->create();
         $sales_rep_2 = factory(App\SalesRep::class)->create()->toArray();
         $sales_rep_2['name'] = 'something-123rep_name-something';
         $this->post('/edit_sales_rep', $sales_rep_2);
         
-        factory(App\Customer::class)->create();
-        factory(App\Customer::class)->create();
-        factory(App\Customer::class)->create();
-        factory(App\Customer::class)->create();
-        factory(App\Customer::class)->create();
-        factory(App\Customer::class)->create();
+        factory(App\Customer::class, 6)->create();
         $customer = factory(App\Customer::class)->create()->toArray();
         $customer['name'] = '0000something-123name-something';
         $customer['address'] = '0000something-123address-something';

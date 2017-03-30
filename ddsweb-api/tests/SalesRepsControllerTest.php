@@ -16,9 +16,7 @@ class SalesRepsControllerTest extends TestCase
     /** @test **/
     public function index_status_code_should_be_200()
     {
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
+        factory(App\SalesRep::class, 3)->create();
         $this
         ->post('/sales_reps')
         ->seeStatusCode(200);
@@ -27,9 +25,7 @@ class SalesRepsControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_collection_of_records()
     {
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
+        factory(App\SalesRep::class, 3)->create();
         $this->post('/sales_reps');
         $data = json_decode($this->response->getContent(), true)['data'];
         $expected = [
@@ -42,9 +38,7 @@ class SalesRepsControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_reference_list()
     {
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
+        factory(App\SalesRep::class, 3)->create();
         $this->post('/sales_rep_reference');
         $data = json_decode($this->response->getContent(), true);
         $this->seeJsonEquals($data);
@@ -54,12 +48,7 @@ class SalesRepsControllerTest extends TestCase
     public function index_should_return_a_collection_of_filtered_and_ordered__records()
     {
         
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
-        factory(App\SalesRep::class)->create();
+        factory(App\SalesRep::class, 6)->create();
         $sales_rep = factory(App\SalesRep::class)->create()->toArray();
         $sales_rep['name'] = '0000something-123name-something';
         $sales_rep['email'] = '0000something-123email@something.com';

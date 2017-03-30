@@ -16,9 +16,7 @@ class HeadingsControllerTest extends TestCase
     /** @test **/
     public function index_status_code_should_be_200()
     {
-        factory(App\Heading::class)->create();
-        factory(App\Heading::class)->create();
-        factory(App\Heading::class)->create();
+        factory(App\Heading::class, 3)->create();
         $this
         ->post('/headings')
         ->seeStatusCode(200);
@@ -27,9 +25,7 @@ class HeadingsControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_collection_of_records()
     {
-        factory(App\Heading::class)->create();
-        factory(App\Heading::class)->create();
-        factory(App\Heading::class)->create();
+        factory(App\Heading::class, 3)->create();
         $this->post('/headings');
         $data = json_decode($this->response->getContent(), true)['data'];
         $expected = [
@@ -42,9 +38,7 @@ class HeadingsControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_reference_list()
     {
-        factory(App\Heading::class)->create();
-        factory(App\Heading::class)->create();
-        factory(App\Heading::class)->create();
+        factory(App\Heading::class, 3)->create();
         $this->post('/heading_reference');
         $data = json_decode($this->response->getContent(), true);
         $this->seeJsonEquals($data);
@@ -58,12 +52,7 @@ class HeadingsControllerTest extends TestCase
         $page_type_2['name'] = 'something-123page_type_name-something';
         $this->post('/edit_page_type', $page_type_2);
         
-        factory(App\Heading::class)->create();
-        factory(App\Heading::class)->create();
-        factory(App\Heading::class)->create();
-        factory(App\Heading::class)->create();
-        factory(App\Heading::class)->create();
-        factory(App\Heading::class)->create();
+        factory(App\Heading::class, 6)->create();
         $heading = factory(App\Heading::class)->create()->toArray();
         $heading['name'] = '0000something-123name-something';
         $heading['heading_num'] = '0000something-123heading_num-something';

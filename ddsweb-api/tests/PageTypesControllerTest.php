@@ -15,9 +15,7 @@ class PageTypesControllerTest extends TestCase
     /** @test **/
     public function index_status_code_should_be_200()
     {
-        factory(App\PageType::class)->create();
-        factory(App\PageType::class)->create();
-        factory(App\PageType::class)->create();
+        factory(App\PageType::class, 3)->create();
         $this
         ->post('/page_types')
         ->seeStatusCode(200);
@@ -26,9 +24,7 @@ class PageTypesControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_collection_of_records()
     {
-        factory(App\PageType::class)->create();
-        factory(App\PageType::class)->create();
-        factory(App\PageType::class)->create();
+        factory(App\PageType::class, 3)->create();
         $this->post('/page_types');
         $data = json_decode($this->response->getContent(), true)['data'];
         $expected = [
@@ -41,9 +37,7 @@ class PageTypesControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_reference_list()
     {
-        factory(App\PageType::class)->create();
-        factory(App\PageType::class)->create();
-        factory(App\PageType::class)->create();
+        factory(App\PageType::class, 3)->create();
         $this->post('/page_type_reference');
         $data = json_decode($this->response->getContent(), true);
         $this->seeJsonEquals($data);
@@ -53,12 +47,7 @@ class PageTypesControllerTest extends TestCase
     public function index_should_return_a_collection_of_filtered_and_ordered__records()
     {
         
-        factory(App\PageType::class)->create();
-        factory(App\PageType::class)->create();
-        factory(App\PageType::class)->create();
-        factory(App\PageType::class)->create();
-        factory(App\PageType::class)->create();
-        factory(App\PageType::class)->create();
+        factory(App\PageType::class, 6)->create();
         $page_type = factory(App\PageType::class)->create()->toArray();
         $page_type['name'] = '0000something-123name-something';
         $page_type['code'] = '0000something-123code';

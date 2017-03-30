@@ -15,9 +15,7 @@ class OrderStatusesControllerTest extends TestCase
     /** @test **/
     public function index_status_code_should_be_200()
     {
-        factory(App\OrderStatus::class)->create();
-        factory(App\OrderStatus::class)->create();
-        factory(App\OrderStatus::class)->create();
+        factory(App\OrderStatus::class, 3)->create();
         $this
         ->post('/order_statuses')
         ->seeStatusCode(200);
@@ -26,9 +24,7 @@ class OrderStatusesControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_collection_of_records()
     {
-        factory(App\OrderStatus::class)->create();
-        factory(App\OrderStatus::class)->create();
-        factory(App\OrderStatus::class)->create();
+        factory(App\OrderStatus::class, 3)->create();
         $this->post('/order_statuses');
         $data = json_decode($this->response->getContent(), true)['data'];
         $expected = [
@@ -41,9 +37,7 @@ class OrderStatusesControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_reference_list()
     {
-        factory(App\OrderStatus::class)->create();
-        factory(App\OrderStatus::class)->create();
-        factory(App\OrderStatus::class)->create();
+        factory(App\OrderStatus::class, 3)->create();
         $this->post('/order_status_reference');
         $data = json_decode($this->response->getContent(), true);
         $this->seeJsonEquals($data);
@@ -53,12 +47,7 @@ class OrderStatusesControllerTest extends TestCase
     public function index_should_return_a_collection_of_filtered_and_ordered__records()
     {
         
-        factory(App\OrderStatus::class)->create();
-        factory(App\OrderStatus::class)->create();
-        factory(App\OrderStatus::class)->create();
-        factory(App\OrderStatus::class)->create();
-        factory(App\OrderStatus::class)->create();
-        factory(App\OrderStatus::class)->create();
+        factory(App\OrderStatus::class, 6)->create();
         $order_status = factory(App\OrderStatus::class)->create()->toArray();
         $order_status['name'] = '0000something-123name-something';
         $order_status['code'] = '0000something-123code';
