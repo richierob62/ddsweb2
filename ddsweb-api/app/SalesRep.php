@@ -8,11 +8,6 @@ class SalesRep extends Model
 {
     protected $guarded = [];
     
-    protected $casts = [
-    'is_rep' => 'boolean',
-    'is_admin' => 'boolean',
-    'is_active' => 'boolean',
-    ];
     
     static public function rules($id = null) {
         return [
