@@ -17,7 +17,6 @@ class SalesRepsController extends Controller
     
     public function salesReps(Request $request)
     {
-        $query = SalesRep::where('id','>',-1);
         $filters = $request->input('filters');
         
         $sort_name = $request->input('sort_name');
@@ -30,13 +29,14 @@ class SalesRepsController extends Controller
             $sort_dir = 'asc';
         }
         
+        $query = SalesRep::sortResultsBy($sort_name, $sort_dir);
+
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {
-                $query = SalesRep::filterOn($key, $filter, $query);
+                $query = SalesRep::filterOn($key, $filter);
             }
         }
         
-        $query = SalesRep::sortResultsBy($sort_name, $sort_dir, $query);
         
         return response()->json(['data' => $query->get()]);
     }

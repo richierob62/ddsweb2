@@ -34,40 +34,40 @@ class Heading extends Model
     
     public function page_type() { return $this->belongsTo(PageType::class, 'page_type');  }
     
-    static public function filterOn($key, $filter, $query)
+    static public function scopeFilterOn($query, $key, $filter)
     {
         switch ($key) {
             case 'name':
-                return $query->where('name', 'LIKE', '%'.$filter.'%');
+                $query->where('name', 'LIKE', '%'.$filter.'%');
                 break;
             case 'sort_name':
-                return $query->where('sort_name', 'LIKE', '%'.$filter.'%');
+                $query->where('sort_name', 'LIKE', '%'.$filter.'%');
                 break;
             case 'heading_num':
-                return $query->where('heading_num', 'LIKE', '%'.$filter.'%');
+                $query->where('heading_num', 'LIKE', '%'.$filter.'%');
                 break;
             case 'page_type':
-                return $query->whereHas('page_type', function($q) use ($filter) {
+                $query->whereHas('page_type', function($q) use ($filter) {
                     $q->where('name', 'LIKE', '%'.$filter.'%');
                 });
                 break;
             case 'id':
-                return $query->where('id', $filter);
+                $query->where('id', $filter);
                 break;
             default:
-                return $query;
+                $query;
         }
     }
 
-    static public function sortResultsBy($sort_name, $sort_dir, $query) {
+    static public function scopeSortResultsBy($query, $sort_name, $sort_dir) {
         switch ($sort_name) {
             case 'page_type':
-                return $query->whereHas('page_type', function($q) use ($filter, $sort_dir) {
+                $query->whereHas('page_type', function($q) use ($filter, $sort_dir) {
                     $q->orderBy('name', $sort_dir);
                 });
                 break;
             default:
-                return $query->orderBy($sort_name, $sort_dir);
+                $query->orderBy($sort_name, $sort_dir);
         }        
     }
 }

@@ -17,7 +17,6 @@ class HeadingsController extends Controller
     
     public function headings(Request $request)
     {
-        $query = Heading::where('id','>',-1);
         $filters = $request->input('filters');
         
         $sort_name = $request->input('sort_name');
@@ -30,13 +29,14 @@ class HeadingsController extends Controller
             $sort_dir = 'asc';
         }
         
+        $query = Heading::sortResultsBy($sort_name, $sort_dir);
+        
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {
-                $query = Heading::filterOn($key, $filter, $query);
+                $query = Heading::filterOn($key, $filter);
             }
         }
         
-        $query = Heading::sortResultsBy($sort_name, $sort_dir, $query);
         
         return response()->json(['data' => $query->get()]);
     }

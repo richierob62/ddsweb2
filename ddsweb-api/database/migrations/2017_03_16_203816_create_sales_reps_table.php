@@ -28,9 +28,9 @@ class CreateSalesRepsTable extends Migration
             $table->string('zip')->nullable();
             $table->string('email');
             $table->string('phone');
-            $table->boolean('is_rep')->default(1);
-            $table->boolean('is_admin')->default(0);
-            $table->boolean('is_active')->default(1);
+            $table->string('is_rep')->default('Y');
+            $table->string('is_admin')->default('N');
+            $table->string('is_active')->default('Y');
             
             $table->float('commission_new')->nullable();
             $table->float('commission_renew')->nullable();

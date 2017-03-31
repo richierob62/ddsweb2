@@ -17,7 +17,6 @@ class PayPlansController extends Controller
     
     public function payPlans(Request $request)
     {
-        $query = PayPlan::where('id','>',-1);
         $filters = $request->input('filters');
         
         $sort_name = $request->input('sort_name');
@@ -29,14 +28,14 @@ class PayPlansController extends Controller
         if(sizeof($sort_dir) == 0) {
             $sort_dir = 'asc';
         }
+
+        $query = PayPlan::sortResultsBy($sort_name, $sort_dir);        
         
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {
-                $query = PayPlan::filterOn($key, $filter, $query);
+                $query = PayPlan::filterOn($key, $filter);
             }
         }
-        
-        $query = PayPlan::sortResultsBy($sort_name, $sort_dir, $query);
         
         return response()->json(['data' => $query->get()]);
     }

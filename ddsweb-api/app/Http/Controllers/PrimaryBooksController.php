@@ -17,7 +17,6 @@ class PrimaryBooksController extends Controller
     
     public function primaryBooks(Request $request)
     {
-        $query = PrimaryBook::where('id','>',-1);
         $filters = $request->input('filters');
         
         $sort_name = $request->input('sort_name');
@@ -30,14 +29,14 @@ class PrimaryBooksController extends Controller
             $sort_dir = 'asc';
         }
         
+        $query = PrimaryBook::sortResultsBy($sort_name, $sort_dir);
+                
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {
-                $query = PrimaryBook::filterOn($key, $filter, $query);
+                $query = PrimaryBook::filterOn($key, $filter);
             }
         }
         
-        $query = PrimaryBook::sortResultsBy($sort_name, $sort_dir, $query);
-
         return response()->json(['data' => $query->get()]);
     }
     

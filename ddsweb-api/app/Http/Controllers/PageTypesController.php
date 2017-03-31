@@ -17,7 +17,6 @@ class PageTypesController extends Controller
     
     public function pageTypes(Request $request)
     {
-        $query = PageType::where('id','>',-1);
         $filters = $request->input('filters');
         
         $sort_name = $request->input('sort_name');
@@ -29,15 +28,15 @@ class PageTypesController extends Controller
         if(sizeof($sort_dir) == 0) {
             $sort_dir = 'asc';
         }
-        
+
+        $query = PageType::sortResultsBy($sort_name, $sort_dir);
+                
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {
-                $query = PageType::filterOn($key, $filter, $query);
+                $query = PageType::filterOn($key, $filter);
             }
         }
         
-        $query = PageType::sortResultsBy($sort_name, $sort_dir, $query);
-
         return response()->json(['data' => $query->get()]);
     }
     

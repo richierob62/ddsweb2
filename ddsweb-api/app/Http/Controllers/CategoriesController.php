@@ -17,7 +17,6 @@ class CategoriesController extends Controller
     
     public function categories(Request $request)
     {
-        $query = Category::where('id','>',-1);
         $filters = $request->input('filters');
         
         $sort_name = $request->input('sort_name');
@@ -30,13 +29,14 @@ class CategoriesController extends Controller
             $sort_dir = 'asc';
         }
         
+        $query = Category::sortResultsBy($sort_name, $sort_dir);
+
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {
-                $query = Category::filterOn($key, $filter, $query);
+                $query = Category::filterOn($key, $filter);
             }
         }
         
-        $query = Category::sortResultsBy($sort_name, $sort_dir, $query);
         
         return response()->json(['data' => $query->get()]);
     }

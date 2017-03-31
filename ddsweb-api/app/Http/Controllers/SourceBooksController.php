@@ -17,7 +17,6 @@ class SourceBooksController extends Controller
     
     public function sourceBooks(Request $request)
     {
-        $query = SourceBook::where('id','>',-1);
         $filters = $request->input('filters');
         
         $sort_name = $request->input('sort_name');
@@ -29,15 +28,15 @@ class SourceBooksController extends Controller
         if(sizeof($sort_dir) == 0) {
             $sort_dir = 'asc';
         }
+
+        $query = SourceBook::sortResultsBy($sort_name, $sort_dir);
         
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {
-                $query = SourceBook::filterOn($key, $filter, $query);
+                $query = SourceBook::filterOn($key, $filter);
             }
         }
         
-        $query = SourceBook::sortResultsBy($sort_name, $sort_dir, $query);
-
         return response()->json(['data' => $query->get()]);
     }
     

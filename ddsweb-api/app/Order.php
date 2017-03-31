@@ -48,7 +48,7 @@ class Order extends Model
     public function order_status() { return $this->belongsTo(OrderStatus::class, 'order_status');  }
     public function sales_rep() { return $this->belongsTo(SalesRep::class, 'sales_rep');  }
     
-    static public function filterOn($key, $filter, $query)
+    static public function scopeFilterOn($query, $key, $filter)
     {
         switch ($key) {
             case 'order_num':
@@ -56,42 +56,42 @@ class Order extends Model
                 break;
             case 'order_date':
                 return $query->where('order_date', 'LIKE', '%'.$filter.'%');
-                break;                
+                break;
             case 'primary_book':
                 return $query->whereHas('primary_book', function($q) use ($filter) {
                     $q->where('name', 'LIKE', '%'.$filter.'%');
-                });
-                break;
-            case 'customer':
-                return $query->whereHas('customer', function($q) use ($filter) {
-                    $q->where('name', 'LIKE', '%'.$filter.'%');
-                });
-                break;
-            case 'order_status':
-                return $query->whereHas('order_status', function($q) use ($filter) {
-                    $q->where('name', 'LIKE', '%'.$filter.'%');
-                });
-                break;
-            case 'sales_rep':
-                return $query->whereHas('sales_rep', function($q) use ($filter) {
-                    $q->where('name', 'LIKE', '%'.$filter.'%');
-                });
-                break;
-            case 'id':
-                return $query->where('id', $filter);
-                break;
-            default:
-                return $query;
-    }
-}
-
-static public function sortResultsBy($sort_order_num, $sort_dir, $query) {
-    switch ($sort_order_num) {
-        case 'sales_rep':
-            return $query->whereHas('sales_rep', function($q) use ($filter, $sort_dir) {
-                $q->orderBy('name', $sort_dir);
+            });
+            break;
+        case 'customer':
+            return $query->whereHas('customer', function($q) use ($filter) {
+                $q->where('name', 'LIKE', '%'.$filter.'%');
         });
         break;
+        case 'order_status':
+            return $query->whereHas('order_status', function($q) use ($filter) {
+                $q->where('name', 'LIKE', '%'.$filter.'%');
+        });
+        break;
+        case 'sales_rep':
+            return $query->whereHas('sales_rep', function($q) use ($filter) {
+                $q->where('name', 'LIKE', '%'.$filter.'%');
+        });
+        break;
+        case 'id':
+            return $query->where('id', $filter);
+            break;
+        default:
+            return $query;
+        }
+    }
+
+    static public function scopeSortResultsBy($query, $sort_order_num, $sort_dir) {
+        switch ($sort_order_num) {
+            case 'sales_rep':
+                return $query->whereHas('sales_rep', function($q) use ($filter, $sort_dir) {
+                    $q->orderBy('name', $sort_dir);
+            });
+            break;
         case 'primary_book':
             return $query->whereHas('primary_book', function($q) use ($filter, $sort_dir) {
                 $q->orderBy('name', $sort_dir);
@@ -107,8 +107,8 @@ static public function sortResultsBy($sort_order_num, $sort_dir, $query) {
                 $q->orderBy('name', $sort_dir);
         });
         break;
-    default:
-        return $query->orderBy($sort_order_num, $sort_dir);
-}
-}
+        default:
+            return $query->orderBy($sort_order_num, $sort_dir);
+        }
+    }
 }

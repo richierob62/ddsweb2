@@ -17,7 +17,6 @@ class OrderStatusesController extends Controller
     
     public function orderStatuses(Request $request)
     {
-        $query = OrderStatus::where('id','>',-1);
         $filters = $request->input('filters');
         
         $sort_name = $request->input('sort_name');
@@ -29,14 +28,14 @@ class OrderStatusesController extends Controller
         if(sizeof($sort_dir) == 0) {
             $sort_dir = 'asc';
         }
-        
+
+        $query = OrderStatus::sortResultsBy($sort_name, $sort_dir);
+                
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {
-                $query = OrderStatus::filterOn($key, $filter, $query);
+                $query = OrderStatus::filterOn($key, $filter);
             }
         }
-        
-        $query = OrderStatus::sortResultsBy($sort_name, $sort_dir, $query);
         
         return response()->json(['data' => $query->get()]);
     }

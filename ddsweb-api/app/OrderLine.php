@@ -33,7 +33,7 @@ class OrderLine extends Model
     public function udac() { return $this->belongsTo(Udac::class, 'udac');  }
     public function heading() { return $this->belongsTo(Heading::class, 'heading');  }
     
-    static public function filterOn($key, $filter, $query)
+    static public function scopeFilterOn($query, $key, $filter)
     {
         switch ($key) {
             case 'order':
@@ -62,8 +62,8 @@ class OrderLine extends Model
         }
     }
 
-    static public function sortResultsBy($code, $sort_dir, $query) {
-        switch ($code) {
+    static public function scopeSortResultsBy($query, $sort_name, $sort_dir) {
+        switch ($sort_name) {
             case 'order':
                 return $query->whereHas('order', function($q) use ($filter, $sort_dir) {
                     $q->orderBy('order_num', $sort_dir);
@@ -80,7 +80,7 @@ class OrderLine extends Model
                 });
                 break;
             default:
-                return $query->orderBy($code, $sort_dir);
+                return $query->orderBy($sort_name, $sort_dir);
         }        
     }
 }

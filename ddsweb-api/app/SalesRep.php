@@ -8,6 +8,12 @@ class SalesRep extends Model
 {
     protected $guarded = [];
     
+    protected $casts = [
+    'is_rep' => 'boolean',
+    'is_admin' => 'boolean',
+    'is_active' => 'boolean',
+    ];
+    
     static public function rules($id = null) {
         return [
         'name' => 'required|unique:sales_reps,name,'.$id,
@@ -35,41 +41,42 @@ class SalesRep extends Model
     
     public function customers() { return $this->hasMany(Customer::class);  }
     
-    static public function filterOn($key, $filter, $query)
+    static public function scopeFilterOn($query, $key, $filter)
     {
+
         switch ($key) {
             case 'name':
-                return $query->where('name', 'LIKE', '%'.$filter.'%');
+                $query->where('name', 'LIKE', '%'.$filter.'%');
                 break;
             case 'email':
-                return $query->where('email', 'LIKE', '%'.$filter.'%');
+                $query->where('email', 'LIKE', '%'.$filter.'%');
                 break;
             case 'phone':
-                return $query->where('phone', 'LIKE', '%'.$filter.'%');
+                $query->where('phone', 'LIKE', '%'.$filter.'%');
                 break;
             case 'is_rep':
-                return $query->where('is_rep', $filter);
+                $query->where('is_rep', $filter);
                 break;
             case 'is_admin':
-                return $query->where('is_admin', $filter);
+                $query->where('is_admin', $filter);
                 break;
             case 'is_active':
-                return $query->where('is_active', $filter);
+                $query->where('is_active', $filter);
                 break;
             case 'id':
-                return $query->where('id', $filter);
+                $query->where('id', $filter);
                 break;
             default:
-                return $query;
+                $query;
         }
     }
     
-    static public function sortResultsBy($sort_name, $sort_dir, $query) {
+    static public function scopeSortResultsBy($query, $sort_name, $sort_dir) {
         switch ($sort_name) {
             case 'somerelativefield':
                 break;
             default:
-                return $query->orderBy($sort_name, $sort_dir);
+                $query->orderBy($sort_name, $sort_dir);
         }
     }
 }

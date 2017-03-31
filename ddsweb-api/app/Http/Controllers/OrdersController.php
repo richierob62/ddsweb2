@@ -17,7 +17,6 @@ class OrdersController extends Controller
     
     public function orders(Request $request)
     {
-        $query = Order::where('id','>',-1);
         $filters = $request->input('filters');
         
         $sort_name = $request->input('sort_name');
@@ -29,14 +28,16 @@ class OrdersController extends Controller
         if(sizeof($sort_dir) == 0) {
             $sort_dir = 'asc';
         }
+
+
+        $query = Order::sortResultsBy($sort_name, $sort_dir);
         
+                
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {
-                $query = Order::filterOn($key, $filter, $query);
+                $query = Order::filterOn($key, $filter);
             }
         }
-        
-        $query = Order::sortResultsBy($sort_name, $sort_dir, $query);
         
         return response()->json(['data' => $query->get()]);
     }

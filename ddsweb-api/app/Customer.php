@@ -48,7 +48,7 @@ class Customer extends Model
     public function primary_book() { return $this->belongsTo(PrimaryBook::class, 'primary_book');  }
     public function sales_rep() { return $this->belongsTo(SalesRep::class, 'sales_rep');  }
     
-    static public function filterOn($key, $filter, $query)
+    static public function scopeFilterOn($query, $key, $filter)
     {
         switch ($key) {
             case 'name':
@@ -79,7 +79,7 @@ class Customer extends Model
         }
     }
 
-    static public function sortResultsBy($sort_name, $sort_dir, $query) {
+    static public function scopeSortResultsBy($query, $sort_name, $sort_dir) {
         switch ($sort_name) {
             case 'sales_rep':
                 return $query->whereHas('sales_rep', function($q) use ($filter, $sort_dir) {

@@ -17,7 +17,6 @@ class CustomersController extends Controller
     
     public function customers(Request $request)
     {
-        $query = Customer::where('id','>',-1);
         $filters = $request->input('filters');
         
         $sort_name = $request->input('sort_name');
@@ -30,13 +29,13 @@ class CustomersController extends Controller
             $sort_dir = 'asc';
         }
         
+        $query = Customer::sortResultsBy($sort_name, $sort_dir);
+
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {
-                $query = Customer::filterOn($key, $filter, $query);
+                $query = Customer::filterOn($key, $filter);
             }
         }
-        
-        $query = Customer::sortResultsBy($sort_name, $sort_dir, $query);
         
         return response()->json(['data' => $query->get()]);
     }

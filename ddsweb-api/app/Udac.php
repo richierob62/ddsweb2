@@ -34,47 +34,47 @@ class Udac extends Model
     public function primary_book() { return $this->belongsTo(PrimaryBook::class, 'primary_book');  }
     public function ad_type() { return $this->belongsTo(AdType::class, 'ad_type');  }
     
-    static public function filterOn($key, $filter, $query)
+    static public function scopeFilterOn($query, $key, $filter)
     {
         switch ($key) {
             case 'name':
-                return $query->where('name', 'LIKE', '%'.$filter.'%');
+                $query->where('name', 'LIKE', '%'.$filter.'%');
                 break;
             case 'code':
-                return $query->where('code', 'LIKE', '%'.$filter.'%');
+                $query->where('code', 'LIKE', '%'.$filter.'%');
                 break;
             case 'primary_book':
-                return $query->whereHas('primary_book', function($q) use ($filter) {
+                $query->whereHas('primary_book', function($q) use ($filter) {
                     $q->where('name', 'LIKE', '%'.$filter.'%');
                 });
                 break;
             case 'ad_type':
-                return $query->whereHas('ad_type', function($q) use ($filter) {
+                $query->whereHas('ad_type', function($q) use ($filter) {
                     $q->where('name', 'LIKE', '%'.$filter.'%');
                 });
                 break;
             case 'id':
-                return $query->where('id', $filter);
+                $query->where('id', $filter);
                 break;
             default:
-                return $query;
+                $query;
         }
     }
 
-    static public function sortResultsBy($code, $sort_dir, $query) {
-        switch ($code) {
+    static public function scopeSortResultsBy($query, $sort_name, $sort_dir) {
+        switch ($sort_name) {
             case 'primary_book':
-                return $query->whereHas('primary_book', function($q) use ($filter, $sort_dir) {
+                $query->whereHas('primary_book', function($q) use ($filter, $sort_dir) {
                     $q->orderBy('name', $sort_dir);
                 });
                 break;
             case 'ad_type':
-                return $query->whereHas('ad_type', function($q) use ($filter, $sort_dir) {
+                $query->whereHas('ad_type', function($q) use ($filter, $sort_dir) {
                     $q->orderBy('name', $sort_dir);
                 });
                 break;
             default:
-                return $query->orderBy($code, $sort_dir);
+                $query->orderBy($sort_name, $sort_dir);
         }        
     }
 }

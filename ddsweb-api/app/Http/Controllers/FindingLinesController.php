@@ -17,7 +17,6 @@ class FindingLinesController extends Controller
     
     public function findingLines(Request $request)
     {
-        $query = FindingLine::where('id','>',-1);
         $filters = $request->input('filters');
         
         $sort_name = $request->input('sort_name');
@@ -30,13 +29,14 @@ class FindingLinesController extends Controller
             $sort_dir = 'asc';
         }
         
+        $query = FindingLine::sortResultsBy($sort_name, $sort_dir);
+        
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {
-                $query = FindingLine::filterOn($key, $filter, $query);
+                $query = FindingLine::filterOn($key, $filter);
             }
         }
         
-        $query = FindingLine::sortResultsBy($sort_name, $sort_dir, $query);
         
         return response()->json(['data' => $query->get()]);
     }

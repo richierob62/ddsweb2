@@ -53,20 +53,20 @@ class SalesRepsControllerTest extends TestCase
         $sales_rep['name'] = '0000something-123name-something';
         $sales_rep['email'] = '0000something-123email@something.com';
         $sales_rep['phone'] = '555 555-5555';
-        $sales_rep['is_rep'] = 1;
-        $sales_rep['is_admin'] = 1;
-        $sales_rep['is_active'] = 1;
+        $sales_rep['is_rep'] = 'N';
+        $sales_rep['is_admin'] = 'N';
+        $sales_rep['is_active'] = 'N';
         $this->post('/edit_sales_rep', $sales_rep);
-        
+
         $this->post('/sales_reps', [
         'filters' => [
-        'name' => '123name',
-        'email' => '123email',
-        'id' => $sales_rep['id'],
-        'phone' => '555 555-5555',
-        'is_rep' => 1,
-        'is_admin' => 1,
-        'is_active' => 1
+            'name' => '123name',
+            'email' => '123email',
+            'id' => $sales_rep['id'],
+            'phone' => '555 555-5555',
+            'is_rep' => 'N',
+            'is_admin' => 'N',
+            'is_active' => 'N',
         ],
         'sort_name' => 'name',
         'sort_dir' => 'desc'

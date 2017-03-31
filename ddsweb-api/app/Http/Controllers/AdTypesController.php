@@ -17,7 +17,6 @@ class AdTypesController extends Controller
     
     public function adTypes(Request $request)
     {
-        $query = AdType::where('id','>',-1);
         $filters = $request->input('filters');
         
         $sort_name = $request->input('sort_name');
@@ -30,13 +29,14 @@ class AdTypesController extends Controller
             $sort_dir = 'asc';
         }
         
+        $query = AdType::sortResultsBy($sort_name, $sort_dir);
+
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {
-                $query = AdType::filterOn($key, $filter, $query);
+                $query = AdType::filterOn($key, $filter);
             }
         }
         
-        $query = AdType::sortResultsBy($sort_name, $sort_dir, $query);
 
         return response()->json(['data' => $query->get()]);
     }

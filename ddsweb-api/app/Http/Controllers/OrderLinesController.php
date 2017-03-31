@@ -17,7 +17,6 @@ class OrderLinesController extends Controller
     
     public function orderLines(Request $request)
     {
-        $query = OrderLine::where('id','>',-1);
         $filters = $request->input('filters');
         
         $sort_name = $request->input('sort_name');
@@ -30,13 +29,13 @@ class OrderLinesController extends Controller
             $sort_dir = 'asc';
         }
         
+        $query = OrderLine::sortResultsBy($sort_name, $sort_dir);
+        
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {
-                $query = OrderLine::filterOn($key, $filter, $query);
+                $query = OrderLine::filterOn($key, $filter);
             }
         }
-        
-        $query = OrderLine::sortResultsBy($sort_name, $sort_dir, $query);
         
         return response()->json(['data' => $query->get()]);
     }
@@ -61,7 +60,7 @@ class OrderLinesController extends Controller
     
     public function newOrderLine(Request $request)
     {
-
+        
         $validator = Validator::make(
         $request->all(),
         OrderLine::rules(),
@@ -91,7 +90,7 @@ class OrderLinesController extends Controller
     public function editOrderLine(Request $request)
     {
         $id = $request->input('id');
-
+        
         $validator = Validator::make(
         $request->all(),
         OrderLine::rules($id),
@@ -130,7 +129,7 @@ class OrderLinesController extends Controller
             return response()->json(['error' => 'Not Found'],404);
         }
     }
-
+    
     public function nextSequenceNumber(Request $request)
     {
         $last_seq_num = OrderLine::where('order', $request->input('order'))

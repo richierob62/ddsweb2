@@ -24,29 +24,29 @@ class OrderStatus extends Model
         ];
     }
     
-    static public function filterOn($key, $filter, $query)
+    static public function scopeFilterOn($query, $key, $filter)
     {
         switch ($key) {
             case 'name':
-                return $query->where('name', 'LIKE', '%'.$filter.'%');
+                $query->where('name', 'LIKE', '%'.$filter.'%');
                 break;
             case 'code':
-                return $query->where('code', 'LIKE', '%'.$filter.'%');
+                $query->where('code', 'LIKE', '%'.$filter.'%');
                 break;
             case 'id':
-                return $query->where('id', $filter);
+                $query->where('id', $filter);
                 break;
             default:
-                return $query;
+                $query;
         }
     }
     
-    static public function sortResultsBy($sort_name, $sort_dir, $query) {
+    static public function scopeSortResultsBy($query, $sort_name, $sort_dir) {
         switch ($sort_name) {
             case 'somerelativefield':
                 break;
             default:
-                return $query->orderBy($sort_name, $sort_dir);
+                $query->orderBy($sort_name, $sort_dir);
         }
     }
 }
