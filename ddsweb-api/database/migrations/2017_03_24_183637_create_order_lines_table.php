@@ -17,12 +17,10 @@ class CreateOrderLinesTable extends Migration
             
             $table->increments('id');
 
-            $table->integer('order')->unsigned()->index();
-            $table->integer('udac')->unsigned()->index();
-            $table->integer('heading')->unsigned()->index();
+            // ref
+            $table->integer('order_id')->unsigned()->index();
+            $table->integer('udac_id')->unsigned()->index();
 
-            $table->integer('sequence')->unsigned()->index();
-            
             $table->timestamps();
         });
     }

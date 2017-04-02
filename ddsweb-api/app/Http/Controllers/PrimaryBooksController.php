@@ -29,7 +29,8 @@ class PrimaryBooksController extends Controller
             $sort_dir = 'asc';
         }
         
-        $query = PrimaryBook::sortResultsBy($sort_name, $sort_dir);
+        $query = PrimaryBook::select(\DB::raw('primary_books.*'))
+        ->orderBy(PrimaryBook::orderField($sort_name), $sort_dir); 
                 
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {

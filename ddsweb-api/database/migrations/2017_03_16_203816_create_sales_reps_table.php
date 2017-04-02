@@ -20,7 +20,7 @@ class CreateSalesRepsTable extends Migration
             $table->string('code')->index();
             $table->string('name')->index();
             
-            $table->integer('compensation_plan')->unsigned()->index();
+            $table->integer('compensation_plan_id')->unsigned()->index();
             
             $table->string('address')->nullable();
             $table->string('city')->nullable();

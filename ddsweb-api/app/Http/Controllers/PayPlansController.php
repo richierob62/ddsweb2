@@ -29,7 +29,8 @@ class PayPlansController extends Controller
             $sort_dir = 'asc';
         }
 
-        $query = PayPlan::sortResultsBy($sort_name, $sort_dir);        
+        $query = PayPlan::select(\DB::raw('pay_plans.*'))
+        ->orderBy(PayPlan::orderField($sort_name), $sort_dir);       
         
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {

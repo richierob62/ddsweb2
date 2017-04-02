@@ -29,7 +29,8 @@ class PageTypesController extends Controller
             $sort_dir = 'asc';
         }
 
-        $query = PageType::sortResultsBy($sort_name, $sort_dir);
+        $query = PageType::select(\DB::raw('page_types.*'))
+        ->orderBy(PageType::orderField($sort_name), $sort_dir);
                 
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {

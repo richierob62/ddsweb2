@@ -11,7 +11,6 @@ class OrderLinesControllerTest extends TestCase
     {
         parent::setup();
         $this->order = factory(App\Order::class)->create();
-        $this->heading = factory(App\Heading::class)->create();
         $this->udac = factory(App\Udac::class)->create();
     }
     
@@ -51,36 +50,32 @@ class OrderLinesControllerTest extends TestCase
     {
         
         $order_2 = factory(App\Order::class)->create()->toArray();
-        $order_2['order_num'] = 'something-123ord-something';
+        $order_2['order_num'] = '000-123ord-something';
         $this->post('/edit_order', $order_2);
-        
-        $heading_2 = factory(App\Heading::class)->create()->toArray();
-        $heading_2['name'] = 'something-123head-something';
-        $this->post('/edit_heading', $heading_2);
+
         
         $udac_2 = factory(App\Udac::class)->create()->toArray();
         $udac_2['name'] = 'something-123udac-something';
         $this->post('/edit_udac', $udac_2);
         
+
         factory(App\OrderLine::class, 6)->create();
+
         $order_line = factory(App\OrderLine::class)->create()->toArray();
-        $order_line['sequence'] = 1;
-        $order_line['order'] = $order_2['id'];
-        $order_line['heading'] = $heading_2['id'];
-        $order_line['udac'] = $udac_2['id'];
+        $order_line['order_id'] = $order_2['id'];
+        $order_line['udac_id'] = $udac_2['id'];
         $this->post('/edit_order_line', $order_line);
-        
+
         $this->post('/order_lines', [
         'filters' => [
         'order' => '123ord',
-        'heading' => '123head',
         'udac' => '123udac',
-        'sequence' => 1,
         'id' => $order_line['id']
         ],
-        'sort_name' => 'sequence',
+        'sort_name' => 'order',
         'sort_dir' => 'desc'
         ]);
+
         $data = json_decode($this->response->getContent(), true)['data'];
         $this->assertEquals(1, sizeOf($data));
         
@@ -94,12 +89,15 @@ class OrderLinesControllerTest extends TestCase
         
         $this->post('/order_lines', [
         'filters' => [],
-        'sort_name' => 'sequence',
+        'sort_name' => 'order',
         'sort_dir' => 'asc'
         ]);
+
+        
         $data = json_decode($this->response->getContent(), true)['data'];
+
         $first_rec = $data[0];
-        $this->assertEquals($first_rec['id'], $order_line['id']);
+        $this->assertEquals( (int)$first_rec['order_id'], $order_2['id']);
         
         $this->post('/order_lines');
         $data = json_decode($this->response->getContent(), true)['data'];
@@ -114,21 +112,19 @@ class OrderLinesControllerTest extends TestCase
         $this->post('/order_lines');
         $data = json_decode($this->response->getContent(), true)['data'];
         $id = $data[0]['id'];
+        $rec_1 = $data[0];
         
-        
-        $expected = [
-        'data' => $data[0]
-        ];
         $this
         ->post('/order_line', ['id' => $id])
-        ->seeStatusCode(200)
-        ->seeJsonEquals($expected);
+        ->seeStatusCode(200);
         
+        $rec_2 = json_decode($this->response->getContent(), true)['data'];
+
+        $this->assertEquals($rec_1['order_id'], $rec_2['order_id']);
+        $this->assertEquals($rec_1['udac_id'], $rec_2['udac_id']);
         
-        $data = json_decode($this->response->getContent(), true)['data'];
-        
-        $this->assertArrayhasKey('created_at', $data);
-        $this->assertArrayhasKey('updated_at', $data);
+        $this->assertArrayhasKey('created_at', $rec_2);
+        $this->assertArrayhasKey('updated_at', $rec_2);
         
     }
     
@@ -145,8 +141,8 @@ class OrderLinesControllerTest extends TestCase
     public function it_saves_new_order_line_in_the_database()
     {
         $new = factory(App\OrderLine::class)->raw();
-        $sequence = $new['sequence'];
-        $order = $new['order'];
+        $udac_id = $new['udac_id'];
+        $order_id = $new['order_id'];
 
         $this->post('/new_order_line', $new);
         
@@ -155,14 +151,14 @@ class OrderLinesControllerTest extends TestCase
         $this->assertArrayHasKey('data', $body);
         
         $data = $body['data'];
-        $this->assertEquals($sequence, $data['sequence']);
-        $this->assertEquals($order, $data['order']);
+        $this->assertEquals($udac_id, $data['udac_id']);
+        $this->assertEquals($order_id, $data['order_id']);
         $this->assertTrue($data['id'] > 0);
         
         $this
         ->seeStatusCode(201)
         ->seeJson(['created' => true])
-        ->seeInDatabase('order_lines', ['order' => $order]);
+        ->seeInDatabase('order_lines', ['order_id' => $order_id]);
         
     }
     
@@ -172,8 +168,8 @@ class OrderLinesControllerTest extends TestCase
         $order_line = factory(App\OrderLine::class)->create();
         
         $edited = factory(App\OrderLine::class)->raw();
-        $sequence = $edited['sequence'];
-        $order = $edited['order'];
+        $udac_id = $edited['udac_id'];
+        $order_id = $edited['order_id'];
         $id = $order_line->id;
         $edited['id'] = $id;
 
@@ -186,7 +182,7 @@ class OrderLinesControllerTest extends TestCase
         $this
         ->seeStatusCode(201)
         ->seeJson(['updated' => true, 'id' => $id])
-        ->seeInDatabase('order_lines', ['sequence' => $sequence ]);
+        ->seeInDatabase('order_lines', ['udac_id' => $udac_id ]);
         
     }
     
@@ -240,14 +236,16 @@ class OrderLinesControllerTest extends TestCase
     public function it_validates_required_fields_when_creating_a_new_order_line()
     {
         $this->post('/new_order_line', [], ['Accept' => 'application/json']);
-        
+
         $this->assertEquals(422, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
-        $this->assertArrayHasKey('sequence', $errors);
+        $this->assertArrayHasKey('udac_id', $errors);
+        $this->assertArrayHasKey('order_id', $errors);
         
-        $this->assertEquals(["A sequence number is required."], $errors['sequence']);
+        $this->assertEquals(["A udac is required."], $errors['udac_id']);
+        $this->assertEquals(["An order number is required."], $errors['order_id']);
         
     }
     
@@ -265,9 +263,11 @@ class OrderLinesControllerTest extends TestCase
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
-        $this->assertArrayHasKey('sequence', $errors);
+        $this->assertArrayHasKey('udac_id', $errors);
+        $this->assertArrayHasKey('order_id', $errors);
         
-        $this->assertEquals(["A sequence number is required."], $errors['sequence']);
+        $this->assertEquals(["A udac is required."], $errors['udac_id']);
+        $this->assertEquals(["An order number is required."], $errors['order_id']);
         
     }
     
@@ -309,9 +309,8 @@ class OrderLinesControllerTest extends TestCase
     public function it_validates_reference_fields_on_create()
     {
         $new = factory(App\OrderLine::class)->raw();
-        $new['order'] = 888888;
-        $new['heading'] = 888888;
-        $new['udac'] = NULL;
+        $new['order_id'] = 888888;
+        $new['udac_id'] = 6666;
         
         $this->post('/new_order_line', $new);
         
@@ -319,13 +318,11 @@ class OrderLinesControllerTest extends TestCase
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
-        $this->assertArrayHasKey('order', $errors);
-        $this->assertArrayHasKey('heading', $errors);
-        $this->assertArrayHasKey('udac', $errors);
+        $this->assertArrayHasKey('order_id', $errors);
+        $this->assertArrayHasKey('udac_id', $errors);
         
-        $this->assertEquals(["You must select a valid order number."], $errors['order']);
-        $this->assertEquals(["You must select a valid heading."], $errors['heading']);
-        $this->assertEquals(["You must select a valid udac."], $errors['udac']);
+        $this->assertEquals(["You must select a valid order number."], $errors['order_id']);
+        $this->assertEquals(["You must select a valid udac."], $errors['udac_id']);
     }
     
     
@@ -335,9 +332,8 @@ class OrderLinesControllerTest extends TestCase
     {
         $order_line = factory(App\OrderLine::class)->create()->toArray();
         
-        $order_line['order'] = NULL;
-        $order_line['heading'] = NULL;
-        $order_line['udac'] = NULL;
+        $order_line['order_id'] = 55555;
+        $order_line['udac_id'] = 55555;
         
         $this->post('/edit_order_line', $order_line);
         
@@ -345,31 +341,29 @@ class OrderLinesControllerTest extends TestCase
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
-        $this->assertArrayHasKey('order', $errors);
-        $this->assertArrayHasKey('heading', $errors);
-        $this->assertArrayHasKey('udac', $errors);
+        $this->assertArrayHasKey('order_id', $errors);
+        $this->assertArrayHasKey('udac_id', $errors);
         
-        $this->assertEquals(["You must select a valid order number."], $errors['order']);
-        $this->assertEquals(["You must select a valid heading."], $errors['heading']);
-        $this->assertEquals(["You must select a valid udac."], $errors['udac']);
+        $this->assertEquals(["You must select a valid order number."], $errors['order_id']);
+        $this->assertEquals(["You must select a valid udac."], $errors['udac_id']);
     }
     
-    /** @test **/
-    public function it_returns_the_next_available_sequence_number()
-    {
-        $new = factory(App\OrderLine::class)->raw();
-        $sequence = $new['sequence'];
-        $order =$new['order'];
-        $this->post('/new_order_line', $new);
+    // /** @test **/
+    // public function it_returns_the_next_available_sequence_number()
+    // {
+    //     $new = factory(App\OrderLine::class)->raw();
+    //     $sequence = $new['sequence'];
+    //     $order_id =$new['order'];
+    //     $this->post('/new_order_line', $new);
 
-        $new = factory(App\OrderLine::class)->raw();
-        $new['sequence'] = $sequence + 1;
-        $new['order'] = $order;
-        $this->post('/new_order_line', $new);
+    //     $new = factory(App\OrderLine::class)->raw();
+    //     $new['sequence'] = $sequence + 1;
+    //     $new['order'] = $order;
+    //     $this->post('/new_order_line', $new);
         
-        $this->post('/next_sequence_number', ['order' => $order ]);
-        $data = json_decode($this->response->getContent(), true);
+    //     $this->post('/next_sequence_number', ['order' => $order_id ]);
+    //     $data = json_decode($this->response->getContent(), true);
         
-        $this->assertEquals($sequence + 2, $data);
-    }
+    //     $this->assertEquals($sequence + 2, $data);
+    // }
 }

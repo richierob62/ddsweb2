@@ -18,7 +18,7 @@ class CreateAdTypesTable extends Migration
             $table->string('code')->index();
             $table->string('name')->index();
             
-            $table->integer('page_type')->unsigned()->index();
+            $table->integer('page_type_id')->unsigned()->index();
             
             $table->timestamps();
         });

@@ -29,7 +29,8 @@ class LocalForeignsController extends Controller
             $sort_dir = 'asc';
         }
         
-        $query = LocalForeign::sortResultsBy($sort_name, $sort_dir);
+        $query = LocalForeign::select(\DB::raw('local_foreigns.*'))
+        ->orderBy(LocalForeign::orderField($sort_name), $sort_dir);
         
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {

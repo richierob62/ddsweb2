@@ -17,11 +17,11 @@ class CreateCustomersTable extends Migration
             
             $table->increments('id');
             
-            $table->integer('category')->unsigned()->index();
-            $table->integer('local_foreign')->unsigned()->index();
-            $table->integer('pay_plan')->unsigned()->index();
-            $table->integer('primary_book')->unsigned()->index();
-            $table->integer('sales_rep')->unsigned()->index();
+            $table->integer('category_id')->unsigned()->index();
+            $table->integer('local_foreign_id')->unsigned()->index();
+            $table->integer('pay_plan_id')->unsigned()->index();
+            $table->integer('primary_book_id')->unsigned()->index();
+            $table->integer('sales_rep_id')->unsigned()->index();
             
             $table->string('name')->index();
 

@@ -29,7 +29,9 @@ class AdTypesController extends Controller
             $sort_dir = 'asc';
         }
         
-        $query = AdType::sortResultsBy($sort_name, $sort_dir);
+        $query = AdType::select(\DB::raw('ad_types.*'))
+        ->join('page_types', 'page_types.id', '=', 'ad_types.page_type_id')
+        ->orderBy(AdType::orderField($sort_name), $sort_dir);
 
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {

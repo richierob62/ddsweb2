@@ -29,7 +29,8 @@ class CategoriesController extends Controller
             $sort_dir = 'asc';
         }
         
-        $query = Category::sortResultsBy($sort_name, $sort_dir);
+        $query = Category::select(\DB::raw('categories.*'))
+        ->orderBy(Category::orderField($sort_name), $sort_dir);
 
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {

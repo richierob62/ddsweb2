@@ -29,7 +29,8 @@ class SourceBooksController extends Controller
             $sort_dir = 'asc';
         }
 
-        $query = SourceBook::sortResultsBy($sort_name, $sort_dir);
+        $query = SourceBook::select(\DB::raw('source_books.*'))
+        ->orderBy(SourceBook::orderField($sort_name), $sort_dir); 
         
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {

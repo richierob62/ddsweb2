@@ -29,7 +29,9 @@ class CustomersController extends Controller
             $sort_dir = 'asc';
         }
         
-        $query = Customer::sortResultsBy($sort_name, $sort_dir);
+        $query = Customer::select(\DB::raw('customers.*'))
+        ->join('sales_reps', 'sales_reps.id', '=', 'customers.sales_rep_id')
+        ->orderBy(Customer::orderField($sort_name), $sort_dir);
 
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {

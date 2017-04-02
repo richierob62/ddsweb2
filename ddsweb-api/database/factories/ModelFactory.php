@@ -72,7 +72,7 @@ $factory->define(App\Customer::class, function ($faker) {
     'billing_state' => $faker->word,
     'billing_zip' => $faker->postcode,
     'building' => $faker->word,
-    'category' => $category,
+    'category_id' => $category,
     'certification' => $faker->word,
     'city' => $faker->city,
     'department' => $faker->word,
@@ -84,19 +84,19 @@ $factory->define(App\Customer::class, function ($faker) {
     'fellowship' => $faker->word,
     'hospital_affiliations' => $faker->word,
     'hours' => $faker->word,
-    'local_foreign' => $local_foreign,
+    'local_foreign_id' => $local_foreign,
     'medical_director' => $faker->word,
     'medical_education' => $faker->word,
     'name' => $faker->company,
     'other_1' => $faker->sentence,
     'other_2' => $faker->sentence,
     'outreach_locations' => $faker->word,
-    'pay_plan' => $pay_plan,
+    'pay_plan_id' => $pay_plan,
     'phone' => (string)$faker->randomNumber(7),
-    'primary_book' => $primary_book,
+    'primary_book_id' => $primary_book,
     'residency' => $faker->word,
     'room_num' => $faker->word,
-    'sales_rep' => $sales_rep,
+    'sales_rep_id' => $sales_rep,
     'special_interest' => $faker->word,
     'state' => $faker->word,
     'undergraduate_education' => $faker->word,
@@ -160,7 +160,7 @@ $factory->define(App\AdType::class, function ($faker) {
     return [
     'name' => $faker->word,
     'code' => $faker->word,
-    'page_type' => $page_type
+    'page_type_id' => $page_type
     ];
 });
 
@@ -184,7 +184,7 @@ $factory->define(App\Heading::class, function ($faker) {
     'name' => $faker->word,
     'sort_name' => $faker->word,
     'heading_num' => $faker->randomNumber(4),
-    'page_type' => $page_type
+    'page_type_id' => $page_type
     ];
     
 });
@@ -209,8 +209,8 @@ $factory->define(App\Udac::class, function ($faker) {
     'name' => $faker->word,
     'code' => $faker->word,
     'rate' => $faker->randomNumber(5)/100,
-    'primary_book' => $primary_book,
-    'ad_type' => $ad_type
+    'primary_book_id' => $primary_book,
+    'ad_type_id' => $ad_type
     ];
     
 });
@@ -237,7 +237,7 @@ $factory->define(App\SalesRep::class, function (Faker\Generator $faker) {
     'is_rep' => 1,
     'is_admin' => 1,
     'is_active' => 1,
-    'compensation_plan' => $compensation_plan,
+    'compensation_plan_id' => $compensation_plan,
     'commission_new' => $faker->randomNumber(2),
     'commission_renew' => $faker->randomNumber(2)
     
@@ -300,10 +300,10 @@ $factory->define(App\Order::class, function ($faker) {
     return [
     'order_num' => (string)$faker->randomNumber(6),
     'order_date' => $faker->date,
-    'primary_book' => $primary_book,
-    'customer' => $customer,
-    'sales_rep' => $sales_rep,
-    'order_status' => $order_status
+    'primary_book_id' => $primary_book,
+    'customer_id' => $customer,
+    'sales_rep_id' => $sales_rep,
+    'order_status_id' => $order_status
     
     ];
 });
@@ -324,19 +324,9 @@ $factory->define(App\OrderLine::class, function ($faker) {
         $udac = $udac->random()->id;
     }
     
-    $heading = \App\Heading::all();
-    if($heading->count() < 10) {
-        $heading = factory(App\Heading::class)->create()->id;
-    } else {
-        $heading = $heading->random()->id;
-    }
-    
-    
     return [
-    'sequence' => $faker->randomNumber(2),
-    'order' => $order,
-    'udac' => $udac,
-    'heading' => $heading
+    'order_id' => $order,
+    'udac_id' => $udac,
     ];
 });
 
@@ -344,5 +334,12 @@ $factory->define(App\FindingLine::class, function ($faker) {
     return [
     'name' => $faker->word,
     'code' => $faker->word
+    ];
+});
+
+$factory->define(App\Field::class, function ($faker) {
+    return [
+    'name' => $faker->word,
+    'description' => $faker->word
     ];
 });

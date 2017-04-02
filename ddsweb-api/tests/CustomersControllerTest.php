@@ -52,9 +52,8 @@ class CustomersControllerTest extends TestCase
     public function index_should_return_a_collection_of_filtered_and_ordered__records()
     {
         
-        factory(App\SalesRep::class, 3)->create();
         $sales_rep_2 = factory(App\SalesRep::class)->create()->toArray();
-        $sales_rep_2['name'] = 'something-123rep_name-something';
+        $sales_rep_2['name'] = '0000ing-123rep_name-something';
         $this->post('/edit_sales_rep', $sales_rep_2);
         
         factory(App\Customer::class, 6)->create();
@@ -64,7 +63,7 @@ class CustomersControllerTest extends TestCase
         $customer['city'] = 'something-123city-something';
         $customer['state'] = 'something-123state-something';
         $customer['account_num'] = 'something-123account_num-something';
-        $customer['sales_rep'] = $sales_rep_2['id'];
+        $customer['sales_rep_id'] = $sales_rep_2['id'];
         $this->post('/edit_customer', $customer);
         
         $this->post('/customers', [
@@ -93,12 +92,12 @@ class CustomersControllerTest extends TestCase
         
         $this->post('/customers', [
         'filters' => [],
-        'sort_name' => 'name',
+        'sort_name' => 'sales_rep',
         'sort_dir' => 'asc'
         ]);
         $data = json_decode($this->response->getContent(), true)['data'];
         $first_rec = $data[0];
-        $this->assertEquals($first_rec['name'], $customer['name']);
+        $this->assertEquals($first_rec['sales_rep_id'], $sales_rep_2['id']);
         
         $this->post('/customers');
         $data = json_decode($this->response->getContent(), true)['data'];
@@ -109,25 +108,26 @@ class CustomersControllerTest extends TestCase
     /** @test **/
     public function it_returns_a_valid_customer()
     {
-        factory(App\Customer::class)->create();
+
+        factory(App\Customer::class, 6)->create();
         $this->post('/customers');
         $data = json_decode($this->response->getContent(), true)['data'];
         $id = $data[0]['id'];
-        
-        
-        $expected = [
-        'data' => $data[0]
-        ];
+        $rec_1 = $data[0];
+
+        $custs = App\Customer::where('id', $id)->get(['id', 'name'])->toArray();
+
         $this
         ->post('/customer', ['id' => $id])
-        ->seeStatusCode(200)
-        ->seeJsonEquals($expected);
+        ->seeStatusCode(200);
         
+        $rec_2 = json_decode($this->response->getContent(), true)['data'];
+
+        $this->assertEquals($rec_1['name'], $rec_2['name']);
+        $this->assertEquals($rec_1['sales_rep_id'], $rec_2['sales_rep_id']);
         
-        $data = json_decode($this->response->getContent(), true)['data'];
-        
-        $this->assertArrayhasKey('created_at', $data);
-        $this->assertArrayhasKey('updated_at', $data);
+        $this->assertArrayhasKey('created_at', $rec_2);
+        $this->assertArrayhasKey('updated_at', $rec_2);
         
     }
     
@@ -145,7 +145,7 @@ class CustomersControllerTest extends TestCase
     {
         $new = factory(App\Customer::class)->raw();
         $name = $new['name'];
-        $category = $new['category'];
+        $category_id = $new['category_id'];
         
         $this->post('/new_customer', $new);
         
@@ -154,7 +154,7 @@ class CustomersControllerTest extends TestCase
         
         $data = $body['data'];
         $this->assertEquals($name, $data['name']);
-        $this->assertEquals($category, $data['category']);
+        $this->assertEquals($category_id, $data['category_id']);
         $this->assertTrue($data['id'] > 0);
         
         $this
@@ -171,7 +171,7 @@ class CustomersControllerTest extends TestCase
         
         $edited = factory(App\Customer::class)->raw();
         $name = $edited['name'];
-        $category = $edited['category'];
+        $category_id = $edited['category_id'];
         $id = $customer->id;
         $edited['id'] = $id;
         
@@ -307,11 +307,11 @@ class CustomersControllerTest extends TestCase
         $this->post('/edit_customer', [
         'id' => $customer_2->id,
         'account_num' => $customer_1->account_num,
-        'category' => $this->category->id,
-        'local_foreign' => $this->local_foreign->id,
-        'pay_plan' => $this->pay_plan->id,
-        'primary_book' => $this->primary_book->id,
-        'sales_rep' => $this->sales_rep->id,
+        'category_id' => $this->category->id,
+        'local_foreign_id' => $this->local_foreign->id,
+        'pay_plan_id' => $this->pay_plan->id,
+        'primary_book_id' => $this->primary_book->id,
+        'sales_rep_id' => $this->sales_rep->id,
         'name' => $customer_1->name
         ]);
         
@@ -378,11 +378,11 @@ class CustomersControllerTest extends TestCase
     public function it_validates_reference_fields_on_create()
     {
         $new = factory(App\Customer::class)->raw();
-        $new['category'] = 888888;
-        $new['local_foreign'] = NULL;
-        $new['pay_plan'] = 888888;
-        $new['primary_book'] = NULL;
-        $new['sales_rep'] = 888888;
+        $new['category_id'] = 888888;
+        $new['local_foreign_id'] = NULL;
+        $new['pay_plan_id'] = 888888;
+        $new['primary_book_id'] = NULL;
+        $new['sales_rep_id'] = 888888;
         
         $this->post('/new_customer', $new);
         
@@ -390,17 +390,17 @@ class CustomersControllerTest extends TestCase
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
-        $this->assertArrayHasKey('category', $errors);
-        $this->assertArrayHasKey('local_foreign', $errors);
-        $this->assertArrayHasKey('pay_plan', $errors);
-        $this->assertArrayHasKey('primary_book', $errors);
-        $this->assertArrayHasKey('sales_rep', $errors);
+        $this->assertArrayHasKey('category_id', $errors);
+        $this->assertArrayHasKey('local_foreign_id', $errors);
+        $this->assertArrayHasKey('pay_plan_id', $errors);
+        $this->assertArrayHasKey('primary_book_id', $errors);
+        $this->assertArrayHasKey('sales_rep_id', $errors);
         
-        $this->assertEquals(["You must select a valid category."], $errors['category']);
-        $this->assertEquals(["You must select a valid local/foreign."], $errors['local_foreign']);
-        $this->assertEquals(["You must select a valid pay plan."], $errors['pay_plan']);
-        $this->assertEquals(["You must select a valid primary book."], $errors['primary_book']);
-        $this->assertEquals(["You must select a valid sales rep."], $errors['sales_rep']);
+        $this->assertEquals(["You must select a valid category."], $errors['category_id']);
+        $this->assertEquals(["You must select a valid local/foreign."], $errors['local_foreign_id']);
+        $this->assertEquals(["You must select a valid pay plan."], $errors['pay_plan_id']);
+        $this->assertEquals(["You must select a valid primary book."], $errors['primary_book_id']);
+        $this->assertEquals(["You must select a valid sales rep."], $errors['sales_rep_id']);
     }
     
     
@@ -410,11 +410,11 @@ class CustomersControllerTest extends TestCase
     {
         $customer = factory(App\Customer::class)->create()->toArray();
         
-        $customer['category'] = NULL;
-        $customer['local_foreign'] = 9999999;
-        $customer['pay_plan'] = 9999999;
-        $customer['primary_book'] = 9999999;
-        $customer['sales_rep'] = NULL;
+        $customer['category_id'] = NULL;
+        $customer['local_foreign_id'] = 9999999;
+        $customer['pay_plan_id'] = 9999999;
+        $customer['primary_book_id'] = 9999999;
+        $customer['sales_rep_id'] = NULL;
         
         $this->post('/edit_customer', $customer);
         
@@ -422,17 +422,17 @@ class CustomersControllerTest extends TestCase
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
-        $this->assertArrayHasKey('category', $errors);
-        $this->assertArrayHasKey('local_foreign', $errors);
-        $this->assertArrayHasKey('pay_plan', $errors);
-        $this->assertArrayHasKey('primary_book', $errors);
-        $this->assertArrayHasKey('sales_rep', $errors);
+        $this->assertArrayHasKey('category_id', $errors);
+        $this->assertArrayHasKey('local_foreign_id', $errors);
+        $this->assertArrayHasKey('pay_plan_id', $errors);
+        $this->assertArrayHasKey('primary_book_id', $errors);
+        $this->assertArrayHasKey('sales_rep_id', $errors);
         
-        $this->assertEquals(["You must select a valid category."], $errors['category']);
-        $this->assertEquals(["You must select a valid local/foreign."], $errors['local_foreign']);
-        $this->assertEquals(["You must select a valid pay plan."], $errors['pay_plan']);
-        $this->assertEquals(["You must select a valid primary book."], $errors['primary_book']);
-        $this->assertEquals(["You must select a valid sales rep."], $errors['sales_rep']);
+        $this->assertEquals(["You must select a valid category."], $errors['category_id']);
+        $this->assertEquals(["You must select a valid local/foreign."], $errors['local_foreign_id']);
+        $this->assertEquals(["You must select a valid pay plan."], $errors['pay_plan_id']);
+        $this->assertEquals(["You must select a valid primary book."], $errors['primary_book_id']);
+        $this->assertEquals(["You must select a valid sales rep."], $errors['sales_rep_id']);
     }
     
     /** @test **/
@@ -452,3 +452,5 @@ class CustomersControllerTest extends TestCase
         $this->assertEquals('201', $data);
     }
 }
+
+

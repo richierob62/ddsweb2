@@ -17,11 +17,12 @@ class OrderLinesController extends Controller
     
     public function orderLines(Request $request)
     {
+        
         $filters = $request->input('filters');
         
         $sort_name = $request->input('sort_name');
         if(sizeof($sort_name) == 0) {
-            $sort_name = 'sequence';
+            $sort_name = 'order';
         }
         
         $sort_dir = $request->input('sort_dir');
@@ -29,7 +30,11 @@ class OrderLinesController extends Controller
             $sort_dir = 'asc';
         }
         
-        $query = OrderLine::sortResultsBy($sort_name, $sort_dir);
+        $query = OrderLine::select(\DB::raw('order_lines.*'))
+        ->join('orders', 'orders.id', '=', 'order_lines.order_id')
+        ->join('udacs', 'udacs.id', '=', 'order_lines.udac_id')
+        ->orderBy(Orderline::orderField($sort_name), $sort_dir);
+        
         
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {
@@ -37,13 +42,14 @@ class OrderLinesController extends Controller
             }
         }
         
+        
         return response()->json(['data' => $query->get()]);
     }
     
     public function referenceList() {
-        $refs =  OrderLine::orderBy('sequence')->get(['id', 'sequence'])
+        $refs =  OrderLine::orderBy('order')->get(['id', 'order'])
         ->map( function ($item) {
-            return ['id' => $item->id, 'display' => $item->sequence ];
+            return ['id' => $item->id, 'display' => $item->order ];
         });
         return response()->json(['data' => $refs]);
     }
@@ -130,11 +136,11 @@ class OrderLinesController extends Controller
         }
     }
     
-    public function nextSequenceNumber(Request $request)
-    {
-        $last_seq_num = OrderLine::where('order', $request->input('order'))
-        ->orderBy('sequence', 'desc')->first()->sequence;
-        return (int)$last_seq_num + 1;
-    }
+    // public function nextSequenceNumber(Request $request)
+    // {
+    //     $last_seq_num = OrderLine::where('order', $request->input('order'))
+    //     ->orderBy('sequence', 'desc')->first()->sequence;
+    //     return (int)$last_seq_num + 1;
+    // }
     
 }

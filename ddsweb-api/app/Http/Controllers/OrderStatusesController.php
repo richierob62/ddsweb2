@@ -29,7 +29,8 @@ class OrderStatusesController extends Controller
             $sort_dir = 'asc';
         }
 
-        $query = OrderStatus::sortResultsBy($sort_name, $sort_dir);
+        $query = OrderStatus::select(\DB::raw('order_statuses.*'))
+        ->orderBy(OrderStatus::orderField($sort_name), $sort_dir);
                 
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {

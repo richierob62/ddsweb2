@@ -57,7 +57,7 @@ class HeadingsControllerTest extends TestCase
         $heading['name'] = '0000something-123name-something';
         $heading['heading_num'] = '0000something-123heading_num-something';
         $heading['sort_name'] = 'something-123sort_name-something';
-        $heading['page_type'] = $page_type_2['id'];
+        $heading['page_type_id'] = $page_type_2['id'];
         $this->post('/edit_heading', $heading);
         
         $this->post('/headings', [
@@ -136,7 +136,7 @@ class HeadingsControllerTest extends TestCase
     {
         $new = factory(App\Heading::class)->raw();
         $name = $new['name'];
-        $page_type = $new['page_type'];
+        $page_type_id = $new['page_type_id'];
         
         $this->post('/new_heading', $new);
         
@@ -145,7 +145,7 @@ class HeadingsControllerTest extends TestCase
         
         $data = $body['data'];
         $this->assertEquals($name, $data['name']);
-        $this->assertEquals($page_type, $data['page_type']);
+        $this->assertEquals($page_type_id, $data['page_type_id']);
         $this->assertTrue($data['id'] > 0);
         
         $this
@@ -162,7 +162,7 @@ class HeadingsControllerTest extends TestCase
         
         $edited = factory(App\Heading::class)->raw();
         $name = $edited['name'];
-        $page_type = $edited['page_type'];
+        $page_type_id = $edited['page_type_id'];
         $id = $heading->id;
         $edited['id'] = $id;
         
@@ -346,7 +346,7 @@ class HeadingsControllerTest extends TestCase
     public function it_validates_reference_fields_on_create()
     {
         $new = factory(App\Heading::class)->raw();
-        $new['page_type'] = 888888;
+        $new['page_type_id'] = 888888;
         
         $this->post('/new_heading', $new);
         
@@ -354,9 +354,9 @@ class HeadingsControllerTest extends TestCase
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
-        $this->assertArrayHasKey('page_type', $errors);
+        $this->assertArrayHasKey('page_type_id', $errors);
         
-        $this->assertEquals(["You must select a valid page type."], $errors['page_type']);
+        $this->assertEquals(["You must select a valid page type."], $errors['page_type_id']);
     }
     
     
@@ -366,7 +366,7 @@ class HeadingsControllerTest extends TestCase
     {
         $heading = factory(App\Heading::class)->create()->toArray();
         
-        $heading['page_type'] = NULL;
+        $heading['page_type_id'] = NULL;
         
         $this->post('/edit_heading', $heading);
         
@@ -374,9 +374,9 @@ class HeadingsControllerTest extends TestCase
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
-        $this->assertArrayHasKey('page_type', $errors);
+        $this->assertArrayHasKey('page_type_id', $errors);
         
-        $this->assertEquals(["You must select a valid page type."], $errors['page_type']);
+        $this->assertEquals(["You must select a valid page type."], $errors['page_type_id']);
     }
     
 }

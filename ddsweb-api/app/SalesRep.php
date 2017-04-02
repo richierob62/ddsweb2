@@ -15,7 +15,7 @@ class SalesRep extends Model
         'code' => 'required|unique:sales_reps,code,'.$id,
         'email' => 'email|unique:sales_reps,email,'.$id,
         'phone' => 'required|unique:sales_reps,phone,'.$id,
-        'compensation_plan' => 'required|exists:compensation_plans,id',
+        'compensation_plan_id' => 'required|exists:compensation_plans,id',
         ];
     }
     
@@ -29,12 +29,12 @@ class SalesRep extends Model
         'email.unique' => 'That email has already been used.',
         'phone.unique' => 'That phone number has already been used.',
         'phone.required' => 'A phone number is required.',
-        'compensation_plan.required' => 'A compensation plan is required.',
-        'compensation_plan.exists' => 'You must select a valid compensation plan.'
+        'compensation_plan_id.required' => 'A compensation plan is required.',
+        'compensation_plan_id.exists' => 'You must select a valid compensation plan.'
         ];
     }
     
-    public function customers() { return $this->hasMany(Customer::class);  }
+    public function compensation_plan() { return $this->belongsTo(CompensationPLan::class);  }
     
     static public function scopeFilterOn($query, $key, $filter)
     {
@@ -66,12 +66,14 @@ class SalesRep extends Model
         }
     }
     
-    static public function scopeSortResultsBy($query, $sort_name, $sort_dir) {
+    static public function orderField($sort_name) {
         switch ($sort_name) {
-            case 'somerelativefield':
-                break;
+            case 'foo':
+            return 'huh';
+            break;
             default:
-                $query->orderBy($sort_name, $sort_dir);
-        }
+            return $sort_name;
+        }  
     }
+    
 }

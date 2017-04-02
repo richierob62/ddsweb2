@@ -16,13 +16,13 @@ class CreateUdacsTable extends Migration
         Schema::create('udacs', function (Blueprint $table) {
             $table->increments('id');
             
-            $table->integer('primary_book')->unsigned()->index();
-            $table->integer('ad_type')->unsigned()->index();
+            $table->integer('primary_book_id')->unsigned()->index();
+            $table->integer('ad_type_id')->unsigned()->index();
             
             $table->string('name')->index();
             $table->string('code')->index();
             
-            $table->decimal('rate', 6, 2);
+            $table->integer('rate');
             
             $table->timestamps();
         });

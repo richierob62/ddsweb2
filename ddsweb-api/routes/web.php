@@ -26,7 +26,6 @@ $app->post('edit_customer', 'CustomersController@editCustomer');
 $app->post('delete_customer', 'CustomersController@deleteCustomer');
 $app->post('next_customer_number', 'CustomersController@nextCustomerNumber');
 
-
 $app->post('sales_reps', 'SalesRepsController@salesReps');
 $app->post('sales_rep_reference', 'SalesRepsController@referenceList');
 $app->post('sales_rep', 'SalesRepsController@salesRepByID');
@@ -126,3 +125,12 @@ $app->post('finding_line', 'FindingLinesController@findingLineByID');
 $app->post('new_finding_line', 'FindingLinesController@newFindingLine');
 $app->post('edit_finding_line', 'FindingLinesController@editFindingLine');
 $app->post('delete_finding_line', 'FindingLinesController@deleteFindingLine');
+
+$app->post('fields', 'FieldsController@fields');
+$app->post('field_reference', 'FieldsController@referenceList');
+$app->post('field', 'FieldsController@fieldByID');
+$app->post('new_field', 'FieldsController@newField');
+$app->post('edit_field', 'FieldsController@editField');
+$app->post('delete_field', 'FieldsController@deleteField');
+
+

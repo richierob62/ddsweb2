@@ -29,7 +29,8 @@ class SalesRepsController extends Controller
             $sort_dir = 'asc';
         }
         
-        $query = SalesRep::sortResultsBy($sort_name, $sort_dir);
+        $query = SalesRep::select(\DB::raw('sales_reps.*'))
+        ->orderBy(SalesRep::orderField($sort_name), $sort_dir); 
 
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {

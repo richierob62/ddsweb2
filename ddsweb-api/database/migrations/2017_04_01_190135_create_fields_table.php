@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateHeadingsTable extends Migration
+class CreateFieldsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,10 @@ class CreateHeadingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('headings', function (Blueprint $table) {
+        Schema::create('fields', function (Blueprint $table) {
             $table->increments('id');
-
-            $table->integer('page_type_id')->unsigned()->index();
-            
             $table->string('name')->index();
-            $table->string('sort_name')->index();
-
-            $table->string('heading_num')->index();
-
+            $table->string('description')->index();              
             $table->timestamps();
         });
     }
@@ -34,6 +28,6 @@ class CreateHeadingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('headings');
+        Schema::dropIfExists('fields');
     }
 }

@@ -10,77 +10,63 @@ class OrderLine extends Model
     
     static public function rules($id = null) {
         return [
-        'heading'  => 'exists:headings,id',
-        'order'  => 'exists:orders,id',
-        'udac'  => 'exists:udacs,id',
-        'sequence' => 'required|integer'
+        'order_id'  => 'required|exists:orders,id',
+        'udac_id'  => 'required|exists:udacs,id',
         ];
     }
             
     static public function errorMessages() {
         return [
-            
-        'sequence.required' => 'A sequence number is required.',
-        
-        'order.exists' => 'You must select a valid order number.',
-        'udac.exists' => 'You must select a valid udac.',
-        'heading.exists' => 'You must select a valid heading.'
-        
+        'order_id.exists' => 'You must select a valid order number.',
+        'udac_id.exists' => 'You must select a valid udac.',
+        'order_id.required' => 'An order number is required.',
+        'udac_id.required' => 'A udac is required.',
         ];
     }
     
-    public function order() { return $this->belongsTo(Order::class, 'order');  }
-    public function udac() { return $this->belongsTo(Udac::class, 'udac');  }
-    public function heading() { return $this->belongsTo(Heading::class, 'heading');  }
+    public function order() { return $this->belongsTo(Order::class, 'order_id');  }
+    public function udac() { return $this->belongsTo(Udac::class, 'udac_id');  }
     
     static public function scopeFilterOn($query, $key, $filter)
     {
         switch ($key) {
             case 'order':
-                return $query->whereHas('order', function($q) use ($filter) {
+                $query->whereHas('order', function($q) use ($filter) {
                     $q->where('order_num', 'LIKE', '%'.$filter.'%');
                 });
                 break;
             case 'udac':
-                return $query->whereHas('udac', function($q) use ($filter) {
+                $query->whereHas('udac', function($q) use ($filter) {
                     $q->where('name', 'LIKE', '%'.$filter.'%');
                 });
                 break;
-            case 'heading':
-                return $query->whereHas('heading', function($q) use ($filter) {
-                    $q->where('name', 'LIKE', '%'.$filter.'%');
-                });
-                break;        
-            case 'sequence':
-                return $query->where('sequence', $filter);
-                break;                        
+            // case 'heading':
+            //     $query->whereHas('heading', function($q) use ($filter) {
+            //         $q->where('name', 'LIKE', '%'.$filter.'%');
+            //     });
+            //     break;        
+            // case 'sequence':
+            //     $query->where('sequence', $filter);
+            //     break;                        
             case 'id':
-                return $query->where('id', $filter);
+                $query->where('id', $filter);
                 break;
             default:
-                return $query;
+                $query;
         }
     }
 
-    static public function scopeSortResultsBy($query, $sort_name, $sort_dir) {
+    static public function orderField($sort_name) {
         switch ($sort_name) {
             case 'order':
-                return $query->whereHas('order', function($q) use ($filter, $sort_dir) {
-                    $q->orderBy('order_num', $sort_dir);
-                })->orderBy('sequence', 'asc');
-                break;
+            return 'orders.order_num';
+            break;
             case 'udac':
-                return $query->whereHas('udac', function($q) use ($filter, $sort_dir) {
-                    $q->orderBy('name', $sort_dir);
-                });
-                break;
-            case 'heading':
-                return $query->whereHas('heading', function($q) use ($filter, $sort_dir) {
-                    $q->orderBy('name', $sort_dir);
-                });
-                break;
+            return 'udacs.name';
+            break;
             default:
-                return $query->orderBy($sort_name, $sort_dir);
-        }        
+            return $sort_name;
+        }  
     }
+
 }

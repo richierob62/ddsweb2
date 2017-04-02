@@ -12,8 +12,8 @@ class Udac extends Model
         return [
         'name' => 'required|unique:udacs,name,'.$id,
         'code' => 'required|unique:udacs,code,'.$id,
-        'primary_book'  => 'exists:primary_books,id',
-        'ad_type'  => 'exists:ad_types,id'
+        'primary_book_id'  => 'exists:primary_books,id',
+        'ad_type_id'  => 'exists:ad_types,id'
         ];
     }
     static public function errorMessages() {
@@ -25,14 +25,14 @@ class Udac extends Model
         'name.required' => 'A udac name is required.',
         'code.required' => 'A udac code is required.',
         
-        'primary_book.exists' => 'You must select a valid primary book.',
-        'ad_type.exists' => 'You must select a valid ad type.'
+        'primary_book_id.exists' => 'You must select a valid primary book.',
+        'ad_type_id.exists' => 'You must select a valid ad type.'
         
         ];
     }
     
-    public function primary_book() { return $this->belongsTo(PrimaryBook::class, 'primary_book');  }
-    public function ad_type() { return $this->belongsTo(AdType::class, 'ad_type');  }
+    public function primary_book() { return $this->belongsTo(PrimaryBook::class, 'primary_book_id');  }
+    public function ad_type() { return $this->belongsTo(AdType::class, 'ad_type_id');  }
     
     static public function scopeFilterOn($query, $key, $filter)
     {
@@ -61,20 +61,17 @@ class Udac extends Model
         }
     }
 
-    static public function scopeSortResultsBy($query, $sort_name, $sort_dir) {
+    static public function orderField($sort_name) {
         switch ($sort_name) {
             case 'primary_book':
-                $query->whereHas('primary_book', function($q) use ($filter, $sort_dir) {
-                    $q->orderBy('name', $sort_dir);
-                });
-                break;
+            return 'primary_books.name';
+            break;
             case 'ad_type':
-                $query->whereHas('ad_type', function($q) use ($filter, $sort_dir) {
-                    $q->orderBy('name', $sort_dir);
-                });
-                break;
+            return 'ad_types.name';
+            break;
             default:
-                $query->orderBy($sort_name, $sort_dir);
-        }        
+            return $sort_name;
+        }  
     }
+
 }

@@ -3,7 +3,7 @@
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
-class AdTypesControllerTest extends TestCase
+class FieldsControllerTest extends TestCase
 {
     use DatabaseMigrations;
     
@@ -15,17 +15,17 @@ class AdTypesControllerTest extends TestCase
     /** @test **/
     public function index_status_code_should_be_200()
     {
-        factory(App\AdType::class, 3)->create();
+        factory(App\Field::class, 3)->create();
         $this
-        ->post('/ad_types')
+        ->post('/fields')
         ->seeStatusCode(200);
     }
     
     /** @test **/
     public function index_should_return_a_collection_of_records()
     {
-        factory(App\AdType::class, 3)->create();
-        $this->post('/ad_types');
+        factory(App\Field::class, 3)->create();
+        $this->post('/fields');
         $data = json_decode($this->response->getContent(), true)['data'];
         $expected = [
         'data' => $data
@@ -37,8 +37,8 @@ class AdTypesControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_reference_list()
     {
-        factory(App\AdType::class, 3)->create();
-        $this->post('/ad_type_reference');
+        factory(App\Field::class, 3)->create();
+        $this->post('/field_reference');
         $data = json_decode($this->response->getContent(), true);
         $this->seeJsonEquals($data);
     }
@@ -47,23 +47,17 @@ class AdTypesControllerTest extends TestCase
     public function index_should_return_a_collection_of_filtered_and_ordered__records()
     {
         
-        $page_type_2 = factory(App\PageType::class)->create()->toArray();
-        $page_type_2['name'] = 'something-123page_type_name-something';
-        $this->post('/edit_page_type', $page_type_2);
+        factory(App\Field::class, 6)->create();
+        $field = factory(App\Field::class)->create()->toArray();
+        $field['name'] = '0000something-123name-something';
+        $field['description'] = '0000something-123descrip';
+        $this->post('/edit_field', $field);
         
-        factory(App\AdType::class, 6)->create();
-        $ad_type = factory(App\AdType::class)->create()->toArray();
-        $ad_type['name'] = '0000something-123name-something';
-        $ad_type['code'] = '0000something-123code';
-        $ad_type['page_type_id'] = $page_type_2['id'];
-        $this->post('/edit_ad_type', $ad_type);
-        
-        $this->post('/ad_types', [
+        $this->post('/fields', [
         'filters' => [
         'name' => '123name',
-        'code' => '123code',
-        'page_type' => '123page_type',
-        'id' => $ad_type['id']
+        'description' => '123descrip',
+        'id' => $field['id']
         ],
         'sort_name' => 'name',
         'sort_dir' => 'desc'
@@ -71,7 +65,7 @@ class AdTypesControllerTest extends TestCase
         $data = json_decode($this->response->getContent(), true)['data'];
         $this->assertEquals(1, sizeOf($data));
         
-        $this->post('/ad_types', [
+        $this->post('/fields', [
         'filters' => [],
         'sort_name' => NULL,
         'sort_dir' => NULL
@@ -79,26 +73,26 @@ class AdTypesControllerTest extends TestCase
         $data = json_decode($this->response->getContent(), true)['data'];
         $this->assertEquals(7, sizeOf($data));
         
-        $this->post('/ad_types', [
+        $this->post('/fields', [
         'filters' => [],
         'sort_name' => 'name',
         'sort_dir' => 'asc'
         ]);
         $data = json_decode($this->response->getContent(), true)['data'];
         $first_rec = $data[0];
-        $this->assertEquals($first_rec['name'], $ad_type['name']);
+        $this->assertEquals($first_rec['name'], $field['name']);
         
-        $this->post('/ad_types');
+        $this->post('/fields');
         $data = json_decode($this->response->getContent(), true)['data'];
         $this->assertEquals(7, sizeOf($data));
         
     }
     
     /** @test **/
-    public function it_returns_a_valid_ad_type()
+    public function it_returns_a_valid_field()
     {
-        factory(App\AdType::class)->create();
-        $this->post('/ad_types');
+        factory(App\Field::class)->create();
+        $this->post('/fields');
         $data = json_decode($this->response->getContent(), true)['data'];
         $id = $data[0]['id'];
         
@@ -107,7 +101,7 @@ class AdTypesControllerTest extends TestCase
         'data' => $data[0]
         ];
         $this
-        ->post('/ad_type', ['id' => $id])
+        ->post('/field', ['id' => $id])
         ->seeStatusCode(200)
         ->seeJsonEquals($expected);
         
@@ -120,25 +114,22 @@ class AdTypesControllerTest extends TestCase
     }
     
     /** @test **/
-    public function returns_an_error_when_the_ad_type_id_does_not_exist()
+    public function returns_an_error_when_the_field_id_does_not_exist()
     {
         $this
-        ->post('/ad_type', ['id' => 999999])
+        ->post('/field', ['id' => 999999])
         ->seeStatusCode(404)
         ->seeJson(['error' => 'Not Found']);
     }
     
     /** @test **/
-    public function it_saves_new_ad_type_in_the_database()
+    public function it_saves_new_field_in_the_database()
     {
         
         
-        $page_type_2 = factory(App\PageType::class)->create()->toArray();
-        
-        $this->post('/new_ad_type', [
+        $this->post('/new_field', [
         'name' => 'foo',
-        'code' => 'foo',
-        'page_type_id' => $page_type_2['id']
+        'description' => 'foo',
         ]);
         
         $body = json_decode($this->response->getContent(), true);
@@ -146,16 +137,15 @@ class AdTypesControllerTest extends TestCase
         
         $data = $body['data'];
         $this->assertEquals('foo', $data['name']);
-        $this->assertEquals('foo', $data['code']);
-        $this->assertEquals($page_type_2['id'], $data['page_type_id']);
+        $this->assertEquals('foo', $data['description']);
         $this->assertTrue($data['id'] > 0);
         
         $this
         ->seeStatusCode(201)
         ->seeJson(['created' => true])
-        ->seeInDatabase('ad_types', [
+        ->seeInDatabase('fields', [
         'name' => 'foo',
-        'code' => 'foo'
+        'description' => 'foo'
         ]);
         
     }
@@ -163,14 +153,14 @@ class AdTypesControllerTest extends TestCase
     /** @test **/
     public function update_should_pass_with_a_valid_id()
     {
-        $ad_type = factory(App\AdType::class)->create();
+        $field = factory(App\Field::class)->create();
         
-        $id = $ad_type->id;
+        $id = $field->id;
         
-        $this->post('/edit_ad_type', [
-        'id' => $ad_type->id,
+        $this->post('/edit_field', [
+        'id' => $field->id,
         'name' => 'foo_edited',
-        'code' => 'foo_edited'
+        'description' => 'foo_edited'
         ]);
         
         $body = json_decode($this->response->getContent(), true);
@@ -179,7 +169,7 @@ class AdTypesControllerTest extends TestCase
         $this
         ->seeStatusCode(201)
         ->seeJson(['updated' => true, 'id' => $id])
-        ->seeInDatabase('ad_types', ['name' => 'foo_edited']);
+        ->seeInDatabase('fields', ['name' => 'foo_edited']);
         
     }
     
@@ -187,10 +177,10 @@ class AdTypesControllerTest extends TestCase
     public function update_should_fail_with_an_invalid_id()
     {
         
-        $this->post('/edit_ad_type', [
+        $this->post('/edit_field', [
         'id' => 9999999,
         'name' => 'foo_edited',
-        'code' => 'foo_edited'
+        'description' => 'foo_edited'
         ]);
         
         $this
@@ -200,29 +190,29 @@ class AdTypesControllerTest extends TestCase
     
     
     /** @test **/
-    public function delete_should_remove_a_valid_ad_type()
+    public function delete_should_remove_a_valid_field()
     {
-        $ad_type = factory(App\AdType::class)->create();
+        $field = factory(App\Field::class)->create();
         
-        $id = $ad_type->id;
+        $id = $field->id;
         
-        $this->seeInDatabase('ad_types', ['id' => $id]);
+        $this->seeInDatabase('fields', ['id' => $id]);
         
         $this
-        ->post('/delete_ad_type', ['id' => $id])
+        ->post('/delete_field', ['id' => $id])
         ->seeStatusCode(201)
         ->seeJson(['deleted' => true]);
         
         $data = json_decode($this->response->getContent(), true);
         $this->assertArrayhasKey('id', $data);
         
-        $this->notSeeInDatabase('ad_types', ['id' => $id]);
+        $this->notSeeInDatabase('fields', ['id' => $id]);
     }
     
     /** @test **/
     public function delete_should_fail_with_an_invalid_id()
     {
-        $this->post('/delete_ad_type', ['id' => 999999 ]);
+        $this->post('/delete_field', ['id' => 999999 ]);
         
         $this
         ->seeStatusCode(404)
@@ -231,41 +221,41 @@ class AdTypesControllerTest extends TestCase
     
     // required - create
     /** @test **/
-    public function it_validates_required_fields_when_creating_a_new_ad_type()
+    public function it_validates_required_fields_when_creating_a_new_field()
     {
-        $this->post('/new_ad_type', [], ['Accept' => 'application/json']);
+        $this->post('/new_field', [], ['Accept' => 'application/json']);
         
         $this->assertEquals(422, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
-        $this->assertArrayHasKey('code', $errors);
+        $this->assertArrayHasKey('description', $errors);
         
-        $this->assertEquals(["An ad type name is required."], $errors['name']);
-        $this->assertEquals(["An ad type code is required."], $errors['code']);
+        $this->assertEquals(["A field name is required."], $errors['name']);
+        $this->assertEquals(["A field description is required."], $errors['description']);
         
     }
     
     
     // required - edit
     /** @test **/
-    public function it_validates_required_fields_when_updating_a_ad_type()
+    public function it_validates_required_fields_when_updating_a_field()
     {
         
-        $ad_type = factory(App\AdType::class)->create();
+        $field = factory(App\Field::class)->create();
         
-        $this->post('/edit_ad_type', ['id' => $ad_type->id], ['Accept' => 'application/json']);
+        $this->post('/edit_field', ['id' => $field->id], ['Accept' => 'application/json']);
         
         $this->assertEquals(422, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
-        $this->assertArrayHasKey('code', $errors);
+        $this->assertArrayHasKey('description', $errors);
         
-        $this->assertEquals(["An ad type name is required."], $errors['name']);
-        $this->assertEquals(["An ad type code is required."], $errors['code']);
+        $this->assertEquals(["A field name is required."], $errors['name']);
+        $this->assertEquals(["A field description is required."], $errors['description']);
         
     }
     
@@ -274,12 +264,11 @@ class AdTypesControllerTest extends TestCase
     public function it_rejects_duplicate_data_on_create()
     {
         
-        $ad_type = factory(App\AdType::class)->create();
+        $field = factory(App\Field::class)->create();
         
-        $this->post('/new_ad_type', [
-        'code' => $ad_type['code'],
-        'name' => $ad_type['name'],
-        'page_type_id' => $ad_type['page_type_id']
+        $this->post('/new_field', [
+        'description' => $field['description'],
+        'name' => $field['name'],
         ]);
         
         $this->assertEquals(422, $this->response->getStatusCode());
@@ -287,10 +276,10 @@ class AdTypesControllerTest extends TestCase
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
-        $this->assertArrayHasKey('code', $errors);
+        $this->assertArrayHasKey('description', $errors);
         
-        $this->assertEquals(["That name has already been used."], $errors['name']);
-        $this->assertEquals(["That code has already been used."], $errors['code']);
+        $this->assertEquals(["That field name has already been used."], $errors['name']);
+        $this->assertEquals(["That field description has already been used."], $errors['description']);
         
     }
     
@@ -299,15 +288,14 @@ class AdTypesControllerTest extends TestCase
     public function it_rejects_duplicate_names_on_edit()
     {
         
-        $ad_type_1 = factory(App\AdType::class)->create();
+        $field_1 = factory(App\Field::class)->create();
         
-        $ad_type_2 = factory(App\AdType::class)->create();
+        $field_2 = factory(App\Field::class)->create();
         
-        $this->post('/edit_ad_type', [
-        'id' => $ad_type_2->id,
-        'name' => $ad_type_1->name,
-        'code' => $ad_type_1->code,
-        'page_type_id' => $ad_type_2->page_type_id
+        $this->post('/edit_field', [
+        'id' => $field_2->id,
+        'name' => $field_1->name,
+        'description' => $field_1->description,
         ]);
         
         
@@ -316,10 +304,10 @@ class AdTypesControllerTest extends TestCase
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
-        $this->assertArrayHasKey('code', $errors);
+        $this->assertArrayHasKey('description', $errors);
         
-        $this->assertEquals(["That code has already been used."], $errors['code']);
-        $this->assertEquals(["That name has already been used."], $errors['name']);
+        $this->assertEquals(["That field name has already been used."], $errors['name']);
+        $this->assertEquals(["That field description has already been used."], $errors['description']);
         
     }
     
@@ -343,18 +331,7 @@ class AdTypesControllerTest extends TestCase
     /** @test **/
     public function it_validates_reference_fields_on_create()
     {
-        $new = factory(App\AdType::class)->raw();
-        $new['page_type_id'] = 888888;
-        
-        $this->post('/new_heading', $new);
-        
-        $this->assertEquals(422, $this->response->getStatusCode());
-        
-        $errors = json_decode($this->response->getContent(), true)['errors'];
-        
-        $this->assertArrayHasKey('page_type_id', $errors);
-        
-        $this->assertEquals(["You must select a valid page type."], $errors['page_type_id']);
+        // NA
     }
     
     
@@ -362,18 +339,6 @@ class AdTypesControllerTest extends TestCase
     /** @test **/
     public function it_validates_reference_fields_on_edit()
     {
-        $heading = factory(App\AdType::class)->create()->toArray();
-        
-        $heading['page_type_id'] = NULL;
-        
-        $this->post('/edit_heading', $heading);
-        
-        $this->assertEquals(422, $this->response->getStatusCode());
-        
-        $errors = json_decode($this->response->getContent(), true)['errors'];
-        
-        $this->assertArrayHasKey('page_type_id', $errors);
-        
-        $this->assertEquals(["You must select a valid page type."], $errors['page_type_id']);
+        // NA
     }
 }

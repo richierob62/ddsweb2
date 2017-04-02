@@ -176,10 +176,11 @@ class SalesRepsControllerTest extends TestCase
         'name' => 'foo_edited',
         'code' => 'foo_edited',
         'phone' => '555 555-5555',
-        'compensation_plan' => $sales_rep->compensation_plan
+        'compensation_plan_id' => $sales_rep->compensation_plan_id
         ]);
         
         $body = json_decode($this->response->getContent(), true);
+
         $this->assertArrayHasKey('data', $body);
         
         $this
@@ -199,7 +200,7 @@ class SalesRepsControllerTest extends TestCase
         'name' => 'foo_edited',
         'code' => 'foo_edited',
         'phone' => 'some phone',
-        'compensation_plan' => $this->compensation_plan->id
+        'compensation_plan_id' => $this->compensation_plan->id
         ]);
         
         $this
@@ -250,11 +251,11 @@ class SalesRepsControllerTest extends TestCase
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
-        $this->assertArrayHasKey('compensation_plan', $errors);
+        $this->assertArrayHasKey('compensation_plan_id', $errors);
         
         $this->assertEquals(["A sales rep name is required."], $errors['name']);
         $this->assertEquals(["A sales rep code is required."], $errors['code']);
-        $this->assertEquals(["A compensation plan is required."], $errors['compensation_plan']);
+        $this->assertEquals(["A compensation plan is required."], $errors['compensation_plan_id']);
         
     }
     
@@ -290,7 +291,7 @@ class SalesRepsControllerTest extends TestCase
         'code' => 'foo',
         'name' => 'foo',
         'phone' => 'some_phone',
-        'compensation_plan' => $this->compensation_plan->id
+        'compensation_plan_id' => $this->compensation_plan->id
         ]);
         
         $this->post('/new_sales_rep', [
@@ -298,7 +299,7 @@ class SalesRepsControllerTest extends TestCase
         'code' => 'foo',
         'name' => 'foo',
         'phone' => 'some_phone',
-        'compensation_plan' => $this->compensation_plan->id
+        'compensation_plan_id' => $this->compensation_plan->id
         ]);
         
         $this->assertEquals(422, $this->response->getStatusCode());

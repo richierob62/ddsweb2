@@ -29,7 +29,10 @@ class UdacsController extends Controller
             $sort_dir = 'asc';
         }
 
-        $query = Udac::sortResultsBy($sort_name, $sort_dir);
+        $query = Udac::select(\DB::raw('udacs.*'))
+        ->join('primary_books', 'primary_books.id', '=', 'udacs.primary_book_id')
+        ->join('ad_types', 'ad_types.id', '=', 'udacs.ad_type_id')
+        ->orderBy(Udac::orderField($sort_name), $sort_dir);
                 
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {

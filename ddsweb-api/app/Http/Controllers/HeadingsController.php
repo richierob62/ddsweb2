@@ -29,7 +29,9 @@ class HeadingsController extends Controller
             $sort_dir = 'asc';
         }
         
-        $query = Heading::sortResultsBy($sort_name, $sort_dir);
+        $query = Heading::select(\DB::raw('headings.*'))
+        ->join('page_types', 'page_types.id', '=', 'headings.page_type_id')
+        ->orderBy(Heading::orderField($sort_name), $sort_dir);
         
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {

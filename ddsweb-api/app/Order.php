@@ -19,10 +19,10 @@ class Order extends Model
         return [
         'order_num' => 'required|unique:orders,order_num,'.$id,
         'order_date' => 'required|date',
-        'primary_book'  => 'exists:primary_books,id',
-        'customer' => 'exists:customers,id',
-        'order_status' => 'exists:order_statuses,id',
-        'sales_rep' => 'exists:sales_reps,id'
+        'primary_book_id'  => 'exists:primary_books,id',
+        'customer_id' => 'exists:customers,id',
+        'order_status_id' => 'exists:order_statuses,id',
+        'sales_rep_id' => 'exists:sales_reps,id'
         ];
     }
     
@@ -33,20 +33,20 @@ class Order extends Model
         'order_num.required' => 'An order number is required.',
         'order_date.required' => 'An order date is required.',
         
-        'primary_book.exists' => 'You must select a primary book.',
-        'customer.exists' => 'You must select a customer.',
-        'order_status.exists' => 'You must select an order status.',
-        'sales_rep.exists' => 'You must select a sales rep.',
+        'primary_book_id.exists' => 'You must select a primary book.',
+        'customer_id.exists' => 'You must select a customer.',
+        'order_status_id.exists' => 'You must select an order status.',
+        'sales_rep_id.exists' => 'You must select a sales rep.',
         
         'order_date.date' => 'The order date must be a valid date.',
         
         ];
     }
     
-    public function primary_book() { return $this->belongsTo(PrimaryBook::class, 'primary_book');  }
-    public function customer() { return $this->belongsTo(Customer::class, 'customer');  }
-    public function order_status() { return $this->belongsTo(OrderStatus::class, 'order_status');  }
-    public function sales_rep() { return $this->belongsTo(SalesRep::class, 'sales_rep');  }
+    public function primary_book() { return $this->belongsTo(PrimaryBook::class, 'primary_book_id');  }
+    public function customer() { return $this->belongsTo(Customer::class, 'customer_id');  }
+    public function order_status() { return $this->belongsTo(OrderStatus::class, 'order_status_id');  }
+    public function sales_rep() { return $this->belongsTo(SalesRep::class, 'sales_rep_id');  }
     
     static public function scopeFilterOn($query, $key, $filter)
     {
@@ -62,53 +62,46 @@ class Order extends Model
                     $q->where('name', 'LIKE', '%'.$filter.'%');
             });
             break;
-        case 'customer':
-            return $query->whereHas('customer', function($q) use ($filter) {
-                $q->where('name', 'LIKE', '%'.$filter.'%');
-        });
-        break;
-        case 'order_status':
-            return $query->whereHas('order_status', function($q) use ($filter) {
-                $q->where('name', 'LIKE', '%'.$filter.'%');
-        });
-        break;
-        case 'sales_rep':
-            return $query->whereHas('sales_rep', function($q) use ($filter) {
-                $q->where('name', 'LIKE', '%'.$filter.'%');
-        });
-        break;
-        case 'id':
-            return $query->where('id', $filter);
+            case 'customer':
+                return $query->whereHas('customer', function($q) use ($filter) {
+                    $q->where('name', 'LIKE', '%'.$filter.'%');
+            });
             break;
-        default:
-            return $query;
+            case 'order_status':
+                return $query->whereHas('order_status', function($q) use ($filter) {
+                    $q->where('name', 'LIKE', '%'.$filter.'%');
+            });
+            break;
+            case 'sales_rep':
+                return $query->whereHas('sales_rep', function($q) use ($filter) {
+                    $q->where('name', 'LIKE', '%'.$filter.'%');
+            });
+            break;
+            case 'id':
+                return $query->where('id', $filter);
+                break;
+            default:
+                return $query;
         }
     }
 
-    static public function scopeSortResultsBy($query, $sort_order_num, $sort_dir) {
-        switch ($sort_order_num) {
+    static public function orderField($sort_name) {
+        switch ($sort_name) {
             case 'sales_rep':
-                return $query->whereHas('sales_rep', function($q) use ($filter, $sort_dir) {
-                    $q->orderBy('name', $sort_dir);
-            });
+            return 'sales_reps.name';
             break;
-        case 'primary_book':
-            return $query->whereHas('primary_book', function($q) use ($filter, $sort_dir) {
-                $q->orderBy('name', $sort_dir);
-        });
-        break;
-        case 'customer':
-            return $query->whereHas('customer', function($q) use ($filter, $sort_dir) {
-                $q->orderBy('name', $sort_dir);
-        });
-        break;
-        case 'order_status':
-            return $query->whereHas('order_status', function($q) use ($filter, $sort_dir) {
-                $q->orderBy('name', $sort_dir);
-        });
-        break;
-        default:
-            return $query->orderBy($sort_order_num, $sort_dir);
-        }
+            case 'primary_book':
+            return 'primary_books.name';
+            break;
+            case 'customer':
+            return 'customers.name';
+            break;
+            case 'order_status':
+            return 'order_statuses.name';
+            break;
+            default:
+            return $sort_name;
+        }  
     }
+
 }

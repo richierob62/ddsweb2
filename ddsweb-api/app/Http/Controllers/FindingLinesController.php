@@ -29,7 +29,8 @@ class FindingLinesController extends Controller
             $sort_dir = 'asc';
         }
         
-        $query = FindingLine::sortResultsBy($sort_name, $sort_dir);
+        $query = FindingLine::select(\DB::raw('finding_lines.*'))
+        ->orderBy(FindingLine::orderField($sort_name), $sort_dir);
         
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {

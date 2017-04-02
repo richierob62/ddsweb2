@@ -30,7 +30,12 @@ class OrdersController extends Controller
         }
 
 
-        $query = Order::sortResultsBy($sort_name, $sort_dir);
+        $query = Order::select(\DB::raw('orders.*'))
+        ->join('sales_reps', 'sales_reps.id', '=', 'orders.sales_rep_id')
+        ->join('customers', 'customers.id', '=', 'orders.customer_id')
+        ->join('primary_books', 'primary_books.id', '=', 'orders.primary_book_id')
+        ->join('order_statuses', 'order_statuses.id', '=', 'orders.order_status_id')
+        ->orderBy(Order::orderField($sort_name), $sort_dir);
         
                 
         if(sizeof($filters) > 0) {

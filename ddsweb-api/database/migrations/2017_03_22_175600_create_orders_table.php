@@ -20,10 +20,10 @@ class CreateOrdersTable extends Migration
             $table->string('order_num')->index();
             $table->date('order_date')->index();
 
-            $table->integer('primary_book')->unsigned()->index();
-            $table->integer('customer')->unsigned()->index();
-            $table->integer('sales_rep')->unsigned()->index();
-            $table->integer('order_status')->unsigned()->index();
+            $table->integer('primary_book_id')->unsigned()->index();
+            $table->integer('customer_id')->unsigned()->index();
+            $table->integer('sales_rep_id')->unsigned()->index();
+            $table->integer('order_status_id')->unsigned()->index();
             
             $table->timestamps();
         });

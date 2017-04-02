@@ -14,7 +14,7 @@ class OrdersControllerTest extends TestCase
         $this->primary_book = factory(App\PrimaryBook::class)->create();
         $this->customer = factory(App\Customer::class)->create();
         $this->sales_rep = factory(App\SalesRep::class)->create();
-        $this->status = factory(App\OrderStatus::class)->create();
+        $this->order_status = factory(App\OrderStatus::class)->create();
     }
     
     /** @test **/
@@ -72,10 +72,10 @@ class OrdersControllerTest extends TestCase
         $order = factory(App\Order::class)->create()->toArray();
         $order['order_num'] = '000111111111';
         $order['order_date'] = new Carbon('2017-12-31');
-        $order['primary_book'] = $primary_book_2['id'];
-        $order['customer'] = $customer_2['id'];
-        $order['sales_rep'] = $sales_rep_2['id'];
-        $order['order_status'] = $order_status_2['id'];
+        $order['primary_book_id'] = $primary_book_2['id'];
+        $order['customer_id'] = $customer_2['id'];
+        $order['sales_rep_id'] = $sales_rep_2['id'];
+        $order['order_status_id'] = $order_status_2['id'];
 
         $this->post('/edit_order', $order);
         
@@ -317,10 +317,10 @@ class OrdersControllerTest extends TestCase
         'id' => $order_2->id,
         'order_num' => $order_1->order_num,
         'order_date' => (new Carbon()),
-        'customer' => $this->customer->id,
-        'status' => $this->status->id,
-        'primary_book' => $this->primary_book->id,
-        'sales_rep' => $this->sales_rep->id
+        'customer_id' => $this->customer->id,
+        'order_status_id' => $this->order_status->id,
+        'primary_book_id' => $this->primary_book->id,
+        'sales_rep_id' => $this->sales_rep->id
         ]);
         
         
@@ -378,10 +378,10 @@ class OrdersControllerTest extends TestCase
     public function it_validates_reference_fields_on_create()
     {
         $new = factory(App\Order::class)->raw();
-        $new['customer'] = NULL;
-        $new['order_status'] = 888888;
-        $new['primary_book'] = NULL;
-        $new['sales_rep'] = 888888;
+        $new['customer_id'] = NULL;
+        $new['order_status_id'] = 888888;
+        $new['primary_book_id'] = NULL;
+        $new['sales_rep_id'] = 888888;
         
         $this->post('/new_order', $new);
         
@@ -389,15 +389,15 @@ class OrdersControllerTest extends TestCase
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
-        $this->assertArrayHasKey('customer', $errors);
-        $this->assertArrayHasKey('order_status', $errors);
-        $this->assertArrayHasKey('primary_book', $errors);
-        $this->assertArrayHasKey('sales_rep', $errors);
+        $this->assertArrayHasKey('customer_id', $errors);
+        $this->assertArrayHasKey('order_status_id', $errors);
+        $this->assertArrayHasKey('primary_book_id', $errors);
+        $this->assertArrayHasKey('sales_rep_id', $errors);
         
-        $this->assertEquals(["You must select a customer."], $errors['customer']);
-        $this->assertEquals(["You must select an order status."], $errors['order_status']);
-        $this->assertEquals(["You must select a primary book."], $errors['primary_book']);
-        $this->assertEquals(["You must select a sales rep."], $errors['sales_rep']);
+        $this->assertEquals(["You must select a customer."], $errors['customer_id']);
+        $this->assertEquals(["You must select an order status."], $errors['order_status_id']);
+        $this->assertEquals(["You must select a primary book."], $errors['primary_book_id']);
+        $this->assertEquals(["You must select a sales rep."], $errors['sales_rep_id']);
     }
     
     
@@ -407,10 +407,10 @@ class OrdersControllerTest extends TestCase
     {
         $order = factory(App\Order::class)->create()->toArray();
         
-        $order['customer'] = 88888888;
-        $order['order_status'] = NULL;
-        $order['primary_book'] = 88888888;
-        $order['sales_rep'] = NULL;
+        $order['customer_id'] = 88888888;
+        $order['order_status_id'] = NULL;
+        $order['primary_book_id'] = 88888888;
+        $order['sales_rep_id'] = NULL;
         
         $this->post('/edit_order', $order);
         
@@ -418,15 +418,15 @@ class OrdersControllerTest extends TestCase
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
-        $this->assertArrayHasKey('customer', $errors);
-        $this->assertArrayHasKey('order_status', $errors);
-        $this->assertArrayHasKey('primary_book', $errors);
-        $this->assertArrayHasKey('sales_rep', $errors);
+        $this->assertArrayHasKey('customer_id', $errors);
+        $this->assertArrayHasKey('order_status_id', $errors);
+        $this->assertArrayHasKey('primary_book_id', $errors);
+        $this->assertArrayHasKey('sales_rep_id', $errors);
         
-        $this->assertEquals(["You must select a customer."], $errors['customer']);
-        $this->assertEquals(["You must select an order status."], $errors['order_status']);
-        $this->assertEquals(["You must select a primary book."], $errors['primary_book']);
-        $this->assertEquals(["You must select a sales rep."], $errors['sales_rep']);
+        $this->assertEquals(["You must select a customer."], $errors['customer_id']);
+        $this->assertEquals(["You must select an order status."], $errors['order_status_id']);
+        $this->assertEquals(["You must select a primary book."], $errors['primary_book_id']);
+        $this->assertEquals(["You must select a sales rep."], $errors['sales_rep_id']);
     }
     
     /** @test **/

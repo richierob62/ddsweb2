@@ -775,7 +775,7 @@ WORKFLOW
 ===============================================================================================================
 Controller tests
     migrations & models to support
-        php artisan make:migration create_finding_lines_table --create=finding_lines
+        php artisan make:migration create_fields_table --create=fields
         php artisan migrate
         composer dump-autoload
         php artisan migrate:refresh
@@ -790,20 +790,25 @@ file creation order
     MyThingsController.php
 
 
+\Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
+    var_dump($query->sql);
+    var_dump($query->bindings);
+    var_dump($query->time);
+});
+
+
 to do
 --------------------
 react
+    + sagas to access apis after apis done
 
 
 lumen
 
     + change all migrations to cascade delete for foreign keys
+    * change all validations to check usage before delete
+    + usage table
+    + order line sort and filter based on usage of fields
+    + order lien next sequence number
 
-    + order_details 
-        order
-        udac
-        heading
-        sequence
-        
-    + sagas to access apis after apis done
     

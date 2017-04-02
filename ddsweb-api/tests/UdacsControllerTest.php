@@ -52,17 +52,17 @@ class UdacsControllerTest extends TestCase
         $primary_book_2 = factory(App\PrimaryBook::class)->create()->toArray();
         $primary_book_2['name'] = 'something-123primary_book_name-something';
         $this->post('/edit_primary_book', $primary_book_2);
-
+        
         $ad_type_2 = factory(App\AdType::class)->create()->toArray();
         $ad_type_2['name'] = 'something-123ad_type_name-something';
         $this->post('/edit_ad_type', $ad_type_2);
-
+        
         factory(App\Udac::class, 6)->create();
         $udac = factory(App\Udac::class)->create()->toArray();
         $udac['name'] = '0000something-123name-something';
         $udac['code'] = '0000something-123code-something';
-        $udac['primary_book'] = $primary_book_2['id'];
-        $udac['ad_type'] = $ad_type_2['id'];
+        $udac['primary_book_id'] = $primary_book_2['id'];
+        $udac['ad_type_id'] = $ad_type_2['id'];
         $this->post('/edit_udac', $udac);
         $this->post('/udacs', [
         'filters' => [
@@ -72,6 +72,7 @@ class UdacsControllerTest extends TestCase
         'ad_type' => '123ad_type_name',
         'id' => $udac['id']
         ],
+        'sort_name'=> 'name',
         'sort_dir' => 'desc'
         ]);
         $data = json_decode($this->response->getContent(), true)['data'];
@@ -79,6 +80,7 @@ class UdacsControllerTest extends TestCase
         
         $this->post('/udacs', [
         'filters' => [],
+        'sort_name'=> 'name',
         'sort_dir' => NULL
         ]);
         $data = json_decode($this->response->getContent(), true)['data'];
@@ -86,6 +88,7 @@ class UdacsControllerTest extends TestCase
         
         $this->post('/udacs', [
         'filters' => [],
+        'sort_name'=> 'name',
         'sort_dir' => 'asc'
         ]);
         $data = json_decode($this->response->getContent(), true)['data'];
@@ -137,7 +140,7 @@ class UdacsControllerTest extends TestCase
     {
         $new = factory(App\Udac::class)->raw();
         $name = $new['name'];
-        $primary_book = $new['primary_book'];
+        $primary_book_id = $new['primary_book_id'];
         
         $this->post('/new_udac', $new);
         
@@ -146,7 +149,7 @@ class UdacsControllerTest extends TestCase
         
         $data = $body['data'];
         $this->assertEquals($name, $data['name']);
-        $this->assertEquals($primary_book, $data['primary_book']);
+        $this->assertEquals($primary_book_id, $data['primary_book_id']);
         $this->assertTrue($data['id'] > 0);
         
         $this
@@ -163,7 +166,7 @@ class UdacsControllerTest extends TestCase
         
         $edited = factory(App\Udac::class)->raw();
         $name = $edited['name'];
-        $primary_book = $edited['primary_book'];
+        $primary_book_id = $edited['primary_book_id'];
         $id = $udac->id;
         $edited['id'] = $id;
         
@@ -339,8 +342,8 @@ class UdacsControllerTest extends TestCase
     public function it_validates_reference_fields_on_create()
     {
         $new = factory(App\Udac::class)->raw();
-        $new['primary_book'] = 888888;
-        $new['ad_type'] = 888888;
+        $new['primary_book_id'] = 888888;
+        $new['ad_type_id'] = 888888;
         
         $this->post('/new_udac', $new);
         
@@ -348,11 +351,11 @@ class UdacsControllerTest extends TestCase
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
-        $this->assertArrayHasKey('primary_book', $errors);
-        $this->assertArrayHasKey('ad_type', $errors);
+        $this->assertArrayHasKey('primary_book_id', $errors);
+        $this->assertArrayHasKey('ad_type_id', $errors);
         
-        $this->assertEquals(["You must select a valid primary book."], $errors['primary_book']);
-        $this->assertEquals(["You must select a valid ad type."], $errors['ad_type']);
+        $this->assertEquals(["You must select a valid primary book."], $errors['primary_book_id']);
+        $this->assertEquals(["You must select a valid ad type."], $errors['ad_type_id']);
     }
     
     
@@ -362,8 +365,8 @@ class UdacsControllerTest extends TestCase
     {
         $udac = factory(App\Udac::class)->create()->toArray();
         
-        $udac['primary_book'] = NULL;
-        $udac['ad_type'] = NULL;        
+        $udac['primary_book_id'] = NULL;
+        $udac['ad_type_id'] = NULL;
         
         $this->post('/edit_udac', $udac);
         
@@ -371,11 +374,11 @@ class UdacsControllerTest extends TestCase
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
-        $this->assertArrayHasKey('primary_book', $errors);
-        $this->assertArrayHasKey('ad_type', $errors);
+        $this->assertArrayHasKey('primary_book_id', $errors);
+        $this->assertArrayHasKey('ad_type_id', $errors);
         
-        $this->assertEquals(["You must select a valid primary book."], $errors['primary_book']);
-        $this->assertEquals(["You must select a valid ad type."], $errors['ad_type']);
+        $this->assertEquals(["You must select a valid primary book."], $errors['primary_book_id']);
+        $this->assertEquals(["You must select a valid ad type."], $errors['ad_type_id']);
     }
     
 }

@@ -12,11 +12,11 @@ class Customer extends Model
         return [
         'name' => 'required|unique:customers,name,'.$id,
         'account_num' => 'required|unique:customers,account_num,'.$id,
-        'category'  => 'exists:categories,id',
-        'local_foreign' => 'exists:local_foreigns,id',
-        'pay_plan' => 'exists:pay_plans,id',
-        'primary_book'  => 'exists:primary_books,id',
-        'sales_rep' => 'exists:sales_reps,id',
+        'category_id'  => 'exists:categories,id',
+        'local_foreign_id' => 'exists:local_foreigns,id',
+        'pay_plan_id' => 'exists:pay_plans,id',
+        'primary_book_id'  => 'exists:primary_books,id',
+        'sales_rep_id' => 'exists:sales_reps,id',
         'billing_email' => 'email',
         'email' => 'email'
         ];
@@ -30,11 +30,11 @@ class Customer extends Model
         'account_num.required' => 'An account number is required.',
         'name.required' => 'A company name is required.',
         
-        'category.exists' => 'You must select a valid category.',
-        'local_foreign.exists' => 'You must select a valid local/foreign.',
-        'pay_plan.exists' => 'You must select a valid pay plan.',
-        'primary_book.exists' => 'You must select a valid primary book.',
-        'sales_rep.exists' => 'You must select a valid sales rep.',
+        'category_id.exists' => 'You must select a valid category.',
+        'local_foreign_id.exists' => 'You must select a valid local/foreign.',
+        'pay_plan_id.exists' => 'You must select a valid pay plan.',
+        'primary_book_id.exists' => 'You must select a valid primary book.',
+        'sales_rep_id.exists' => 'You must select a valid sales rep.',
         
         'billing_email.email' => 'The billing email must be a valid email address.',
         'email.email' => 'The email must be a valid email address.'
@@ -42,11 +42,11 @@ class Customer extends Model
         ];
     }
     
-    public function category() { return $this->belongsTo(Category::class, 'category');  }
-    public function local_foreign() { return $this->belongsTo(LocalForeign::class, 'local_foreign');  }
-    public function pay_plan() { return $this->belongsTo(PayPlan::class, 'pay_plan');  }
-    public function primary_book() { return $this->belongsTo(PrimaryBook::class, 'primary_book');  }
-    public function sales_rep() { return $this->belongsTo(SalesRep::class, 'sales_rep');  }
+    public function category() { return $this->belongsTo(Category::class, 'category_id');  }
+    public function local_foreign() { return $this->belongsTo(LocalForeign::class, 'local_foreign_id');  }
+    public function pay_plan() { return $this->belongsTo(PayPlan::class, 'pay_plan_id');  }
+    public function primary_book() { return $this->belongsTo(PrimaryBook::class, 'primary_book_id');  }
+    public function sales_rep() { return $this->belongsTo(SalesRep::class, 'sales_rep_id');  }
     
     static public function scopeFilterOn($query, $key, $filter)
     {
@@ -79,15 +79,14 @@ class Customer extends Model
         }
     }
 
-    static public function scopeSortResultsBy($query, $sort_name, $sort_dir) {
+    static public function orderField($sort_name) {
         switch ($sort_name) {
             case 'sales_rep':
-                return $query->whereHas('sales_rep', function($q) use ($filter, $sort_dir) {
-                    $q->orderBy('name', $sort_dir);
-                });
-                break;
+            return 'sales_reps.name';
+            break;
             default:
-                return $query->orderBy($sort_name, $sort_dir);
-        }        
+            return $sort_name;
+        }  
     }
+
 }

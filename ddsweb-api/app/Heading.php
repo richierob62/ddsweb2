@@ -13,7 +13,7 @@ class Heading extends Model
         'name' => 'required|unique:headings,name,'.$id,
         'sort_name' => 'required|unique:headings,sort_name,'.$id,
         'heading_num' => 'required|unique:headings,heading_num,'.$id,
-        'page_type'  => 'exists:page_types,id'
+        'page_type_id'  => 'exists:page_types,id'
         ];
     }
 
@@ -27,12 +27,12 @@ class Heading extends Model
         'sort_name.required' => 'A sort heading is required.',
         'heading_num.required' => 'A heading number is required.',
         
-        'page_type.exists' => 'You must select a valid page type.',
+        'page_type_id.exists' => 'You must select a valid page type.',
         
         ];
     }
     
-    public function page_type() { return $this->belongsTo(PageType::class, 'page_type');  }
+    public function page_type() { return $this->belongsTo(PageType::class, 'page_type_id');  }
     
     static public function scopeFilterOn($query, $key, $filter)
     {
@@ -59,15 +59,14 @@ class Heading extends Model
         }
     }
 
-    static public function scopeSortResultsBy($query, $sort_name, $sort_dir) {
+    static public function orderField($sort_name) {
         switch ($sort_name) {
             case 'page_type':
-                $query->whereHas('page_type', function($q) use ($filter, $sort_dir) {
-                    $q->orderBy('name', $sort_dir);
-                });
-                break;
+            return 'page_types.name';
+            break;
             default:
-                $query->orderBy($sort_name, $sort_dir);
-        }        
+            return $sort_name;
+        }  
     }
+    
 }

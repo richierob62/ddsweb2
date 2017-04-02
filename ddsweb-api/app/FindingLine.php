@@ -41,12 +41,14 @@ class FindingLine extends Model
         }
     }
     
-    static public function scopeSortResultsBy($query, $sort_name, $sort_dir) {
+    static public function orderField($sort_name) {
         switch ($sort_name) {
-            case 'somerelativefield':
-                break;
+            case 'foo':
+            return 'huh';
+            break;
             default:
-                $query->orderBy($sort_name, $sort_dir);
-        }
+            return $sort_name;
+        }  
     }
+    
 }
