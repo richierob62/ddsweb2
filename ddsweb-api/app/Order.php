@@ -19,10 +19,10 @@ class Order extends Model
         return [
         'order_num' => 'required|unique:orders,order_num,'.$id,
         'order_date' => 'required|date',
-        'primary_book_id'  => 'exists:primary_books,id',
-        'customer_id' => 'exists:customers,id',
-        'order_status_id' => 'exists:order_statuses,id',
-        'sales_rep_id' => 'exists:sales_reps,id'
+        'primary_book_id'  => 'required|exists:primary_books,id',
+        'customer_id' => 'required|exists:customers,id',
+        'order_status_id' => 'required|exists:order_statuses,id',
+        'sales_rep_id' => 'required|exists:sales_reps,id'
         ];
     }
     
@@ -37,6 +37,11 @@ class Order extends Model
         'customer_id.exists' => 'You must select a customer.',
         'order_status_id.exists' => 'You must select an order status.',
         'sales_rep_id.exists' => 'You must select a sales rep.',
+        
+        'primary_book_id.required' => 'You must select a primary book.',
+        'customer_id.required' => 'You must select a customer.',
+        'order_status_id.required' => 'You must select an order status.',
+        'sales_rep_id.required' => 'You must select a sales rep.',
         
         'order_date.date' => 'The order date must be a valid date.',
         

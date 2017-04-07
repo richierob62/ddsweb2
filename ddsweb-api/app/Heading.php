@@ -13,7 +13,7 @@ class Heading extends Model
         'name' => 'required|unique:headings,name,'.$id,
         'sort_name' => 'required|unique:headings,sort_name,'.$id,
         'heading_num' => 'required|unique:headings,heading_num,'.$id,
-        'page_type_id'  => 'exists:page_types,id'
+        'page_type_id'  => 'required|exists:page_types,id'
         ];
     }
 
@@ -28,6 +28,7 @@ class Heading extends Model
         'heading_num.required' => 'A heading number is required.',
         
         'page_type_id.exists' => 'You must select a valid page type.',
+        'page_type_id.required' => 'You must select a valid page type.',
         
         ];
     }

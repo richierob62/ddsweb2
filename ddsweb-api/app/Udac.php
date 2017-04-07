@@ -12,8 +12,8 @@ class Udac extends Model
         return [
         'name' => 'required|unique:udacs,name,'.$id,
         'code' => 'required|unique:udacs,code,'.$id,
-        'primary_book_id'  => 'exists:primary_books,id',
-        'ad_type_id'  => 'exists:ad_types,id'
+        'primary_book_id'  => 'required|exists:primary_books,id',
+        'ad_type_id'  => 'required|exists:ad_types,id'
         ];
     }
     static public function errorMessages() {
@@ -26,7 +26,10 @@ class Udac extends Model
         'code.required' => 'A udac code is required.',
         
         'primary_book_id.exists' => 'You must select a valid primary book.',
-        'ad_type_id.exists' => 'You must select a valid ad type.'
+        'ad_type_id.exists' => 'You must select a valid ad type.',
+        
+        'primary_book_id.required' => 'You must select a valid primary book.',
+        'ad_type_id.required' => 'You must select a valid ad type.'
         
         ];
     }

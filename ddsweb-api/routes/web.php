@@ -103,6 +103,12 @@ $app->post('ad_type', 'AdTypesController@adTypeByID');
 $app->post('new_ad_type', 'AdTypesController@newAdType');
 $app->post('edit_ad_type', 'AdTypesController@editAdType');
 $app->post('delete_ad_type', 'AdTypesController@deleteAdType');
+$app->post('get_fields', 'AdTypesController@getFields');
+$app->post('attach_field', 'AdTypesController@addField');
+$app->post('remove_field', 'AdTypesController@deleteField');
+$app->post('promote_field', 'AdTypesController@promoteField');
+$app->post('demote_field', 'AdTypesController@demoteField');
+
 
 $app->post('udacs', 'UdacsController@udacs');
 $app->post('udac_reference', 'UdacsController@referenceList');
@@ -132,5 +138,6 @@ $app->post('field', 'FieldsController@fieldByID');
 $app->post('new_field', 'FieldsController@newField');
 $app->post('edit_field', 'FieldsController@editField');
 $app->post('delete_field', 'FieldsController@deleteField');
+
 
 

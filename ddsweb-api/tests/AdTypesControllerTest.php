@@ -164,16 +164,15 @@ class AdTypesControllerTest extends TestCase
     public function update_should_pass_with_a_valid_id()
     {
         $ad_type = factory(App\AdType::class)->create();
+        $ad_type->name = 'foo_edited';
+        $ad_type->code = 'foo_edited';
         
         $id = $ad_type->id;
         
-        $this->post('/edit_ad_type', [
-        'id' => $ad_type->id,
-        'name' => 'foo_edited',
-        'code' => 'foo_edited'
-        ]);
+        $this->post('/edit_ad_type', $ad_type->toArray());
         
         $body = json_decode($this->response->getContent(), true);
+        
         $this->assertArrayHasKey('data', $body);
         
         $this
@@ -187,11 +186,12 @@ class AdTypesControllerTest extends TestCase
     public function update_should_fail_with_an_invalid_id()
     {
         
-        $this->post('/edit_ad_type', [
-        'id' => 9999999,
-        'name' => 'foo_edited',
-        'code' => 'foo_edited'
-        ]);
+        $ad_type = factory(App\AdType::class)->create();
+        $ad_type->id = 999999;
+        $ad_type->name = 'foo_edited';
+        $ad_type->code = 'foo_edited';
+        
+        $this->post('/edit_ad_type', $ad_type->toArray());
         
         $this
         ->seeStatusCode(404)
@@ -346,7 +346,7 @@ class AdTypesControllerTest extends TestCase
         $new = factory(App\AdType::class)->raw();
         $new['page_type_id'] = 888888;
         
-        $this->post('/new_heading', $new);
+        $this->post('/new_ad_type', $new);
         
         $this->assertEquals(422, $this->response->getStatusCode());
         
@@ -362,11 +362,11 @@ class AdTypesControllerTest extends TestCase
     /** @test **/
     public function it_validates_reference_fields_on_edit()
     {
-        $heading = factory(App\AdType::class)->create()->toArray();
+        $ad_type = factory(App\AdType::class)->create()->toArray();
         
-        $heading['page_type_id'] = NULL;
+        $ad_type['page_type_id'] = NULL;
         
-        $this->post('/edit_heading', $heading);
+        $this->post('/edit_ad_type', $ad_type);
         
         $this->assertEquals(422, $this->response->getStatusCode());
         
@@ -376,4 +376,203 @@ class AdTypesControllerTest extends TestCase
         
         $this->assertEquals(["You must select a valid page type."], $errors['page_type_id']);
     }
+    
+    /** @test **/
+    // $app->post('get_fields', 'AdTypesController@getFields');
+    public function it_returns_the_fields_for_given_ad_type_in_order()
+    {
+        $field_1 = factory(App\Field::class)->create();
+        $field_2 = factory(App\Field::class)->create();
+        
+        $ad_type = factory(App\AdType::class)->create();
+        $ad_type->fields()->attach($field_1->id, ['sequence' => 2]);
+        $ad_type->fields()->attach($field_2->id, ['sequence' => 1]);
+        
+        $this->post('/get_fields', ['id' => $ad_type->id]);
+        
+        $data = json_decode($this->response->getContent(), true)['data'];
+        
+        $this->assertEquals(2, sizeof($data));
+        $this->assertEquals($field_2->id, $data[0]['id']);
+        $this->assertEquals($field_1->id, $data[1]['id']);
+        $this->assertEquals(1, $data[0]['pivot']['sequence']);
+    }
+    
+    /** @test **/
+    // $app->post('attach_field', 'AdTypesController@addField');
+    public function it_adds_a_field_to_an_ad_type()
+    {
+        $field_1 = factory(App\Field::class)->create();
+        
+        $ad_type = factory(App\AdType::class)->create();
+        
+        $this->post('/attach_field', ['id' => $ad_type->id, 'field' => $field_1->id]);
+        
+        $this->seeStatusCode(201)
+        ->seeJsonEquals([
+        "created" => true,
+        "data" => [
+        "id" => $ad_type->id,
+        "field" => $field_1->id,
+        "sequence" => 1
+        ]
+        ]);
+
+
+        // again
+
+        $field_2 = factory(App\Field::class)->create();
+        $field_3 = factory(App\Field::class)->create();
+        
+        $this->post('/attach_field', ['id' => $ad_type->id, 'field' => $field_2->id]);
+        $this->post('/attach_field', ['id' => $ad_type->id, 'field' => $field_3->id]);
+        
+        $this->seeStatusCode(201)
+        ->seeJsonEquals([
+        "created" => true,
+        "data" => [
+        "id" => $ad_type->id,
+        "field" => $field_3->id,
+        "sequence" => 3
+        ]
+        ]);        
+        
+    }
+    
+
+    /** @test **/
+    // $app->post('remove_field', 'AdTypesController@deleteField');
+    public function it_deletes_a_field_from_an_ad_type_and_renumbers_the_balance()
+    {
+
+        $field_1 = factory(App\Field::class)->create();
+        $field_2 = factory(App\Field::class)->create();
+        $field_3 = factory(App\Field::class)->create();
+        $field_4 = factory(App\Field::class)->create();
+        
+        $ad_type = factory(App\AdType::class)->create();
+        
+        $this->post('/attach_field', ['id' => $ad_type->id, 'field' => $field_1->id]);
+        $this->post('/attach_field', ['id' => $ad_type->id, 'field' => $field_2->id]);
+        $this->post('/attach_field', ['id' => $ad_type->id, 'field' => $field_3->id]);
+        $this->post('/attach_field', ['id' => $ad_type->id, 'field' => $field_4->id]);
+
+        $this->post('/remove_field', ['id' => $ad_type->id, 'field' => $field_2->id]);
+
+        $this->seeStatusCode(201)
+        ->seeJsonEquals([
+        "deleted" => true,
+        "data" => [
+        "id" => $ad_type->id,
+        "field" => $field_2->id
+        ]
+        ]);
+
+
+        $this->post('/get_fields', ['id' => $ad_type->id]);
+        
+        $data = json_decode($this->response->getContent(), true)['data'];
+        
+        $this->assertEquals(3, sizeof($data));
+        $this->assertEquals($field_1->id, $data[0]['id']);
+        $this->assertEquals($field_3->id, $data[1]['id']);
+        $this->assertEquals($field_4->id, $data[2]['id']);
+        $this->assertEquals(1, $data[0]['pivot']['sequence']);
+        $this->assertEquals(2, $data[1]['pivot']['sequence']);
+        $this->assertEquals(3, $data[2]['pivot']['sequence']);
+
+    }
+
+    /** @test **/
+    // $app->post('promote_field', 'AdTypesController@promoteField');
+    public function it_moves_a_field_up_in_sequence()
+    {
+
+        $field_1 = factory(App\Field::class)->create();
+        $field_2 = factory(App\Field::class)->create();
+        $field_3 = factory(App\Field::class)->create();
+        $field_4 = factory(App\Field::class)->create();
+        
+        $ad_type = factory(App\AdType::class)->create();
+        
+        $this->post('/attach_field', ['id' => $ad_type->id, 'field' => $field_1->id]);
+        $this->post('/attach_field', ['id' => $ad_type->id, 'field' => $field_2->id]);
+        $this->post('/attach_field', ['id' => $ad_type->id, 'field' => $field_3->id]);
+        $this->post('/attach_field', ['id' => $ad_type->id, 'field' => $field_4->id]);
+
+        $this->post('/promote_field', ['id' => $ad_type->id, 'field' => $field_2->id]);
+
+        $this->seeStatusCode(201)
+        ->seeJsonEquals([
+        "promoted" => true,
+        "data" => [
+        "id" => $ad_type->id,
+        "field" => $field_2->id,
+        "sequence" => 1
+        ]
+        ]);
+
+
+        $this->post('/get_fields', ['id' => $ad_type->id]);
+        
+        $data = json_decode($this->response->getContent(), true)['data'];
+        
+        $this->assertEquals(4, sizeof($data));
+        $this->assertEquals($field_2->id, $data[0]['id']);
+        $this->assertEquals($field_1->id, $data[1]['id']);
+        $this->assertEquals($field_3->id, $data[2]['id']);
+        $this->assertEquals($field_4->id, $data[3]['id']);
+        $this->assertEquals(1, $data[0]['pivot']['sequence']);
+        $this->assertEquals(2, $data[1]['pivot']['sequence']);
+        $this->assertEquals(3, $data[2]['pivot']['sequence']);
+        $this->assertEquals(4, $data[3]['pivot']['sequence']);
+
+    }
+
+    /** @test **/
+    // $app->post('demote_field', 'AdTypesController@demoteField');
+    public function it_moves_a_field_down_in_sequence()
+    {
+
+        $field_1 = factory(App\Field::class)->create();
+        $field_2 = factory(App\Field::class)->create();
+        $field_3 = factory(App\Field::class)->create();
+        $field_4 = factory(App\Field::class)->create();
+        
+        $ad_type = factory(App\AdType::class)->create();
+        
+        $this->post('/attach_field', ['id' => $ad_type->id, 'field' => $field_1->id]);
+        $this->post('/attach_field', ['id' => $ad_type->id, 'field' => $field_2->id]);
+        $this->post('/attach_field', ['id' => $ad_type->id, 'field' => $field_3->id]);
+        $this->post('/attach_field', ['id' => $ad_type->id, 'field' => $field_4->id]);
+
+        $this->post('/demote_field', ['id' => $ad_type->id, 'field' => $field_2->id]);
+
+        $this->seeStatusCode(201)
+        ->seeJsonEquals([
+        "demoted" => true,
+        "data" => [
+        "id" => $ad_type->id,
+        "field" => $field_2->id,
+        "sequence" => 3
+        ]
+        ]);
+
+
+        $this->post('/get_fields', ['id' => $ad_type->id]);
+        
+        $data = json_decode($this->response->getContent(), true)['data'];
+        
+        $this->assertEquals(4, sizeof($data));
+        $this->assertEquals($field_1->id, $data[0]['id']);
+        $this->assertEquals($field_3->id, $data[1]['id']);
+        $this->assertEquals($field_2->id, $data[2]['id']);
+        $this->assertEquals($field_4->id, $data[3]['id']);
+        $this->assertEquals(1, $data[0]['pivot']['sequence']);
+        $this->assertEquals(2, $data[1]['pivot']['sequence']);
+        $this->assertEquals(3, $data[2]['pivot']['sequence']);
+        $this->assertEquals(4, $data[3]['pivot']['sequence']);
+
+    }
+    
 }

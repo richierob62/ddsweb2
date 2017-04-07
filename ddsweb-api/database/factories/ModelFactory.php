@@ -149,14 +149,14 @@ $factory->define(App\PageType::class, function ($faker) {
 });
 
 $factory->define(App\AdType::class, function ($faker) {
-
+    
     $page_type = \App\PageType::all();
     if($page_type->count() < 2) {
         $page_type = factory(App\PageType::class)->create()->id;
     } else {
         $page_type = $page_type->random()->id;
     }
-
+    
     return [
     'name' => $faker->word,
     'code' => $faker->word,
@@ -341,5 +341,35 @@ $factory->define(App\Field::class, function ($faker) {
     return [
     'name' => $faker->word,
     'description' => $faker->word
+    ];
+});
+
+$factory->define(App\FieldUsage::class, function ($faker) {
+    
+    $ad_type = \App\AdType::all();
+    if($ad_type->count() < 10) {
+        $ad_type = factory(App\AdType::class)->create()->id;
+    } else {
+        $ad_type = $ad_type->random()->id;
+    }
+    
+    $field = \App\Field::all();
+    if($field->count() < 10) {
+        $field = factory(App\Field::class)->create()->id;
+    } else {
+        $field = $field->random()->id;
+    }
+    
+    $last = App\FieldUsage::where('ad_type_id', $ad_type)->orderBy('sequence', 'desc')->first();
+    if ($last) {
+        $next_seq = $last->sequence + 1;
+    } else {
+        $next_seq = 1;
+    }
+    
+    return [
+    'ad_type_id' => $ad_type,
+    'field_id' => $field,
+    'sequence' => $next_seq
     ];
 });

@@ -775,7 +775,7 @@ WORKFLOW
 ===============================================================================================================
 Controller tests
     migrations & models to support
-        php artisan make:migration create_fields_table --create=fields
+        php artisan make:migration create_field_usages_table --create=field_usages
         php artisan migrate
         composer dump-autoload
         php artisan migrate:refresh

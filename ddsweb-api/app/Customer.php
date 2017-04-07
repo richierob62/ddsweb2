@@ -12,11 +12,11 @@ class Customer extends Model
         return [
         'name' => 'required|unique:customers,name,'.$id,
         'account_num' => 'required|unique:customers,account_num,'.$id,
-        'category_id'  => 'exists:categories,id',
-        'local_foreign_id' => 'exists:local_foreigns,id',
-        'pay_plan_id' => 'exists:pay_plans,id',
-        'primary_book_id'  => 'exists:primary_books,id',
-        'sales_rep_id' => 'exists:sales_reps,id',
+        'category_id'  => 'required|exists:categories,id',
+        'local_foreign_id' => 'required|exists:local_foreigns,id',
+        'pay_plan_id' => 'required|exists:pay_plans,id',
+        'primary_book_id'  => 'required|exists:primary_books,id',
+        'sales_rep_id' => 'required|exists:sales_reps,id',
         'billing_email' => 'email',
         'email' => 'email'
         ];
@@ -35,7 +35,13 @@ class Customer extends Model
         'pay_plan_id.exists' => 'You must select a valid pay plan.',
         'primary_book_id.exists' => 'You must select a valid primary book.',
         'sales_rep_id.exists' => 'You must select a valid sales rep.',
-        
+
+        'category_id.required' => 'You must select a valid category.',
+        'local_foreign_id.required' => 'You must select a valid local/foreign.',
+        'pay_plan_id.required' => 'You must select a valid pay plan.',
+        'primary_book_id.required' => 'You must select a valid primary book.',
+        'sales_rep_id.required' => 'You must select a valid sales rep.',
+
         'billing_email.email' => 'The billing email must be a valid email address.',
         'email.email' => 'The email must be a valid email address.'
         

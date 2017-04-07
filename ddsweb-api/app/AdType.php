@@ -12,7 +12,7 @@ class AdType extends Model
         return [
         'name' => 'required|unique:ad_types,name,'.$id,
         'code' => 'required|unique:ad_types,code,'.$id,
-        'page_type_id'  => 'exists:page_types,id',
+        'page_type_id'  => 'required|exists:page_types,id',
         ];
     }
     
@@ -24,14 +24,20 @@ class AdType extends Model
         'code.required' => 'An ad type code is required.',
         
         'page_type_id.exists' => 'You must select a valid page type.',
-
+        'page_type_id.required' => 'You must select a valid page type.',
+        
         ];
     }
-
-
+    
+    
     public function page_type() { return $this->belongsTo(PageType::class, 'page_type_id');  }
-
-
+    public function fields() {
+        return $this->belongsToMany(Field::class, 'ad_type_fields')
+                    ->withPivot('sequence')
+                    ->withTimestamps();  
+    }
+    
+    
     static public function scopeFilterOn($query, $key, $filter)
     {
         switch ($key) {
@@ -44,8 +50,8 @@ class AdType extends Model
             case 'page_type':
                 $query->whereHas('page_type', function($q) use ($filter) {
                     $q->where('name', 'LIKE', '%'.$filter.'%');
-                });
-                break;                
+            });
+            break;
             case 'id':
                 $query->where('id', $filter);
                 break;
@@ -53,15 +59,15 @@ class AdType extends Model
                 $query;
         }
     }
-    
+
     static public function orderField($sort_name) {
         switch ($sort_name) {
             case 'page_type':
-            return 'page_types.name';
-            break;
+                return 'page_types.name';
+                break;
             default:
-            return $sort_name;
-        }  
+                return $sort_name;
+        }
     }
 
 }

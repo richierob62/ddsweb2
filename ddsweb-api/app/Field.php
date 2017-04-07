@@ -23,6 +23,12 @@ class Field extends Model
         'description.required' => 'A field description is required.'
         ];
     }
+
+    public function ad_types() {
+        return $this->belongsToMany(AdType::class, 'ad_type_fields')
+                    ->withPivot('sequence')
+                    ->withTimestamps();  
+    }    
     
     static public function scopeFilterOn($query, $key, $filter)
     {
