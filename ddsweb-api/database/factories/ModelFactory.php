@@ -340,7 +340,11 @@ $factory->define(App\FindingLine::class, function ($faker) {
 $factory->define(App\Field::class, function ($faker) {
     return [
     'name' => $faker->word,
-    'description' => $faker->word
+    'description' => $faker->word,
+    'input_type' => $faker->word,
+    'ref_table' => $faker->word,
+    'filter_fld' => $faker->word,
+    'filter_val' => $faker->word,
     ];
 });
 

@@ -11,7 +11,8 @@ class Field extends Model
     static public function rules($id = null) {
         return [
         'name' => 'required|unique:fields,name,'.$id,
-        'description' => 'required|unique:fields,description,'.$id
+        'description' => 'required|unique:fields,description,'.$id,
+        'input_type' => 'required|in:text,select,typeahead'
         ];
     }
     
@@ -20,7 +21,9 @@ class Field extends Model
         'name.unique' => 'That field name has already been used.',
         'name.required' => 'A field name is required.',
         'description.unique' => 'That field description has already been used.',
-        'description.required' => 'A field description is required.'
+        'description.required' => 'A field description is required.',
+        'input_type.required' => 'An input type is required.',
+        'input_type.in' => 'The input type must be text, select or typeahead'
         ];
     }
 
@@ -38,6 +41,18 @@ class Field extends Model
                 break;
             case 'description':
                 $query->where('description', 'LIKE', '%'.$filter.'%');
+                break;
+            case 'input_type':
+                $query->where('input_type', 'LIKE', '%'.$filter.'%');
+                break;
+            case 'ref_table':
+                $query->where('ref_table', 'LIKE', '%'.$filter.'%');
+                break;
+            case 'filter_fld':
+                $query->where('filter_fld', 'LIKE', '%'.$filter.'%');
+                break;
+            case 'filter_val':
+                $query->where('filter_val', 'LIKE', '%'.$filter.'%');
                 break;
             case 'id':
                 $query->where('id', $filter);

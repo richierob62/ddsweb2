@@ -51,12 +51,20 @@ class FieldsControllerTest extends TestCase
         $field = factory(App\Field::class)->create()->toArray();
         $field['name'] = '0000something-123name-something';
         $field['description'] = '0000something-123descrip';
+        $field['input_type'] = 'text';
+        $field['ref_table'] = 'foo_ref';
+        $field['filter_fld'] = 'foo_fld';
+        $field['filter_val'] = 'foo_val';
         $this->post('/edit_field', $field);
         
         $this->post('/fields', [
         'filters' => [
         'name' => '123name',
         'description' => '123descrip',
+        'input_type' => 'text',
+        'ref_table' => 'foo_ref',
+        'filter_fld' => 'foo_fld',
+        'filter_val' => 'foo_val',
         'id' => $field['id']
         ],
         'sort_name' => 'name',
@@ -130,6 +138,10 @@ class FieldsControllerTest extends TestCase
         $this->post('/new_field', [
         'name' => 'foo',
         'description' => 'foo',
+        'input_type' => 'text',
+        'ref_table' => 'foo_ref',
+        'filter_fld' => 'foo_fld',
+        'filter_val' => 'foo_val',
         ]);
         
         $body = json_decode($this->response->getContent(), true);
@@ -138,6 +150,10 @@ class FieldsControllerTest extends TestCase
         $data = $body['data'];
         $this->assertEquals('foo', $data['name']);
         $this->assertEquals('foo', $data['description']);
+        $this->assertEquals('text', $data['input_type']);
+        $this->assertEquals('foo_ref', $data['ref_table']);
+        $this->assertEquals('foo_fld', $data['filter_fld']);
+        $this->assertEquals('foo_val', $data['filter_val']);
         $this->assertTrue($data['id'] > 0);
         
         $this
@@ -145,7 +161,11 @@ class FieldsControllerTest extends TestCase
         ->seeJson(['created' => true])
         ->seeInDatabase('fields', [
         'name' => 'foo',
-        'description' => 'foo'
+        'description' => 'foo',
+        'input_type' => 'text',
+        'ref_table' => 'foo_ref',
+        'filter_fld' => 'foo_fld',
+        'filter_val' => 'foo_val'
         ]);
         
     }
@@ -160,7 +180,11 @@ class FieldsControllerTest extends TestCase
         $this->post('/edit_field', [
         'id' => $field->id,
         'name' => 'foo_edited',
-        'description' => 'foo_edited'
+        'description' => 'foo_edited',
+        'input_type' => 'text',
+        'ref_table' => 'foo_ref',
+        'filter_fld' => 'foo_fld',
+        'filter_val' => 'foo_val',
         ]);
         
         $body = json_decode($this->response->getContent(), true);
@@ -169,7 +193,14 @@ class FieldsControllerTest extends TestCase
         $this
         ->seeStatusCode(201)
         ->seeJson(['updated' => true, 'id' => $id])
-        ->seeInDatabase('fields', ['name' => 'foo_edited']);
+        ->seeInDatabase('fields', [
+        'name' => 'foo_edited',
+        'description' => 'foo_edited',
+        'input_type' => 'text',
+        'ref_table' => 'foo_ref',
+        'filter_fld' => 'foo_fld',
+        'filter_val' => 'foo_val',
+        ]);
         
     }
     
@@ -180,7 +211,11 @@ class FieldsControllerTest extends TestCase
         $this->post('/edit_field', [
         'id' => 9999999,
         'name' => 'foo_edited',
-        'description' => 'foo_edited'
+        'description' => 'foo_edited',
+        'input_type' => 'text',
+        'ref_table' => 'foo_ref',
+        'filter_fld' => 'foo_fld',
+        'filter_val' => 'foo_val',         
         ]);
         
         $this
@@ -231,9 +266,11 @@ class FieldsControllerTest extends TestCase
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('description', $errors);
+        $this->assertArrayHasKey('input_type', $errors);
         
         $this->assertEquals(["A field name is required."], $errors['name']);
         $this->assertEquals(["A field description is required."], $errors['description']);
+        $this->assertEquals(["An input type is required."], $errors['input_type']);
         
     }
     
@@ -253,9 +290,11 @@ class FieldsControllerTest extends TestCase
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('description', $errors);
+        $this->assertArrayHasKey('input_type', $errors);
         
         $this->assertEquals(["A field name is required."], $errors['name']);
         $this->assertEquals(["A field description is required."], $errors['description']);
+        $this->assertEquals(["An input type is required."], $errors['input_type']);
         
     }
     
@@ -269,6 +308,10 @@ class FieldsControllerTest extends TestCase
         $this->post('/new_field', [
         'description' => $field['description'],
         'name' => $field['name'],
+        'input_type' => 'text',
+        'ref_table' => 'foo_ref',
+        'filter_fld' => 'foo_fld',
+        'filter_val' => 'foo_val',        
         ]);
         
         $this->assertEquals(422, $this->response->getStatusCode());
@@ -296,6 +339,10 @@ class FieldsControllerTest extends TestCase
         'id' => $field_2->id,
         'name' => $field_1->name,
         'description' => $field_1->description,
+        'input_type' => 'text',
+        'ref_table' => 'foo_ref',
+        'filter_fld' => 'foo_fld',
+        'filter_val' => 'foo_val',        
         ]);
         
         

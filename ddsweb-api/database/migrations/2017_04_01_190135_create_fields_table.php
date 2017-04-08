@@ -17,6 +17,10 @@ class CreateFieldsTable extends Migration
             $table->increments('id');
             $table->string('name')->index();
             $table->string('description')->index();              
+            $table->string('input_type');              
+            $table->string('ref_table')->nullable();              
+            $table->string('filter_fld')->nullable();              
+            $table->string('filter_val')->nullable();              
             $table->timestamps();
         });
     }

@@ -805,10 +805,17 @@ react
 
 lumen
 
+    + add input_type, ref_table and filter to field
+    + create field_order_lines
+    + add functions to order_line to create field_order_lines and get data
+
+    + field_order_lines : holds values for fields used by order_lines; 
+        udac determines ad_type
+        ad_type determins allowed fields
+        field determines input_type, ref_table and filter
+        
     + change all migrations to cascade delete for foreign keys
     * change all validations to check usage before delete
-    + usage table
-    + order line sort and filter based on usage of fields
-    + order lien next sequence number
+
 
     
