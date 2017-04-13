@@ -323,10 +323,19 @@ $factory->define(App\OrderLine::class, function ($faker) {
     } else {
         $udac = $udac->random()->id;
     }
-    
+
+    $last = App\OrderLine::where('order_id', $order)
+    ->orderBy('sequence', 'desc')->first();
+    if ($last) {
+        $next_seq = $last->sequence + 1;
+    } else {
+        $next_seq = 1;
+    }
+
     return [
     'order_id' => $order,
     'udac_id' => $udac,
+    'sequence' => $next_seq
     ];
 });
 

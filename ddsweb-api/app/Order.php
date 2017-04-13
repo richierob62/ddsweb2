@@ -52,6 +52,7 @@ class Order extends Model
     public function customer() { return $this->belongsTo(Customer::class, 'customer_id');  }
     public function order_status() { return $this->belongsTo(OrderStatus::class, 'order_status_id');  }
     public function sales_rep() { return $this->belongsTo(SalesRep::class, 'sales_rep_id');  }
+    public function order_lines() { return $this->hasMany(OrderLine::class);  }
     
     static public function scopeFilterOn($query, $key, $filter)
     {

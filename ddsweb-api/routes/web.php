@@ -109,7 +109,6 @@ $app->post('remove_field', 'AdTypesController@deleteField');
 $app->post('promote_field', 'AdTypesController@promoteField');
 $app->post('demote_field', 'AdTypesController@demoteField');
 
-
 $app->post('udacs', 'UdacsController@udacs');
 $app->post('udac_reference', 'UdacsController@referenceList');
 $app->post('udac', 'UdacsController@udacByID');
@@ -117,13 +116,16 @@ $app->post('new_udac', 'UdacsController@newUdac');
 $app->post('edit_udac', 'UdacsController@editUdac');
 $app->post('delete_udac', 'UdacsController@deleteUdac');
 
-$app->post('order_lines', 'OrderLinesController@orderLines');
-$app->post('order_line_reference', 'OrderLinesController@referenceList');
-$app->post('order_line', 'OrderLinesController@orderLineByID');
 $app->post('new_order_line', 'OrderLinesController@newOrderLine');
+$app->post('order_lines', 'OrderLinesController@orderLines');
+$app->post('order_line', 'OrderLinesController@orderLineByID');
 $app->post('edit_order_line', 'OrderLinesController@editOrderLine');
 $app->post('delete_order_line', 'OrderLinesController@deleteOrderLine');
-$app->post('next_sequence_number', 'OrderLinesController@nextSequenceNumber');
+
+$app->post('get_udac_data', 'OrderLinesController@getUdacData');
+$app->post('edit_udac_data', 'OrderLinesController@editUdacData');
+$app->post('promote_order_line', 'OrderLinesController@promoteOrderLine');
+$app->post('demote_order_line', 'OrderLinesController@demoteOrderLine');
 
 $app->post('finding_lines', 'FindingLinesController@findingLines');
 $app->post('finding_line_reference', 'FindingLinesController@referenceList');

@@ -33,6 +33,12 @@ class Field extends Model
                     ->withTimestamps();  
     }    
     
+    public function order_lines() { return $this->belongsToMany(OrderLine::class, 'field_order_line')
+        ->withPivot(['is_reference', 'reference_table', 'value' ])
+        ->withTimestamps();
+    }
+
+
     static public function scopeFilterOn($query, $key, $filter)
     {
         switch ($key) {

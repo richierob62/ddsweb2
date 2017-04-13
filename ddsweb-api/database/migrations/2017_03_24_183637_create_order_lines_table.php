@@ -20,6 +20,7 @@ class CreateOrderLinesTable extends Migration
             // ref
             $table->integer('order_id')->unsigned()->index();
             $table->integer('udac_id')->unsigned()->index();
+            $table->integer('sequence')->unsigned();
 
             $table->timestamps();
         });

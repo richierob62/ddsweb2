@@ -14,7 +14,7 @@ class OrderLine extends Model
         'udac_id'  => 'required|exists:udacs,id',
         ];
     }
-            
+    
     static public function errorMessages() {
         return [
         'order_id.exists' => 'You must select a valid order number.',
@@ -26,6 +26,10 @@ class OrderLine extends Model
     
     public function order() { return $this->belongsTo(Order::class, 'order_id');  }
     public function udac() { return $this->belongsTo(Udac::class, 'udac_id');  }
+    public function fields() { return $this->belongsToMany(Field::class, 'field_order_line')
+        ->withPivot(['is_reference', 'reference_table', 'value' ])
+        ->withTimestamps();
+    }
     
     static public function scopeFilterOn($query, $key, $filter)
     {
@@ -33,40 +37,32 @@ class OrderLine extends Model
             case 'order':
                 $query->whereHas('order', function($q) use ($filter) {
                     $q->where('order_num', 'LIKE', '%'.$filter.'%');
-                });
-                break;
-            case 'udac':
-                $query->whereHas('udac', function($q) use ($filter) {
-                    $q->where('name', 'LIKE', '%'.$filter.'%');
-                });
-                break;
-            // case 'heading':
-            //     $query->whereHas('heading', function($q) use ($filter) {
-            //         $q->where('name', 'LIKE', '%'.$filter.'%');
-            //     });
-            //     break;        
-            // case 'sequence':
-            //     $query->where('sequence', $filter);
-            //     break;                        
-            case 'id':
-                $query->where('id', $filter);
-                break;
-            default:
-                $query;
-        }
+            });
+            break;
+        case 'udac':
+            $query->whereHas('udac', function($q) use ($filter) {
+                $q->where('name', 'LIKE', '%'.$filter.'%');
+        });
+        break;
+        case 'id':
+            $query->where('id', $filter);
+            break;
+        default:
+            $query;
     }
+}
 
-    static public function orderField($sort_name) {
-        switch ($sort_name) {
-            case 'order':
+static public function orderField($sort_name) {
+    switch ($sort_name) {
+        case 'order':
             return 'orders.order_num';
             break;
-            case 'udac':
+        case 'udac':
             return 'udacs.name';
             break;
-            default:
+        default:
             return $sort_name;
-        }  
     }
+}
 
 }

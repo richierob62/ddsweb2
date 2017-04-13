@@ -775,7 +775,8 @@ WORKFLOW
 ===============================================================================================================
 Controller tests
     migrations & models to support
-        php artisan make:migration create_field_usages_table --create=field_usages
+        php artisan make:migration create_field_order_lines_table --create=field_order_lines
+        
         php artisan migrate
         composer dump-autoload
         php artisan migrate:refresh
@@ -805,7 +806,6 @@ react
 
 lumen
 
-    + add input_type, ref_table and filter to field
     + create field_order_lines
     + add functions to order_line to create field_order_lines and get data
 
