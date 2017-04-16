@@ -217,7 +217,25 @@ class OrderStatusesControllerTest extends TestCase
         ->seeStatusCode(404)
         ->seeJson(['error' => 'Not Found']);
     }
-    
+
+
+    /** @test **/
+    public function delete_should_fail_if_id_in_use()
+    {
+        $order_status = factory(App\OrderStatus::class)->create();
+
+        $order = factory(App\Order::class)->raw();
+        $order['order_status_id'] = $order_status->id;
+        $this->post('/new_order', $order);
+
+        $this
+        ->post('/delete_order_status', ['id' => $order_status->id])
+        ->seeStatusCode(422)
+        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+    }
+
+
+
     // required - create
     /** @test **/
     public function it_validates_required_fields_when_creating_a_new_order_status()

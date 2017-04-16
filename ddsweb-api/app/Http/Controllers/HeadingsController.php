@@ -123,6 +123,12 @@ class HeadingsController extends Controller
         $id = $request->input('id');
         try {
             $heading = Heading::findOrFail($id);
+
+
+            if(!$heading->okToDelete()) {
+                return response()->json(['error' => 'Cannot be deleted: Being used'],422);
+            }
+
             $heading->delete();
             return response()->json([
             'deleted' => true,

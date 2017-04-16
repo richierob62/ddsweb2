@@ -42,7 +42,19 @@ class PrimaryBook extends Model
         'sales_close.required' => 'A sales close date is required.',
         ];
     }
-    
+
+
+    public function okToDelete() {
+        return ($this->customers()->count() == 0) && 
+        ($this->orders()->count() == 0) &&
+        ($this->udacs()->count() == 0);
+    }
+    public function customers() { return $this->hasMany(Customer::class); }
+    public function orders() { return $this->hasMany(Order::class); }
+    public function udacs() { return $this->hasMany(Udac::class); }
+    public function source_books() { return $this->belongsToMany(SourceBook::class); }
+
+
     static public function scopeFilterOn($query, $key, $filter)
     {
         switch ($key) {

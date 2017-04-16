@@ -33,7 +33,12 @@ class Udac extends Model
         
         ];
     }
-    
+
+    public function okToDelete() {
+        return $this->order_lines()->count() == 0;
+    }
+    public function order_lines() { return $this->hasMany(OrderLine::class); }
+
     public function primary_book() { return $this->belongsTo(PrimaryBook::class, 'primary_book_id');  }
     public function ad_type() { return $this->belongsTo(AdType::class, 'ad_type_id');  }
     

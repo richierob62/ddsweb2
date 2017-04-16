@@ -122,6 +122,11 @@ class SalesRepsController extends Controller
         $id = $request->input('id');
         try {
             $sales_rep = SalesRep::findOrFail($id);
+
+            if(!$sales_rep->okToDelete()) {
+                return response()->json(['error' => 'Cannot be deleted: Being used'],422);
+            } 
+                       
             $sales_rep->delete();
             return response()->json([
             'deleted' => true,

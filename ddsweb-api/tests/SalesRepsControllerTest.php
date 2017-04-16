@@ -238,7 +238,40 @@ class SalesRepsControllerTest extends TestCase
         ->seeStatusCode(404)
         ->seeJson(['error' => 'Not Found']);
     }
-    
+
+
+    /** @test **/
+    public function delete_should_fail_if_id_in_use_by_customer()
+    {
+        $sales_rep = factory(App\SalesRep::class)->create();
+
+        $customer = factory(App\Customer::class)->raw();
+        $customer['sales_rep_id'] = $sales_rep->id;
+        $this->post('/new_customer', $customer);
+
+        $this
+        ->post('/delete_sales_rep', ['id' => $sales_rep->id])
+        ->seeStatusCode(422)
+        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+    }
+
+
+    /** @test **/
+    public function delete_should_fail_if_id_in_use_by_order()
+    {
+        $sales_rep = factory(App\SalesRep::class)->create();
+
+        $order = factory(App\Order::class)->raw();
+        $order['sales_rep_id'] = $sales_rep->id;
+        $this->post('/new_order', $order);
+
+        $this
+        ->post('/delete_sales_rep', ['id' => $sales_rep->id])
+        ->seeStatusCode(422)
+        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+    }
+
+
     // required - create
     /** @test **/
     public function it_validates_required_fields_when_creating_a_new_sales_rep()

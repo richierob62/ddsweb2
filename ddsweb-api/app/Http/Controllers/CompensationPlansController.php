@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Field;
+use App\CompensationPlan;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 
 /**
-* Class FieldsController
+* Class CompensationPlansController
 * @package App\Http\Controllers
 */
-class FieldsController extends Controller
+class CompensationPlansController extends Controller
 {
     
-    public function fields(Request $request)
+    public function compensationPlans(Request $request)
     {
         $filters = $request->input('filters');
         
@@ -28,44 +28,43 @@ class FieldsController extends Controller
         if(sizeof($sort_dir) == 0) {
             $sort_dir = 'asc';
         }
-        
-        $query = Field::select(\DB::raw('fields.*'))
-        ->orderBy(Field::orderField($sort_name), $sort_dir);
+
+        $query = CompensationPlan::select(\DB::raw('compensation_plans.*'))
+        ->orderBy(CompensationPlan::orderField($sort_name), $sort_dir);       
         
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {
-                $query = Field::filterOn($key, $filter);
+                $query = CompensationPlan::filterOn($key, $filter);
             }
         }
-        
         
         return response()->json(['data' => $query->get()]);
     }
     
     public function referenceList() {
-        $refs =  Field::orderBy('name')->get(['id', 'name'])
+        $refs =  CompensationPlan::orderBy('name')->get(['id', 'name'])
         ->map( function ($item) {
             return ['id' => $item->id, 'display' => $item->name ];
         });
         return response()->json(['data' => $refs]);
     }
     
-    public function fieldByID(Request $request)
+    public function compensationPlanByID(Request $request)
     {
         $id = $request->input('id');
         try {
-            return ['data' => Field::findOrFail($id)->toArray()];
+            return ['data' => CompensationPlan::findOrFail($id)->toArray()];
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Not Found'],404);
         }
     }
     
-    public function newField(Request $request)
+    public function newCompensationPlan(Request $request)
     {
         $validator = Validator::make(
         $request->all(),
-        Field::rules(),
-        Field::errorMessages()
+        CompensationPlan::rules(),
+        CompensationPlan::errorMessages()
         );
         
         if($validator->fails()) {
@@ -74,10 +73,10 @@ class FieldsController extends Controller
         
         try {
             
-            $field = Field::create($request->all());
+            $compensation_plan = CompensationPlan::create($request->all());
             return response()->json([
             'created' => true,
-            'data' => $field->toArray()
+            'data' => $compensation_plan->toArray()
             ], 201);
             
         } catch (ModelNotFoundException $e) {
@@ -88,15 +87,15 @@ class FieldsController extends Controller
         
     }
     
-    public function editField(Request $request)
+    public function editCompensationPlan(Request $request)
     {
         
         $id = $request->input('id');
         
         $validator = Validator::make(
         $request->all(),
-        Field::rules($id),
-        Field::errorMessages()
+        CompensationPlan::rules($id),
+        CompensationPlan::errorMessages()
         );
         
         if($validator->fails()) {
@@ -104,30 +103,30 @@ class FieldsController extends Controller
         }
         
         try {
-            $field = Field::findOrFail($id);
+            $compensation_plan = CompensationPlan::findOrFail($id);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Not Found'],404);
         }
         
-        $field->fill($request->all());
-        $field->save();
+        $compensation_plan->fill($request->all());
+        $compensation_plan->save();
         return response()->json([
         'updated' => true,
-        'data' => $field->toArray()
+        'data' => $compensation_plan->toArray()
         ], 201);
     }
     
-    public function deleteField(Request $request)
+    public function deleteCompensationPlan(Request $request)
     {
         $id = $request->input('id');
         try {
-            $field = Field::findOrFail($id);
+            $compensation_plan = CompensationPlan::findOrFail($id);
 
-            if(!$field->okToDelete()) {
+            if(!$compensation_plan->okToDelete()) {
                 return response()->json(['error' => 'Cannot be deleted: Being used'],422);
             }
 
-            $field->delete();
+            $compensation_plan->delete();
             return response()->json([
             'deleted' => true,
             'id' => $id
@@ -136,5 +135,4 @@ class FieldsController extends Controller
             return response()->json(['error' => 'Not Found'],404);
         }
     }
-
 }

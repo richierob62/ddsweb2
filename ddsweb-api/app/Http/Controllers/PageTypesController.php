@@ -121,6 +121,11 @@ class PageTypesController extends Controller
         $id = $request->input('id');
         try {
             $page_type = PageType::findOrFail($id);
+
+            if(!$page_type->okToDelete()) {
+                return response()->json(['error' => 'Cannot be deleted: Being used'],422);
+            }
+
             $page_type->delete();
             return response()->json([
             'deleted' => true,

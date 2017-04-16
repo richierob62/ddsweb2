@@ -42,7 +42,13 @@ class SourceBook extends Model
         'sales_close.required' => 'A sales close date is required.',
         ];
     }
-    
+
+    public function okToDelete() {
+        return $this->primary_books()->count() == 0;
+    }
+
+    public function primary_books() { return $this->belongsToMany(PrimaryBook::class); }
+
     static public function scopeFilterOn($query, $key, $filter)
     {
         switch ($key) {

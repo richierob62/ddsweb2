@@ -23,7 +23,11 @@ class LocalForeign extends Model
         'code.required' => 'A local\/foreign code is required.'
         ];
     }
-    
+
+    public function okToDelete() {
+        return $this->customers()->count() == 0;
+    }
+
     public function customers() { return $this->hasMany(Customer::class);  }
     
     static public function scopeFilterOn($query, $key, $filter)

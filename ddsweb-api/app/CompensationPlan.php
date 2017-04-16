@@ -18,11 +18,18 @@ class CompensationPlan extends Model
     static public function errorMessages() {
         return [
         'name.unique' => 'That name has already been used.',
-        'name.required' => 'A name is required.',
+        'name.required' => 'A compensation plan name is required.',
         'code.unique' => 'That code has already been used.',
-        'code.required' => 'A code is required.'
+        'code.required' => 'A compensation plan code is required.'
         ];
     }
+    
+
+    public function okToDelete() {
+        return $this->sales_reps()->count() == 0;
+    }
+
+    public function sales_reps() { return $this->hasMany(SalesRep::class);  }
     
     static public function scopeFilterOn($query, $key, $filter)
     {
@@ -41,12 +48,14 @@ class CompensationPlan extends Model
         }
     }
     
-    static public function scopeSortResultsBy($query, $sort_name, $sort_dir) {
+    static public function orderField($sort_name) {
         switch ($sort_name) {
-            case 'somerelativefield':
-                break;
+            case 'foo':
+            return 'huh';
+            break;
             default:
-                $query->orderBy($sort_name, $sort_dir);
-        }
+            return $sort_name;
+        }  
     }
+    
 }

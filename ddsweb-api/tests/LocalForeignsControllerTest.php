@@ -217,7 +217,25 @@ class LocalForeignsControllerTest extends TestCase
         ->seeStatusCode(404)
         ->seeJson(['error' => 'Not Found']);
     }
-    
+
+
+    /** @test **/
+    public function delete_should_fail_if_id_in_use()
+    {
+        $local_foreign = factory(App\LocalForeign::class)->create();
+
+        $customer = factory(App\Customer::class)->raw();
+        $customer['local_foreign_id'] = $local_foreign->id;
+        $this->post('/new_customer', $customer);
+
+        $this
+        ->post('/delete_local_foreign', ['id' => $local_foreign->id])
+        ->seeStatusCode(422)
+        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+    }
+
+
+
     // required - create
     /** @test **/
     public function it_validates_required_fields_when_creating_a_new_local_foreign()

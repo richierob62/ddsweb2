@@ -121,6 +121,11 @@ class PayPlansController extends Controller
         $id = $request->input('id');
         try {
             $pay_plan = PayPlan::findOrFail($id);
+
+            if(!$pay_plan->okToDelete()) {
+                return response()->json(['error' => 'Cannot be deleted: Being used'],422);
+            }
+
             $pay_plan->delete();
             return response()->json([
             'deleted' => true,

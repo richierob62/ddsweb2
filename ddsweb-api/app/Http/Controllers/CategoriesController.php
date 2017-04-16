@@ -122,6 +122,11 @@ class CategoriesController extends Controller
         $id = $request->input('id');
         try {
             $category = Category::findOrFail($id);
+
+            if(!$category->okToDelete()) {
+                return response()->json(['error' => 'Cannot be deleted: Being used'],422);
+            }
+
             $category->delete();
             return response()->json([
             'deleted' => true,

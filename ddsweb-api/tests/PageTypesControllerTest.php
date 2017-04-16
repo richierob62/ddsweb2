@@ -217,7 +217,40 @@ class PageTypesControllerTest extends TestCase
         ->seeStatusCode(404)
         ->seeJson(['error' => 'Not Found']);
     }
-    
+
+
+
+    /** @test **/
+    public function delete_should_fail_if_id_in_use_by_a_heading()
+    {
+        $page_type = factory(App\PageType::class)->create();
+
+        $heading = factory(App\Heading::class)->raw();
+        $heading['page_type_id'] = $page_type->id;
+        $this->post('/new_heading', $heading);
+
+        $this
+        ->post('/delete_page_type', ['id' => $page_type->id])
+        ->seeStatusCode(422)
+        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+    }
+
+    /** @test **/
+    public function delete_should_fail_if_id_in_use_by_an_ad_type()
+    {
+        $page_type = factory(App\PageType::class)->create();
+
+        $ad_type = factory(App\AdType::class)->raw();
+        $ad_type['page_type_id'] = $page_type->id;
+        $this->post('/new_ad_type', $ad_type);
+
+        $this
+        ->post('/delete_page_type', ['id' => $page_type->id])
+        ->seeStatusCode(422)
+        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+    }
+
+
     // required - create
     /** @test **/
     public function it_validates_required_fields_when_creating_a_new_page_type()

@@ -123,6 +123,11 @@ class UdacsController extends Controller
         $id = $request->input('id');
         try {
             $udac = Udac::findOrFail($id);
+
+            if(!$udac->okToDelete()) {
+                return response()->json(['error' => 'Cannot be deleted: Being used'],422);
+            }
+
             $udac->delete();
             return response()->json([
             'deleted' => true,

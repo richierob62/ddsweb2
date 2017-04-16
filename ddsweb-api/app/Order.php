@@ -110,4 +110,9 @@ class Order extends Model
         }  
     }
 
+    public function deleteOrderAndLines() {
+        OrderLine::where('order_id', $this->id)->delete();
+        $this->delete();
+    }
+
 }

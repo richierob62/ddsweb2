@@ -263,7 +263,6 @@ class OrderLinesControllerTest extends TestCase
         $this->assertEquals(["You must select a valid udac."], $errors['udac_id']);
     }
     
-    
     // type - edit
     /** @test **/
     public function it_validates_reference_fields_on_edit()

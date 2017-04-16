@@ -217,7 +217,54 @@ class FindingLinesControllerTest extends TestCase
         ->seeStatusCode(404)
         ->seeJson(['error' => 'Not Found']);
     }
-    
+
+
+    /** @test **/
+    public function delete_should_fail_if_id_in_use()
+    {
+        $finding_line = factory(App\FindingLine::class)->create();
+
+        // create a field
+        $field = factory(App\Field::class)->raw();
+        $field['input_type'] = 'select';     
+        $field['ref_table'] = 'finding_lines';     
+        $this->post('/new_field', $field);
+        $field = json_decode($this->response->getContent(), true)['data'];
+
+        // create an ad_type using that fields
+        $ad_type = factory(App\AdType::class)->create();
+        $this->post('/attach_field', ['id' => $ad_type->id, 'field' => $field['id']]);
+        
+        // create a udac of that ad_type
+        $udac = factory(App\Udac::class)->create();
+        $udac->ad_type_id = $ad_type->id;
+        $udac->save();
+        
+        // create an order line using api
+        $order_line = factory(App\OrderLine::class)->raw();
+        $order_line['udac_id'] = $udac->id;
+        $this->post('/new_order_line',$order_line);
+        $order_line = json_decode($this->response->getContent(), true)['data'];
+
+        // update field data to use finding line
+        $new_field_values = [
+            $field['id'] => $finding_line->id
+        ];
+        
+        $this
+        ->post('/edit_udac_data',
+        [
+        'order_line_id' => $order_line['id'],
+        'fields_data' => $new_field_values
+        ]);
+
+        $this
+        ->post('/delete_finding_line', ['id' => $finding_line->id])
+        ->seeStatusCode(422)
+        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+    }
+
+
     // required - create
     /** @test **/
     public function it_validates_required_fields_when_creating_a_new_finding_line()

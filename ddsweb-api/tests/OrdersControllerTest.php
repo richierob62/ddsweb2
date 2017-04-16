@@ -446,4 +446,28 @@ class OrdersControllerTest extends TestCase
         $this->assertEquals('201', $data);
     }
 
+    /** @test **/
+    public function it_deletes_order_lines_when_deleting_an_order()
+    {
+
+        $order = factory(App\Order::class)->create();
+        
+        $id = $order->id;
+
+        // add order_line
+        $new = factory(App\OrderLine::class)->raw();
+        $new['order_id'] = $order->id;    
+        $this->post('/new_order_line', $new);
+        
+        $this
+        ->seeStatusCode(201)
+        ->seeJson(['created' => true])
+        ->seeInDatabase('order_lines', ['order_id' => $order->id]);
+
+        $this->post('/delete_order', ['id' => $id]);
+        
+        $this->notSeeInDatabase('order_lines', ['order_id' => $order->id]);
+
+    }
+
 }

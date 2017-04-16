@@ -228,7 +228,22 @@ class AdTypesControllerTest extends TestCase
         ->seeStatusCode(404)
         ->seeJson(['error' => 'Not Found']);
     }
-    
+
+    /** @test **/
+    public function delete_should_fail_if_id_in_use()
+    {
+        $ad_type = factory(App\AdType::class)->create();
+
+        $udac = factory(App\Udac::class)->raw();
+        $udac['ad_type_id'] = $ad_type->id;
+        $this->post('/new_udac', $udac);
+
+        $this
+        ->post('/delete_ad_type', ['id' => $ad_type->id])
+        ->seeStatusCode(422)
+        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+    }
+
     // required - create
     /** @test **/
     public function it_validates_required_fields_when_creating_a_new_ad_type()

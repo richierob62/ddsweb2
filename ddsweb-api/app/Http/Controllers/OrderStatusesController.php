@@ -73,10 +73,10 @@ class OrderStatusesController extends Controller
         
         try {
             
-            $pay_plan = OrderStatus::create($request->all());
+            $order_status = OrderStatus::create($request->all());
             return response()->json([
             'created' => true,
-            'data' => $pay_plan->toArray()
+            'data' => $order_status->toArray()
             ], 201);
             
         } catch (ModelNotFoundException $e) {
@@ -103,16 +103,16 @@ class OrderStatusesController extends Controller
         }
         
         try {
-            $pay_plan = OrderStatus::findOrFail($id);
+            $order_status = OrderStatus::findOrFail($id);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Not Found'],404);
         }
         
-        $pay_plan->fill($request->all());
-        $pay_plan->save();
+        $order_status->fill($request->all());
+        $order_status->save();
         return response()->json([
         'updated' => true,
-        'data' => $pay_plan->toArray()
+        'data' => $order_status->toArray()
         ], 201);
     }
     
@@ -120,8 +120,14 @@ class OrderStatusesController extends Controller
     {
         $id = $request->input('id');
         try {
-            $pay_plan = OrderStatus::findOrFail($id);
-            $pay_plan->delete();
+            $order_status = OrderStatus::findOrFail($id);
+
+            if(!$order_status->okToDelete()) {
+                return response()->json(['error' => 'Cannot be deleted: Being used'],422);
+            }
+
+
+            $order_status->delete();
             return response()->json([
             'deleted' => true,
             'id' => $id

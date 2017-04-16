@@ -3,7 +3,7 @@
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
-class PayPlansControllerTest extends TestCase
+class CompensationPlansControllerTest extends TestCase
 {
     use DatabaseMigrations;
     
@@ -15,17 +15,17 @@ class PayPlansControllerTest extends TestCase
     /** @test **/
     public function index_status_code_should_be_200()
     {
-        factory(App\PayPlan::class, 3)->create();
+        factory(App\CompensationPlan::class, 3)->create();
         $this
-        ->post('/pay_plans')
+        ->post('/compensation_plans')
         ->seeStatusCode(200);
     }
     
     /** @test **/
     public function index_should_return_a_collection_of_records()
     {
-        factory(App\PayPlan::class, 3)->create();
-        $this->post('/pay_plans');
+        factory(App\CompensationPlan::class, 3)->create();
+        $this->post('/compensation_plans');
         $data = json_decode($this->response->getContent(), true)['data'];
         $expected = [
         'data' => $data
@@ -37,8 +37,8 @@ class PayPlansControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_reference_list()
     {
-        factory(App\PayPlan::class, 3)->create();
-        $this->post('/pay_plan_reference');
+        factory(App\CompensationPlan::class, 3)->create();
+        $this->post('/compensation_plan_reference');
         $data = json_decode($this->response->getContent(), true);
         $this->seeJsonEquals($data);
     }
@@ -47,17 +47,17 @@ class PayPlansControllerTest extends TestCase
     public function index_should_return_a_collection_of_filtered_and_ordered__records()
     {
         
-        factory(App\PayPlan::class, 6)->create();
-        $pay_plan = factory(App\PayPlan::class)->create()->toArray();
-        $pay_plan['name'] = '0000something-123name-something';
-        $pay_plan['code'] = '0000something-123code';
-        $this->post('/edit_pay_plan', $pay_plan);
+        factory(App\CompensationPlan::class, 6)->create();
+        $compensation_plan = factory(App\CompensationPlan::class)->create()->toArray();
+        $compensation_plan['name'] = '0000something-123name-something';
+        $compensation_plan['code'] = '0000something-123code';
+        $this->post('/edit_compensation_plan', $compensation_plan);
         
-        $this->post('/pay_plans', [
+        $this->post('/compensation_plans', [
         'filters' => [
         'name' => '123name',
         'code' => '123code',
-        'id' => $pay_plan['id']
+        'id' => $compensation_plan['id']
         ],
         'sort_name' => 'name',
         'sort_dir' => 'desc'
@@ -65,7 +65,7 @@ class PayPlansControllerTest extends TestCase
         $data = json_decode($this->response->getContent(), true)['data'];
         $this->assertEquals(1, sizeOf($data));
         
-        $this->post('/pay_plans', [
+        $this->post('/compensation_plans', [
         'filters' => [],
         'sort_name' => NULL,
         'sort_dir' => NULL
@@ -73,26 +73,26 @@ class PayPlansControllerTest extends TestCase
         $data = json_decode($this->response->getContent(), true)['data'];
         $this->assertEquals(7, sizeOf($data));
         
-        $this->post('/pay_plans', [
+        $this->post('/compensation_plans', [
         'filters' => [],
         'sort_name' => 'name',
         'sort_dir' => 'asc'
         ]);
         $data = json_decode($this->response->getContent(), true)['data'];
         $first_rec = $data[0];
-        $this->assertEquals($first_rec['name'], $pay_plan['name']);
+        $this->assertEquals($first_rec['name'], $compensation_plan['name']);
         
-        $this->post('/pay_plans');
+        $this->post('/compensation_plans');
         $data = json_decode($this->response->getContent(), true)['data'];
         $this->assertEquals(7, sizeOf($data));
         
     }
     
     /** @test **/
-    public function it_returns_a_valid_pay_plan()
+    public function it_returns_a_valid_compensation_plan()
     {
-        factory(App\PayPlan::class)->create();
-        $this->post('/pay_plans');
+        factory(App\CompensationPlan::class)->create();
+        $this->post('/compensation_plans');
         $data = json_decode($this->response->getContent(), true)['data'];
         $id = $data[0]['id'];
         
@@ -101,7 +101,7 @@ class PayPlansControllerTest extends TestCase
         'data' => $data[0]
         ];
         $this
-        ->post('/pay_plan', ['id' => $id])
+        ->post('/compensation_plan', ['id' => $id])
         ->seeStatusCode(200)
         ->seeJsonEquals($expected);
         
@@ -114,19 +114,19 @@ class PayPlansControllerTest extends TestCase
     }
     
     /** @test **/
-    public function returns_an_error_when_the_pay_plan_id_does_not_exist()
+    public function returns_an_error_when_the_compensation_plan_id_does_not_exist()
     {
         $this
-        ->post('/pay_plan', ['id' => 999999])
+        ->post('/compensation_plan', ['id' => 999999])
         ->seeStatusCode(404)
         ->seeJson(['error' => 'Not Found']);
     }
     
     /** @test **/
-    public function it_saves_new_pay_plan_in_the_database()
+    public function it_saves_new_compensation_plan_in_the_database()
     {
         
-        $this->post('/new_pay_plan', [
+        $this->post('/new_compensation_plan', [
         'name' => 'foo',
         'code' => 'foo'
         ]);
@@ -142,7 +142,7 @@ class PayPlansControllerTest extends TestCase
         $this
         ->seeStatusCode(201)
         ->seeJson(['created' => true])
-        ->seeInDatabase('pay_plans', [
+        ->seeInDatabase('compensation_plans', [
         'name' => 'foo',
         'code' => 'foo'
         ]);
@@ -152,12 +152,12 @@ class PayPlansControllerTest extends TestCase
     /** @test **/
     public function update_should_pass_with_a_valid_id()
     {
-        $pay_plan = factory(App\PayPlan::class)->create();
+        $compensation_plan = factory(App\CompensationPlan::class)->create();
         
-        $id = $pay_plan->id;
+        $id = $compensation_plan->id;
         
-        $this->post('/edit_pay_plan', [
-        'id' => $pay_plan->id,
+        $this->post('/edit_compensation_plan', [
+        'id' => $compensation_plan->id,
         'name' => 'foo_edited',
         'code' => 'foo_edited'
         ]);
@@ -168,7 +168,7 @@ class PayPlansControllerTest extends TestCase
         $this
         ->seeStatusCode(201)
         ->seeJson(['updated' => true, 'id' => $id])
-        ->seeInDatabase('pay_plans', ['name' => 'foo_edited']);
+        ->seeInDatabase('compensation_plans', ['name' => 'foo_edited']);
         
     }
     
@@ -176,7 +176,7 @@ class PayPlansControllerTest extends TestCase
     public function update_should_fail_with_an_invalid_id()
     {
         
-        $this->post('/edit_pay_plan', [
+        $this->post('/edit_compensation_plan', [
         'id' => 9999999,
         'name' => 'foo_edited',
         'code' => 'foo_edited'
@@ -189,46 +189,47 @@ class PayPlansControllerTest extends TestCase
     
     
     /** @test **/
-    public function delete_should_remove_a_valid_pay_plan()
+    public function delete_should_remove_a_valid_compensation_plan()
     {
-        $pay_plan = factory(App\PayPlan::class)->create();
+        $compensation_plan = factory(App\CompensationPlan::class)->create();
         
-        $id = $pay_plan->id;
+        $id = $compensation_plan->id;
         
-        $this->seeInDatabase('pay_plans', ['id' => $id]);
+        $this->seeInDatabase('compensation_plans', ['id' => $id]);
         
         $this
-        ->post('/delete_pay_plan', ['id' => $id])
+        ->post('/delete_compensation_plan', ['id' => $id])
         ->seeStatusCode(201)
         ->seeJson(['deleted' => true]);
         
         $data = json_decode($this->response->getContent(), true);
         $this->assertArrayhasKey('id', $data);
         
-        $this->notSeeInDatabase('pay_plans', ['id' => $id]);
+        $this->notSeeInDatabase('compensation_plans', ['id' => $id]);
     }
     
     /** @test **/
     public function delete_should_fail_with_an_invalid_id()
     {
-        $this->post('/delete_pay_plan', ['id' => 999999 ]);
+        $this->post('/delete_compensation_plan', ['id' => 999999 ]);
         
         $this
         ->seeStatusCode(404)
         ->seeJson(['error' => 'Not Found']);
     }
 
+
     /** @test **/
     public function delete_should_fail_if_id_in_use()
     {
-        $pay_plan = factory(App\PayPlan::class)->create();
+        $compensation_plan = factory(App\CompensationPlan::class)->create();
 
-        $customer = factory(App\Customer::class)->raw();
-        $customer['pay_plan_id'] = $pay_plan->id;
-        $this->post('/new_customer', $customer);
+        $sales_rep = factory(App\SalesRep::class)->raw();
+        $sales_rep['compensation_plan_id'] = $compensation_plan->id;
+        $this->post('/new_sales_rep', $sales_rep);
 
         $this
-        ->post('/delete_pay_plan', ['id' => $pay_plan->id])
+        ->post('/delete_compensation_plan', ['id' => $compensation_plan->id])
         ->seeStatusCode(422)
         ->seeJson(['error' => 'Cannot be deleted: Being used']);
     }
@@ -236,9 +237,9 @@ class PayPlansControllerTest extends TestCase
 
     // required - create
     /** @test **/
-    public function it_validates_required_fields_when_creating_a_new_pay_plan()
+    public function it_validates_required_fields_when_creating_a_new_compensation_plan()
     {
-        $this->post('/new_pay_plan', [], ['Accept' => 'application/json']);
+        $this->post('/new_compensation_plan', [], ['Accept' => 'application/json']);
         
         $this->assertEquals(422, $this->response->getStatusCode());
         
@@ -247,20 +248,20 @@ class PayPlansControllerTest extends TestCase
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["A pay plan name is required."], $errors['name']);
-        $this->assertEquals(["A pay plan code is required."], $errors['code']);
+        $this->assertEquals(["A compensation plan name is required."], $errors['name']);
+        $this->assertEquals(["A compensation plan code is required."], $errors['code']);
         
     }
     
     
     // required - edit
     /** @test **/
-    public function it_validates_required_fields_when_updating_a_pay_plan()
+    public function it_validates_required_fields_when_updating_a_compensation_plan()
     {
         
-        $pay_plan = factory(App\PayPlan::class)->create();
+        $compensation_plan = factory(App\CompensationPlan::class)->create();
         
-        $this->post('/edit_pay_plan', ['id' => $pay_plan->id], ['Accept' => 'application/json']);
+        $this->post('/edit_compensation_plan', ['id' => $compensation_plan->id], ['Accept' => 'application/json']);
         
         $this->assertEquals(422, $this->response->getStatusCode());
         
@@ -269,8 +270,8 @@ class PayPlansControllerTest extends TestCase
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["A pay plan name is required."], $errors['name']);
-        $this->assertEquals(["A pay plan code is required."], $errors['code']);
+        $this->assertEquals(["A compensation plan name is required."], $errors['name']);
+        $this->assertEquals(["A compensation plan code is required."], $errors['code']);
         
     }
     
@@ -279,12 +280,12 @@ class PayPlansControllerTest extends TestCase
     public function it_rejects_duplicate_data_on_create()
     {
         
-        $this->post('/new_pay_plan', [
+        $this->post('/new_compensation_plan', [
         'code' => 'foo',
         'name' => 'foo'
         ]);
         
-        $this->post('/new_pay_plan', [
+        $this->post('/new_compensation_plan', [
         'code' => 'foo',
         'name' => 'foo'
         ]);
@@ -307,14 +308,14 @@ class PayPlansControllerTest extends TestCase
     public function it_rejects_duplicate_names_on_edit()
     {
         
-        $pay_plan_1 = factory(App\PayPlan::class)->create();
+        $compensation_plan_1 = factory(App\CompensationPlan::class)->create();
         
-        $pay_plan_2 = factory(App\PayPlan::class)->create();
+        $compensation_plan_2 = factory(App\CompensationPlan::class)->create();
         
-        $this->post('/edit_pay_plan', [
-        'id' => $pay_plan_2->id,
-        'name' => $pay_plan_1->name,
-        'code' => $pay_plan_1->code
+        $this->post('/edit_compensation_plan', [
+        'id' => $compensation_plan_2->id,
+        'name' => $compensation_plan_1->name,
+        'code' => $compensation_plan_1->code
         ]);
         
         

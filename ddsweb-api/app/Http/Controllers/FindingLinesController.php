@@ -122,6 +122,11 @@ class FindingLinesController extends Controller
         $id = $request->input('id');
         try {
             $finding_line = FindingLine::findOrFail($id);
+
+            if(!$finding_line->okToDelete()) {
+                return response()->json(['error' => 'Cannot be deleted: Being used'],422);
+            }
+
             $finding_line->delete();
             return response()->json([
             'deleted' => true,

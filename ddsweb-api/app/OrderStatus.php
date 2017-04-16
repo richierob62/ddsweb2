@@ -23,7 +23,13 @@ class OrderStatus extends Model
         'code.required' => 'An order status code is required.'
         ];
     }
-    
+
+
+    public function okToDelete() {
+        return $this->orders()->count() == 0;
+    }
+    public function orders() { return $this->hasMany(Order::class); }
+
     static public function scopeFilterOn($query, $key, $filter)
     {
         switch ($key) {

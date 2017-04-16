@@ -237,7 +237,24 @@ class SourceBooksControllerTest extends TestCase
         ->seeStatusCode(404)
         ->seeJson(['error' => 'Not Found']);
     }
-    
+
+
+    /** @test **/
+    public function delete_should_fail_if_id_in_use()
+    {
+        $source_book = factory(App\SourceBook::class)->create();
+
+        $primary_book = factory(App\Udac::class)-> create();
+        
+        $this->post('/attach_source_book', ['id' => $primary_book->id, 'source_book' => $source_book->id]);
+
+        $this
+        ->post('/delete_source_book', ['id' => $source_book->id])
+        ->seeStatusCode(422)
+        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+    }
+
+
     // required - create
     /** @test **/
     public function it_validates_required_fields_when_creating_a_new_source_book()

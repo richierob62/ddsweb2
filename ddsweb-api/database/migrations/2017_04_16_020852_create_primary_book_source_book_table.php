@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFieldOrderLineTable extends Migration
+class CreatePrimaryBookSourceBookTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateFieldOrderLineTable extends Migration
      */
     public function up()
     {
-        Schema::create('field_order_line', function (Blueprint $table) {
+        Schema::create('primary_book_source_book', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('field_id')->index();
-            $table->unsignedInteger('order_line_id')->index();
-            $table->string('value')->nullable();
+            $table->integer('primary_book_id')->unsigned()->index();
+            $table->integer('source_book_id')->unsigned()->index();
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateFieldOrderLineTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('field_order_line');
+        Schema::dropIfExists('primary_book_source_book');
     }
 }

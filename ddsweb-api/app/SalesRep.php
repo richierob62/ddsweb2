@@ -33,7 +33,14 @@ class SalesRep extends Model
         'compensation_plan_id.exists' => 'You must select a valid compensation plan.'
         ];
     }
-    
+
+    public function okToDelete() {
+        return ($this->customers()->count() == 0) && ($this->orders()->count() == 0);
+    }
+    public function customers() { return $this->hasMany(Customer::class); }
+    public function orders() { return $this->hasMany(Order::class); }
+
+
     public function compensation_plan() { return $this->belongsTo(CompensationPLan::class);  }
     
     static public function scopeFilterOn($query, $key, $filter)

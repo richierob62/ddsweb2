@@ -27,7 +27,7 @@ class OrderLine extends Model
     public function order() { return $this->belongsTo(Order::class, 'order_id');  }
     public function udac() { return $this->belongsTo(Udac::class, 'udac_id');  }
     public function fields() { return $this->belongsToMany(Field::class, 'field_order_line')
-        ->withPivot(['is_reference', 'reference_table', 'value' ])
+        ->withPivot(['value' ])
         ->withTimestamps();
     }
     

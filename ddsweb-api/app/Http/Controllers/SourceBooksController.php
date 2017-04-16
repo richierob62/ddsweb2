@@ -121,6 +121,11 @@ class SourceBooksController extends Controller
         $id = $request->input('id');
         try {
             $source_book = SourceBook::findOrFail($id);
+
+            if(!$source_book->okToDelete()) {
+                return response()->json(['error' => 'Cannot be deleted: Being used'],422);
+            }
+
             $source_book->delete();
             return response()->json([
             'deleted' => true,

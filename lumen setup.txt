@@ -775,7 +775,7 @@ WORKFLOW
 ===============================================================================================================
 Controller tests
     migrations & models to support
-        php artisan make:migration create_field_order_lines_table --create=field_order_lines
+        php artisan make:migration create_primary_book_source_book_table --create=primary_book_source_book
         
         php artisan migrate
         composer dump-autoload
@@ -798,24 +798,37 @@ file creation order
 });
 
 
-to do
---------------------
-react
-    + sagas to access apis after apis done
+============================
+    /** @test **/
+    public function delete_should_fail_if_id_in_use()
+    {
+        $ad_type = factory(App\AdType::class)->create();
+
+        $udac = factory(App\Udac::class)->raw();
+        $udac['ad_type_id'] = $ad_type->id;
+        $this->post('/new_udac', $udac);
+
+        $this
+        ->post('/delete_ad_type', ['id' => $ad_type->id])
+        ->seeStatusCode(422)
+        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+    }
+============================
+            if(!$ad_type->okToDelete()) {
+                return response()->json(['error' => 'Cannot be deleted: Being used'],422);
+            }
+============================
+    public function okToDelete() {
+        return $this->udacs()->count() == 0;
+    }
+    public function udacs() { return $this->hasMany(Udac::class); }
+============================
+
++ to do
+    + privileges
+        + edit/delete orders with status == FINAL
+        + edit/delete order lines with status == FINAL
+    + react
+        + sagas to access apis after apis done
 
 
-lumen
-
-    + create field_order_lines
-    + add functions to order_line to create field_order_lines and get data
-
-    + field_order_lines : holds values for fields used by order_lines; 
-        udac determines ad_type
-        ad_type determins allowed fields
-        field determines input_type, ref_table and filter
-        
-    + change all migrations to cascade delete for foreign keys
-    * change all validations to check usage before delete
-
-
-    

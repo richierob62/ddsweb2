@@ -226,7 +226,24 @@ class UdacsControllerTest extends TestCase
         ->seeStatusCode(404)
         ->seeJson(['error' => 'Not Found']);
     }
+
+
+    /** @test **/
+    public function delete_should_fail_if_id_in_use()
+    {
+        $udac = factory(App\Udac::class)->create();
+
+        $order_line = factory(App\OrderLine::class)->raw();
+        $order_line['udac_id'] = $udac->id;
+        $this->post('/new_order_line', $order_line);
+
+        $this
+        ->post('/delete_udac', ['id' => $udac->id])
+        ->seeStatusCode(422)
+        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+    }
     
+        
     // required - create
     /** @test **/
     public function it_validates_required_fields_when_creating_a_new_udac()

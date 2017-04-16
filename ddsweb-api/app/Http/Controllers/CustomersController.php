@@ -122,6 +122,11 @@ class CustomersController extends Controller
         $id = $request->input('id');
         try {
             $customer = Customer::findOrFail($id);
+
+            if(!$customer->okToDelete()) {
+                return response()->json(['error' => 'Cannot be deleted: Orders exist'],422);
+            }
+
             $customer->delete();
             return response()->json([
             'deleted' => true,

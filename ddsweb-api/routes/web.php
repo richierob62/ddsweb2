@@ -47,6 +47,13 @@ $app->post('new_pay_plan', 'PayPlansController@newPayPlan');
 $app->post('edit_pay_plan', 'PayPlansController@editPayPlan');
 $app->post('delete_pay_plan', 'PayPlansController@deletePayPlan');
 
+$app->post('compensation_plans', 'CompensationPlansController@compensationPlans');
+$app->post('compensation_plan_reference', 'CompensationPlansController@referenceList');
+$app->post('compensation_plan', 'CompensationPlansController@compensationPlanByID');
+$app->post('new_compensation_plan', 'CompensationPlansController@newCompensationPlan');
+$app->post('edit_compensation_plan', 'CompensationPlansController@editCompensationPlan');
+$app->post('delete_compensation_plan', 'CompensationPlansController@deleteCompensationPlan');
+
 $app->post('local_foreigns', 'LocalForeignsController@localForeigns');
 $app->post('local_foreign_reference', 'LocalForeignsController@referenceList');
 $app->post('local_foreign', 'LocalForeignsController@localForeignByID');
@@ -67,6 +74,9 @@ $app->post('primary_book', 'PrimaryBooksController@primaryBookByID');
 $app->post('new_primary_book', 'PrimaryBooksController@newPrimaryBook');
 $app->post('edit_primary_book', 'PrimaryBooksController@editPrimaryBook');
 $app->post('delete_primary_book', 'PrimaryBooksController@deletePrimaryBook');
+$app->post('get_source_books', 'PrimaryBooksController@getSourceBooks');
+$app->post('attach_source_book', 'PrimaryBooksController@attachSourceBook');
+$app->post('remove_source_book', 'PrimaryBooksController@removeSourceBook');
 
 $app->post('page_types', 'PageTypesController@pageTypes');
 $app->post('page_type_reference', 'PageTypesController@referenceList');

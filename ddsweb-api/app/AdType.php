@@ -28,7 +28,10 @@ class AdType extends Model
         
         ];
     }
-    
+
+    public function okToDelete() {
+        return $this->udacs()->count() == 0;
+    }
     
     public function page_type() { return $this->belongsTo(PageType::class, 'page_type_id');  }
     public function fields() {
@@ -36,7 +39,7 @@ class AdType extends Model
                     ->withPivot('sequence')
                     ->withTimestamps();  
     }
-    
+    public function udacs() { return $this->hasMany(Udac::class); }
     
     static public function scopeFilterOn($query, $key, $filter)
     {

@@ -356,33 +356,3 @@ $factory->define(App\Field::class, function ($faker) {
     'filter_val' => $faker->word,
     ];
 });
-
-$factory->define(App\FieldUsage::class, function ($faker) {
-    
-    $ad_type = \App\AdType::all();
-    if($ad_type->count() < 10) {
-        $ad_type = factory(App\AdType::class)->create()->id;
-    } else {
-        $ad_type = $ad_type->random()->id;
-    }
-    
-    $field = \App\Field::all();
-    if($field->count() < 10) {
-        $field = factory(App\Field::class)->create()->id;
-    } else {
-        $field = $field->random()->id;
-    }
-    
-    $last = App\FieldUsage::where('ad_type_id', $ad_type)->orderBy('sequence', 'desc')->first();
-    if ($last) {
-        $next_seq = $last->sequence + 1;
-    } else {
-        $next_seq = 1;
-    }
-    
-    return [
-    'ad_type_id' => $ad_type,
-    'field_id' => $field,
-    'sequence' => $next_seq
-    ];
-});

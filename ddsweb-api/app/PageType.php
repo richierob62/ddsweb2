@@ -23,8 +23,13 @@ class PageType extends Model
         'code.required' => 'A page type code is required.'
         ];
     }
-    
-    public function customers() { return $this->hasMany(Customer::class);  }
+
+    public function okToDelete() {
+        return ($this->ad_types()->count() == 0) && ($this->headings()->count() == 0);
+    }
+    public function ad_types() { return $this->hasMany(AdType::class); }
+
+    public function headings() { return $this->hasMany(Heading::class);  }
     
     static public function scopeFilterOn($query, $key, $filter)
     {

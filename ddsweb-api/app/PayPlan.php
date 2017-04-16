@@ -23,7 +23,11 @@ class PayPlan extends Model
         'code.required' => 'A pay plan code is required.'
         ];
     }
-    
+
+    public function okToDelete() {
+        return $this->customers()->count() == 0;
+    }
+
     public function customers() { return $this->hasMany(Customer::class);  }
     
     static public function scopeFilterOn($query, $key, $filter)

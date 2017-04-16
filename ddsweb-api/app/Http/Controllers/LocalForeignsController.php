@@ -123,6 +123,11 @@ class LocalForeignsController extends Controller
         $id = $request->input('id');
         try {
             $local_foreign = LocalForeign::findOrFail($id);
+
+            if(!$local_foreign->okToDelete()) {
+                return response()->json(['error' => 'Cannot be deleted: Being used'],422);
+            }
+
             $local_foreign->delete();
             return response()->json([
             'deleted' => true,

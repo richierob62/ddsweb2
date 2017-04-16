@@ -24,6 +24,23 @@ class FindingLine extends Model
         ];
     }
     
+    public function okToDelete() {
+
+        $fl_fields = Field::where('ref_table', 'finding_lines')
+        ->get(['id'])
+        ->toArray();
+
+        $uses = OrderLine::select(\DB::raw('order_lines.id'))
+        ->join('field_order_line', 'order_lines.id', '=', 'field_order_line.order_line_id')
+        ->whereIn('field_order_line.field_id', $fl_fields )
+        ->where('value', $this->id)
+        ->count();
+
+        return $uses == 0;
+        
+    }
+
+
     static public function scopeFilterOn($query, $key, $filter)
     {
         switch ($key) {

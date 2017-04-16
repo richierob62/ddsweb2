@@ -231,7 +231,24 @@ class CustomersControllerTest extends TestCase
         ->seeStatusCode(404)
         ->seeJson(['error' => 'Not Found']);
     }
-    
+
+
+    /** @test **/
+    public function delete_should_fail_if_id_in_use()
+    {
+        $customer = factory(App\Customer::class)->create();
+
+        $order = factory(App\Order::class)->raw();
+        $order['customer_id'] = $customer->id;
+        $this->post('/new_order', $order);
+
+        $this
+        ->post('/delete_customer', ['id' => $customer->id])
+        ->seeStatusCode(422)
+        ->seeJson(['error' => 'Cannot be deleted: Orders exist']);
+    }
+
+
     // required - create
     /** @test **/
     public function it_validates_required_fields_when_creating_a_new_customer()

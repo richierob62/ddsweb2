@@ -123,6 +123,11 @@ class AdTypesController extends Controller
         $id = $request->input('id');
         try {
             $ad_type = AdType::findOrFail($id);
+
+            if(!$ad_type->okToDelete()) {
+                return response()->json(['error' => 'Cannot be deleted: Being used'],422);
+            }
+
             $ad_type->delete();
             return response()->json([
             'deleted' => true,

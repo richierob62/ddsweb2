@@ -32,7 +32,25 @@ class Heading extends Model
         
         ];
     }
-    
+
+
+    public function okToDelete() {
+
+        $hd_fields = Field::where('ref_table', 'headings')
+        ->get(['id'])
+        ->toArray();
+
+        $uses = OrderLine::select(\DB::raw('order_lines.id'))
+        ->join('field_order_line', 'order_lines.id', '=', 'field_order_line.order_line_id')
+        ->whereIn('field_order_line.field_id', $hd_fields )
+        ->where('value', $this->id)
+        ->count();
+
+        return $uses == 0;
+        
+    }
+
+
     public function page_type() { return $this->belongsTo(PageType::class, 'page_type_id');  }
     
     static public function scopeFilterOn($query, $key, $filter)

@@ -127,7 +127,7 @@ class OrdersController extends Controller
         $id = $request->input('id');
         try {
             $order = Order::findOrFail($id);
-            $order->delete();
+            $order->deleteOrderAndLines();
             return response()->json([
             'deleted' => true,
             'id' => $id

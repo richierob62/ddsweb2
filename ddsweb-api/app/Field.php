@@ -27,6 +27,10 @@ class Field extends Model
         ];
     }
 
+    public function okToDelete() {
+        return $this->ad_types()->count() == 0;
+    }
+
     public function ad_types() {
         return $this->belongsToMany(AdType::class, 'ad_type_fields')
                     ->withPivot('sequence')
@@ -34,7 +38,7 @@ class Field extends Model
     }    
     
     public function order_lines() { return $this->belongsToMany(OrderLine::class, 'field_order_line')
-        ->withPivot(['is_reference', 'reference_table', 'value' ])
+        ->withPivot(['value' ])
         ->withTimestamps();
     }
 

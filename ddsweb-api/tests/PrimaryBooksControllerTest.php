@@ -237,7 +237,56 @@ class PrimaryBooksControllerTest extends TestCase
         ->seeStatusCode(404)
         ->seeJson(['error' => 'Not Found']);
     }
-    
+
+
+    /** @test **/
+    public function delete_should_fail_if_id_in_use_by_a_customer()
+    {
+        $primary_book = factory(App\PrimaryBook::class)->create();
+
+        $customer = factory(App\Customer::class)->raw();
+        $customer['primary_book_id'] = $primary_book->id;
+        $this->post('/new_customer', $customer);
+
+        $this
+        ->post('/delete_primary_book', ['id' => $primary_book->id])
+        ->seeStatusCode(422)
+        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+    }
+
+
+    /** @test **/
+    public function delete_should_fail_if_id_in_use_by_a_order()
+    {
+        $primary_book = factory(App\PrimaryBook::class)->create();
+
+        $order = factory(App\Order::class)->raw();
+        $order['primary_book_id'] = $primary_book->id;
+        $this->post('/new_order', $order);
+
+        $this
+        ->post('/delete_primary_book', ['id' => $primary_book->id])
+        ->seeStatusCode(422)
+        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+    }
+
+
+    /** @test **/
+    public function delete_should_fail_if_id_in_use_by_a_udac()
+    {
+        $primary_book = factory(App\PrimaryBook::class)->create();
+
+        $udac = factory(App\Udac::class)->raw();
+        $udac['primary_book_id'] = $primary_book->id;
+        $this->post('/new_udac', $udac);
+
+        $this
+        ->post('/delete_primary_book', ['id' => $primary_book->id])
+        ->seeStatusCode(422)
+        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+    }
+
+
     // required - create
     /** @test **/
     public function it_validates_required_fields_when_creating_a_new_primary_book()
@@ -407,19 +456,57 @@ class PrimaryBooksControllerTest extends TestCase
         $this->assertEquals(["Sales close must be a valid date."], $errors['sales_close']);
     }
     
-    // type - create
     /** @test **/
-    public function it_validates_reference_fields_on_create()
+    public function it_adds_a_source_book_to_a_primary_book()
     {
-        // N/A
+        $source_book = factory(App\SourceBook::class)->create();
+        
+        $primary_book = factory(App\PrimaryBook::class)->create();
+        
+        $this->post('/attach_source_book', ['id' => $primary_book->id, 'source_book' => $source_book->id]);
+        
+        $this->seeStatusCode(201)
+        ->seeJsonEquals([
+        "created" => true,
+        "data" => [
+        "id" => $primary_book->id,
+        "source_book" => $source_book->id
+        ]
+        ])
+        ->seeInDatabase('primary_book_source_book', 
+        [
+            'primary_book_id' => $primary_book->id,
+            'source_book_id' => $source_book->id,
+        ]);
     }
     
-    
-    // type - edit
+
     /** @test **/
-    public function it_validates_reference_fields_on_edit()
+    public function it_deletes_a_source_book_from_a_primary_book()
     {
-        // N/A
-    }
+
+        $source_book = factory(App\SourceBook::class)->create();
+        
+        $primary_book = factory(App\PrimaryBook::class)->create();
+        
+        $this->post('/attach_source_book', ['id' => $primary_book->id, 'source_book' => $source_book->id]);
+        $this->post('/remove_source_book', ['id' => $primary_book->id, 'source_book' => $source_book->id]);
+
+        $this->seeStatusCode(201)
+        ->seeJsonEquals([
+        "deleted" => true,
+        "data" => [
+        "id" => $primary_book->id,
+        "source_book" => $source_book->id
+        ]
+        ]);
+
+        $this->post('/get_source_books', ['id' => $primary_book->id]);
+        
+        $data = json_decode($this->response->getContent(), true)['data'];
+        
+        $this->assertEquals(0, sizeof($data));
+
+    } 
     
 }

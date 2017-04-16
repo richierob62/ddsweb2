@@ -47,7 +47,12 @@ class Customer extends Model
         
         ];
     }
-    
+
+    public function okToDelete() {
+        return $this->orders()->count() == 0;
+    }
+    public function orders() { return $this->hasMany(Order::class); }
+
     public function category() { return $this->belongsTo(Category::class, 'category_id');  }
     public function local_foreign() { return $this->belongsTo(LocalForeign::class, 'local_foreign_id');  }
     public function pay_plan() { return $this->belongsTo(PayPlan::class, 'pay_plan_id');  }

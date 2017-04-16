@@ -217,6 +217,22 @@ class CategoriesControllerTest extends TestCase
         ->seeStatusCode(404)
         ->seeJson(['error' => 'Not Found']);
     }
+
+    /** @test **/
+    public function delete_should_fail_if_id_in_use()
+    {
+        $category = factory(App\Category::class)->create();
+
+        $customer = factory(App\Customer::class)->raw();
+        $customer['category_id'] = $category->id;
+        $this->post('/new_customer', $customer);
+
+        $this
+        ->post('/delete_category', ['id' => $category->id])
+        ->seeStatusCode(422)
+        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+    }
+
     
     // required - create
     /** @test **/

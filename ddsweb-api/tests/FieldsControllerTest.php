@@ -254,6 +254,22 @@ class FieldsControllerTest extends TestCase
         ->seeJson(['error' => 'Not Found']);
     }
     
+
+    /** @test **/
+    public function delete_should_fail_if_id_in_use()
+    {
+        $field = factory(App\Field::class)->create();
+
+        $ad_type = factory(App\AdType::class)->create();
+
+        $this->post('/attach_field', ['id' => $ad_type->id, 'field' => $field->id]);
+
+        $this
+        ->post('/delete_field', ['id' => $field->id])
+        ->seeStatusCode(422)
+        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+    }
+
     // required - create
     /** @test **/
     public function it_validates_required_fields_when_creating_a_new_field()
