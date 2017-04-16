@@ -1,5 +1,5 @@
 import React from 'react'
-import { createEventDispatcher, buildField, createDataRows, createLink, buttons } from '../components/component_parts'
+import { createEventDispatcher, buildField, createDataRows, createLink, contextMenuButtons } from '../components/component_parts'
 
 const createFilterCells = p => {
     const list_template = p.data.get('list_template').toJS()
@@ -201,7 +201,7 @@ const buildPageContextMenu = p => {
         <div style={menu_style}>
             <p style={para_style} >Related Items</p>
             {links}
-            {buttons(p)}
+            {contextMenuButtons(p)}
         </div>
     )
 }

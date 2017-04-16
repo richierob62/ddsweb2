@@ -63,9 +63,9 @@ export const getRoutes = (store) => {
       <Route path="page_types" onEnter={requireAuth} component={PageTypes} />
       <Route path="payplans" onEnter={requireAuth} component={PayPlans} />
       <Route path="permissions" onEnter={requireAuth} component={Permissions} />
-      <Route path="primarybooks" onEnter={requireAuth} component={PrimaryBooks} />
+      <Route path="primary_books" onEnter={requireAuth} component={PrimaryBooks} />
       <Route path="sales_reps" onEnter={requireAuth} component={SalesReps} />
-      <Route path="sourcebooks" onEnter={requireAuth} component={SourceBooks} />
+      <Route path="source_books" onEnter={requireAuth} component={SourceBooks} />
       <Route path="udacs" onEnter={requireAuth} component={Udacs} />
     </Route>
   );

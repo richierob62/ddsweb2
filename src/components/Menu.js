@@ -51,13 +51,13 @@ const Menu = () => {
                     <Link to="/permissions" className="link-item" activeClassName="active-link">Permissions</Link>
                 </li>
                 <li className="menu-item">
-                    <Link to="/primarybooks" className="link-item" activeClassName="active-link">Primary Books</Link>
+                    <Link to="/primary_books" className="link-item" activeClassName="active-link">Primary Books</Link>
                 </li>
                 <li className="menu-item">
                     <Link to="/sales_reps" className="link-item" activeClassName="active-link">Sales Reps</Link>
                 </li>
                 <li className="menu-item">
-                    <Link to="/sourcebooks" className="link-item" activeClassName="active-link">Source Books</Link>
+                    <Link to="/source_books" className="link-item" activeClassName="active-link">Source Books</Link>
                 </li>
                 <li className="menu-item">
                     <Link to="/udacs" className="link-item" activeClassName="active-link">Udacs</Link>
