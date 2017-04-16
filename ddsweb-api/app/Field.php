@@ -32,7 +32,7 @@ class Field extends Model
     }
 
     public function ad_types() {
-        return $this->belongsToMany(AdType::class, 'ad_type_fields')
+        return $this->belongsToMany(AdType::class, 'ad_type_field')
                     ->withPivot('sequence')
                     ->withTimestamps();  
     }    

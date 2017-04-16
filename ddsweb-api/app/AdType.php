@@ -35,7 +35,7 @@ class AdType extends Model
     
     public function page_type() { return $this->belongsTo(PageType::class, 'page_type_id');  }
     public function fields() {
-        return $this->belongsToMany(Field::class, 'ad_type_fields')
+        return $this->belongsToMany(Field::class, 'ad_type_field')
                     ->withPivot('sequence')
                     ->withTimestamps();  
     }

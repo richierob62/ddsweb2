@@ -1,20 +1,21 @@
-import { take, put, call, fork, select, cancel } from 'redux-saga/effects'
-import * as act from '../actions'
-import * as api from '../api/api'
+// import { take, put, call, fork, select, cancel } from 'redux-saga/effects'
+import {fork} from 'redux-saga/effects'
+// import * as act from '../actions'
+// import * as api from '../api/api'
 
-const paths = [
-  {
-    path: '/customers',
-    refs: [
-      'categories',
-      'local_foreigns',
-      'pay_plans',
-      'primary_books',
-      'sales_reps',
-    ],
-    list: 'customers'
-  }
-]
+// const paths = [
+//   {
+//     path: '/customers',
+//     refs: [
+//       'categories',
+//       'local_foreigns',
+//       'pay_plans',
+//       'primary_books',
+//       'sales_reps',
+//     ],
+//     list: 'customers'
+//   }
+// ]
 
 // 'CHANGE_XXX_FILTER'
 // 'CHANGE_XXX_SORT'
@@ -62,23 +63,23 @@ const paths = [
 // /******************************* API LINK *************************************/
 // /******************************************************************************/
 
-function* loadReferenceList(name) {
-  const apiCall = 'loadReferenceList_' + name.toUpperCase()
-  const { response } = yield call(api[apiCall])
-  if (response) {
-    yield put(act['refListLoaded_' + name.toUpperCase()](response))
-  }
-}
+// function* loadReferenceList(name) {
+//   const apiCall = 'loadReferenceList_' + name.toUpperCase()
+//   const { response } = yield call(api[apiCall])
+//   if (response) {
+//     yield put(act['refListLoaded_' + name.toUpperCase()](response))
+//   }
+// }
 
-function* loadList(name) {
-  const apiCall = 'loadList_' + name.toUpperCase()
-  const filters = select()[name].get('current_filters').toJS()
-  const sort = select()[name].get('current_sort').toJS()
-  const { response } = yield call(api[apiCall](filters, sort))
-  if (response) {
-    yield put(act['listLoaded' + name.toUpperCase()](response))
-  }
-}
+// function* loadList(name) {
+//   const apiCall = 'loadList_' + name.toUpperCase()
+//   const filters = select()[name].get('current_filters').toJS()
+//   const sort = select()[name].get('current_sort').toJS()
+//   const { response } = yield call(api[apiCall](filters, sort))
+//   if (response) {
+//     yield put(act['listLoaded' + name.toUpperCase()](response))
+//   }
+// }
 
 // const generateListLoader = (entity) => {
 //   let table = entity.toLowerCase()
@@ -179,19 +180,20 @@ function* loadList(name) {
 // /******************************************************************************/
 
 const pageChangeWatcher = function* () {
-  while (true) {
-    yield take(act['pageChange'])
-    let forks = []
-    const new_path = yield select()['pageChange'].get('current_path')
-    const path_obj = paths.find(obj => obj.path === new_path)
-    if (path_obj) {
-      forks = path_obj.refs.map(ref => {
-        return fork(loadReferenceList(ref))
-      })
-      forks.push(loadList(path_obj.list))
-    }
-    yield [forks]
-  }
+  // while (true) {
+    // yield take(act['pageChange'])
+    // let forks = []
+    // const new_path = yield select()['pageChange'].get('current_path')
+    // const path_obj = paths.find(obj => obj.path === new_path)
+    // if (path_obj) {
+    //   forks = path_obj.refs.map(ref => {
+    //     return fork(loadReferenceList(ref))
+    //   })
+    //   forks.push(loadList(path_obj.list))
+    // }
+    // yield [forks]
+  // }
+    yield 1
 }
 
 

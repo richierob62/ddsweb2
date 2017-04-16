@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAdTypeFieldsTable extends Migration
+class CreateAdTypeFieldTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAdTypeFieldsTable extends Migration
      */
     public function up()
     {
-        Schema::create('ad_type_fields', function (Blueprint $table) {
+        Schema::create('ad_type_field', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('ad_type_id')->unsigned()->index();
             $table->integer('field_id')->unsigned()->index();
@@ -29,6 +29,6 @@ class CreateAdTypeFieldsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ad_type_fields');
+        Schema::dropIfExists('ad_type_field');
     }
 }

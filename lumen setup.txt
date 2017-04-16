@@ -825,10 +825,11 @@ file creation order
 ============================
 
 + to do
+    + sagas
+        + identify actions for sagas
+        + sagas to access apis after apis done
     + privileges
         + edit/delete orders with status == FINAL
         + edit/delete order lines with status == FINAL
-    + react
-        + sagas to access apis after apis done
 
 

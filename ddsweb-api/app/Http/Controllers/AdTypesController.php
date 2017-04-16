@@ -142,7 +142,7 @@ class AdTypesController extends Controller
     {
         $id = $request->input('id');
         try {
-            $fields = AdType::findOrFail($id)->fields()->orderBy('ad_type_fields.sequence')->get();
+            $fields = AdType::findOrFail($id)->fields()->orderBy('ad_type_field.sequence')->get();
             return response()->json(['data' => $fields]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Not Found'],404);
@@ -207,7 +207,7 @@ class AdTypesController extends Controller
     }
     
     public function renumberFields($ad_id) {
-        $fields_fn = AdType::findOrFail($ad_id)->fields()->orderBy('ad_type_fields.sequence');
+        $fields_fn = AdType::findOrFail($ad_id)->fields()->orderBy('ad_type_field.sequence');
         if ($fields_fn->count() > 0) {
             $fields_obj = $fields_fn->get();
             $seq = 1;
