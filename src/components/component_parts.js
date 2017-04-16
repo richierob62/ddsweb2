@@ -487,7 +487,18 @@ export const createLink = (p, link) => {
             dispatch(func(payload))
         }
     }
-    return <Link onClick={handleClick} key={link.label} to={link.link} className="context-item" activeClassName="active-context-item">{link.label}</Link>
+    const linkStyle = {
+        fontSize: '.7rem',
+        margin: '2px 2px'
+    }
+    return <Link
+        onClick={handleClick}
+        key={link.label}
+        to={link.link}
+        style={linkStyle}
+    >
+        {link.label}
+    </Link>
 }
 
 const editButton = p => {
@@ -520,7 +531,7 @@ const cancelButton = p => {
     return <button type="button" onClick={handleClick} className="btn btn-sm btn-outline-danger">Cancel</button>
 }
 
-export const buttons = p => {
+export const contextMenuButtons = p => {
     const mode = p.data.get('mode')
     if (mode === 'display') {
         return (
