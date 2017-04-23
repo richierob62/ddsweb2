@@ -799,35 +799,40 @@ file creation order
 
 
 ============================
-    /** @test **/
-    public function delete_should_fail_if_id_in_use()
-    {
-        $ad_type = factory(App\AdType::class)->create();
 
-        $udac = factory(App\Udac::class)->raw();
-        $udac['ad_type_id'] = $ad_type->id;
-        $this->post('/new_udac', $udac);
 
-        $this
-        ->post('/delete_ad_type', ['id' => $ad_type->id])
-        ->seeStatusCode(422)
-        ->seeJson(['error' => 'Cannot be deleted: Being used']);
-    }
-============================
-            if(!$ad_type->okToDelete()) {
-                return response()->json(['error' => 'Cannot be deleted: Being used'],422);
-            }
-============================
-    public function okToDelete() {
-        return $this->udacs()->count() == 0;
-    }
-    public function udacs() { return $this->hasMany(Udac::class); }
+
 ============================
 
 + to do
-    + sagas
-        + identify actions for sagas
-        + sagas to access apis after apis done
+
+    + check all actions being fired by customer component against reducer
+        beginCustomerCreate
+        beginCustomerDelete
+        beginCustomerDuplicate
+        beginCustomerEdit
+        cancelCustomer
+        changeCustomerData
+        changeCustomerFilter
+        changeCustomerSort
+        saveCustomer
+        selectCustomer
+        selectCustomerTab
+
+        + test that state changed due to action + reducer
+
+        + test that sagas being called
+            it('The root saga should react to actions', () => {
+            const generator = rootSaga();
+            expect(generator.next().value).to.eql(fork(takeEvery, 'PRODUCTS_REQUESTED', fetchProducts));
+            expect(generator.next().done).to.eql(true);
+            });
+
+    + id actions to be listened to by sagas and associated completion actions
+    + make saga api calls
+
+    + typeahead has problem when selected is subset of another existing entry
+
     + privileges
         + edit/delete orders with status == FINAL
         + edit/delete order lines with status == FINAL

@@ -8,7 +8,7 @@ import { getRoutes } from './routes';
 import configureStore from './configureStore';
 import Root from './Root';
 import './index.css';
-import root_saga from './reducers/root_saga'
+import root_saga from './sagas/root_saga'
 
 const store = configureStore();
 store.runSaga(root_saga);

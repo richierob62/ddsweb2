@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import * as act from '../actions'
 import * as sel from '../selectors'
-import { buildPage } from '../utils/page_builder'
+import { buildPage } from '../page_utils/page_builder'
 
 const state_part = 'customers'
 

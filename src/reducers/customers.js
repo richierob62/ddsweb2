@@ -290,6 +290,7 @@ const customers = (state = initial_state, action) => {
             if (state.get('mode') !== 'display') return state
             return state.set('selected_id', action.payload)
         }
+
         case 'SELECT_CUSTOMER_TAB': {
             return state.setIn(['details_template', 'current_tab'], action.payload)
         }
@@ -333,10 +334,11 @@ const customers = (state = initial_state, action) => {
         case 'BEGIN_CUSTOMER_EDIT': {
             const id = state.get('selected_id')
             const current = state.get('list').find(cust => cust.get('id') === id)
-            const backup_copy = Object.assign({}, current.toJS())
+            const backup_copy = Immutable.fromJS(Object.assign({}, current.toJS()))
             return state.set('mode', 'edit')
                 .set('backup_copy', backup_copy)
         }
+
         case 'BEGIN_CUSTOMER_CREATE': {
             const id = Math.floor(Math.random() * 1000000 + 1000000)
             const new_copy = state.get('fields')
@@ -354,6 +356,7 @@ const customers = (state = initial_state, action) => {
                 .set('selected_id', id)
                 .set('mode', 'new')
         }
+
         case 'BEGIN_CUSTOMER_DUPLICATE': {
             const new_id = Math.floor(Math.random() * 1000000 + 1000000)
             const id = state.get('selected_id')
@@ -367,14 +370,15 @@ const customers = (state = initial_state, action) => {
                 .set('selected_id', new_id)
                 .set('mode', 'duplicate')
         }
+        
         case 'BEGIN_CUSTOMER_DELETE': {
             return state.set('mode', 'deleting')
         }
 
-        // In sagas we will fire following events after persisting
         case 'SAVE_EDITED_CUSTOMER_DONE': {
             return state.set('mode', 'display').set('backup_copy', undefined)
         }
+        
         case 'SAVE_NEW_CUSTOMER_DONE':
         case 'SAVE_DUPLICATE_CUSTOMER_DONE': {
             const temp_id = state.get('selected_id')
@@ -390,6 +394,7 @@ const customers = (state = initial_state, action) => {
                 .set('mode', 'display')
                 .set('selected_id', action.payload)
         }
+        
         case 'DELETE_CUSTOMER_DONE': {
             const id = state.get('selected_id')
             const index = state.get('list').findIndex(item => item.get('id') === id)

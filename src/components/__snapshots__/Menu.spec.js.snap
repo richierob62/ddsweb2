@@ -2,7 +2,7 @@ exports[`test renders without crashing 1`] = `
 <div
   className="Menu">
   <h2>
-    Main
+    M E N U
   </h2>
   <ul
     className="menu-group">
@@ -33,6 +33,17 @@ exports[`test renders without crashing 1`] = `
       </Link>
     </li>
     <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/order_lines">
+        Order Lines
+      </Link>
+    </li>
+    <li
       className="sub-menu">
       Supporting Files
     </li>
@@ -43,19 +54,8 @@ exports[`test renders without crashing 1`] = `
         className="link-item"
         onlyActiveOnIndex={false}
         style={Object {}}
-        to="/headings">
-        Headings
-      </Link>
-    </li>
-    <li
-      className="menu-item">
-      <Link
-        activeClassName="active-link"
-        className="link-item"
-        onlyActiveOnIndex={false}
-        style={Object {}}
-        to="/findinglines">
-        Finding Lines
+        to="/ad_types">
+        AdTypes
       </Link>
     </li>
     <li
@@ -76,6 +76,50 @@ exports[`test renders without crashing 1`] = `
         className="link-item"
         onlyActiveOnIndex={false}
         style={Object {}}
+        to="/compensation_plans">
+        Compensation Plans
+      </Link>
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/fields">
+        Data Fields (Ads)
+      </Link>
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/findinglines">
+        Finding Lines
+      </Link>
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/headings">
+        Headings
+      </Link>
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
         to="/localforeign">
         Local/Foreign
       </Link>
@@ -87,8 +131,8 @@ exports[`test renders without crashing 1`] = `
         className="link-item"
         onlyActiveOnIndex={false}
         style={Object {}}
-        to="/udacs">
-        Udacs
+        to="/order_statuses">
+        Order Statuses
       </Link>
     </li>
     <li
@@ -98,34 +142,8 @@ exports[`test renders without crashing 1`] = `
         className="link-item"
         onlyActiveOnIndex={false}
         style={Object {}}
-        to="/primarybooks">
-        Primary Books
-      </Link>
-    </li>
-    <li
-      className="menu-item">
-      <Link
-        activeClassName="active-link"
-        className="link-item"
-        onlyActiveOnIndex={false}
-        style={Object {}}
-        to="/sourcebooks">
-        Source Books
-      </Link>
-    </li>
-    <li
-      className="sub-menu">
-      Admin
-    </li>
-    <li
-      className="menu-item">
-      <Link
-        activeClassName="active-link"
-        className="link-item"
-        onlyActiveOnIndex={false}
-        style={Object {}}
-        to="/users">
-        Users/Reps
+        to="/page_types">
+        Page Types
       </Link>
     </li>
     <li
@@ -137,6 +155,61 @@ exports[`test renders without crashing 1`] = `
         style={Object {}}
         to="/payplans">
         Pay Plans
+      </Link>
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/permissions">
+        Permissions
+      </Link>
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/primary_books">
+        Primary Books
+      </Link>
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/sales_reps">
+        Sales Reps
+      </Link>
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/source_books">
+        Source Books
+      </Link>
+    </li>
+    <li
+      className="menu-item">
+      <Link
+        activeClassName="active-link"
+        className="link-item"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/udacs">
+        Udacs
       </Link>
     </li>
   </ul>
