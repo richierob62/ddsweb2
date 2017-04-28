@@ -1,0 +1,50 @@
++ id actions from all components, test reducers & sagas
+
+    auth
+        loginAttemptBegin
+        loginSuccessful
+        logout
+
+    customer
+        selectCustomer
+        selectCustomerTab
+        changeCustomerData
+        changeCustomerFilter
+        changeCustomerSort
+        beginCustomerEdit
+        beginCustomerCreate
+        beginCustomerDelete
+        beginCustomerDuplicate
+        cancelCustomer
+        saveCustomer
+        listLoadedCustomer
+        referenceLoadedCustomer
+
+    root_saga    
+        pageChange
+        changeCustomerFilter
+        changeCustomerSort
+        saveCustomer
+        loginAttemptBegin
+        loginSuccessful
+        logout
+
+
+
++ test that state changed due to action + reducer
+
++ test that sagas being called
+    it('The root saga should react to actions', () => {
+    const generator = rootSaga();
+    expect(generator.next().value).to.eql(fork(takeEvery, 'PRODUCTS_REQUESTED', fetchProducts));
+    expect(generator.next().done).to.eql(true);
+    });
+
++ id actions to be listened to by sagas and associated completion actions
++ make saga api calls
+
++ typeahead has problem when selected is subset of another existing entry
+
++ privileges
+    + edit/delete orders with status == FINAL
+    + edit/delete order lines with status == FINAL

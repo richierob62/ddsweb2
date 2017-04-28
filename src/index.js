@@ -7,7 +7,7 @@ import { browserHistory } from 'react-router';
 import { getRoutes } from './routes';
 import configureStore from './configureStore';
 import Root from './Root';
-import './index.css';
+import './styles/styles.css';
 import root_saga from './sagas/root_saga'
 
 const store = configureStore();

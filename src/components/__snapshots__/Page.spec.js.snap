@@ -1,4 +1,0 @@
-exports[`test renders without crashing 1`] = `
-<div
-  className="page" />
-`;
