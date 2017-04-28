@@ -1,6 +1,8 @@
 import React from 'react'
 import createEventDispatcher from './create_dispatcher'
+import styled from 'styled-components'
 
+// dispatchers
 const createTypeaheadEventDispatcher = (p, field) => {
     const { dispatch, act } = p
     const action = field + 'TypeaheadChange'
@@ -8,15 +10,121 @@ const createTypeaheadEventDispatcher = (p, field) => {
     return (payload) => dispatch(func(payload))
 }
 
-const editable_text_input = (p, field, value) => {
-    const input_style = {
-        flex: 1,
-        fontSize: '.75rem',
-        color: 'blue',
-        border: 'none',
-        borderBottom: '1px solid #767676',
-        paddingLeft: '.75rem',
+// styled components
+const StyledEditableText = styled.input`
+    flex: 1;
+    font-size: .75rem;
+    color: rgb(201, 71, 225);
+    border: none;
+    border-bottom: 1px solid #767676;
+    margin-left: .75rem;
+    margin-right: 2rem;
+`
+
+const StyledLabel = styled.label`
+    color: rgba(26, 26, 26, 0.75);
+    font-weight: lighter;
+    font-size: .75rem;
+    margin-right: 5px;
+    margin-bottom: 0;
+    margin-top: 1px;
+    min-width: 100px;
+    text-align: right;
+`
+
+const StyledSelect = styled.select`
+    display: inline-block;
+    max-width: 100%;
+    height: calc(1.6rem - 2px);
+    padding: 2px 1.75rem 2px 2px;
+    color: rgb(42, 5, 49);
+    vertical-align: middle;
+    margin-top: -4px;
+    margin-left: 5px;    
+    border: 1px solid rgb(201, 71, 225);
+    border-radius: .25rem;
+    font-size: .75rem;
+
+    option {
+        color: rgb(42, 5, 49);
     }
+`
+
+const DisplayOnlyInput = styled.input`
+    flex: 1;
+    border: none;
+    font-size: .8rem;
+    color: rgb(42, 5, 49);
+`
+
+const StyledTypeahead = styled.div`
+
+        position: relative;
+        cursor: pointer;
+
+        > input {
+            position: absolute;
+            z-index: 100;
+            display: block;
+            max-width: 100%;
+            min-width: 12rem;
+            height: calc(1.6rem - 2px);
+            padding: 2px 5px;
+            color: rgb(42, 5, 49);
+            vertical-align: middle;
+            margin-top: -4px;
+            margin-left: 5px;    
+            border: 1px solid rgb(201, 71, 225);
+            border-radius: .25rem;
+            font-size: .75rem;
+        }
+
+        #options_box {
+            position: absolute;
+            background: white;
+            min-width: 12rem;
+            margin-left: 5px;    
+            top: 1.3rem;
+            width: 100%;
+            z-index: 101;
+            color: rgb(42, 5, 49);
+            border: 1px solid rgb(201, 71, 225);
+            border-radius: .25rem;
+            font-size: .75rem;    
+
+            > div {
+                padding: 3px;
+            }
+
+            > div:hover, > div:focus {
+                background: #b9cae3;
+            }
+        }
+
+`
+
+const StyledDate = styled.input`
+    font-size: .75rem;
+    color: rgb(201, 71, 225);
+    border: none;
+    border-bottom: 1px solid #767676;
+    margin-left: .75rem;
+    margin-right: 2rem;
+`
+
+const StyledCheckboxOrRadioDescription = styled.span`
+    font-size: .75rem;
+    color: rgb(201, 71, 225);
+    border: none;
+    vertical-align: middle;
+    display: inline-block;
+    margin-top: 2px;
+    margin-bottom: -2px;
+`
+
+// component functions
+
+const editable_text_input = (p, field, value) => {
 
     const change_handler = createEventDispatcher('change', 'Data', p)
 
@@ -26,7 +134,7 @@ const editable_text_input = (p, field, value) => {
             value: e.currentTarget.value
         })
     }
-    return <input style={input_style} type="text" value={value} onChange={changeHandler.bind(null, field)} />
+    return <StyledEditableText type="text" value={value} onChange={changeHandler.bind(null, field)} />
 }
 
 const select = (p, field, value) => {
@@ -36,17 +144,8 @@ const select = (p, field, value) => {
     const select_rows = () => {
         if (!ref_list) return null;
         return ref_list.map(option => {
-            return <option className="select-option" key={option.id} value={option.id}>{option.display}</option>
+            return <option key={option.id} value={option.id}>{option.display}</option>
         })
-    }
-
-    const select_style = {
-        flex: 1,
-        fontSize: '.75rem',
-        color: 'blue',
-        height: 'calc(2rem - 2px)',
-        borderBottom: '1px solid #767676',
-        marginTop: '-5px',
     }
 
     const change_handler = createEventDispatcher('change', 'Data', p)
@@ -65,9 +164,9 @@ const select = (p, field, value) => {
         undefined
 
     return (
-        <select value={selected_id} style={select_style} className="custom-select" onChange={clickHandler.bind(null, field)}>
+        <StyledSelect value={selected_id} onChange={clickHandler.bind(null, field)}>
             {select_rows()}
-        </select>
+        </StyledSelect>
     )
 }
 
@@ -75,47 +174,14 @@ const typeahead = (p, field, value) => {
 
     const current_value = value || p.typeaheads[field]
 
-    const typeahead_style = {
-        flex: 1,
-        display: 'flex',
-        fontSize: '0.75rem',
-        color: 'blue',
-        height: 'calc(2rem - 2px)',
-        marginTop: '-5px',
-        position: 'relative',
-    }
-
-    const input_style = {
-        flex: 1,
-        color: 'blue',
-        padding: '.375rem 1.75rem .375rem .75rem',
-        verticalAlign: 'middle',
-        border: '1px solid rgba(0,0,0,.15)',
-        borderBottom: '1px solid rgb(118, 118, 118)',
-        borderRadius: '.25rem',
-    }
-
-    const options_box_style = {
-        position: 'absolute',
-        background: 'white',
-        top: '2rem',
-        width: '100%',
-        border: '1px solid rgba(0,0,0,.15)',
-        borderRadius: '.25rem',
-    }
-
-    const option_style = {
-        cursor: 'pointer',
-        paddingLeft: '.75rem',
-    }
-
     const change_handler = createEventDispatcher('change', 'Data', p)
 
     const typeahead_handler = createTypeaheadEventDispatcher(p, field)
 
     const name_list_needed = p.data.get('fields')
         .toJS()
-        .find(fld => fld.field_name === field).ref_table
+        .find(fld => fld.field_name === field)
+        .ref_table
 
     const value_is_exact_match = (val) => {
         const count = p.ref_lists[name_list_needed]
@@ -205,12 +271,10 @@ const typeahead = (p, field, value) => {
             .map(option => {
                 return (
                     <div
-                        style={option_style}
                         key={option.id}
                         tabIndex="-1"
                         onClick={optionSelectHandler.bind(null, option.id)}
                         onKeyUp={handleKeyUpOption.bind(null, option.id)}
-                        className='option-item'
                     >
                         {option.display}
                     </div>
@@ -218,7 +282,7 @@ const typeahead = (p, field, value) => {
             })
         return (
             <div
-                style={options_box_style}
+                id="options_box"
                 ref={input !== undefined ? () => { } : e => input = e}
             >
                 {option_items}
@@ -227,22 +291,17 @@ const typeahead = (p, field, value) => {
     }
 
     return (
-        <div style={typeahead_style}>
+        <StyledTypeahead>
             <input type="text"
-                style={input_style}
                 value={current_value}
                 onChange={changeHandler.bind(null, field)}
                 onKeyUp={handleKeyUpInput} />
             {!value_is_exact_match(current_value) && renderOptionsBox()}
-        </div>
+        </StyledTypeahead>
     )
 }
 
 const radio = (p, field) => {
-
-    const radio_group_style = {
-
-    }
 
     const change_handler = createEventDispatcher('change', 'Data', p)
 
@@ -268,28 +327,23 @@ const radio = (p, field) => {
                             onChange={optionSelectHandler.bind(null, option.id)}
                         />
                         <span className="custom-control-indicator"></span>
-                        <span className="custom-control-description">{option.display}</span>
+                        <StyledCheckboxOrRadioDescription>{option.display}</StyledCheckboxOrRadioDescription>
                     </label>
                 )
             })
     }
 
     return (
-        <div style={radio_group_style}>
+        <div>
             {renderOptions()}
         </div>
     )
 }
 
 const dateInput = (p, field, value) => {
+
     const change_handler = createEventDispatcher('change', 'Data', p)
-    const date_style = {
-        fontSize: '.75rem',
-        color: 'blue',
-        border: 'none',
-        borderBottom: '1px solid #767676',
-        paddingLeft: '.75rem',
-    }
+
     const handleChange = e => {
         change_handler({
             field,
@@ -297,7 +351,7 @@ const dateInput = (p, field, value) => {
         })
     }
     return (
-        <input style={date_style} type="date" value={value ? value : new Date()} onChange={handleChange} />
+        <StyledDate type="date" value={value ? value : new Date()} onChange={handleChange} />
     )
 }
 
@@ -318,7 +372,7 @@ const checkbox = (p, field, value) => {
                 checked={value === 'Yes' ? 'checked' : ''}
                 onChange={handleChange.bind(null, field)} />
             <span className="custom-control-indicator"></span>
-            <span className="custom-control-description">{value}</span>
+            <StyledCheckboxOrRadioDescription>{value}</StyledCheckboxOrRadioDescription>
         </label>
     )
 }
@@ -331,6 +385,7 @@ const radioGroupDisplayValue = (p, field) => {
         .find(opt => opt.id === p.current.get(field))
         .display
 }
+
 
 const buildMatchingElement = (p, field, value) => {
     const type = p.data.get('fields')
@@ -348,52 +403,26 @@ const buildMatchingElement = (p, field, value) => {
 }
 
 const buildEditField = (p, field, value, label) => {
-    const label_style = {
-        color: 'rgba(26, 26, 26, 0.75)',
-        fontWeight: 'lighter',
-        fontSize: '.75rem',
-        marginRight: '5px',
-        marginBottom: '0',
-        marginTop: '1px',
-        width: '100px',
-        textAlign: 'right'
-    }
     const holder_style = {
         display: 'flex'
     }
     return (
         <div style={holder_style}>
-            <label style={label_style}>{label}:</label>
+            <StyledLabel>{label}:</StyledLabel>        
             {buildMatchingElement(p, field, value)}
         </div>
     )
 }
 
 const buildDisplayField = (current_value, label) => {
-    const label_style = {
-        color: 'rgba(26, 26, 26, 0.75)',
-        fontWeight: 'lighter',
-        fontSize: '.75rem',
-        marginRight: '5px',
-        marginBottom: '0',
-        marginTop: '1px',
-        width: '100px',
-        textAlign: 'right'
-    }
-    const input_style = {
-        flex: 1,
-        border: 'none',
-        borderColor: 'transparent',
-        fontSize: '.75rem',
-        color: 'blue'
-    }
+
     const holder_style = {
         display: 'flex'
     }
     return (
         <div style={holder_style}>
-            <label style={label_style}>{label}:</label>
-            <input style={input_style} type="text" value={current_value} onChange={() => { }} />
+            <StyledLabel>{label}:</StyledLabel>
+            <DisplayOnlyInput type="text" value={current_value} onChange={() => { }} />
         </div>
     )
 }

@@ -1,9 +1,15 @@
 import { Link } from 'react-router';
 import React from 'react'
+import styled from 'styled-components'
 
 const createLink = (p, link) => {
 
     //filter_on: 'account_num', select_on: undefined 
+
+    const StyledLink = styled(Link)`
+        font-size: .7rem;
+        margin: 2px 2px;
+    `
 
     const { dispatch, act } = p
 
@@ -19,19 +25,14 @@ const createLink = (p, link) => {
             dispatch(func(payload))
         }
     }
-    const linkStyle = {
-        fontSize: '.7rem',
-        margin: '2px 2px'
-    }
-    return <Link
+
+    return <StyledLink
         onClick={handleClick}
         key={link.label}
         to={link.link}
-        style={linkStyle}
     >
         {link.label}
-
-    </Link>
+    </StyledLink>
 }
 
 export default createLink

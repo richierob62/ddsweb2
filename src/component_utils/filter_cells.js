@@ -24,7 +24,7 @@ const createFilterCells = p => {
             filter_handler({ column: col, value: e.currentTarget.value })
         }
         return (
-            <th key={'filter-' + col.field_name} style={th_style} className="">
+            <th key={'filter-' + col.field_name} style={th_style}>
                 <input type='text'
                     style={input_style}
                     className="form-control"

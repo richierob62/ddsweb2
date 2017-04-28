@@ -57,3 +57,7 @@ export const beginCustomerDelete = () => {
 export const cancelCustomer = () => {
     return { type: 'CANCEL_CUSTOMER' }
 }
+
+export const saveCustomer = () => {
+    return { type: 'SAVE_CUSTOMER' }
+}

@@ -800,11 +800,46 @@ file creation order
 
 ============================
 
+import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
+
+const theme = { foo: 'mediumseagreen' }
+<ThemeProvider theme={theme}>
+    ...
+</ThemeProvider>
+
+const Title = styled.h1`
+const Wrapper = styled.section`
+const Input = styled.input`
+const Button = styled.button`
+const TomatoButton = styled(Button)`
+const StyledLink = styled(Link)`
+const rotate360 = keyframes`
+
+  background: ${props => props.primary ? 'palevioletred' : 'white'};
+  color: ${props => props.theme.foo};
+  animation: ${rotate360} 2s linear infinite;
+  ...
+`
+
+
 
 
 ============================
 
 + to do
+
+    + design page in BSS
+    + port to react & convert to use styled-components
+    
+
+    + id actions from all components
+    + test that state change is as expected for each (various begin states)
+        + pageChange
+        + 
+
+
 
     + check all actions being fired by customer component against reducer
         beginCustomerCreate

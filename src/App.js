@@ -1,22 +1,34 @@
-import React, { Component } from 'react';
-import Header from './components/Header';
-import Menu from './components/Menu';
-import Page from './components/Page';
+import './App.css'
+import React from 'react'
+import Header from './components/Header'
+import Menu from './components/Menu'
+import Page from './components/Page'
+import styled, { ThemeProvider } from 'styled-components'
 
-import './App.css';
+const theme = { foo: 'bar' }
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
+const App = (props) => {
+  return (
+    <ThemeProvider theme={theme}>
+      <div>
         <Header />
-        <div className="App-main">
+        <MainSection>
           <Menu />
-          <Page {...this.props} />
-        </div>
+          <Page {...props} />
+        </MainSection>
       </div>
-    );
-  }
+    </ThemeProvider>
+  )
 }
 
-export default App;
+const MainSection = styled.div`
+    display: flex;
+    width: 100%
+`
+
+const Wrapper = styled(App) `
+    display: flex;
+    flex-direction: column;
+`
+
+export default Wrapper

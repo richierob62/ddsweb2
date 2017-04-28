@@ -18,96 +18,11 @@ h1 {
     color: #1a1a1a;
 }
 
-.App {
-    display: flex;
-    flex-direction: column;
+
+input:focus {
+    outline: none !important;
 }
 
-.Header {
-    background-color: #9c27b0;
-    color: white;
-    text-align: center;
-    padding: 10px 5px;
-}
-
-.Header h1 {
-    color: white;
-}
-
-.App-main {
-    display: flex;
-    width: 100%
-}
-
-.Menu {
-    width: 15%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-left: 10px;
-    align-self: flex-start;
-}
-
-.Menu h2 {
-    margin-bottom: 5px;
-    font-size: 1.6rem;
-    color: rgba(0, 0, 0, 0.41);
-    margin-top: 2rem;
-    font-weight: lighter;
-}
-
-.menu-group {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.sub-menu {
-    font-weight: normal;
-    padding: 14px 0 5px 0;
-    color: #9c27b0
-}
-
-.link-item {
-    text-decoration: none !important;
-    color: #525252;
-    font-size: .8rem;
-    line-height: 1.2rem;
-    margin-left: .5rem;
-    transition: margin-left 300ms;
-    padding: 5px;
-}
-
-.active-link {
-    background-color: #9c27b0;
-    color: #FFFFFF !important;
-    box-shadow: 0 16px 26px -10px rgba(156, 39, 176, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(156, 39, 176, 0.2);
-    text-decoration: none !important;
-    margin-left: 1rem;
-}
-
-.link-item:hover {
-    background-color: rgb(216, 133, 231);
-    color: #FFFFFF;
-    box-shadow: 0 16px 26px -10px rgba(156, 39, 176, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(156, 39, 176, 0.2);
-    text-decoration: none;
-}
-
-.page {
-    flex: 1;
-    background-color: white;
-    border-left: 1px solid cadetblue;
-    padding: 1rem;
-}
-
-.page-title {
-    margin: 0;
-    color: rgba(26, 26, 26, 0.45);
-    font-weight: lighter;
-    font-size: 1.5rem;
-    border-bottom: 1px solid rgba(128, 128, 128, 0.47);
-    margin-bottom: 10px;
-}
 
 .page-vertical {
     display: flex;
@@ -189,64 +104,7 @@ table>tbody tr td {
     font-weight: normal;
 }
 
-.option-item:focus,
-.option-item:hover {
-    background: #b9cae3;
-}
 
-input:focus {
-    outline: none !important;
-}
 
-.react-datepicker__input-container input,
-input.react-datepicker-ignore-onclickoutside {
-    color: blue;
-    padding: .1rem 1.75rem .31rem .75rem;
-    vertical-align: middle;
-    border: none;
-    border-bottom: 1px solid rgb(118, 118, 118);
-}
 
-span.custom-control-description {
-    font-size: .75rem;
-    color: blue;
-    border: none;
-    vertical-align: middle;
-    display: inline-block;
-    margin-top: 2px;
-    margin-bottom: -2px;
-}
 
-.context-item {
-    text-decoration: none !important;
-    color: #525252;
-    font-size: .75rem;
-    padding: 2px;
-}
-
-.active-context-item {
-    background-color: #9c27b0;
-    color: #FFFFFF !important;
-    box-shadow: 0 16px 26px -10px rgba(156, 39, 176, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(156, 39, 176, 0.2);
-    text-decoration: none !important;
-    margin-left: 1rem;
-}
-
-.context-item:hover {
-    background-color: rgb(216, 133, 231);
-    color: #FFFFFF;
-    box-shadow: 0 16px 26px -10px rgba(156, 39, 176, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(156, 39, 176, 0.2);
-    text-decoration: none;
-}
-
-.btn-collection .btn-sm {
-    font-size: .7rem;
-    margin: 2px 2px;
-}
-
-.btn-collection {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 10px;
-}

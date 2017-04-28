@@ -1,14 +1,16 @@
 import React from 'react'
 import { buildField } from './field_maker'
+import styled from 'styled-components'
+
+const DetailField = styled.div`
+    flex: 1;
+    margin-top: 9px;
+    margin-bottom: 3px;
+`
 
 const buildDetailRow = (p, row) => {
     return row.map(field => {
-        const field_style = {
-            flex: 1,
-            marginTop: '9px',
-            marginBottom: '3px',
-        }
-        return <div style={field_style} key={field}>{buildField(p, field)}</div>
+        return <DetailField key={field}>{buildField(p, field)}</DetailField>
     })
 }
 
