@@ -3,7 +3,6 @@ import buildTabs from '../component_utils/details_tabs'
 import layOutFields from '../component_utils/details_layout'
 import styled from 'styled-components'
 
-
 const DetailsHeader = styled.h5`
     color: rgba(26, 26, 26, 0.74);
     font-weight: lighter;
@@ -19,17 +18,19 @@ const TabSection = styled.div`
     font-size: .9rem;
     margin-bottom: 10px;
     padding-top: .5rem;
-    border-bottom: ${props => props.current ? '1px solid rgb(201, 71, 225)' : 'none'};
+    border-bottom: ${props => props.current
+        ? '1px solid rgb(201, 71, 225)'
+        : 'none'};
 `
-
-
 
 const buildPageDetails = p => {
 
     const { dispatch, act, data, current } = p
-    const dispatch_obj = { dispatch, act, data }
-
-
+    const dispatch_obj = {
+        dispatch,
+        act,
+        data
+    }
 
     const details_style = {
         width: '85%',
@@ -47,8 +48,8 @@ const buildPageDetails = p => {
                 }
             </DetailsHeader>
             <TabSection current={current}>
-                {current 
-                    ? buildTabs(current, data, dispatch_obj) 
+                {current
+                    ? buildTabs(current, data, dispatch_obj)
                     : ''
                 }
             </TabSection>
@@ -56,6 +57,5 @@ const buildPageDetails = p => {
         </div>
     )
 }
-
 
 export default buildPageDetails

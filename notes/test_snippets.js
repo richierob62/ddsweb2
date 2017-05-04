@@ -1,3 +1,10 @@
+import { shallow, mount } from 'enzyme';
+import { shallowToJson } from 'enzyme-to-json';
+
+const store = test_configureStore();
+store.dispatch = jest.fn();
+
+
 // Reducers
 it('should return the initial state', () => {
     expect(
@@ -34,7 +41,13 @@ it('renders without crashing', () => {
 
 it('handles a line select', () => {
     const el = mount(<CustomerList store={store_2} />);
+    el.find('#table-filter-customer-col-1 input').node.value = 'foo_1';
     el.find('#data-row-1').simulate('click');
     expect(store_2.dispatch).toBeCalledWith({ "payload": 1, "type": "SELECT_CUSTOMER" });
 });
+
+
+npm test -- --coverage
+
+
 

@@ -279,13 +279,14 @@ const initial_state = Immutable.fromJS({
                 { id: 2, display: 'option 2' },
             ]
         },
-    ]
+    ],
+    ref_list: [],
+    typeahead: ''    
 })
 
 const customers = (state = initial_state, action) => {
     switch (action.type) {
 
-        // select 
         case 'SELECT_CUSTOMER': {
             if (state.get('mode') !== 'display') return state
             return state.set('selected_id', action.payload)
@@ -295,7 +296,6 @@ const customers = (state = initial_state, action) => {
             return state.setIn(['details_template', 'current_tab'], action.payload)
         }
 
-        // sort
         case 'CHANGE_CUSTOMER_SORT': {
             const sorted_on = state.getIn(['current_sort', 'field_name'])
             const sorted_dir = state.getIn(['current_sort', 'direction'])
@@ -308,12 +308,10 @@ const customers = (state = initial_state, action) => {
                 .setIn(['current_sort', 'direction'], new_direction)
         }
 
-        // filter
         case 'CHANGE_CUSTOMER_FILTER': {
             return state.setIn(['current_filters', action.payload.column], action.payload.value)
         }
 
-        // editing
         case 'CHANGE_CUSTOMER_DATA': {
             return state.updateIn(
                 ['list'],
@@ -330,7 +328,6 @@ const customers = (state = initial_state, action) => {
             )
         }
 
-        // change mode
         case 'BEGIN_CUSTOMER_EDIT': {
             const id = state.get('selected_id')
             const current = state.get('list').find(cust => cust.get('id') === id)
@@ -370,32 +367,31 @@ const customers = (state = initial_state, action) => {
                 .set('selected_id', new_id)
                 .set('mode', 'duplicate')
         }
-        
+
         case 'BEGIN_CUSTOMER_DELETE': {
-            return state.set('mode', 'deleting')
+            return state.set('mode', 'delete')
         }
 
-        case 'SAVE_EDITED_CUSTOMER_DONE': {
-            return state.set('mode', 'display').set('backup_copy', undefined)
-        }
-        
-        case 'SAVE_NEW_CUSTOMER_DONE':
-        case 'SAVE_DUPLICATE_CUSTOMER_DONE': {
+        case 'SAVE_CUSTOMER_COMPLETED': {
+
+            const mode = state.get('mode')
+
+            if (mode === 'edit')
+                return state.set('mode', 'display').set('backup_copy', undefined)
+
             const temp_id = state.get('selected_id')
-            const index = state.get('list').findIndex(item => item.get('id') === temp_id)
-            const current = state.get('list')
-                .find(item => item.get('id') === temp_id)
-                .set('id', action.payload.id)
-                .set('account_num', action.payload.account_num)
+            const currentObj = state.get('list').findEntry(item => item.get('id') === temp_id)
+            const current = currentObj[1].set('id', action.payload)
+
             return state.updateIn(
                 ['list'],
-                list => list.set(index, current)
+                list => list.set(currentObj[0], current)
             )
                 .set('mode', 'display')
                 .set('selected_id', action.payload)
         }
-        
-        case 'DELETE_CUSTOMER_DONE': {
+
+        case 'DELETE_CUSTOMER_COMPLETED': {
             const id = state.get('selected_id')
             const index = state.get('list').findIndex(item => item.get('id') === id)
             return state.updateIn(
@@ -406,7 +402,6 @@ const customers = (state = initial_state, action) => {
                 .set('selected_id', -1)
         }
 
-        // cancel by mode
         case 'CANCEL_CUSTOMER': {
             const mode = state.get('mode')
             switch (mode) {
@@ -442,7 +437,19 @@ const customers = (state = initial_state, action) => {
                 default: return state
             }
         }
-        
+
+        case 'LOAD_CUSTOMER_LIST_COMPLETED': {
+            const newList = Immutable.fromJS(action.payload)
+            return state.set('list', newList)
+            .set('mode', 'display')
+            .set('selected_id', -1)
+        }
+
+        case 'LOAD_CUSTOMER_REFERENCE_COMPLETED': {
+            const newList = Immutable.fromJS(action.payload)
+            return state.set('ref_list', newList)
+        }
+
         default: return state
     }
 }

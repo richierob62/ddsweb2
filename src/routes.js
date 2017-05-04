@@ -24,7 +24,8 @@ import SourceBooks from './components/SourceBooks'
 import Udacs from './components/Udacs'
 
 
-import { pageChange } from './actions';
+import act from './actions/';
+
 import { isLoggedIn } from './selectors.js';
 /*eslint-enable no-unused-vars*/
 
@@ -42,7 +43,7 @@ export const getRoutes = (store) => {
     }
 
     // fire page change action
-    store.dispatch(pageChange(nextState.location.pathname));
+    store.dispatch(act.pageChange(nextState.location.pathname));
 
   };
 

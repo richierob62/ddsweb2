@@ -18,7 +18,7 @@ const layOutFields = p => {
     return rows.map((row, idx) => {
         return (
             <DetailRow key={idx}>
-                {buildDetailRow( p, row)}
+                {buildDetailRow(p, row)}
             </DetailRow>
         )
     })

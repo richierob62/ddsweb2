@@ -1,6 +1,6 @@
 // import { take, put, call, fork, select, cancel } from 'redux-saga/effects'
 import {fork} from 'redux-saga/effects'
-// import * as act from '../actions'
+// import * as act from '../actions/'
 // import * as api from '../api/api'
 
 // const paths = [

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import styled from 'styled-components'
-import '../styles/rr_link.css'
+import '../styles/styles.css'
 
 const StyledMenu = styled.div`
 

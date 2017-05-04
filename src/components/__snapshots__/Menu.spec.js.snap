@@ -1,0 +1,145 @@
+exports[`test renders without crashing 1`] = `
+<styled.div>
+  <h2>
+    M E N U
+  </h2>
+  <div>
+    <h5>
+      Main Activity
+    </h5>
+    <ul>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/customers">
+          Customers
+        </Styled(Link)>
+      </li>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/orders">
+          Orders
+        </Styled(Link)>
+      </li>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/order_lines">
+          Order Lines
+        </Styled(Link)>
+      </li>
+    </ul>
+    <h5>
+      Supporting Files
+    </h5>
+    <ul>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/ad_types">
+          AdTypes
+        </Styled(Link)>
+      </li>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/categories">
+          Categories
+        </Styled(Link)>
+      </li>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/compensation_plans">
+          Compensation Plans
+        </Styled(Link)>
+      </li>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/fields">
+          Data Fields (Ads)
+        </Styled(Link)>
+      </li>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/findinglines">
+          Finding Lines
+        </Styled(Link)>
+      </li>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/headings">
+          Headings
+        </Styled(Link)>
+      </li>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/localforeign">
+          Local/Foreign
+        </Styled(Link)>
+      </li>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/order_statuses">
+          Order Statuses
+        </Styled(Link)>
+      </li>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/page_types">
+          Page Types
+        </Styled(Link)>
+      </li>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/payplans">
+          Pay Plans
+        </Styled(Link)>
+      </li>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/permissions">
+          Permissions
+        </Styled(Link)>
+      </li>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/primary_books">
+          Primary Books
+        </Styled(Link)>
+      </li>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/sales_reps">
+          Sales Reps
+        </Styled(Link)>
+      </li>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/source_books">
+          Source Books
+        </Styled(Link)>
+      </li>
+      <li>
+        <Styled(Link)
+          activeClassName="active-link"
+          to="/udacs">
+          Udacs
+        </Styled(Link)>
+      </li>
+    </ul>
+  </div>
+</styled.div>
+`;
