@@ -227,7 +227,6 @@ $factory->define(App\SalesRep::class, function (Faker\Generator $faker) {
     return [
     'name' => $faker->name,
     'code' => $faker->word,
-    'email' => $faker->email,
     'address' => $faker->streetAddress,
     'city' => $faker->city,
     'state' => $faker->word,

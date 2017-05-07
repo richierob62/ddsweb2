@@ -29,32 +29,6 @@
         loginSuccessful
         logout
 
-+ testing reducers
-    use lumen models as list to create reducers
-
-    AdType.php
-    Category.php
-    CompensationPlan.php
-    Customer.php
-    Field.php
-    FindingLine.php
-    Heading.php
-    LocalForeign.php
-    Order.php
-    OrderLine.php
-    OrderStatus.php
-    PayPlan.php
-    -------------
-
-
-
-    PrimaryBook.php
-    SalesRep.php
-    SourceBook.php
-    Udac.php
-
-+ test that state changed due to action + reducer
-
 + test that sagas being called
     it('The root saga should react to actions', () => {
     const generator = rootSaga();

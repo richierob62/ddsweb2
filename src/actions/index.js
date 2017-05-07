@@ -8,14 +8,16 @@ const grouped_actions = Object.assign({},
     factory('order_line'),
     factory('order_status'),
     factory('pay_plan'),
-    // factory('primary_book'),
-    // factory('sales_rep'),
+    factory('primary_book'),
+    factory('sales_rep'),
     factory('category'),
     factory('compensation_plan'),
     factory('field'),
     factory('finding_line'),
     factory('heading'),
     factory('local_foreign'),
+    factory('source_book'),
+    factory('udac'),
     {pageChange}
 )
 

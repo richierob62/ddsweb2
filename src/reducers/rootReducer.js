@@ -17,6 +17,8 @@ import pageChange from './page-change';
 import pay_plans from './pay_plans';
 import primary_books from './primary_books';
 import sales_reps from './sales_reps';
+import source_books from './source_books';
+import udacs from './udacs';
 
 const rootReducer = combineReducers({
     auth,
@@ -35,6 +37,8 @@ const rootReducer = combineReducers({
     pay_plans : generateTableReducer('pay_plan', pay_plans),
     primary_books : generateTableReducer('primary_book', primary_books),
     sales_reps : generateTableReducer('sales_rep', sales_reps),
+    source_books : generateTableReducer('source_book', source_books),
+    udacs : generateTableReducer('udac', udacs),
 });
 
 export default rootReducer;
