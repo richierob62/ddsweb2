@@ -39,12 +39,15 @@
     Field.php
     FindingLine.php
     Heading.php
-    -------------
     LocalForeign.php
     Order.php
     OrderLine.php
     OrderStatus.php
     PayPlan.php
+    -------------
+
+
+
     PrimaryBook.php
     SalesRep.php
     SourceBook.php
@@ -67,7 +70,6 @@
 + privileges
     + edit/delete orders with status == FINAL
     + edit/delete order lines with status == FINAL
-
 
 
 

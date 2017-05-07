@@ -1,41 +1,39 @@
-import {createStore, combineReducers} from 'redux'
+import {createStore} from 'redux'
 import act from '../actions/'
-import ad_types from './ad_types'
-
-const rootReducer = combineReducers({ad_types})
+import rootReducer from './rootReducer'
 
 it('should return the initial state', () => {
     expect(rootReducer(undefined, {})).toBeDefined()
 })
 
-it('reducer: ad_types should handle action: selectAdType', () => {
+it('reducer: compensation_plans should handle action: selectCompensationPlan', () => {
     const store = createStore(rootReducer)
-    store.dispatch(act.selectAdType(2))
-    const newState = store.getState()['ad_types']
+    store.dispatch(act.selectCompensationPlan(2))
+    const newState = store.getState()['compensation_plans']
     expect(newState.get('selected_id')).toEqual(2)
 })
 
-it('reducer: ad_types should handle action: selectAdTypeTab', () => {
+it('reducer: compensation_plans should handle action: selectCompensationPlanTab', () => {
     const store = createStore(rootReducer)
-    store.dispatch(act.selectAdTypeTab('foo'))
-    const newState = store.getState()['ad_types']
+    store.dispatch(act.selectCompensationPlanTab('foo'))
+    const newState = store.getState()['compensation_plans']
     expect(newState.getIn(['details_template', 'current_tab'])).toEqual('foo')
 })
 
-it('reducer: ad_types should handle action: changeAdTypeData', () => {
+it('reducer: compensation_plans should handle action: changeCompensationPlanData', () => {
 
     const store = createStore(rootReducer)
 
-    store.dispatch(act.selectAdType(2))
+    store.dispatch(act.selectCompensationPlan(2))
 
     const newData = {
         field: 'code',
         value: 'foo'
     }
 
-    store.dispatch(act.changeAdTypeData(newData))
+    store.dispatch(act.changeCompensationPlanData(newData))
 
-    const newState = store.getState()['ad_types']
+    const newState = store.getState()['compensation_plans']
     const field = newState
         .get('list')
         .find((item) => item.get('id') === 2)
@@ -44,7 +42,7 @@ it('reducer: ad_types should handle action: changeAdTypeData', () => {
 
 })
 
-it('reducer: ad_types should handle action: changeAdTypeFilter', () => {
+it('reducer: compensation_plans should handle action: changeCompensationPlanFilter', () => {
 
     const store = createStore(rootReducer)
 
@@ -53,9 +51,9 @@ it('reducer: ad_types should handle action: changeAdTypeFilter', () => {
         value: 'foo'
     }
 
-    store.dispatch(act.changeAdTypeFilter(newData))
+    store.dispatch(act.changeCompensationPlanFilter(newData))
 
-    const newState = store.getState()['ad_types']
+    const newState = store.getState()['compensation_plans']
     const filter = newState
         .get('current_filters')
         .toJS()
@@ -66,10 +64,10 @@ it('reducer: ad_types should handle action: changeAdTypeFilter', () => {
         value: 'dolly'
     }
 
-    const action_2 = act.changeAdTypeFilter(newData_2)
+    const action_2 = act.changeCompensationPlanFilter(newData_2)
     store.dispatch(action_2)
 
-    const newState_2 = store.getState()['ad_types']
+    const newState_2 = store.getState()['compensation_plans']
     const filter_2 = newState_2
         .get('current_filters')
         .toJS()
@@ -77,13 +75,13 @@ it('reducer: ad_types should handle action: changeAdTypeFilter', () => {
 
 })
 
-it('reducer: ad_types should handle action: changeAdTypeSort', () => {
+it('reducer: compensation_plans should handle action: changeCompensationPlanSort', () => {
 
     const store = createStore(rootReducer)
 
-    store.dispatch(act.changeAdTypeSort('foo'))
+    store.dispatch(act.changeCompensationPlanSort('foo'))
 
-    const newState = store.getState()['ad_types']
+    const newState = store.getState()['compensation_plans']
     const sort = newState
         .get('current_sort')
         .toJS()
@@ -91,104 +89,104 @@ it('reducer: ad_types should handle action: changeAdTypeSort', () => {
 
 })
 
-it('reducer: ad_types should handle action: beginAdTypeEdit', () => {
+it('reducer: compensation_plans should handle action: beginCompensationPlanEdit', () => {
 
     const store = createStore(rootReducer)
 
-    store.dispatch(act.selectAdType(2))
+    store.dispatch(act.selectCompensationPlan(2))
 
-    store.dispatch(act.beginAdTypeEdit())
+    store.dispatch(act.beginCompensationPlanEdit())
 
-    const newState = store.getState()['ad_types']
+    const newState = store.getState()['compensation_plans']
     expect(newState.get('mode')).toEqual('edit')
     expect(newState.get('backup_copy')).toBeDefined()
 
 })
 
-it('reducer: ad_types should handle action: beginAdTypeCreate', () => {
+it('reducer: compensation_plans should handle action: beginCompensationPlanCreate', () => {
 
     const store = createStore(rootReducer)
 
-    store.dispatch(act.selectAdType(2))
+    store.dispatch(act.selectCompensationPlan(2))
 
-    const numAdTypes = store
-        .getState()['ad_types']
+    const numCompensationPlans = store
+        .getState()['compensation_plans']
         .get('list')
         .count()
 
-    store.dispatch(act.beginAdTypeCreate())
+    store.dispatch(act.beginCompensationPlanCreate())
 
-    const newState = store.getState()['ad_types']
+    const newState = store.getState()['compensation_plans']
 
     expect(newState.get('mode')).toEqual('new')
     expect(newState.get('selected_id'))
         .not
         .toEqual(2)
-    expect(newState.get('list').count()).toEqual(numAdTypes + 1)
+    expect(newState.get('list').count()).toEqual(numCompensationPlans + 1)
 
 })
 
-it('reducer: ad_types should handle action: beginAdTypeDelete', () => {
+it('reducer: compensation_plans should handle action: beginCompensationPlanDelete', () => {
 
     const store = createStore(rootReducer)
 
-    store.dispatch(act.selectAdType(2))
+    store.dispatch(act.selectCompensationPlan(2))
 
-    store.dispatch(act.beginAdTypeDelete())
+    store.dispatch(act.beginCompensationPlanDelete())
 
-    const newState = store.getState()['ad_types']
+    const newState = store.getState()['compensation_plans']
 
     expect(newState.get('mode')).toEqual('delete')
     expect(newState.get('selected_id')).toEqual(2)
 
 })
 
-it('reducer: ad_types should handle action: beginAdTypeDuplicate', () => {
+it('reducer: compensation_plans should handle action: beginCompensationPlanDuplicate', () => {
 
     const store = createStore(rootReducer)
 
-    store.dispatch(act.selectAdType(2))
+    store.dispatch(act.selectCompensationPlan(2))
 
-    const numAdTypes = store
-        .getState()['ad_types']
+    const numCompensationPlans = store
+        .getState()['compensation_plans']
         .get('list')
         .count()
 
-    store.dispatch(act.beginAdTypeDuplicate())
+    store.dispatch(act.beginCompensationPlanDuplicate())
 
-    const newState = store.getState()['ad_types']
+    const newState = store.getState()['compensation_plans']
 
     expect(newState.get('mode')).toEqual('duplicate')
     expect(newState.get('selected_id'))
         .not
         .toEqual(2)
-    expect(newState.get('list').count()).toEqual(numAdTypes + 1)
+    expect(newState.get('list').count()).toEqual(numCompensationPlans + 1)
 
 })
 
-it('reducer: ad_types should handle action: cancelAdType after beginAdTypeEdit', () => {
+it('reducer: compensation_plans should handle action: cancelCompensationPlan after beginCompensationPlanEdit', () => {
 
     const store = createStore(rootReducer)
 
-    store.dispatch(act.selectAdType(2))
+    store.dispatch(act.selectCompensationPlan(2))
 
     const original_val = store
-        .getState()['ad_types']
+        .getState()['compensation_plans']
         .get('list')
         .find((item) => item.get('id') === 2)
         .get('code')
 
-    store.dispatch(act.beginAdTypeEdit())
+    store.dispatch(act.beginCompensationPlanEdit())
 
     const newData = {
         field: 'code',
         value: 'foo'
     }
 
-    store.dispatch(act.changeAdTypeData(newData))
-    store.dispatch(act.cancelAdType())
+    store.dispatch(act.changeCompensationPlanData(newData))
+    store.dispatch(act.cancelCompensationPlan())
 
-    const newState = store.getState()['ad_types']
+    const newState = store.getState()['compensation_plans']
 
     expect(newState.get('mode')).toEqual('display')
     expect(newState.get('selected_id')).toEqual(2)
@@ -197,79 +195,79 @@ it('reducer: ad_types should handle action: cancelAdType after beginAdTypeEdit',
 
 })
 
-it('reducer: ad_types should handle action: cancelAdType after beginAdTypeCreate', () => {
+it('reducer: compensation_plans should handle action: cancelCompensationPlan after beginCompensationPlanCreate', () => {
 
     const store = createStore(rootReducer)
 
-    const numAdTypes = store
-        .getState()['ad_types']
+    const numCompensationPlans = store
+        .getState()['compensation_plans']
         .get('list')
         .count()
 
-    store.dispatch(act.beginAdTypeCreate())
+    store.dispatch(act.beginCompensationPlanCreate())
 
-    store.dispatch(act.cancelAdType())
+    store.dispatch(act.cancelCompensationPlan())
 
-    const newState = store.getState()['ad_types']
+    const newState = store.getState()['compensation_plans']
 
     expect(newState.get('mode')).toEqual('display')
     expect(newState.get('selected_id')).toEqual(-1)
-    expect(newState.get('list').count()).toEqual(numAdTypes)
+    expect(newState.get('list').count()).toEqual(numCompensationPlans)
 
 })
 
-it('reducer: ad_types should handle action: cancelAdType after beginAdTypeDelete', () => {
+it('reducer: compensation_plans should handle action: cancelCompensationPlan after beginCompensationPlanDelete', () => {
 
     const store = createStore(rootReducer)
 
-    const numAdTypes = store
-        .getState()['ad_types']
+    const numCompensationPlans = store
+        .getState()['compensation_plans']
         .get('list')
         .count()
 
-    store.dispatch(act.selectAdType(2))
-    store.dispatch(act.beginAdTypeDelete())
-    store.dispatch(act.cancelAdType())
+    store.dispatch(act.selectCompensationPlan(2))
+    store.dispatch(act.beginCompensationPlanDelete())
+    store.dispatch(act.cancelCompensationPlan())
 
-    const newState = store.getState()['ad_types']
+    const newState = store.getState()['compensation_plans']
 
     expect(newState.get('mode')).toEqual('display')
     expect(newState.get('selected_id')).toEqual(2)
-    expect(newState.get('list').count()).toEqual(numAdTypes)
+    expect(newState.get('list').count()).toEqual(numCompensationPlans)
 
 })
 
-it('reducer: ad_types should handle action: cancelAdType after beginAdTypeDuplicate', () => {
+it('reducer: compensation_plans should handle action: cancelCompensationPlan after beginCompensationPlanDuplicate', () => {
 
     const store = createStore(rootReducer)
 
-    store.dispatch(act.selectAdType(2))
+    store.dispatch(act.selectCompensationPlan(2))
 
-    const numAdTypes = store
-        .getState()['ad_types']
+    const numCompensationPlans = store
+        .getState()['compensation_plans']
         .get('list')
         .count()
 
-    store.dispatch(act.beginAdTypeDuplicate())
-    store.dispatch(act.cancelAdType())
+    store.dispatch(act.beginCompensationPlanDuplicate())
+    store.dispatch(act.cancelCompensationPlan())
 
-    const newState = store.getState()['ad_types']
+    const newState = store.getState()['compensation_plans']
 
     expect(newState.get('mode')).toEqual('display')
     expect(newState.get('selected_id')).toEqual(-1)
-    expect(newState.get('list').count()).toEqual(numAdTypes)
+    expect(newState.get('list').count()).toEqual(numCompensationPlans)
 
 })
 
-it('reducer: ad_types should handle action: saveAdTypeCompleted in mode: edit', () => {
+it('reducer: compensation_plans should handle action: saveCompensationPlanCompleted in mode: edit', () => {
 
     const store = createStore(rootReducer)
 
-    store.dispatch(act.selectAdType(2))
-    store.dispatch(act.beginAdTypeEdit())
-    store.dispatch(act.saveAdTypeCompleted())
+    store.dispatch(act.selectCompensationPlan(2))
+    store.dispatch(act.beginCompensationPlanEdit())
+    store.dispatch(act.saveCompensationPlanCompleted())
 
-    const newState = store.getState()['ad_types']
+    const newState = store.getState()['compensation_plans']
 
     expect(newState.get('mode')).toEqual('display')
     expect(newState.get('selected_id')).toEqual(2)
@@ -277,59 +275,59 @@ it('reducer: ad_types should handle action: saveAdTypeCompleted in mode: edit', 
 
 })
 
-it('reducer: ad_types should handle action: saveAdTypeCompleted in mode: duplicate', () => {
+it('reducer: compensation_plans should handle action: saveCompensationPlanCompleted in mode: duplicate', () => {
 
     const store = createStore(rootReducer)
 
-    store.dispatch(act.selectAdType(2))
-    store.dispatch(act.beginAdTypeDuplicate())
-    store.dispatch(act.saveAdTypeCompleted(99))
+    store.dispatch(act.selectCompensationPlan(2))
+    store.dispatch(act.beginCompensationPlanDuplicate())
+    store.dispatch(act.saveCompensationPlanCompleted(99))
 
-    const newState = store.getState()['ad_types']
+    const newState = store.getState()['compensation_plans']
 
     expect(newState.get('mode')).toEqual('display')
     expect(newState.get('selected_id')).toEqual(99)
 
 })
 
-it('reducer: ad_types should handle action: saveAdTypeCompleted in mode: new', () => {
+it('reducer: compensation_plans should handle action: saveCompensationPlanCompleted in mode: new', () => {
 
     const store = createStore(rootReducer)
 
-    store.dispatch(act.beginAdTypeCreate())
-    store.dispatch(act.saveAdTypeCompleted(99))
+    store.dispatch(act.beginCompensationPlanCreate())
+    store.dispatch(act.saveCompensationPlanCompleted(99))
 
-    const newState = store.getState()['ad_types']
+    const newState = store.getState()['compensation_plans']
 
     expect(newState.get('mode')).toEqual('display')
     expect(newState.get('selected_id')).toEqual(99)
 
 })
 
-it('reducer: ad_types should handle action: deleteAdTypeCompleted in mode: delete', () => {
+it('reducer: compensation_plans should handle action: deleteCompensationPlanCompleted in mode: delete', () => {
 
     const store = createStore(rootReducer)
 
-    const numAdTypes = store
-        .getState()['ad_types']
+    const numCompensationPlans = store
+        .getState()['compensation_plans']
         .get('list')
         .count()
 
-    store.dispatch(act.deleteAdTypeCompleted())
+    store.dispatch(act.deleteCompensationPlanCompleted())
 
-    const newState = store.getState()['ad_types']
+    const newState = store.getState()['compensation_plans']
 
     expect(newState.get('mode')).toEqual('display')
     expect(newState.get('selected_id')).toEqual(-1)
-    expect(newState.get('list').count()).toEqual(numAdTypes - 1)
+    expect(newState.get('list').count()).toEqual(numCompensationPlans - 1)
 
 })
 
-it('reducer: ad_types should handle action: loadAdTypeListCompleted', () => {
+it('reducer: compensation_plans should handle action: loadCompensationPlanListCompleted', () => {
 
     const store = createStore(rootReducer)
 
-    store.dispatch(act.selectAdType(2))
+    store.dispatch(act.selectCompensationPlan(2))
 
     const newList = [
         {
@@ -341,10 +339,10 @@ it('reducer: ad_types should handle action: loadAdTypeListCompleted', () => {
         }
     ]
 
-    store.dispatch(act.beginAdTypeDelete())
-    store.dispatch(act.loadAdTypeListCompleted(newList))
+    store.dispatch(act.beginCompensationPlanDelete())
+    store.dispatch(act.loadCompensationPlanListCompleted(newList))
 
-    const newState = store.getState()['ad_types']
+    const newState = store.getState()['compensation_plans']
 
     expect(newState.get('mode')).toEqual('display')
     expect(newState.get('selected_id')).toEqual(-1)
@@ -352,7 +350,7 @@ it('reducer: ad_types should handle action: loadAdTypeListCompleted', () => {
 
 })
 
-it('reducer: ad_types should handle action: loadAdTypeReferenceCompleted', () => {
+it('reducer: compensation_plans should handle action: loadCompensationPlanReferenceCompleted', () => {
 
     const store = createStore(rootReducer)
 
@@ -366,9 +364,9 @@ it('reducer: ad_types should handle action: loadAdTypeReferenceCompleted', () =>
         }
     ]
     
-    store.dispatch(act.loadAdTypeReferenceCompleted(newData))
+    store.dispatch(act.loadCompensationPlanReferenceCompleted(newData))
 
-    const newState = store.getState()['ad_types']
+    const newState = store.getState()['compensation_plans']
 
     expect(newState.get('ref_list').count()).toEqual(2)
     expect(newState.get('ref_list').toJS()).toEqual(newData)

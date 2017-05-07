@@ -1,9 +1,6 @@
-import { createStore, combineReducers } from 'redux'
+import { createStore } from 'redux'
 import act from '../actions/'
-import fields from './fields'
-
-
-const rootReducer = combineReducers({ fields })
+import rootReducer from './rootReducer'
 
 
 it('should return the initial state', () => {

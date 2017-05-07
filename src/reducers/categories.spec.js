@@ -1,9 +1,6 @@
-import { createStore, combineReducers } from 'redux'
+import { createStore } from 'redux'
 import act from '../actions/'
-import categories from './categories'
-
-
-const rootReducer = combineReducers({ categories })
+import rootReducer from './rootReducer'
 
 
 it('should return the initial state', () => {

@@ -1,26 +1,47 @@
 import Immutable from 'immutable'
 
 const initial_state = Immutable.fromJS({
-    ref_list: [
-        {id: 1, display: 'Loc/Foreign 1'},
-        {id: 2, display: 'Loc/Foreign 2'},
-        {id: 3, display: 'Loc/Foreign 3'},
-        {id: 4, display: 'Loc/Foreign 4'},
-        {id: 5, display: 'Loc/Foreign 5'},
-        {id: 6, display: 'Loc/Foreign 6'},
-        {id: 7, display: 'Loc/Foreign 7'},
-        {id: 8, display: 'Loc/Foreign 8'},
-        {id: 9, display: 'Loc/Foreign 9'},
-        {id: 10, display: 'Loc/Foreign 10'}
+    list: [
+        { id: 1, name: 'Local Foreign name 1', code: 'localforeign1' },
+        { id: 2, name: 'Local Foreign name 2', code: 'localforeign2' },
+        { id: 3, name: 'Local Foreign name 3', code: 'localforeign3' },
+        { id: 4, name: 'Local Foreign name 4', code: 'localforeign4' },
+        { id: 5, name: 'Local Foreign name 5', code: 'localforeign5' },
+        { id: 6, name: 'Local Foreign name 6', code: 'localforeign6' },
     ],
-    typeahead: ''
+    page_title: 'Local Foreigns',
+    action_word: 'LocalForeign',
+    selected_id: -1,
+    current_sort: {
+        field_name: 'name',
+        direction: 'ASC'
+    },
+    current_filters: {},
+    mode: 'display',
+    fields: [
+        { field_name: 'name', label: 'Name', input_type: 'text', ref_table: undefined },
+        { field_name: 'code', label: 'Code', input_type: 'text', ref_table: undefined },
+    ],
+    list_template: [
+        { field_name: 'code', width: '20%' },
+        { field_name: 'name', width: '40%' },
+    ],
+    details_template: {
+        current_tab: '',
+        tabs: [
+            {
+                name: '',
+                rows: [
+                    ['name'],
+                    ['code'],
+                ]
+            }
+        ]
+    },
+    context_menu: [],
+    radio_groups: [],
+    ref_list: [],
+    typeahead: ''    
 })
 
-const local_foreigns = (state = initial_state, action) => {
-    switch (action.type) {
-        default: return state
-    }
-}
-
-export default local_foreigns
-
+export default initial_state

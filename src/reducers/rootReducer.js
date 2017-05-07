@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import generateTableReducer from './generate_table_reducer'
 
 import auth from './auth';
 import ad_types from './ad_types';
@@ -9,6 +10,9 @@ import fields from './fields';
 import finding_lines from './finding_lines';
 import headings from './headings';
 import local_foreigns from './local_foreigns';
+import order_lines from './order_lines';
+import orders from './orders';
+import order_statuses from './order_statuses';
 import pageChange from './page-change';
 import pay_plans from './pay_plans';
 import primary_books from './primary_books';
@@ -16,18 +20,21 @@ import sales_reps from './sales_reps';
 
 const rootReducer = combineReducers({
     auth,
-    ad_types,
-    categories,
-    compensation_plans,
-    customers,
-    fields,
-    finding_lines,
-    headings,
-    local_foreigns,
     pageChange,
-    pay_plans,
-    primary_books,
-    sales_reps,
+    ad_types : generateTableReducer('ad_type', ad_types),
+    categories : generateTableReducer('category', categories),
+    compensation_plans : generateTableReducer('compensation_plan', compensation_plans),
+    customers : generateTableReducer('customer', customers),
+    fields : generateTableReducer('field', fields),
+    finding_lines : generateTableReducer('finding_line', finding_lines),
+    headings : generateTableReducer('heading', headings),
+    local_foreigns : generateTableReducer('local_foreign', local_foreigns),
+    order_lines : generateTableReducer('order_line', order_lines),
+    orders : generateTableReducer('order', orders),
+    order_statuses : generateTableReducer('order_status', order_statuses),
+    pay_plans : generateTableReducer('pay_plan', pay_plans),
+    primary_books : generateTableReducer('primary_book', primary_books),
+    sales_reps : generateTableReducer('sales_rep', sales_reps),
 });
 
 export default rootReducer;

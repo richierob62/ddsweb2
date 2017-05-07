@@ -1,9 +1,6 @@
-import { createStore, combineReducers } from 'redux'
+import { createStore } from 'redux'
 import act from '../actions/'
-import ad_types from './ad_types'
-
-
-const rootReducer = combineReducers({ ad_types })
+import rootReducer from './rootReducer'
 
 
 it('should return the initial state', () => {

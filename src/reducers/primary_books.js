@@ -1,26 +1,47 @@
 import Immutable from 'immutable'
 
 const initial_state = Immutable.fromJS({
-    ref_list: [
-        {id: 1, display: 'Primary Book 1'},
-        {id: 2, display: 'Primary Book 2'},
-        {id: 3, display: 'Primary Book 3'},
-        {id: 4, display: 'Primary Book 4'},
-        {id: 5, display: 'Primary Book 5'},
-        {id: 6, display: 'Primary Book 6'},
-        {id: 7, display: 'Primary Book 7'},
-        {id: 8, display: 'Primary Book 8'},
-        {id: 9, display: 'Primary Book 9'},
-        {id: 10, display: 'Primary Book 10'}
+    list: [
+        { id: 1, name: 'Primary Book name 1', code: 'atc1' },
+        { id: 2, name: 'Primary Book name 2', code: 'atc2' },
+        { id: 3, name: 'Primary Book name 3', code: 'atc3' },
+        { id: 4, name: 'Primary Book name 4', code: 'atc4' },
+        { id: 5, name: 'Primary Book name 5', code: 'atc5' },
+        { id: 6, name: 'Primary Book name 6', code: 'atc6' },
     ],
-    typeahead: ''
+    page_title: 'Primary Books',
+    action_word: 'PrimaryBook',
+    selected_id: -1,
+    current_sort: {
+        field_name: 'name',
+        direction: 'ASC'
+    },
+    current_filters: {},
+    mode: 'display',
+    fields: [
+        { field_name: 'name', label: 'Name', input_type: 'text', ref_table: undefined },
+        { field_name: 'code', label: 'Code', input_type: 'text', ref_table: undefined },
+    ],
+    list_template: [
+        { field_name: 'code', width: '20%' },
+        { field_name: 'name', width: '40%' },
+    ],
+    details_template: {
+        current_tab: '',
+        tabs: [
+            {
+                name: '',
+                rows: [
+                    ['name'],
+                    ['code'],
+                ]
+            }
+        ]
+    },
+    context_menu: [],
+    radio_groups: [],
+    ref_list: [],
+    typeahead: ''    
 })
 
-const primary_books = (state = initial_state, action) => {
-    switch (action.type) {
-        default: return state
-    }
-}
-
-export default primary_books
-
+export default initial_state

@@ -1,9 +1,6 @@
-import { createStore, combineReducers } from 'redux'
+import { createStore } from 'redux'
 import act from '../actions/'
-import finding_lines from './finding_lines'
-
-
-const rootReducer = combineReducers({ finding_lines })
+import rootReducer from './rootReducer'
 
 
 it('should return the initial state', () => {
