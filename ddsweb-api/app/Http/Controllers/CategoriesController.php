@@ -7,6 +7,7 @@ use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Cache;
 
 /**
 * Class CategoriesController
@@ -43,11 +44,19 @@ class CategoriesController extends Controller
     }
     
     public function referenceList() {
-        $refs =  Category::orderBy('name')->get(['id', 'name'])
-        ->map( function ($item) {
-            return ['id' => $item->id, 'display' => $item->name ];
+        // build cache key
+        $cache_key = $this->buildReferenceCollectionCacheKey();
+        
+        $return_value = Cache::remember($cache_key, 5, function() {
+            
+            $refs =  Category::orderBy('name')->get(['id', 'name'])
+            ->map( function ($item) {
+                return ['id' => $item->id, 'display' => $item->name ];
+            });
+            return response()->json(['data' => $refs]);
         });
-        return response()->json(['data' => $refs]);
+        
+        return $return_value;
     }
     
     public function categoryByID(Request $request)
@@ -136,5 +145,9 @@ class CategoriesController extends Controller
             return response()->json(['error' => 'Not Found'],404);
         }
     }
+
+    protected function buildReferenceCollectionCacheKey() {
+        return 'category_reference';
+    }    
 
 }

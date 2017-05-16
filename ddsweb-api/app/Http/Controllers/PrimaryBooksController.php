@@ -7,6 +7,8 @@ use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Cache;
+
 
 /**
 * Class PrimaryBooksController
@@ -30,8 +32,8 @@ class PrimaryBooksController extends Controller
         }
         
         $query = PrimaryBook::select(\DB::raw('primary_books.*'))
-        ->orderBy(PrimaryBook::orderField($sort_name), $sort_dir); 
-                
+        ->orderBy(PrimaryBook::orderField($sort_name), $sort_dir);
+        
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {
                 $query = PrimaryBook::filterOn($key, $filter);
@@ -42,11 +44,19 @@ class PrimaryBooksController extends Controller
     }
     
     public function referenceList() {
-        $refs =  PrimaryBook::orderBy('name')->get(['id', 'name'])
-        ->map( function ($item) {
-            return ['id' => $item->id, 'display' => $item->name ];
+        // build cache key
+        $cache_key = $this->buildReferenceCollectionCacheKey();
+        
+        $return_value = Cache::remember($cache_key, 5, function() {
+            
+            $refs =  PrimaryBook::orderBy('name')->get(['id', 'name'])
+            ->map( function ($item) {
+                return ['id' => $item->id, 'display' => $item->name ];
+            });
+            return response()->json(['data' => $refs]);
         });
-        return response()->json(['data' => $refs]);
+        
+        return $return_value;
     }
     
     public function primaryBookByID(Request $request)
@@ -121,11 +131,11 @@ class PrimaryBooksController extends Controller
         $id = $request->input('id');
         try {
             $primary_book = PrimaryBook::findOrFail($id);
-
+            
             if(!$primary_book->okToDelete()) {
                 return response()->json(['error' => 'Cannot be deleted: Being used'],422);
             }
-
+            
             $primary_book->delete();
             return response()->json([
             'deleted' => true,
@@ -135,7 +145,7 @@ class PrimaryBooksController extends Controller
             return response()->json(['error' => 'Not Found'],404);
         }
     }
-
+    
     public function attachSourceBook(Request $request)
     {
         $pb_id = $request->input('id');
@@ -173,5 +183,10 @@ class PrimaryBooksController extends Controller
             return response()->json(['error' => 'Not Found'],404);
         }
     }
-
+    
+    protected function buildReferenceCollectionCacheKey() {
+        return 'primary_book_reference';
+    }
+    
+    
 }

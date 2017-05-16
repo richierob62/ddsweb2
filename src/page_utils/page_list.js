@@ -1,24 +1,22 @@
 import React from 'react'
-import createLabelCells from '../component_utils/label_cells'
-import createFilterCells from '../component_utils/filter_cells'
-import createDataRows from '../component_utils/data_rows'
+import styled from 'styled-components'
+import LabelCells from '../component_utils/label_cells'
+import FilterCells from '../component_utils/filter_cells'
+import DataRows from '../component_utils/data_rows'
 
+const PageListWrapper = styled.div`
 
-const buildPageList = p => {
-    return (
-        <div>
-            <table className={'table table-sm table-striped table-hover'} style={{ border: 'none' }} >
-                <thead style={{ paddingBottom: '.5rem' }}>
-                    <tr>{createLabelCells(p)}</tr>
-                    <tr>{createFilterCells(p)}</tr>
-                </thead>
-                <tbody>{createDataRows(p)}</tbody>
-            </table>
-        </div>
-    )
-}
+`
+const PageList = ({ page }) => (
+    <PageListWrapper>
+        <table className={'table table-sm'} style={{ border: 'none' }} >
+            <thead style={{ paddingBottom: '.5rem' }}>
+                <LabelCells page={page} />
+                <FilterCells page={page} />
+            </thead>
+            <DataRows page={page} />
+        </table>
+    </PageListWrapper>
+)
 
-
-
-
-export default buildPageList
+export default PageList

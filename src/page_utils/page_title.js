@@ -1,7 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
+import { connect } from 'react-redux'
+import { getPageTitle } from '../selectors'
 
-const StyledTitle = styled.h1`
+const mstp = (state, ownProps) => ({
+    title: getPageTitle(state[ownProps.page])
+})
+
+const StyledWrapper = styled.h1`
     margin: 0;
     color: rgba(26, 26, 26, 0.45);
     font-weight: lighter;
@@ -10,8 +16,6 @@ const StyledTitle = styled.h1`
     margin-bottom: 10px;
 `
 
-const buildPageTitle = title => {
-    return <StyledTitle>{title}</StyledTitle>
-}
+const PageTitle = ({ title }) => <StyledWrapper>{title}</StyledWrapper>
 
-export default buildPageTitle
+export default connect(mstp)(PageTitle)

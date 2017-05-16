@@ -447,6 +447,7 @@ export const buildField = (p, field) => {
             : (isCheckBox(p, field)) ? checkboxDisplayValue(p, field)
                 : p.current.get(field))
 
+
     return (mode === 'display' || readonly)
         ? buildDisplayField(value, label)
         : buildEditField(p, field, value, label)

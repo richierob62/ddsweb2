@@ -1,6 +1,6 @@
 import proper_camel from './../utils/proper_camel'
 
-const action_templates = [
+export const action_templates = [
     'select_*',
     'change_*_Sort',
     'change_*_Filter',

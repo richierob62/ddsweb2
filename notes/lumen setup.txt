@@ -11,7 +11,7 @@ SETUP DEV ENVIRONMENT
     ------------------------------------------------------
     Homestead.yaml
     ------------------------------------------------------
-    C:\Windows\System32\drivers\etc\hosts
+    C:\Windows\System32\drivers\etc\hosts   
     192.168.10.10  homestead.app
     ------------------------------------------------------
     cd ~/Homestead

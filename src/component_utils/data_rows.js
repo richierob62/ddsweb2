@@ -1,51 +1,118 @@
 import React from 'react'
-import createEventDispatcher from './create_dispatcher'
+import styled from 'styled-components'
+import { connect } from 'react-redux'
+import actions from '../actions'
+import { getSelectedID, getFields, getListTemplate, getActionWord, getFilteredList, refSelector } from '../selectors'
 
-const convertLineData = (data, ref_hash) => {
-    const line_data = data.get('list').toJS()
-    const ref_functions = ref_hash
-    return line_data.map(line => {
-        Object.keys(line).forEach(key => {
-            if (ref_functions[key] !== undefined) {
-                line[key] = line[key] ? ref_functions[key](line[key]) : undefined
+const mstp = (state, ownProps) => ({
+    list: getFilteredList(state[ownProps.page]),
+    fields: getFields(state[ownProps.page]),
+    list_template: getListTemplate(state[ownProps.page]),
+    action_word: getActionWord(state[ownProps.page]),
+    selected_id: getSelectedID(state[ownProps.page]),
+    ref_selector_sales_rep: refSelector(state['sales_reps']),
+    ref_selector_local_foreign: refSelector(state['local_foreigns']),
+    ref_selector_pay_plan: refSelector(state['pay_plans']),
+    ref_selector_primary_book: refSelector(state['primary_books']),
+    ref_selector_category: refSelector(state['categories']),
+})
+
+const WrappingTBody = styled.tbody`
+    border-bottom: 1px solid #9c27b0;
+`
+
+const DataLine = styled.tr`
+    background-color: ${ ({ selected }) => selected ? 'rgb(201, 71, 225)' : 'white'};
+    color: ${ ({ selected }) => selected ? 'white' : 'black'};
+
+    &:hover {
+        color: ${ ({ selected }) => selected ? 'white' : '#2f2f2f'};  
+        background-color: ${ ({ selected }) => selected ? 'rgb(201, 71, 225)' : 'rgb(245, 189, 255)'};      
+    }
+`
+
+const DataCell = styled.td`
+    width: ${ ({ width }) => width};
+    font-size: .7rem;
+    padding-left: .9rem;
+`
+
+const DataRows = (props) => {
+
+    const {
+        dispatch,
+        list,
+        fields,
+        list_template,
+        selected_id,
+        action_word,
+        ref_selector_sales_rep,
+        ref_selector_local_foreign,
+        ref_selector_pay_plan,
+        ref_selector_primary_book,
+        ref_selector_category,
+        } = props
+
+    // select_handler
+    const select_handler_action_name = 'select' + action_word
+    const select_handler = (payload) => dispatch(actions[select_handler_action_name](payload))
+
+    const fixReferenceFields = (line, column) => {
+        const ref_table = fields.getIn([column.get('field_name'), 'ref_table'])
+        if (ref_table === undefined)
+            return line.get(column.get('field_name'))
+        let disp_val
+        switch (ref_table) {
+            case 'sales_rep':
+                disp_val = ref_selector_sales_rep(line.get('sales_rep_id')).get('display')
+                break;
+            case 'local_foreign':
+                disp_val = ref_selector_local_foreign(line.get('local_foreign_id')).get('display')
+                break;
+            case 'pay_plan':
+                disp_val = ref_selector_pay_plan(line.get('pay_plan_id')).get('display')
+                break;
+            case 'primary_book':
+                disp_val = ref_selector_primary_book(line.get('primary_book_id')).get('display')
+                break;
+            case 'category':
+                disp_val = ref_selector_category(line.get('category_id')).get('display')
+                break;
+        }
+        return disp_val || 'loading...'
+    }
+
+    return (
+        <WrappingTBody>
+            {
+                list
+                    .map(line => {
+                        return (
+                            <DataLine
+                                key={line.get('id')}
+                                selected={line.get('id') === selected_id}
+                                onClick={select_handler.bind(null, line.get('id'))}
+                            >
+                                {
+                                    list_template
+                                        .map(column => {
+                                            return (
+                                                <DataCell
+                                                    key={line.get('id') + column.get('field_name')}
+                                                    width={column.get('width')}
+                                                >
+                                                    {fixReferenceFields(line, column)}
+                                                </DataCell>
+                                            )
+                                        })
+                                }
+                            </DataLine>
+                        )
+                    })
             }
-        })
-        return line
-    })
+        </WrappingTBody>
+    )
 }
 
-const createDataRows = p => {
+export default connect(mstp)(DataRows)
 
-    const { dispatch, act, data, ref_hash } = p
-    const dispatch_obj = { dispatch, act, data }
-
-
-    const selected_id = data.get('selected_id')
-    const select_handler = createEventDispatcher('select', '', dispatch_obj)
-    const list_template = data.get('list_template').toJS()
-    const converted_line_data = convertLineData(data, ref_hash)
-
-    return converted_line_data.map(line => {
-        const line_style = (selected_id === line.id) ? {
-            backgroundColor: 'rgb(201, 71, 225)',
-            color: 'white'
-        } : {}
-        const tds = list_template.map(col => {
-            const td_style = {
-                width: col.width,
-                fontSize: '.7rem',
-                paddingLeft: '.9rem'
-            }
-            return (
-                <td key={'body-' + col.field_name + line.id}
-                    style={td_style}
-                >
-                    {line[col.field_name]}
-                </td>
-            )
-        })
-        return <tr key={line.id} onClick={select_handler.bind(null, line.id)} style={line_style} >{tds}</tr>
-    })
-}
-
-export default createDataRows

@@ -1,60 +1,93 @@
 import React from 'react'
-import createEventDispatcher from './create_dispatcher'
 import styled from 'styled-components'
+import { connect } from 'react-redux'
+import actions from '../actions'
+import { getFields, getListTemplate, getCurrentSort, getActionWord } from '../selectors'
 
-const buildFieldObject = (acc, field) => {
-    acc[field.get('field_name')] = field.get('label')
-    return acc
+const mstp = (state, ownProps) => ({
+    fields: getFields(state[ownProps.page]),
+    list_template: getListTemplate(state[ownProps.page]),
+    current_sort: getCurrentSort(state[ownProps.page]),
+    action_word: getActionWord(state[ownProps.page])
+})
+
+const WrappingRow = styled.tr`
+
+`
+
+const ColumnHeading = styled.th`
+    width: ${ ({ width }) => width};
+    border: none;
+    padding-bottom: 0;
+`
+
+const ColumnLabel = styled.span`
+    font-size: .7rem;
+    font-weight: normal;
+    color: rgb(58, 57, 57);
+    margin-bottom: 0px;
+    padding-left: .1rem;    
+    text-transform:uppercase
+`
+const StyledIcon = styled.i`
+    color: #767676;
+    padding-left: 5px;
+`
+
+const SortDirectionIcon = ({ sort_direction }) => {
+    return (
+        sort_direction === 'ASC'
+            ? <StyledIcon className="fa fa-sort-asc" aria-hidden="true"></StyledIcon>
+            : <StyledIcon className="fa fa-sort-desc" aria-hidden="true"></StyledIcon>
+    )
+
 }
 
-const createLabelCells = p => {
+const LabelCells = (props) => {
 
-    const {dispatch, act, data } = p
-    const dispatch_obj = { dispatch, act, data }
+    const { 
+        dispatch,
+         list_template,
+         current_sort,
+         fields,
+         action_word, 
+        } = props
 
-    const labels = data.get('fields')
-        .reduce(buildFieldObject, {})
-    const list_template = data.get('list_template').toJS()
-    const current_sort = data.get('current_sort').toJS()
-    const sort_handler = createEventDispatcher('change', 'Sort', dispatch_obj)
-    return list_template.map(col => {
+    // labels
+    const labels = fields.map(field => field.get('label'))
 
-        const StyledTableHeader = styled.th`
-            width: ${col.width};
-            border: 'none',
-            padding-bottom: '0'
-        `
+    // sort_field
+    const sort_field = current_sort.get('field_name')
 
-        const StyledColumnLabel = styled.span`
-            font-size: .7rem;
-            font-weight: normal;
-            color: rgb(58, 57, 57);
-            margin-bottom: 0px;
-            padding-left: .1rem;    
-            text-transform:uppercase          
-        `
+    // sort_direction
+    const sort_direction = current_sort.get('direction')
 
-        const StyledSortIndicator = styled.span`
-            color: '#767676',
-            paddingLeft: '5px'
-        `
+    // sort_handler
+    const sort_handler_action_name = 'change' + action_word + 'Sort'
+    const sort_handler = (payload) => dispatch(actions[sort_handler_action_name](payload))
 
-        const sort_field = current_sort.field_name
-        const sort_direction = current_sort.direction
-        const sort_indicator = (sort_field === undefined) ? ''
-            : (sort_field !== col.field_name) ? ''
-                : (sort_direction === 'ASC') ? <i className="fa fa-sort-asc" aria-hidden="true"></i>
-                    : <i className="fa fa-sort-desc" aria-hidden="true"></i>
-        return (
-            <StyledTableHeader 
-                key={'label-' + col.field_name}
-                onClick={sort_handler.bind(null, col.field_name)}
-            >
-                <StyledColumnLabel>{labels[col.field_name]}</StyledColumnLabel>
-                <StyledSortIndicator> {sort_indicator}</StyledSortIndicator>
-            </StyledTableHeader>
-        )
-    })
+    return (
+        <WrappingRow>
+            {
+                list_template
+                    .map(column => {
+                        return (
+                            <ColumnHeading
+                                key={column.get('field_name')}
+                                width={column.get('width')}
+                                onClick={sort_handler.bind(null, column.get('field_name'))}
+                            >
+                                <ColumnLabel>{labels.get(column.get('field_name'))}</ColumnLabel>
+                                {
+                                    (sort_field === column.get('field_name')) &&
+                                    <SortDirectionIcon sort_direction={sort_direction} ></SortDirectionIcon>
+                                }
+                            </ColumnHeading>
+                        )
+                    })
+            }
+        </WrappingRow>
+    )
 }
 
-export default createLabelCells
+export default connect(mstp)(LabelCells)

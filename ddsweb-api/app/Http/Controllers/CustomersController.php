@@ -7,6 +7,7 @@ use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Cache;
 
 /**
 * Class CustomersController
@@ -17,37 +18,55 @@ class CustomersController extends Controller
     
     public function customers(Request $request)
     {
+        
         $filters = $request->input('filters');
         
         $sort_name = $request->input('sort_name');
         if(sizeof($sort_name) == 0) {
             $sort_name = 'name';
         }
+        $sort_name = 'customers.' . $sort_name;
         
         $sort_dir = $request->input('sort_dir');
         if(sizeof($sort_dir) == 0) {
             $sort_dir = 'asc';
         }
         
-        $query = Customer::select(\DB::raw('customers.*'))
-        ->join('sales_reps', 'sales_reps.id', '=', 'customers.sales_rep_id')
-        ->orderBy(Customer::orderField($sort_name), $sort_dir);
-
-        if(sizeof($filters) > 0) {
-            foreach( $filters as $key => $filter) {
-                $query = Customer::filterOn($key, $filter);
-            }
-        }
+        // build cache key
+        $cache_key = $this->buildFilteredCollectionCacheKey($filters, $sort_name, $sort_dir);
         
-        return response()->json(['data' => $query->get()]);
+        $return_value = Cache::remember($cache_key, 5, function() use($filters, $sort_name, $sort_dir) {
+            
+            $filter_array = $filters ? Customer::buildFilter($filters) : [];
+            
+            $query = Customer::select(\DB::raw('customers.*'))
+            ->join('sales_reps', 'sales_reps.id', '=', 'customers.sales_rep_id')
+            ->where($filter_array)
+            ->orderBy(Customer::orderField($sort_name), $sort_dir);
+            
+            return response()->json(['data' => $query->get()]);
+        });
+        
+        return $return_value;
+        
     }
     
     public function referenceList() {
-        $refs =  Customer::orderBy('name')->get(['id', 'name'])
-        ->map( function ($item) {
-            return ['id' => $item->id, 'display' => $item->name ];
+        
+        // build cache key
+        $cache_key = $this->buildReferenceCollectionCacheKey();
+        
+        $return_value = Cache::remember($cache_key, 5, function() {
+            
+            $refs =  Customer::orderBy('name')->get(['id', 'name'])
+            ->map( function ($item) {
+                return ['id' => $item->id, 'display' => $item->name ];
+            });
+            return response()->json(['data' => $refs]);
         });
-        return response()->json(['data' => $refs]);
+        
+        return $return_value;
+        
     }
     
     public function customerByID(Request $request)
@@ -122,11 +141,11 @@ class CustomersController extends Controller
         $id = $request->input('id');
         try {
             $customer = Customer::findOrFail($id);
-
+            
             if(!$customer->okToDelete()) {
                 return response()->json(['error' => 'Cannot be deleted: Orders exist'],422);
             }
-
+            
             $customer->delete();
             return response()->json([
             'deleted' => true,
@@ -136,11 +155,25 @@ class CustomersController extends Controller
             return response()->json(['error' => 'Not Found'],404);
         }
     }
-
+    
     public function nextCustomerNumber()
     {
         $last_acc_num = Customer::orderBy('account_num', 'desc')->first()->account_num;
         return (string) ((int) $last_acc_num + 1);
     }
+    
+    protected function buildFilteredCollectionCacheKey($filters, $sort_name, $sort_dir) {
+        $cache_key = 'customers.';
+        foreach( $filters as $key => $value) {
+            $cache_key .= $key . $value;
+        };
+        return $cache_key . '.' . $sort_name . '.' . $sort_dir;
+    }
+    
+    protected function buildReferenceCollectionCacheKey() {
+        return 'customer_reference';
+    }
+    
+    
     
 }

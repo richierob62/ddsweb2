@@ -30,17 +30,6 @@ h1 {
 input:focus {
     outline: none !important;
 }
-
-
-.page-vertical {
-    display: flex;
-    flex-direction: column;
-}
-
-.page-lower {
-    display: flex;
-}
-
 .details {
     flex: 1;
 }
@@ -52,10 +41,6 @@ input:focus {
 .table {
     cursor: pointer;
     font-size: 1rem;
-}
-
-.table-striped>tbody>tr.selected {
-    background-color: palegoldenrod;
 }
 
 table,

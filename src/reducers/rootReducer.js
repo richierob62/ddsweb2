@@ -13,7 +13,7 @@ import local_foreigns from './local_foreigns';
 import order_lines from './order_lines';
 import orders from './orders';
 import order_statuses from './order_statuses';
-import pageChange from './page-change';
+import pageChange from './page_change';
 import pay_plans from './pay_plans';
 import primary_books from './primary_books';
 import sales_reps from './sales_reps';

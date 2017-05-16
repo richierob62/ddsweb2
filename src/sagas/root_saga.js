@@ -1,75 +1,178 @@
-// import { take, put, call, fork, select, cancel } from 'redux-saga/effects'
-import {fork} from 'redux-saga/effects'
-// import * as act from '../actions/'
-// import * as api from '../api/api'
+// take = listen for action
+// fork = run gf non-blocking
+// put = dispatch action
+// call = call regular function
+// select = use reducer selector, passing state
+// cancel = cancel promise
 
-// const paths = [
-//   {
-//     path: '/customers',
-//     refs: [
-//       'categories',
-//       'local_foreigns',
-//       'pay_plans',
-//       'primary_books',
-//       'sales_reps',
-//     ],
-//     list: 'customers'
-//   }
-// ]
-
-// 'CHANGE_XXX_FILTER'
-// 'CHANGE_XXX_SORT'
-// 'DELETE_XXX'
-// 'PAGE_CHANGE'
-// 'SAVE_DUPLICATE_XXX'
-// 'SAVE_EDITED_XXX'
-// 'SAVE_NEW_XXX'
-
-// /* eslint-disable no-constant-condition */
-// import actions, { resetTimer,
-//   loadData,
-//   dataLoaded,
-//   resortRequired,
-//   saveEditComplete,
-//   saveNewComplete,
-//   doDeleteComplete,
-//   saveDuplicateComplete
-// } from '../actions'
-// import * as sel from '../reducer'
-// import * as api from '../services'
-// import entities from '../helpers/entities'
-
-
-// // take = listen for action
-// // fork = run gf non-blobking
-// // put = dispatch action
-// // call = call regular function
-// // select = use reducer selector, passing state
-// // cancel = cancel promise
-
-// // Todo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// // 'LOAD_AND_SET_CURRENT',
-// //    load record
-// // 'LOAD_AND_SET_FILTER'
-// //    load records
-// // fire pageChange
-// // browserHistory.push(new_page)    
-
-
-
+import { take, put, call, fork, select, cancel } from 'redux-saga/effects'
+import act from '../actions'
 
 
 // /******************************************************************************/
-// /******************************* API LINK *************************************/
+// /********************************* CONFIG *************************************/
 // /******************************************************************************/
 
-// function* loadReferenceList(name) {
-//   const apiCall = 'loadReferenceList_' + name.toUpperCase()
-//   const { response } = yield call(api[apiCall])
-//   if (response) {
-//     yield put(act['refListLoaded_' + name.toUpperCase()](response))
-//   }
-// }
+const domain = 'http://ddsweb-api.app/'
+
+const table_hash = {
+  customer: { reducer: 'customers' },
+  category: { reducer: 'categories' },
+  pay_plan: { reducer: 'pay_plans' },
+  local_foreign: { reducer: 'local_foreigns' },
+  primary_book: { reducer: 'primary_books' },
+  sales_rep: { reducer: 'sales_reps' },
+}
+
+// /******************************************************************************/
+// /********************** API CALLING MACHINE ***********************************/
+// /******************************************************************************/
+
+const statusHelper = (response) => {
+  if (response.status >= 200 && response.status < 300) {
+    return Promise.resolve(response)
+  } else {
+    return Promise.reject(new Error(response))
+  }
+}
+
+const postApi = (uri, payload) => {
+
+  const headers = new Headers()
+  headers.append('Content-Type', 'application/json');
+
+  const body = JSON.stringify(payload)
+
+  return fetch(uri, { headers, method: 'POST', body })
+    .then(statusHelper)
+    .then(response => response.json())
+};
+
+
+// /******************************************************************************/
+// /********************** SIDE EFFECT CENTRAL ***********************************/
+// /******************************************************************************/
+
+
+function* loadReferenceList(table) {
+
+  const reducer = table_hash[table].reducer
+  const url = domain + table + '_reference'
+  const action_word = yield getActionWord(reducer)
+
+  const { data } = yield call(postApi, url)
+
+  const closing_action = 'load' + action_word + 'ReferenceCompleted'
+  yield put(act[closing_action](data))
+
+}
+
+function* loadFilteredAndSortedData(table) {
+
+  const reducer = table_hash[table].reducer
+  const url = domain + reducer
+  const filters = yield getFilters(reducer)
+  const sort_name = yield getSortName(reducer)
+  const sort_dir = yield getSortDir(reducer)
+  const action_word = yield getActionWord(reducer)
+  const { data } = yield call(postApi, url, { filters, sort_name, sort_dir })
+
+  const closing_action = 'load' + action_word + 'ListCompleted'
+  yield put(act[closing_action](data))
+
+
+}
+
+
+// /******************************************************************************/
+// /******************************* SELECTORS *************************************/
+// /******************************************************************************/
+
+function* getNewPage() {
+  const state = yield select(s => s['pageChange'])
+  return state.get('current_path')
+}
+
+function* getFilters(reducer) {
+  const state = yield select(s => s[reducer])
+  return state.get('current_filters').toJS()
+}
+
+function* getActionWord(reducer) {
+  const state = yield select(s => s[reducer])
+  return state.get('action_word')
+}
+
+function* getSortName(reducer) {
+  const state = yield select(s => s[reducer])
+  return state.getIn(['current_sort', 'field_name'])
+}
+
+function* listIsDirty(reducer) {
+  const state = yield select(s => s[reducer])
+  return state.get('list_dirty')
+}
+
+function* getSortDir(reducer) {
+  const state = yield select(s => s[reducer])
+  return state.getIn(['current_sort', 'direction'])
+}
+
+
+// /******************************************************************************/
+// /******************************* WATCHERS *************************************/
+// /******************************************************************************/
+
+const pageChangeWatcher = function* () {
+
+  const forever = true
+  while (forever) {
+
+    yield take(act.pageChange().type)
+
+    let reducer;
+    const forks = []
+    // which page?
+    const page = yield getNewPage();
+
+    switch (page) {
+
+      case '/customers':
+
+        // list dirty?
+        reducer = table_hash['customer'].reducer
+        if (yield listIsDirty(reducer)) {
+
+          // main file
+          forks.push(loadFilteredAndSortedData('customer'))
+          
+          // reference lists
+          forks.push(loadReferenceList('sales_rep'))
+          forks.push(loadReferenceList('category'))
+          forks.push(loadReferenceList('local_foreign'))
+          forks.push(loadReferenceList('pay_plan'))
+          forks.push(loadReferenceList('primary_book'))
+
+        }
+
+        break;
+
+    }
+
+    yield [forks]
+  }
+}
+
+
+// start watchers in parallel
+export default function* root() {
+  yield [
+    fork(pageChangeWatcher)
+  ]
+}
+
+
+
 
 // function* loadList(name) {
 //   const apiCall = 'loadList_' + name.toUpperCase()
@@ -175,26 +278,9 @@ import {fork} from 'redux-saga/effects'
 // const dataIsStale = (time) => (time < 0 || (new Date()).getTime() - time > MAX_WAIT)
 
 
-// /******************************************************************************/
-// /******************************* WATCHERS *************************************/
-// /******************************************************************************/
 
-const pageChangeWatcher = function* () {
-  // while (true) {
-    // yield take(act['pageChange'])
-    // let forks = []
-    // const new_path = yield select()['pageChange'].get('current_path')
-    // const path_obj = paths.find(obj => obj.path === new_path)
-    // if (path_obj) {
-    //   forks = path_obj.refs.map(ref => {
-    //     return fork(loadReferenceList(ref))
-    //   })
-    //   forks.push(loadList(path_obj.list))
-    // }
-    // yield [forks]
-  // }
-    yield 1
-}
+
+
 
 
 // const temp_watchers = tables.reduce((acc, table) => {
@@ -299,12 +385,7 @@ const pageChangeWatcher = function* () {
 // })
 
 
-// start watchers in parallel
-export default function* root() {
-  yield [
-    fork(pageChangeWatcher)
-  ]
-}
+
 
 
 

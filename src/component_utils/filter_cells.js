@@ -1,39 +1,69 @@
 import React from 'react'
-import createEventDispatcher from './create_dispatcher'
+import styled from 'styled-components'
+import { connect } from 'react-redux'
+import actions from '../actions'
+import { getListTemplate, getCurrentFilters, getActionWord } from '../selectors'
 
-const createFilterCells = p => {
-    const {dispatch, act, data } = p
-    const dispatch_obj = { dispatch, act, data }
-    const list_template = data.get('list_template').toJS()
-    const filter_handler = createEventDispatcher('change', 'Filter', dispatch_obj)
-    const current_filters = data.get('current_filters').toJS()
-    return list_template.map(col => {
-        const cell_value = current_filters[col.field_name] ? current_filters[col.field_name] : ''
-        const th_style = {
-            width: col.width,
-            paddingBottom: '0px',
-            paddingTop: '0px',
-            marginBottom: '0px',
-            border: 'none'
-        }
-        const input_style = {
-            marginTop: '0px',
-            marginBottom: '0px'
-        }
-        const call_handler = (col, e) => {
-            filter_handler({ column: col, value: e.currentTarget.value })
-        }
-        return (
-            <th key={'filter-' + col.field_name} style={th_style}>
-                <input type='text'
-                    style={input_style}
-                    className="form-control"
-                    value={cell_value}
-                    onChange={call_handler.bind(null, col.field_name)}
-                />
-            </th>
-        )
-    })
+const mstp = (state, ownProps) => ({
+    list_template: getListTemplate(state[ownProps.page]),
+    current_filters: getCurrentFilters(state[ownProps.page]),
+    action_word: getActionWord(state[ownProps.page])
+})
+
+const WrappingRow = styled.tr`
+
+`
+
+const ColumnHeading = styled.th`
+    width: ${ ({ width }) => width};
+    padding-bottom: '0';
+    padding-top: 0;
+    margin-bottom: 0;
+    border: none;    
+`
+
+const ColumnFilter = styled.input`
+    margin-top: 0;
+    margin-bottom: 0;
+`
+
+const FilterCells = (props) => {
+
+    const {
+        dispatch,
+        list_template,
+        current_filters,
+        action_word
+        } = props
+
+    // change_handler
+    const change_handler_action_name = 'change' + action_word + 'Filter'
+    const change_handler = (column, e) => dispatch(actions[change_handler_action_name]({ column, value: e.currentTarget.value }))
+    return (
+        <WrappingRow>
+            {
+                list_template
+                    .map(column => {
+
+                        const cell_value = current_filters.get(column.get('field_name')) || ''
+
+                        return (
+                            <ColumnHeading
+                                key={column.get('field_name')}
+                                width={column.get('width')}
+                            >
+                                <ColumnFilter
+                                    type="text"
+                                    className="form-control"
+                                    value={cell_value}
+                                    onChange={change_handler.bind(null, column.get('field_name'))}
+                                />
+                            </ColumnHeading>
+                        )
+                    })
+            }
+        </WrappingRow>
+    )
 }
 
-export default createFilterCells
+export default connect(mstp)(FilterCells)

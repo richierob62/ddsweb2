@@ -1,16 +1,23 @@
 import React from 'react'
-import buildTabs from '../component_utils/details_tabs'
-import layOutFields from '../component_utils/details_layout'
 import styled from 'styled-components'
 
-const DetailsHeader = styled.h5`
+
+const DetailsWrapper = styled.div`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border: 1px solid red;
+`
+
+const DetailsHeader = styled.div`
     color: rgba(26, 26, 26, 0.74);
     font-weight: lighter;
     font-size: 1rem;
     margin-bottom: -8px;
     margintop: 10px;
+    border: 1px solid blue;
 `
-
 const TabSection = styled.div`
     display: flex;
     color: rgb(162, 156, 156);
@@ -23,39 +30,36 @@ const TabSection = styled.div`
         : 'none'};
 `
 
-const buildPageDetails = p => {
+const FieldsSection = styled.div`
 
-    const { dispatch, act, data, current } = p
-    const dispatch_obj = {
-        dispatch,
-        act,
-        data
-    }
+`
 
-    const details_style = {
-        width: '85%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-start'
-    }
+// import buildTabs from '../component_utils/details_tabs'
+// import layOutFields from '../component_utils/details_layout'
+// import styled from 'styled-components'
 
-    return (
-        <div style={details_style}>
-            <DetailsHeader>
-                {current
-                    ? `${current.get('name')} - Acc# ${current.get('account_num')}`
-                    : 'No current selection'
-                }
-            </DetailsHeader>
-            <TabSection current={current}>
-                {current
-                    ? buildTabs(current, data, dispatch_obj)
-                    : ''
-                }
-            </TabSection>
-            <div>{layOutFields(p)}</div>
-        </div>
-    )
-}
+// {current
+//     ? `${current.get('name')} - Acc# ${current.get('account_num')}`
+//     : 'No current selection'
+// }
+
+// {current
+//     ? buildTabs(current, data, dispatch_obj)
+//     : ''
+// }
+
+const buildPageDetails = ({ page }) => (
+    <DetailsWrapper>
+        <DetailsHeader>
+
+        </DetailsHeader>
+        <TabSection>
+
+        </TabSection>
+        <FieldsSection>
+            {page}
+        </FieldsSection>
+    </DetailsWrapper>
+)
 
 export default buildPageDetails
