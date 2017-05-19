@@ -61,25 +61,36 @@ const DataRows = (props) => {
         const ref_table = fields.getIn([column.get('field_name'), 'ref_table'])
         if (ref_table === undefined)
             return line.get(column.get('field_name'))
-        let disp_val
+
+        let disp_obj
+        const loading = 'loading...'
         switch (ref_table) {
             case 'sales_rep':
-                disp_val = ref_selector_sales_rep(line.get('sales_rep_id')).get('display')
-                break;
+                disp_obj = ref_selector_sales_rep(line.get('sales_rep_id'))
+                return disp_obj ?
+                    disp_obj.get('display') :
+                    loading
             case 'local_foreign':
-                disp_val = ref_selector_local_foreign(line.get('local_foreign_id')).get('display')
-                break;
+                disp_obj = ref_selector_local_foreign(line.get('local_foreign_id'))
+                return disp_obj ?
+                    disp_obj.get('display') :
+                    loading
             case 'pay_plan':
-                disp_val = ref_selector_pay_plan(line.get('pay_plan_id')).get('display')
-                break;
+                disp_obj = ref_selector_pay_plan(line.get('pay_plan_id'))
+                return disp_obj ?
+                    disp_obj.get('display') :
+                    loading
             case 'primary_book':
-                disp_val = ref_selector_primary_book(line.get('primary_book_id')).get('display')
-                break;
+                disp_obj = ref_selector_primary_book(line.get('primary_book_id'))
+                return disp_obj ?
+                    disp_obj.get('display') :
+                    loading
             case 'category':
-                disp_val = ref_selector_category(line.get('category_id')).get('display')
-                break;
+                disp_obj = ref_selector_category(line.get('category_id'))
+                return disp_obj ?
+                    disp_obj.get('display') :
+                    loading
         }
-        return disp_val || 'loading...'
     }
 
     return (

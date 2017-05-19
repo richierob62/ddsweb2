@@ -7,11 +7,7 @@ export const getDisplayValueFromID = (list) => {
     }
 }
 
-export const getCurrent = (state) => {
-    const id = state.get('selected_id')
-    if (id === -1) return null;
-    return state.get('list').find(item => item.get('id') === id)
-};
+
 
 export const getFilteredRefList = (state) => {
     const filter = state.get('typeahead')
@@ -41,3 +37,12 @@ export const getSelectedID = state => state.get('selected_id')
 
 export const refSelector = state => id => state.get('ref_list').find( entry => entry.get('id') === id)
 
+export const getCurrentRecord = (state) => {
+    const id = state.get('selected_id')
+    if (id === -1) return null;
+    return state.get('list').find(item => item.get('id') === id)
+};
+
+export const getTabNames = state => state.getIn(['details_template', 'tabs']).map( tab => tab.get('name'))
+
+export const getCurrentTab = state => state.getIn(['details_template', 'current_tab'])

@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import DetailsHeader from '../component_utils/details_header'
 
 
 const DetailsWrapper = styled.div`
@@ -7,59 +8,17 @@ const DetailsWrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    border: 1px solid red;
-`
-
-const DetailsHeader = styled.div`
-    color: rgba(26, 26, 26, 0.74);
-    font-weight: lighter;
-    font-size: 1rem;
-    margin-bottom: -8px;
-    margintop: 10px;
-    border: 1px solid blue;
-`
-const TabSection = styled.div`
-    display: flex;
-    color: rgb(162, 156, 156);
-    font-weight: 100;
-    font-size: .9rem;
-    margin-bottom: 10px;
-    padding-top: .5rem;
-    border-bottom: ${props => props.current
-        ? '1px solid rgb(201, 71, 225)'
-        : 'none'};
 `
 
 const FieldsSection = styled.div`
 
 `
 
-// import buildTabs from '../component_utils/details_tabs'
-// import layOutFields from '../component_utils/details_layout'
-// import styled from 'styled-components'
-
-// {current
-//     ? `${current.get('name')} - Acc# ${current.get('account_num')}`
-//     : 'No current selection'
-// }
-
-// {current
-//     ? buildTabs(current, data, dispatch_obj)
-//     : ''
-// }
-
-const buildPageDetails = ({ page }) => (
+const PageDetails = ({ page }) => (
     <DetailsWrapper>
-        <DetailsHeader>
-
-        </DetailsHeader>
-        <TabSection>
-
-        </TabSection>
-        <FieldsSection>
-            {page}
-        </FieldsSection>
+        <DetailsHeader page={page} />
+        <FieldsSection page={page} />
     </DetailsWrapper>
 )
 
-export default buildPageDetails
+export default PageDetails

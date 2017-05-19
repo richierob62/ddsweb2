@@ -164,9 +164,11 @@ class CustomersController extends Controller
     
     protected function buildFilteredCollectionCacheKey($filters, $sort_name, $sort_dir) {
         $cache_key = 'customers.';
-        foreach( $filters as $key => $value) {
-            $cache_key .= $key . $value;
-        };
+        if ($filters) {
+            foreach( $filters as $key => $value) {
+                $cache_key .= $key . $value;
+            };
+        }
         return $cache_key . '.' . $sort_name . '.' . $sort_dir;
     }
     
