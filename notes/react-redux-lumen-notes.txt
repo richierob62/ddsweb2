@@ -779,8 +779,7 @@ List
     .findEntry(predicate) -> [index, Map]
 
 
-
-WORKFLOW
+PHP WORKFLOW
 ===============================================================================================================
 Controller tests
     migrations & models to support
@@ -800,6 +799,8 @@ file creation order
     MyThingsController.php
 
 
+QUERY TESTING
+===============================================================================================================
 \Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
     var_dump($query->sql);
     var_dump($query->bindings);

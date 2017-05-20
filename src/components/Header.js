@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 const StyledH1 = styled.h1`
     background-color: #9c27b0;
-    color: white;
+    color: rgba(255,255,255,.7);
     text-align: center;
     padding: 10px 5px;
 `
