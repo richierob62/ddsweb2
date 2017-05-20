@@ -1,6 +1,6 @@
 import React from 'react'
-// import createLink from '../component_utils/context_menu_link'
-// import contextMenuButtons from '../component_utils/context_menu_buttons'
+// import createLink from '../page_utils/context_menu_link'
+// import contextMenuButtons from '../page_utils/context_menu_buttons'
 // import styled from 'styled-components'
 
 // const StyledContextMenu = styled.div`

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import DetailsHeader from '../component_utils/details_header'
+import DetailsHeader from '../page_utils/details_header'
 
 
 const DetailsWrapper = styled.div`

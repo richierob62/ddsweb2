@@ -39,6 +39,7 @@ const DetailsHeader = (props) => {
         tab_names,
         current_tab,
         action_word,
+        dispatch,
     } = props
 
     return (
@@ -49,18 +50,22 @@ const DetailsHeader = (props) => {
                     : 'No current selection'
                 }
             </HeaderWrapper>
-            <TabWrapper>
-                {
-                    tab_names.size < 2 ?
-                        null :
-                        tab_names.map(name => <Tab
-                            key={name}
-                            name={name}
-                            is_current={name === current_tab}
-                            action_word={action_word}
-                        />)
-                }
-            </TabWrapper>
+            {
+                current_record &&
+                <TabWrapper>
+                    {
+                        tab_names.size < 2 ?
+                            null :
+                            tab_names.map(name => <Tab
+                                key={name}
+                                name={name}
+                                is_current={name === current_tab}
+                                action_word={action_word}
+                                dispatch={dispatch}
+                            />)
+                    }
+                </TabWrapper>
+            }
         </div>
     )
 }

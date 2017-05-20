@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import LabelCells from '../component_utils/label_cells'
-import FilterCells from '../component_utils/filter_cells'
-import DataRows from '../component_utils/data_rows'
+import LabelCells from '../page_utils/label_cells'
+import FilterCells from '../page_utils/filter_cells'
+import DataRows from '../page_utils/data_rows'
 
 const PageListWrapper = styled.div`
 
