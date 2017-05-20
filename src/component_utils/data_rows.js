@@ -90,6 +90,8 @@ const DataRows = (props) => {
                 return disp_obj ?
                     disp_obj.get('display') :
                     loading
+            default:
+                return ''
         }
     }
 

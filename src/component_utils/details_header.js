@@ -56,7 +56,7 @@ const DetailsHeader = (props) => {
                         tab_names.map(name => <Tab
                             key={name}
                             name={name}
-                            is_current={name == current_tab}
+                            is_current={name === current_tab}
                             action_word={action_word}
                         />)
                 }

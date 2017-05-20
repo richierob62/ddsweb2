@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form'
 import generateTableReducer from './generate_table_reducer'
 
 import auth from './auth';
@@ -21,6 +22,7 @@ import source_books from './source_books';
 import udacs from './udacs';
 
 const rootReducer = combineReducers({
+    form: formReducer,
     auth,
     pageChange,
     ad_types : generateTableReducer('ad_type', ad_types),

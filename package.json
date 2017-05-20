@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "create-react-app-sass": "^1.1.0",
     "enzyme": "latest",
     "enzyme-to-json": "^1.4.4",
     "eslint": "^3.12.2",
@@ -19,12 +18,13 @@
     "react-redux": "^4.4.6",
     "react-router": "^3.0.0",
     "redux": "^3.6.0",
+    "redux-form": "^6.7.0",
     "redux-saga": "^0.14.3",
     "styled-components": "^1.4.5"
   },
   "scripts": {
-    "start": "react-scripts-with-sass start",
-    "build": "react-scripts-with-sass build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }

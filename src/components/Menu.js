@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import styled from 'styled-components'
-import '../styles/styles.css'
+// import '../styles/styles.scss'
 
 const StyledMenu = styled.div`
 
@@ -25,9 +25,11 @@ const StyledMenu = styled.div`
         h5 {
             font-weight: normal;
             padding: 14px 0 5px 0;
-            color: #9c27b0; 
+            color: rgba(0, 0, 0, 0.41); 
+            text-transform: uppercase;
             margin-top: 20px;
-            font-size: 1rem;        
+            font-size: 1rem;    
+            margin-bottom: 0;    
         }
 
         ul {
@@ -35,27 +37,39 @@ const StyledMenu = styled.div`
             margin: 0;
             padding: 0;        
 
-            li a {
+            li {
+                
+                margin: 0;
+                display: block;
+                width: 100%;
+            
+                a {
 
-                &:hover {
-                    background-color: rgb(216, 133, 231);
-                    color: #FFFFFF;
-                    box-shadow: 0 16px 26px -10px rgba(156, 39, 176, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(156, 39, 176, 0.2);
-                    text-decoration: none;
+                    display: block;
+                    margin-right: .5rem;
+                    margin-bottom: -2px;
+                    padding: 3px 5px;
+
+                    &:hover {
+                        background-color: rgb(216, 133, 231);
+                        color: #FFFFFF !important;
+                        box-shadow: 0 16px 26px -10px rgba(156, 39, 176, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(156, 39, 176, 0.2);
+                        text-decoration: none;
+                    }
+
                 }
-
             }
         }
     }
 `
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(Link) `
     text-decoration: none !important;
     color: #525252;
     font-size: .8rem;
     line-height: 1.2rem;
     margin-left: .5rem;
-    transition: margin-left 300ms;
+    transition: margin-left 300ms;  
     padding: 5px;
 `
 
@@ -75,7 +89,7 @@ const Menu = () => <StyledMenu>
             </li>
 
         </ul>
-        <h5>Supporting Files</h5>
+        <h5>Other Files</h5>
         <ul>
             <li>
                 <StyledLink to="/ad_types" activeClassName="active-link">AdTypes</StyledLink>
@@ -84,7 +98,7 @@ const Menu = () => <StyledMenu>
                 <StyledLink to="/categories" activeClassName="active-link">Categories</StyledLink>
             </li>
             <li>
-                <StyledLink to="/compensation_plans" activeClassName="active-link">Compensation Plans</StyledLink>
+                <StyledLink to="/compensation_plans" activeClassName="active-link">Comp Plans</StyledLink>
             </li>
             <li>
                 <StyledLink to="/fields" activeClassName="active-link">Data Fields (Ads)</StyledLink>
