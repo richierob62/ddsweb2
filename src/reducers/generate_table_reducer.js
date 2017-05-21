@@ -205,7 +205,9 @@ const generateTableReducer = (table_name, initial_state) => {
             case LOAD_x_REFERENCE_COMPLETED:
                 {
                     const newList = Immutable.fromJS(action.payload)
-                    return state.set('ref_list', newList)
+                    return state
+                    .set('ref_list', newList)
+                    .set('ref_list_dirty', false)
                 }
 
             case SAVE_x_COMPLETED:

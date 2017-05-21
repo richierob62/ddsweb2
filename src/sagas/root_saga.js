@@ -113,6 +113,11 @@ function* listIsDirty(reducer) {
   return state.get('list_dirty')
 }
 
+function* refListIsDirty(reducer) {
+  const state = yield select(s => s[reducer])
+  return state.get('ref_list_dirty')
+}
+
 function* getSortDir(reducer) {
   const state = yield select(s => s[reducer])
   return state.getIn(['current_sort', 'direction'])
@@ -147,11 +152,11 @@ const pageChangeWatcher = function* () {
           forks.push(loadFilteredAndSortedData('customer'))
           
           // reference lists
-          forks.push(loadReferenceList('sales_rep'))
-          forks.push(loadReferenceList('category'))
-          forks.push(loadReferenceList('local_foreign'))
-          forks.push(loadReferenceList('pay_plan'))
-          forks.push(loadReferenceList('primary_book'))
+          if (yield refListIsDirty('sales_reps')) { forks.push(loadReferenceList('sales_rep')) }
+          if (yield refListIsDirty('categories')) forks.push(loadReferenceList('category'))
+          if (yield refListIsDirty('local_foreigns')) forks.push(loadReferenceList('local_foreign'))
+          if (yield refListIsDirty('pay_plans')) forks.push(loadReferenceList('pay_plan'))
+          if (yield refListIsDirty('primary_books')) forks.push(loadReferenceList('primary_book'))
 
         }
 

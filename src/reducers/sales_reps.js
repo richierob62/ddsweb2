@@ -54,6 +54,7 @@ const initial_state = Immutable.fromJS({
     context_menu: [],
     radio_groups: [],
     ref_list: [],
+    ref_list_dirty: true,
     typeahead: ''
 })
 
