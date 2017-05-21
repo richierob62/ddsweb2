@@ -51,7 +51,6 @@ table>thead>tr>th,
 table>tbody>td {
     display: block;
 }
-
 table>thead>tr:after,
 table>tbody>tr:after {
     content: ' ';
@@ -61,9 +60,10 @@ table>tbody>tr:after {
 }
 
 table>tbody {
-    overflow-y: scroll;
-    height: 200px;
+    /*overflow-y: scroll;
+    height: 200px;*/
 }
+
 
 table>tbody>tr {
     display: flex;

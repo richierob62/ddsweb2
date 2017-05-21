@@ -18,6 +18,8 @@ const generateTableReducer = (table_name, initial_state) => {
     const SAVE_x_COMPLETED = 'SAVE_' + ucname + '_COMPLETED'
     const SELECT_x = 'SELECT_' + ucname + ''
     const SELECT_x_TAB = 'SELECT_' + ucname + '_TAB'
+    const PREVIOUS_x_SUBLIST = 'PREVIOUS_' + ucname + '_SUBLIST'
+    const NEXT_x_SUBLIST = 'NEXT_' + ucname + '_SUBLIST'
 
     return (state = initial_state, action) => {
 
@@ -30,22 +32,22 @@ const generateTableReducer = (table_name, initial_state) => {
                         .get('fields')
                         .toJS()
                         .reduce((acc, field) => {
-                            if (field.ref_table !== undefined) 
+                            if (field.ref_table !== undefined)
                                 return Object.assign({}, acc, {
                                     [field.field_name]: undefined
                                 })
-                            if (field.input_type === 'radio') 
+                            if (field.input_type === 'radio')
                                 return Object.assign({}, acc, {
                                     [field.field_name]: 1
                                 })
-                            if (field.input_type === 'date') 
+                            if (field.input_type === 'date')
                                 return Object.assign({}, acc, {
                                     [field.field_name]: undefined
                                 })
                             return Object.assign({}, acc, {
                                 [field.field_name]: ''
                             })
-                        }, {id: id})
+                        }, { id: id })
                     return state.updateIn(['list'], list => list.push(Immutable.fromJS(new_copy)))
                         .set('selected_id', id)
                         .set('mode', 'new')
@@ -89,7 +91,7 @@ const generateTableReducer = (table_name, initial_state) => {
                 {
                     const mode = state.get('mode')
                     switch (mode) {
-                            // edit
+                        // edit
                         case 'edit':
                             {
                                 const temp_id = state.get('selected_id')
@@ -101,7 +103,7 @@ const generateTableReducer = (table_name, initial_state) => {
                                     .set('mode', 'display')
                                     .set('backup_copy', undefined)
                             }
-                            // new duplicate
+                        // new duplicate
                         case 'new':
                         case 'duplicate':
                             {
@@ -113,7 +115,7 @@ const generateTableReducer = (table_name, initial_state) => {
                                     .set('mode', 'display')
                                     .set('selected_id', -1)
                             }
-                            // delete
+                        // delete
                         case 'delete':
                             {
                                 return state.set('mode', 'display')
@@ -136,9 +138,11 @@ const generateTableReducer = (table_name, initial_state) => {
 
             case CHANGE_x_FILTER:
                 {
-                    return state.setIn([
-                        'current_filters', action.payload.column
-                    ], action.payload.value)
+                    return state
+                        .setIn([
+                            'current_filters', action.payload.column
+                        ], action.payload.value)
+                        .set('list_dirty', true)
                 }
 
             case CHANGE_x_SORT:
@@ -150,11 +154,14 @@ const generateTableReducer = (table_name, initial_state) => {
                             ? 'DESC'
                             : 'ASC')
                         : 'ASC'
-                    return state.setIn([
-                        'current_sort', 'field_name'
-                    ], action.payload).setIn([
-                        'current_sort', 'direction'
-                    ], new_direction)
+                    return state
+                        .setIn([
+                            'current_sort', 'field_name'
+                        ], action.payload)
+                        .setIn([
+                            'current_sort', 'direction'
+                        ], new_direction)
+                        .set('list_dirty', true)
                 }
 
             case DELETE_x_COMPLETED:
@@ -166,6 +173,7 @@ const generateTableReducer = (table_name, initial_state) => {
                     return state.updateIn(['list'], list => list.delete(index))
                         .set('mode', 'display')
                         .set('selected_id', -1)
+                        .set('list_dirty', true)
                 }
 
             case LOAD_x_LIST_COMPLETED:
@@ -186,10 +194,12 @@ const generateTableReducer = (table_name, initial_state) => {
                         ? state
                             .set('list', newList)
                             .set('list_dirty', false)
+                            .set('first_index', 0)
                         : state
                             .set('list', newList)
                             .set('selected_id', -1)
                             .set('list_dirty', false)
+                            .set('first_index', 0)
                 }
 
             case LOAD_x_REFERENCE_COMPLETED:
@@ -203,7 +213,7 @@ const generateTableReducer = (table_name, initial_state) => {
 
                     const mode = state.get('mode')
 
-                    if (mode === 'edit') 
+                    if (mode === 'edit')
                         return state.set('mode', 'display').set('backup_copy', undefined)
 
                     const temp_id = state.get('selected_id')
@@ -219,7 +229,7 @@ const generateTableReducer = (table_name, initial_state) => {
 
             case SELECT_x:
                 {
-                    if (state.get('mode') !== 'display') 
+                    if (state.get('mode') !== 'display')
                         return state
                     return state.set('selected_id', action.payload)
                 }
@@ -229,6 +239,25 @@ const generateTableReducer = (table_name, initial_state) => {
                     return state.setIn([
                         'details_template', 'current_tab'
                     ], action.payload)
+                }
+
+            case PREVIOUS_x_SUBLIST:
+                {
+                    const new_idx = state.get('first_index') - 5 < 0 ?
+                        0 :
+                        state.get('first_index') - 5
+
+                    return state.set('first_index', new_idx)
+                }
+
+            case NEXT_x_SUBLIST:
+                {
+                    const list_size = state.get('list').count()
+                    const new_idx = state.get('first_index') + 10 > list_size ?
+                        (list_size - 5 < 0 ? 0 : list_size - 5) :
+                        state.get('first_index') + 5
+
+                    return state.set('first_index', new_idx)
                 }
 
             default:

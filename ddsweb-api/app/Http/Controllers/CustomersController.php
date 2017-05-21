@@ -35,7 +35,7 @@ class CustomersController extends Controller
         // build cache key
         $cache_key = $this->buildFilteredCollectionCacheKey($filters, $sort_name, $sort_dir);
         
-        $return_value = Cache::remember($cache_key, 5, function() use($filters, $sort_name, $sort_dir) {
+        $return_value = Cache::remember($cache_key, 1, function() use($filters, $sort_name, $sort_dir) {
             
             $filter_array = $filters ? Customer::buildFilter($filters) : [];
             

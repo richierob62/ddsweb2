@@ -15,6 +15,8 @@ export const action_templates = [
     'delete_*_Completed',
     'load_*_List_Completed',
     'load_*_Reference_Completed',
+    'previous_*_Sublist',
+    'next_*_Sublist',
 ]
 
 const factory = (table) => {

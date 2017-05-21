@@ -2,6 +2,7 @@ import Immutable from 'immutable'
 
 const initial_state = Immutable.fromJS({
     list: [],
+    first_index: 0,
     list_dirty: true,
     page_title: 'Customers',
     action_word: 'Customer',

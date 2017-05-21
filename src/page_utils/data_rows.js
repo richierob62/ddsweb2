@@ -4,18 +4,20 @@ import { connect } from 'react-redux'
 import actions from '../actions'
 import { getSelectedID, getFields, getListTemplate, getActionWord, getFilteredList, refSelector } from '../selectors'
 
-const mstp = (state, ownProps) => ({
-    list: getFilteredList(state[ownProps.page]),
-    fields: getFields(state[ownProps.page]),
-    list_template: getListTemplate(state[ownProps.page]),
-    action_word: getActionWord(state[ownProps.page]),
-    selected_id: getSelectedID(state[ownProps.page]),
-    ref_selector_sales_rep: refSelector(state['sales_reps']),
-    ref_selector_local_foreign: refSelector(state['local_foreigns']),
-    ref_selector_pay_plan: refSelector(state['pay_plans']),
-    ref_selector_primary_book: refSelector(state['primary_books']),
-    ref_selector_category: refSelector(state['categories']),
-})
+const mstp = (state, ownProps) => {
+    return ({
+        list: getFilteredList(state[ownProps.page]),
+        fields: getFields(state[ownProps.page]),
+        list_template: getListTemplate(state[ownProps.page]),
+        action_word: getActionWord(state[ownProps.page]),
+        selected_id: getSelectedID(state[ownProps.page]),
+        ref_selector_sales_rep: refSelector(state['sales_reps']),
+        ref_selector_local_foreign: refSelector(state['local_foreigns']),
+        ref_selector_pay_plan: refSelector(state['pay_plans']),
+        ref_selector_primary_book: refSelector(state['primary_books']),
+        ref_selector_category: refSelector(state['categories']),
+    })
+}
 
 const WrappingTBody = styled.tbody`
     border-bottom: 1px solid #9c27b0;
@@ -24,6 +26,7 @@ const WrappingTBody = styled.tbody`
 const DataLine = styled.tr`
     background-color: ${ ({ selected }) => selected ? 'rgb(201, 71, 225)' : 'white'};
     color: ${ ({ selected }) => selected ? 'white' : 'black'};
+    height: 30px;
 
     &:hover {
         color: ${ ({ selected }) => selected ? 'white' : '#2f2f2f'};  
