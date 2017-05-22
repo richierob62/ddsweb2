@@ -1,5 +1,5 @@
 import factory from './action_type_factory'
-import {pageChange} from './general_actions'
+import {pageChange, sortChangeCompleted } from './general_actions'
 
 const grouped_actions = Object.assign({},
     factory('ad_type'),
@@ -18,7 +18,8 @@ const grouped_actions = Object.assign({},
     factory('local_foreign'),
     factory('source_book'),
     factory('udac'),
-    {pageChange}
+    {pageChange},
+    {sortChangeCompleted},
 )
 
 export default grouped_actions

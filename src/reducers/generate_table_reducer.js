@@ -11,7 +11,6 @@ const generateTableReducer = (table_name, initial_state) => {
     const CANCEL_x = 'CANCEL_' + ucname + ''
     const CHANGE_x_DATA = 'CHANGE_' + ucname + '_DATA'
     const CHANGE_x_FILTER = 'CHANGE_' + ucname + '_FILTER'
-    const CHANGE_x_SORT = 'CHANGE_' + ucname + '_SORT'
     const DELETE_x_COMPLETED = 'DELETE_' + ucname + '_COMPLETED'
     const LOAD_x_LIST_COMPLETED = 'LOAD_' + ucname + '_LIST_COMPLETED'
     const LOAD_x_REFERENCE_COMPLETED = 'LOAD_' + ucname + '_REFERENCE_COMPLETED'
@@ -139,30 +138,11 @@ const generateTableReducer = (table_name, initial_state) => {
             case CHANGE_x_FILTER:
                 {
                     return state
-                        .setIn([
-                            'current_filters', action.payload.column
-                        ], action.payload.value)
+                        .setIn(['current_filters', action.payload.column], action.payload.value)
                         .set('list_dirty', true)
                 }
 
-            case CHANGE_x_SORT:
-                {
-                    const sorted_on = state.getIn(['current_sort', 'field_name'])
-                    const sorted_dir = state.getIn(['current_sort', 'direction'])
-                    const new_direction = action.payload === sorted_on
-                        ? (sorted_dir === 'ASC'
-                            ? 'DESC'
-                            : 'ASC')
-                        : 'ASC'
-                    return state
-                        .setIn([
-                            'current_sort', 'field_name'
-                        ], action.payload)
-                        .setIn([
-                            'current_sort', 'direction'
-                        ], new_direction)
-                        .set('list_dirty', true)
-                }
+            // sort removed; moved to saga
 
             case DELETE_x_COMPLETED:
                 {
@@ -206,8 +186,8 @@ const generateTableReducer = (table_name, initial_state) => {
                 {
                     const newList = Immutable.fromJS(action.payload)
                     return state
-                    .set('ref_list', newList)
-                    .set('ref_list_dirty', false)
+                        .set('ref_list', newList)
+                        .set('ref_list_dirty', false)
                 }
 
             case SAVE_x_COMPLETED:
@@ -260,6 +240,44 @@ const generateTableReducer = (table_name, initial_state) => {
                         state.get('first_index') + 5
 
                     return state.set('first_index', new_idx)
+                }
+
+            case 'SORT_CHANGE_COMPLETED':
+                {
+                    
+
+
+                    if (action.payload.reducer === state.get('reducer_name')) {
+
+                        const is_dirty = action.payload.field_name !== state.getIn(['current_sort', 'field_name'])
+
+                        if (is_dirty) {
+                            return state
+                                .setIn([
+                                    'current_sort', 'field_name'
+                                ], action.payload.field_name)
+                                .setIn([
+                                    'current_sort', 'direction'
+                                ], action.payload.direction)
+                                .set('first_index', 0)
+                                .set('list', action.payload.list)
+                                .set('list_dirty', true)
+                        }
+                        else {
+                            return state
+                                .setIn([
+                                    'current_sort', 'field_name'
+                                ], action.payload.field_name)
+                                .setIn([
+                                    'current_sort', 'direction'
+                                ], action.payload.direction)
+                                .set('first_index', 0)
+                                .set('list', action.payload.list)
+                        }
+                    }
+                    else {
+                        return state
+                    }
                 }
 
             default:

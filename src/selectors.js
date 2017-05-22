@@ -33,12 +33,15 @@ export const getCurrentFilters = state => state.get('current_filters')
 
 export const getFilteredList = state => {
     const num_to_skip = state.get('first_index')
-    return state.get('list').skip(num_to_skip).take(5)
+    return state
+        .get('list')
+        .skip(num_to_skip)
+        .take(5)
 }
 
 export const getSelectedID = state => state.get('selected_id')
 
-export const refSelector = state => id => state.get('ref_list').find( entry => entry.get('id') === id)
+export const refSelector = state => id => state.get('ref_list').find(entry => entry.get('id') === id)
 
 export const getCurrentRecord = (state) => {
     const id = state.get('selected_id')
@@ -46,7 +49,7 @@ export const getCurrentRecord = (state) => {
     return state.get('list').find(item => item.get('id') === id)
 };
 
-export const getTabNames = state => state.getIn(['details_template', 'tabs']).map( tab => tab.get('name'))
+export const getTabNames = state => state.getIn(['details_template', 'tabs']).map(tab => tab.get('name'))
 
 export const getCurrentTab = state => state.getIn(['details_template', 'current_tab'])
 

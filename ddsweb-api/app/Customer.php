@@ -92,7 +92,7 @@ class Customer extends Model
 
 static public function orderField($sort_name) {
     switch ($sort_name) {
-        case 'sales_rep':
+        case 'customers.sales_rep':
             return 'sales_reps.name';
             break;
         default:

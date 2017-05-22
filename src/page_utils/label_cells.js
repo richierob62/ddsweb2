@@ -8,7 +8,7 @@ const mstp = (state, ownProps) => ({
     fields: getFields(state[ownProps.page]),
     list_template: getListTemplate(state[ownProps.page]),
     current_sort: getCurrentSort(state[ownProps.page]),
-    action_word: getActionWord(state[ownProps.page])
+    action_word: getActionWord(state[ownProps.page]),
 })
 
 const WrappingRow = styled.tr`

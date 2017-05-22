@@ -6,6 +6,7 @@ const initial_state = Immutable.fromJS({
     list_dirty: true,
     page_title: 'Customers',
     action_word: 'Customer',
+    reducer_name: 'customers',
     selected_id: -1,
     current_sort: {
         field_name: 'name',
