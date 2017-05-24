@@ -5,7 +5,7 @@
 // select = use reducer selector, passing state
 // cancel = cancel promise
 
-import { take, put, call, fork, select } from 'redux-saga/effects'
+import { take, put, call, fork, select, throttle } from 'redux-saga/effects'
 import act from '../actions'
 
 
@@ -68,21 +68,58 @@ function* loadReferenceList(table) {
 }
 
 function* loadFilteredAndSortedData(table) {
-
   const reducer = table_hash[table].reducer
   const url = domain + reducer
-  const filters = yield getFilters(reducer)
   const sort_name = yield getSortName(reducer)
   const sort_dir = yield getSortDir(reducer)
+  const filters = yield getFilters(reducer)
+
   const action_word = yield getActionWord(reducer)
   const { data } = yield call(postApi, url, { filters, sort_name, sort_dir })
-
   const closing_action = 'load' + action_word + 'ListCompleted'
   yield put(act[closing_action](data))
-
-
 }
 
+function* handleSort(table, action) {
+
+  const reducer = table_hash[table].reducer
+  const prev_sorted_on = yield getSortName(reducer)
+  const prev_sorted_dir = yield getSortDir(reducer)
+  const new_sort_field = action.payload
+  const ref_table_name = yield getReferenceTableName(reducer, new_sort_field)
+  const ref_reducer_name = (ref_table_name !== undefined) ? table_hash[ref_table_name].reducer : undefined
+
+  let valueMapper
+  if (ref_reducer_name === undefined)
+    valueMapper = a => a.get(new_sort_field)
+  else
+    valueMapper = yield valueMapperGenerator(ref_reducer_name, new_sort_field + '_id')
+
+  const new_direction = action.payload === prev_sorted_on
+    ? (prev_sorted_dir === 'ASC'
+      ? 'DESC'
+      : 'ASC')
+    : 'ASC'
+
+  const sortFunc = (a, b) => {
+    const multiplier = new_direction === 'ASC' ? 1 : -1
+    if (a < b) { return -1 * multiplier }
+    if (a > b) { return 1 * multiplier }
+    if (a === b) { return 0 }
+  }
+
+  const sorted_list = (yield getFilteredList(reducer)).sortBy(valueMapper, sortFunc)
+
+  const payload = {
+    reducer: reducer,
+    list: sorted_list,
+    field_name: new_sort_field,
+    direction: new_direction
+  }
+
+  yield put(act.sortChangeCompleted(payload))
+
+}
 
 // /******************************************************************************/
 // /******************************* SELECTORS *************************************/
@@ -141,8 +178,8 @@ function* getFilteredList(reducer) {
 // /************************** FUNCTION GENERATORS *******************************/
 // /******************************************************************************/
 
-function* valueMapperGenerator(reducer_name, sort_field) {
-  const reducer = yield getReducer(reducer_name)
+function* valueMapperGenerator(ref_reducer_name, sort_field) {
+  const reducer = yield getReducer(ref_reducer_name)
   const ref_list = reducer.get('ref_list')
   return (a) => {
     const id = a.get(sort_field)
@@ -150,54 +187,15 @@ function* valueMapperGenerator(reducer_name, sort_field) {
   }
 }
 
-const changeSortGenerator = (reducer_string, act_string) => {
-
+const changeSortGenerator = (act_string, table) => {
   return function* () {
-    const forever = true
-    while (forever) {
+    yield throttle(150, act_string, handleSort, table)
+  }
+}
 
-      const action = yield take(act_string)
-
-      const prev_sorted_on = yield getSortName(reducer_string)
-      const prev_sorted_dir = yield getSortDir(reducer_string)
-
-      const new_sort_field = action.payload
-
-      const ref_table_name = yield getReferenceTableName(reducer_string, new_sort_field)
-
-      const reducer_name = (ref_table_name !== undefined) ? table_hash[ref_table_name].reducer : undefined
-
-      let valueMapper
-      if (reducer_name === undefined)
-        valueMapper = a => a.get(new_sort_field)
-      else
-        valueMapper = yield valueMapperGenerator(reducer_name, new_sort_field + '_id')
-
-      const new_direction = action.payload === prev_sorted_on
-        ? (prev_sorted_dir === 'ASC'
-          ? 'DESC'
-          : 'ASC')
-        : 'ASC'
-
-      const sortFunc = (a, b) => {
-        const multiplier = new_direction === 'ASC' ? 1 : -1
-        if (a < b) { return -1 * multiplier }
-        if (a > b) { return 1 * multiplier }
-        if (a === b) { return 0 }
-      }
-
-      const sorted_list = (yield getFilteredList(reducer_string)).sortBy(valueMapper, sortFunc)
-
-      const payload = {
-        reducer: reducer_string,
-        list: sorted_list,
-        field_name: new_sort_field,
-        direction: new_direction
-      }
-
-      yield put(act.sortChangeCompleted(payload))
-
-    }
+const changeFilterGenerator = (act_string, table) => {
+  return function* () {
+    yield throttle(150, act_string, loadFilteredAndSortedData, table)
   }
 }
 
@@ -245,7 +243,8 @@ const pageChangeWatcher = function* () {
   }
 }
 
-const changeCustomerSort = changeSortGenerator('customers', 'CHANGE_CUSTOMER_SORT')
+const changeCustomerSort = changeSortGenerator('CHANGE_CUSTOMER_SORT', 'customer')
+const changeCustomerFilter = changeFilterGenerator('CHANGE_CUSTOMER_FILTER', 'customer')
 
 
 // start watchers in parallel
@@ -253,5 +252,6 @@ export default function* root() {
   yield [
     fork(pageChangeWatcher),
     fork(changeCustomerSort),
+    fork(changeCustomerFilter),
   ]
 }

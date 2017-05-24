@@ -244,8 +244,6 @@ const generateTableReducer = (table_name, initial_state) => {
 
             case 'SORT_CHANGE_COMPLETED':
                 {
-                    
-
 
                     if (action.payload.reducer === state.get('reducer_name')) {
 
