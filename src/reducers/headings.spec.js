@@ -1,21 +1,21 @@
 import { createStore } from 'redux'
 import act from '../actions/'
-import rootReducer from './rootReducer'
+import root_reducer from './root_reducer'
 
 
 it('should return the initial state', () => {
-    expect(rootReducer(undefined, {})).toBeDefined()
+    expect(root_reducer(undefined, {})).toBeDefined()
 })
 
 it('reducer: headings should handle action: selectHeading', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectHeading(2))
     const newState = store.getState()['headings']
     expect(newState.get('selected_id')).toEqual(2)
 })
 
 it('reducer: headings should handle action: selectHeadingTab', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectHeadingTab('foo'))
     const newState = store.getState()['headings']
     expect(newState.getIn(['details_template', 'current_tab'])).toEqual('foo')
@@ -23,7 +23,7 @@ it('reducer: headings should handle action: selectHeadingTab', () => {
 
 it('reducer: headings should handle action: changeHeadingData', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectHeading(2))
 
@@ -42,7 +42,7 @@ it('reducer: headings should handle action: changeHeadingData', () => {
 
 it('reducer: headings should handle action: changeHeadingFilter', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = {
         column: 'name',
@@ -72,7 +72,7 @@ it('reducer: headings should handle action: changeHeadingFilter', () => {
 
 it('reducer: headings should handle action: changeHeadingSort', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.changeHeadingSort('foo'))
 
@@ -84,7 +84,7 @@ it('reducer: headings should handle action: changeHeadingSort', () => {
 
 it('reducer: headings should handle action: beginHeadingEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectHeading(2))
 
@@ -98,7 +98,7 @@ it('reducer: headings should handle action: beginHeadingEdit', () => {
 
 it('reducer: headings should handle action: beginHeadingCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectHeading(2))
 
@@ -116,7 +116,7 @@ it('reducer: headings should handle action: beginHeadingCreate', () => {
 
 it('reducer: headings should handle action: beginHeadingDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectHeading(2))
 
@@ -131,7 +131,7 @@ it('reducer: headings should handle action: beginHeadingDelete', () => {
 
 it('reducer: headings should handle action: beginHeadingDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectHeading(2))
 
@@ -149,7 +149,7 @@ it('reducer: headings should handle action: beginHeadingDuplicate', () => {
 
 it('reducer: headings should handle action: cancelHeading after beginHeadingEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectHeading(2))
 
@@ -176,7 +176,7 @@ it('reducer: headings should handle action: cancelHeading after beginHeadingEdit
 
 it('reducer: headings should handle action: cancelHeading after beginHeadingCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numHeadings = store.getState()['headings'].get('list').count()
 
@@ -194,7 +194,7 @@ it('reducer: headings should handle action: cancelHeading after beginHeadingCrea
 
 it('reducer: headings should handle action: cancelHeading after beginHeadingDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numHeadings = store.getState()['headings'].get('list').count()
     
@@ -212,7 +212,7 @@ it('reducer: headings should handle action: cancelHeading after beginHeadingDele
 
 it('reducer: headings should handle action: cancelHeading after beginHeadingDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectHeading(2))
 
@@ -231,7 +231,7 @@ it('reducer: headings should handle action: cancelHeading after beginHeadingDupl
 
 it('reducer: headings should handle action: saveHeadingCompleted in mode: edit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectHeading(2))
     store.dispatch(act.beginHeadingEdit())
@@ -247,7 +247,7 @@ it('reducer: headings should handle action: saveHeadingCompleted in mode: edit',
 
 it('reducer: headings should handle action: saveHeadingCompleted in mode: duplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectHeading(2))
     store.dispatch(act.beginHeadingDuplicate())
@@ -262,7 +262,7 @@ it('reducer: headings should handle action: saveHeadingCompleted in mode: duplic
 
 it('reducer: headings should handle action: saveHeadingCompleted in mode: new', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.beginHeadingCreate())
     store.dispatch(act.saveHeadingCompleted(99))
@@ -276,7 +276,7 @@ it('reducer: headings should handle action: saveHeadingCompleted in mode: new', 
 
 it('reducer: headings should handle action: deleteHeadingCompleted in mode: delete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numHeadings = store.getState()['headings'].get('list').count()
 
@@ -292,7 +292,7 @@ it('reducer: headings should handle action: deleteHeadingCompleted in mode: dele
 
 it('reducer: headings should handle action: loadHeadingListCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectHeading(2))
 
@@ -314,7 +314,7 @@ it('reducer: headings should handle action: loadHeadingListCompleted', () => {
 
 it('reducer: headings should handle action: loadHeadingReferenceCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData =  [
         { id: 1, display: 'foo' },

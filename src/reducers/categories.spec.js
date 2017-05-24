@@ -1,21 +1,21 @@
 import { createStore } from 'redux'
 import act from '../actions/'
-import rootReducer from './rootReducer'
+import root_reducer from './root_reducer'
 
 
 it('should return the initial state', () => {
-    expect(rootReducer(undefined, {})).toBeDefined()
+    expect(root_reducer(undefined, {})).toBeDefined()
 })
 
 it('reducer: categories should handle action: selectCategory', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectCategory(2))
     const newState = store.getState()['categories']
     expect(newState.get('selected_id')).toEqual(2)
 })
 
 it('reducer: categories should handle action: selectCategoryTab', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectCategoryTab('foo'))
     const newState = store.getState()['categories']
     expect(newState.getIn(['details_template', 'current_tab'])).toEqual('foo')
@@ -23,7 +23,7 @@ it('reducer: categories should handle action: selectCategoryTab', () => {
 
 it('reducer: categories should handle action: changeCategoryData', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCategory(2))
 
@@ -42,7 +42,7 @@ it('reducer: categories should handle action: changeCategoryData', () => {
 
 it('reducer: categories should handle action: changeCategoryFilter', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = {
         column: 'code',
@@ -72,7 +72,7 @@ it('reducer: categories should handle action: changeCategoryFilter', () => {
 
 it('reducer: categories should handle action: changeCategorySort', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.changeCategorySort('foo'))
 
@@ -84,7 +84,7 @@ it('reducer: categories should handle action: changeCategorySort', () => {
 
 it('reducer: categories should handle action: beginCategoryEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCategory(2))
 
@@ -98,7 +98,7 @@ it('reducer: categories should handle action: beginCategoryEdit', () => {
 
 it('reducer: categories should handle action: beginCategoryCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCategory(2))
 
@@ -116,7 +116,7 @@ it('reducer: categories should handle action: beginCategoryCreate', () => {
 
 it('reducer: categories should handle action: beginCategoryDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCategory(2))
 
@@ -131,7 +131,7 @@ it('reducer: categories should handle action: beginCategoryDelete', () => {
 
 it('reducer: categories should handle action: beginCategoryDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCategory(2))
 
@@ -149,7 +149,7 @@ it('reducer: categories should handle action: beginCategoryDuplicate', () => {
 
 it('reducer: categories should handle action: cancelCategory after beginCategoryEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCategory(2))
 
@@ -176,7 +176,7 @@ it('reducer: categories should handle action: cancelCategory after beginCategory
 
 it('reducer: categories should handle action: cancelCategory after beginCategoryCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numCategories = store.getState()['categories'].get('list').count()
 
@@ -194,7 +194,7 @@ it('reducer: categories should handle action: cancelCategory after beginCategory
 
 it('reducer: categories should handle action: cancelCategory after beginCategoryDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numCategories = store.getState()['categories'].get('list').count()
     
@@ -212,7 +212,7 @@ it('reducer: categories should handle action: cancelCategory after beginCategory
 
 it('reducer: categories should handle action: cancelCategory after beginCategoryDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCategory(2))
 
@@ -231,7 +231,7 @@ it('reducer: categories should handle action: cancelCategory after beginCategory
 
 it('reducer: categories should handle action: saveCategoryCompleted in mode: edit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCategory(2))
     store.dispatch(act.beginCategoryEdit())
@@ -247,7 +247,7 @@ it('reducer: categories should handle action: saveCategoryCompleted in mode: edi
 
 it('reducer: categories should handle action: saveCategoryCompleted in mode: duplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCategory(2))
     store.dispatch(act.beginCategoryDuplicate())
@@ -262,7 +262,7 @@ it('reducer: categories should handle action: saveCategoryCompleted in mode: dup
 
 it('reducer: categories should handle action: saveCategoryCompleted in mode: new', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.beginCategoryCreate())
     store.dispatch(act.saveCategoryCompleted(99))
@@ -276,7 +276,7 @@ it('reducer: categories should handle action: saveCategoryCompleted in mode: new
 
 it('reducer: categories should handle action: deleteCategoryCompleted in mode: delete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numCategories = store.getState()['categories'].get('list').count()
 
@@ -292,7 +292,7 @@ it('reducer: categories should handle action: deleteCategoryCompleted in mode: d
 
 it('reducer: categories should handle action: loadCategoryListCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCategory(2))
 
@@ -314,7 +314,7 @@ it('reducer: categories should handle action: loadCategoryListCompleted', () => 
 
 it('reducer: categories should handle action: loadCategoryReferenceCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData =  [
         { id: 1, display: 'foo' },

@@ -1,21 +1,21 @@
 import {createStore } from 'redux'
 import act from '../actions/'
-import rootReducer from './rootReducer'
+import root_reducer from './root_reducer'
 
 
 it('should return the initial state', () => {
-    expect(rootReducer(undefined, {})).toBeDefined()
+    expect(root_reducer(undefined, {})).toBeDefined()
 })
 
 it('reducer: sales_reps should handle action: selectSalesRep', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectSalesRep(2))
     const newState = store.getState()['sales_reps']
     expect(newState.get('selected_id')).toEqual(2)
 })
 
 it('reducer: sales_reps should handle action: selectSalesRepTab', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectSalesRepTab('foo'))
     const newState = store.getState()['sales_reps']
     expect(newState.getIn(['details_template', 'current_tab'])).toEqual('foo')
@@ -23,7 +23,7 @@ it('reducer: sales_reps should handle action: selectSalesRepTab', () => {
 
 it('reducer: sales_reps should handle action: changeSalesRepData', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSalesRep(2))
 
@@ -45,7 +45,7 @@ it('reducer: sales_reps should handle action: changeSalesRepData', () => {
 
 it('reducer: sales_reps should handle action: changeSalesRepFilter', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = {
         column: 'code',
@@ -78,7 +78,7 @@ it('reducer: sales_reps should handle action: changeSalesRepFilter', () => {
 
 it('reducer: sales_reps should handle action: changeSalesRepSort', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.changeSalesRepSort('foo'))
 
@@ -92,7 +92,7 @@ it('reducer: sales_reps should handle action: changeSalesRepSort', () => {
 
 it('reducer: sales_reps should handle action: beginSalesRepEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSalesRep(2))
 
@@ -106,7 +106,7 @@ it('reducer: sales_reps should handle action: beginSalesRepEdit', () => {
 
 it('reducer: sales_reps should handle action: beginSalesRepCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSalesRep(2))
 
@@ -129,7 +129,7 @@ it('reducer: sales_reps should handle action: beginSalesRepCreate', () => {
 
 it('reducer: sales_reps should handle action: beginSalesRepDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSalesRep(2))
 
@@ -144,7 +144,7 @@ it('reducer: sales_reps should handle action: beginSalesRepDelete', () => {
 
 it('reducer: sales_reps should handle action: beginSalesRepDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSalesRep(2))
 
@@ -167,7 +167,7 @@ it('reducer: sales_reps should handle action: beginSalesRepDuplicate', () => {
 
 it('reducer: sales_reps should handle action: cancelSalesRep after beginSalesRepEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSalesRep(2))
 
@@ -198,7 +198,7 @@ it('reducer: sales_reps should handle action: cancelSalesRep after beginSalesRep
 
 it('reducer: sales_reps should handle action: cancelSalesRep after beginSalesRepCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numSalesReps = store
         .getState()['sales_reps']
@@ -219,7 +219,7 @@ it('reducer: sales_reps should handle action: cancelSalesRep after beginSalesRep
 
 it('reducer: sales_reps should handle action: cancelSalesRep after beginSalesRepDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numSalesReps = store
         .getState()['sales_reps']
@@ -240,7 +240,7 @@ it('reducer: sales_reps should handle action: cancelSalesRep after beginSalesRep
 
 it('reducer: sales_reps should handle action: cancelSalesRep after beginSalesRepDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSalesRep(2))
 
@@ -262,7 +262,7 @@ it('reducer: sales_reps should handle action: cancelSalesRep after beginSalesRep
 
 it('reducer: sales_reps should handle action: saveSalesRepCompleted in mode: edit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSalesRep(2))
     store.dispatch(act.beginSalesRepEdit())
@@ -278,7 +278,7 @@ it('reducer: sales_reps should handle action: saveSalesRepCompleted in mode: edi
 
 it('reducer: sales_reps should handle action: saveSalesRepCompleted in mode: duplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSalesRep(2))
     store.dispatch(act.beginSalesRepDuplicate())
@@ -293,7 +293,7 @@ it('reducer: sales_reps should handle action: saveSalesRepCompleted in mode: dup
 
 it('reducer: sales_reps should handle action: saveSalesRepCompleted in mode: new', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.beginSalesRepCreate())
     store.dispatch(act.saveSalesRepCompleted(99))
@@ -307,7 +307,7 @@ it('reducer: sales_reps should handle action: saveSalesRepCompleted in mode: new
 
 it('reducer: sales_reps should handle action: deleteSalesRepCompleted in mode: delete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numSalesReps = store
         .getState()['sales_reps']
@@ -326,7 +326,7 @@ it('reducer: sales_reps should handle action: deleteSalesRepCompleted in mode: d
 
 it('reducer: sales_reps should handle action: loadSalesRepListCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSalesRep(2))
 
@@ -353,7 +353,7 @@ it('reducer: sales_reps should handle action: loadSalesRepListCompleted', () => 
 
 it('reducer: sales_reps should handle action: loadSalesRepReferenceCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = [
         {

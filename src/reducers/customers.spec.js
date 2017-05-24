@@ -1,21 +1,21 @@
 import { createStore } from 'redux'
 import act from '../actions/'
-import rootReducer from './rootReducer'
+import root_reducer from './root_reducer'
 
 
 it('should return the initial state', () => {
-    expect(rootReducer(undefined, {})).toBeDefined()
+    expect(root_reducer(undefined, {})).toBeDefined()
 })
 
 it('reducer: customers should handle action: selectCustomer', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectCustomer(2))
     const newState = store.getState()['customers']
     expect(newState.get('selected_id')).toEqual(2)
 })
 
 it('reducer: customers should handle action: selectCustomerTab', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectCustomerTab('foo'))
     const newState = store.getState()['customers']
     expect(newState.getIn(['details_template', 'current_tab'])).toEqual('foo')
@@ -23,7 +23,7 @@ it('reducer: customers should handle action: selectCustomerTab', () => {
 
 it('reducer: customers should handle action: changeCustomerData', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCustomer(2))
 
@@ -42,7 +42,7 @@ it('reducer: customers should handle action: changeCustomerData', () => {
 
 it('reducer: customers should handle action: changeCustomerFilter', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = {
         column: 'account_num',
@@ -72,7 +72,7 @@ it('reducer: customers should handle action: changeCustomerFilter', () => {
 
 it('reducer: customers should handle action: changeCustomerSort', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.changeCustomerSort('foo'))
 
@@ -84,7 +84,7 @@ it('reducer: customers should handle action: changeCustomerSort', () => {
 
 it('reducer: customers should handle action: beginCustomerEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCustomer(2))
 
@@ -98,7 +98,7 @@ it('reducer: customers should handle action: beginCustomerEdit', () => {
 
 it('reducer: customers should handle action: beginCustomerCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCustomer(2))
 
@@ -116,7 +116,7 @@ it('reducer: customers should handle action: beginCustomerCreate', () => {
 
 it('reducer: customers should handle action: beginCustomerDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCustomer(2))
 
@@ -131,7 +131,7 @@ it('reducer: customers should handle action: beginCustomerDelete', () => {
 
 it('reducer: customers should handle action: beginCustomerDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCustomer(2))
 
@@ -149,7 +149,7 @@ it('reducer: customers should handle action: beginCustomerDuplicate', () => {
 
 it('reducer: customers should handle action: cancelCustomer after beginCustomerEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCustomer(2))
 
@@ -176,7 +176,7 @@ it('reducer: customers should handle action: cancelCustomer after beginCustomerE
 
 it('reducer: customers should handle action: cancelCustomer after beginCustomerCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numCustomers = store.getState()['customers'].get('list').count()
 
@@ -194,7 +194,7 @@ it('reducer: customers should handle action: cancelCustomer after beginCustomerC
 
 it('reducer: customers should handle action: cancelCustomer after beginCustomerDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numCustomers = store.getState()['customers'].get('list').count()
     
@@ -212,7 +212,7 @@ it('reducer: customers should handle action: cancelCustomer after beginCustomerD
 
 it('reducer: customers should handle action: cancelCustomer after beginCustomerDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCustomer(2))
 
@@ -231,7 +231,7 @@ it('reducer: customers should handle action: cancelCustomer after beginCustomerD
 
 it('reducer: customers should handle action: saveCustomerCompleted in mode: edit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCustomer(2))
     store.dispatch(act.beginCustomerEdit())
@@ -247,7 +247,7 @@ it('reducer: customers should handle action: saveCustomerCompleted in mode: edit
 
 it('reducer: customers should handle action: saveCustomerCompleted in mode: duplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCustomer(2))
     store.dispatch(act.beginCustomerDuplicate())
@@ -262,7 +262,7 @@ it('reducer: customers should handle action: saveCustomerCompleted in mode: dupl
 
 it('reducer: customers should handle action: saveCustomerCompleted in mode: new', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.beginCustomerCreate())
     store.dispatch(act.saveCustomerCompleted(99))
@@ -276,7 +276,7 @@ it('reducer: customers should handle action: saveCustomerCompleted in mode: new'
 
 it('reducer: customers should handle action: deleteCustomerCompleted in mode: delete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numCustomers = store.getState()['customers'].get('list').count()
 
@@ -292,7 +292,7 @@ it('reducer: customers should handle action: deleteCustomerCompleted in mode: de
 
 it('reducer: customers should handle action: loadCustomerListCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCustomer(2))
 
@@ -314,7 +314,7 @@ it('reducer: customers should handle action: loadCustomerListCompleted', () => {
 
 it('reducer: customers should handle action: loadCustomerReferenceCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData =  [
         { id: 1, display: 'foo' },

@@ -1,21 +1,21 @@
 import {createStore} from 'redux'
 import act from '../actions/'
-import rootReducer from './rootReducer'
+import root_reducer from './root_reducer'
 
 
 it('should return the initial state', () => {
-    expect(rootReducer(undefined, {})).toBeDefined()
+    expect(root_reducer(undefined, {})).toBeDefined()
 })
 
 it('reducer: orders should handle action: selectOrder', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectOrder(2))
     const newState = store.getState()['orders']
     expect(newState.get('selected_id')).toEqual(2)
 })
 
 it('reducer: orders should handle action: selectOrderTab', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectOrderTab('foo'))
     const newState = store.getState()['orders']
     expect(newState.getIn(['details_template', 'current_tab'])).toEqual('foo')
@@ -23,7 +23,7 @@ it('reducer: orders should handle action: selectOrderTab', () => {
 
 it('reducer: orders should handle action: changeOrderData', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrder(2))
 
@@ -45,7 +45,7 @@ it('reducer: orders should handle action: changeOrderData', () => {
 
 it('reducer: orders should handle action: changeOrderFilter', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = {
         column: 'code',
@@ -78,7 +78,7 @@ it('reducer: orders should handle action: changeOrderFilter', () => {
 
 it('reducer: orders should handle action: changeOrderSort', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.changeOrderSort('foo'))
 
@@ -92,7 +92,7 @@ it('reducer: orders should handle action: changeOrderSort', () => {
 
 it('reducer: orders should handle action: beginOrderEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrder(2))
 
@@ -106,7 +106,7 @@ it('reducer: orders should handle action: beginOrderEdit', () => {
 
 it('reducer: orders should handle action: beginOrderCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrder(2))
 
@@ -129,7 +129,7 @@ it('reducer: orders should handle action: beginOrderCreate', () => {
 
 it('reducer: orders should handle action: beginOrderDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrder(2))
 
@@ -144,7 +144,7 @@ it('reducer: orders should handle action: beginOrderDelete', () => {
 
 it('reducer: orders should handle action: beginOrderDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrder(2))
 
@@ -167,7 +167,7 @@ it('reducer: orders should handle action: beginOrderDuplicate', () => {
 
 it('reducer: orders should handle action: cancelOrder after beginOrderEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrder(2))
 
@@ -198,7 +198,7 @@ it('reducer: orders should handle action: cancelOrder after beginOrderEdit', () 
 
 it('reducer: orders should handle action: cancelOrder after beginOrderCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numOrders = store
         .getState()['orders']
@@ -219,7 +219,7 @@ it('reducer: orders should handle action: cancelOrder after beginOrderCreate', (
 
 it('reducer: orders should handle action: cancelOrder after beginOrderDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numOrders = store
         .getState()['orders']
@@ -240,7 +240,7 @@ it('reducer: orders should handle action: cancelOrder after beginOrderDelete', (
 
 it('reducer: orders should handle action: cancelOrder after beginOrderDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrder(2))
 
@@ -262,7 +262,7 @@ it('reducer: orders should handle action: cancelOrder after beginOrderDuplicate'
 
 it('reducer: orders should handle action: saveOrderCompleted in mode: edit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrder(2))
     store.dispatch(act.beginOrderEdit())
@@ -278,7 +278,7 @@ it('reducer: orders should handle action: saveOrderCompleted in mode: edit', () 
 
 it('reducer: orders should handle action: saveOrderCompleted in mode: duplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrder(2))
     store.dispatch(act.beginOrderDuplicate())
@@ -293,7 +293,7 @@ it('reducer: orders should handle action: saveOrderCompleted in mode: duplicate'
 
 it('reducer: orders should handle action: saveOrderCompleted in mode: new', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.beginOrderCreate())
     store.dispatch(act.saveOrderCompleted(99))
@@ -307,7 +307,7 @@ it('reducer: orders should handle action: saveOrderCompleted in mode: new', () =
 
 it('reducer: orders should handle action: deleteOrderCompleted in mode: delete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numOrders = store
         .getState()['orders']
@@ -326,7 +326,7 @@ it('reducer: orders should handle action: deleteOrderCompleted in mode: delete',
 
 it('reducer: orders should handle action: loadOrderListCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrder(2))
 
@@ -353,7 +353,7 @@ it('reducer: orders should handle action: loadOrderListCompleted', () => {
 
 it('reducer: orders should handle action: loadOrderReferenceCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = [
         {

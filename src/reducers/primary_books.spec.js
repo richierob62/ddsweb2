@@ -1,21 +1,21 @@
 import {createStore } from 'redux'
 import act from '../actions/'
-import rootReducer from './rootReducer'
+import root_reducer from './root_reducer'
 
 
 it('should return the initial state', () => {
-    expect(rootReducer(undefined, {})).toBeDefined()
+    expect(root_reducer(undefined, {})).toBeDefined()
 })
 
 it('reducer: primary_books should handle action: selectPrimaryBook', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectPrimaryBook(2))
     const newState = store.getState()['primary_books']
     expect(newState.get('selected_id')).toEqual(2)
 })
 
 it('reducer: primary_books should handle action: selectPrimaryBookTab', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectPrimaryBookTab('foo'))
     const newState = store.getState()['primary_books']
     expect(newState.getIn(['details_template', 'current_tab'])).toEqual('foo')
@@ -23,7 +23,7 @@ it('reducer: primary_books should handle action: selectPrimaryBookTab', () => {
 
 it('reducer: primary_books should handle action: changePrimaryBookData', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPrimaryBook(2))
 
@@ -45,7 +45,7 @@ it('reducer: primary_books should handle action: changePrimaryBookData', () => {
 
 it('reducer: primary_books should handle action: changePrimaryBookFilter', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = {
         column: 'code',
@@ -78,7 +78,7 @@ it('reducer: primary_books should handle action: changePrimaryBookFilter', () =>
 
 it('reducer: primary_books should handle action: changePrimaryBookSort', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.changePrimaryBookSort('foo'))
 
@@ -92,7 +92,7 @@ it('reducer: primary_books should handle action: changePrimaryBookSort', () => {
 
 it('reducer: primary_books should handle action: beginPrimaryBookEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPrimaryBook(2))
 
@@ -106,7 +106,7 @@ it('reducer: primary_books should handle action: beginPrimaryBookEdit', () => {
 
 it('reducer: primary_books should handle action: beginPrimaryBookCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPrimaryBook(2))
 
@@ -129,7 +129,7 @@ it('reducer: primary_books should handle action: beginPrimaryBookCreate', () => 
 
 it('reducer: primary_books should handle action: beginPrimaryBookDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPrimaryBook(2))
 
@@ -144,7 +144,7 @@ it('reducer: primary_books should handle action: beginPrimaryBookDelete', () => 
 
 it('reducer: primary_books should handle action: beginPrimaryBookDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPrimaryBook(2))
 
@@ -167,7 +167,7 @@ it('reducer: primary_books should handle action: beginPrimaryBookDuplicate', () 
 
 it('reducer: primary_books should handle action: cancelPrimaryBook after beginPrimaryBookEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPrimaryBook(2))
 
@@ -198,7 +198,7 @@ it('reducer: primary_books should handle action: cancelPrimaryBook after beginPr
 
 it('reducer: primary_books should handle action: cancelPrimaryBook after beginPrimaryBookCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numPrimaryBooks = store
         .getState()['primary_books']
@@ -219,7 +219,7 @@ it('reducer: primary_books should handle action: cancelPrimaryBook after beginPr
 
 it('reducer: primary_books should handle action: cancelPrimaryBook after beginPrimaryBookDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numPrimaryBooks = store
         .getState()['primary_books']
@@ -240,7 +240,7 @@ it('reducer: primary_books should handle action: cancelPrimaryBook after beginPr
 
 it('reducer: primary_books should handle action: cancelPrimaryBook after beginPrimaryBookDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPrimaryBook(2))
 
@@ -262,7 +262,7 @@ it('reducer: primary_books should handle action: cancelPrimaryBook after beginPr
 
 it('reducer: primary_books should handle action: savePrimaryBookCompleted in mode: edit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPrimaryBook(2))
     store.dispatch(act.beginPrimaryBookEdit())
@@ -278,7 +278,7 @@ it('reducer: primary_books should handle action: savePrimaryBookCompleted in mod
 
 it('reducer: primary_books should handle action: savePrimaryBookCompleted in mode: duplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPrimaryBook(2))
     store.dispatch(act.beginPrimaryBookDuplicate())
@@ -293,7 +293,7 @@ it('reducer: primary_books should handle action: savePrimaryBookCompleted in mod
 
 it('reducer: primary_books should handle action: savePrimaryBookCompleted in mode: new', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.beginPrimaryBookCreate())
     store.dispatch(act.savePrimaryBookCompleted(99))
@@ -307,7 +307,7 @@ it('reducer: primary_books should handle action: savePrimaryBookCompleted in mod
 
 it('reducer: primary_books should handle action: deletePrimaryBookCompleted in mode: delete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numPrimaryBooks = store
         .getState()['primary_books']
@@ -326,7 +326,7 @@ it('reducer: primary_books should handle action: deletePrimaryBookCompleted in m
 
 it('reducer: primary_books should handle action: loadPrimaryBookListCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPrimaryBook(2))
 
@@ -353,7 +353,7 @@ it('reducer: primary_books should handle action: loadPrimaryBookListCompleted', 
 
 it('reducer: primary_books should handle action: loadPrimaryBookReferenceCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = [
         {

@@ -1,21 +1,21 @@
 import { createStore } from 'redux'
 import act from '../actions/'
-import rootReducer from './rootReducer'
+import root_reducer from './root_reducer'
 
 
 it('should return the initial state', () => {
-    expect(rootReducer(undefined, {})).toBeDefined()
+    expect(root_reducer(undefined, {})).toBeDefined()
 })
 
 it('reducer: fields should handle action: selectField', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectField(2))
     const newState = store.getState()['fields']
     expect(newState.get('selected_id')).toEqual(2)
 })
 
 it('reducer: fields should handle action: selectFieldTab', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectFieldTab('foo'))
     const newState = store.getState()['fields']
     expect(newState.getIn(['details_template', 'current_tab'])).toEqual('foo')
@@ -23,7 +23,7 @@ it('reducer: fields should handle action: selectFieldTab', () => {
 
 it('reducer: fields should handle action: changeFieldData', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectField(2))
 
@@ -42,7 +42,7 @@ it('reducer: fields should handle action: changeFieldData', () => {
 
 it('reducer: fields should handle action: changeFieldFilter', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = {
         column: 'code',
@@ -72,7 +72,7 @@ it('reducer: fields should handle action: changeFieldFilter', () => {
 
 it('reducer: fields should handle action: changeFieldSort', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.changeFieldSort('foo'))
 
@@ -84,7 +84,7 @@ it('reducer: fields should handle action: changeFieldSort', () => {
 
 it('reducer: fields should handle action: beginFieldEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectField(2))
 
@@ -98,7 +98,7 @@ it('reducer: fields should handle action: beginFieldEdit', () => {
 
 it('reducer: fields should handle action: beginFieldCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectField(2))
 
@@ -116,7 +116,7 @@ it('reducer: fields should handle action: beginFieldCreate', () => {
 
 it('reducer: fields should handle action: beginFieldDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectField(2))
 
@@ -131,7 +131,7 @@ it('reducer: fields should handle action: beginFieldDelete', () => {
 
 it('reducer: fields should handle action: beginFieldDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectField(2))
 
@@ -149,7 +149,7 @@ it('reducer: fields should handle action: beginFieldDuplicate', () => {
 
 it('reducer: fields should handle action: cancelField after beginFieldEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectField(2))
 
@@ -176,7 +176,7 @@ it('reducer: fields should handle action: cancelField after beginFieldEdit', () 
 
 it('reducer: fields should handle action: cancelField after beginFieldCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numFields = store.getState()['fields'].get('list').count()
 
@@ -194,7 +194,7 @@ it('reducer: fields should handle action: cancelField after beginFieldCreate', (
 
 it('reducer: fields should handle action: cancelField after beginFieldDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numFields = store.getState()['fields'].get('list').count()
     
@@ -212,7 +212,7 @@ it('reducer: fields should handle action: cancelField after beginFieldDelete', (
 
 it('reducer: fields should handle action: cancelField after beginFieldDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectField(2))
 
@@ -231,7 +231,7 @@ it('reducer: fields should handle action: cancelField after beginFieldDuplicate'
 
 it('reducer: fields should handle action: saveFieldCompleted in mode: edit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectField(2))
     store.dispatch(act.beginFieldEdit())
@@ -247,7 +247,7 @@ it('reducer: fields should handle action: saveFieldCompleted in mode: edit', () 
 
 it('reducer: fields should handle action: saveFieldCompleted in mode: duplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectField(2))
     store.dispatch(act.beginFieldDuplicate())
@@ -262,7 +262,7 @@ it('reducer: fields should handle action: saveFieldCompleted in mode: duplicate'
 
 it('reducer: fields should handle action: saveFieldCompleted in mode: new', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.beginFieldCreate())
     store.dispatch(act.saveFieldCompleted(99))
@@ -276,7 +276,7 @@ it('reducer: fields should handle action: saveFieldCompleted in mode: new', () =
 
 it('reducer: fields should handle action: deleteFieldCompleted in mode: delete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numFields = store.getState()['fields'].get('list').count()
 
@@ -292,7 +292,7 @@ it('reducer: fields should handle action: deleteFieldCompleted in mode: delete',
 
 it('reducer: fields should handle action: loadFieldListCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectField(2))
 
@@ -314,7 +314,7 @@ it('reducer: fields should handle action: loadFieldListCompleted', () => {
 
 it('reducer: fields should handle action: loadFieldReferenceCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData =  [
         { id: 1, display: 'foo' },

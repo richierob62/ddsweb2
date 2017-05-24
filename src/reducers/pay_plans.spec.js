@@ -1,21 +1,21 @@
 import {createStore } from 'redux'
 import act from '../actions/'
-import rootReducer from './rootReducer'
+import root_reducer from './root_reducer'
 
 
 it('should return the initial state', () => {
-    expect(rootReducer(undefined, {})).toBeDefined()
+    expect(root_reducer(undefined, {})).toBeDefined()
 })
 
 it('reducer: pay_plans should handle action: selectPayPlan', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectPayPlan(2))
     const newState = store.getState()['pay_plans']
     expect(newState.get('selected_id')).toEqual(2)
 })
 
 it('reducer: pay_plans should handle action: selectPayPlanTab', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectPayPlanTab('foo'))
     const newState = store.getState()['pay_plans']
     expect(newState.getIn(['details_template', 'current_tab'])).toEqual('foo')
@@ -23,7 +23,7 @@ it('reducer: pay_plans should handle action: selectPayPlanTab', () => {
 
 it('reducer: pay_plans should handle action: changePayPlanData', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPayPlan(2))
 
@@ -45,7 +45,7 @@ it('reducer: pay_plans should handle action: changePayPlanData', () => {
 
 it('reducer: pay_plans should handle action: changePayPlanFilter', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = {
         column: 'code',
@@ -78,7 +78,7 @@ it('reducer: pay_plans should handle action: changePayPlanFilter', () => {
 
 it('reducer: pay_plans should handle action: changePayPlanSort', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.changePayPlanSort('foo'))
 
@@ -92,7 +92,7 @@ it('reducer: pay_plans should handle action: changePayPlanSort', () => {
 
 it('reducer: pay_plans should handle action: beginPayPlanEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPayPlan(2))
 
@@ -106,7 +106,7 @@ it('reducer: pay_plans should handle action: beginPayPlanEdit', () => {
 
 it('reducer: pay_plans should handle action: beginPayPlanCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPayPlan(2))
 
@@ -129,7 +129,7 @@ it('reducer: pay_plans should handle action: beginPayPlanCreate', () => {
 
 it('reducer: pay_plans should handle action: beginPayPlanDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPayPlan(2))
 
@@ -144,7 +144,7 @@ it('reducer: pay_plans should handle action: beginPayPlanDelete', () => {
 
 it('reducer: pay_plans should handle action: beginPayPlanDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPayPlan(2))
 
@@ -167,7 +167,7 @@ it('reducer: pay_plans should handle action: beginPayPlanDuplicate', () => {
 
 it('reducer: pay_plans should handle action: cancelPayPlan after beginPayPlanEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPayPlan(2))
 
@@ -198,7 +198,7 @@ it('reducer: pay_plans should handle action: cancelPayPlan after beginPayPlanEdi
 
 it('reducer: pay_plans should handle action: cancelPayPlan after beginPayPlanCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numPayPlans = store
         .getState()['pay_plans']
@@ -219,7 +219,7 @@ it('reducer: pay_plans should handle action: cancelPayPlan after beginPayPlanCre
 
 it('reducer: pay_plans should handle action: cancelPayPlan after beginPayPlanDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numPayPlans = store
         .getState()['pay_plans']
@@ -240,7 +240,7 @@ it('reducer: pay_plans should handle action: cancelPayPlan after beginPayPlanDel
 
 it('reducer: pay_plans should handle action: cancelPayPlan after beginPayPlanDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPayPlan(2))
 
@@ -262,7 +262,7 @@ it('reducer: pay_plans should handle action: cancelPayPlan after beginPayPlanDup
 
 it('reducer: pay_plans should handle action: savePayPlanCompleted in mode: edit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPayPlan(2))
     store.dispatch(act.beginPayPlanEdit())
@@ -278,7 +278,7 @@ it('reducer: pay_plans should handle action: savePayPlanCompleted in mode: edit'
 
 it('reducer: pay_plans should handle action: savePayPlanCompleted in mode: duplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPayPlan(2))
     store.dispatch(act.beginPayPlanDuplicate())
@@ -293,7 +293,7 @@ it('reducer: pay_plans should handle action: savePayPlanCompleted in mode: dupli
 
 it('reducer: pay_plans should handle action: savePayPlanCompleted in mode: new', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.beginPayPlanCreate())
     store.dispatch(act.savePayPlanCompleted(99))
@@ -307,7 +307,7 @@ it('reducer: pay_plans should handle action: savePayPlanCompleted in mode: new',
 
 it('reducer: pay_plans should handle action: deletePayPlanCompleted in mode: delete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numPayPlans = store
         .getState()['pay_plans']
@@ -326,7 +326,7 @@ it('reducer: pay_plans should handle action: deletePayPlanCompleted in mode: del
 
 it('reducer: pay_plans should handle action: loadPayPlanListCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectPayPlan(2))
 
@@ -353,7 +353,7 @@ it('reducer: pay_plans should handle action: loadPayPlanListCompleted', () => {
 
 it('reducer: pay_plans should handle action: loadPayPlanReferenceCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = [
         {

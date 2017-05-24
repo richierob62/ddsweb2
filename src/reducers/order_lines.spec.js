@@ -1,20 +1,20 @@
 import {createStore } from 'redux'
 import act from '../actions/'
-import rootReducer from './rootReducer'
+import root_reducer from './root_reducer'
 
 it('should return the initial state', () => {
-    expect(rootReducer(undefined, {})).toBeDefined()
+    expect(root_reducer(undefined, {})).toBeDefined()
 })
 
 it('reducer: order_lines should handle action: selectOrderLine', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectOrderLine(2))
     const newState = store.getState()['order_lines']
     expect(newState.get('selected_id')).toEqual(2)
 })
 
 it('reducer: order_lines should handle action: selectOrderLineTab', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectOrderLineTab('foo'))
     const newState = store.getState()['order_lines']
     expect(newState.getIn(['details_template', 'current_tab'])).toEqual('foo')
@@ -22,7 +22,7 @@ it('reducer: order_lines should handle action: selectOrderLineTab', () => {
 
 it('reducer: order_lines should handle action: changeOrderLineData', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderLine(2))
 
@@ -44,7 +44,7 @@ it('reducer: order_lines should handle action: changeOrderLineData', () => {
 
 it('reducer: order_lines should handle action: changeOrderLineFilter', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = {
         column: 'code',
@@ -77,7 +77,7 @@ it('reducer: order_lines should handle action: changeOrderLineFilter', () => {
 
 it('reducer: order_lines should handle action: changeOrderLineSort', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.changeOrderLineSort('foo'))
 
@@ -91,7 +91,7 @@ it('reducer: order_lines should handle action: changeOrderLineSort', () => {
 
 it('reducer: order_lines should handle action: beginOrderLineEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderLine(2))
 
@@ -105,7 +105,7 @@ it('reducer: order_lines should handle action: beginOrderLineEdit', () => {
 
 it('reducer: order_lines should handle action: beginOrderLineCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderLine(2))
 
@@ -128,7 +128,7 @@ it('reducer: order_lines should handle action: beginOrderLineCreate', () => {
 
 it('reducer: order_lines should handle action: beginOrderLineDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderLine(2))
 
@@ -143,7 +143,7 @@ it('reducer: order_lines should handle action: beginOrderLineDelete', () => {
 
 it('reducer: order_lines should handle action: beginOrderLineDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderLine(2))
 
@@ -166,7 +166,7 @@ it('reducer: order_lines should handle action: beginOrderLineDuplicate', () => {
 
 it('reducer: order_lines should handle action: cancelOrderLine after beginOrderLineEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderLine(2))
 
@@ -197,7 +197,7 @@ it('reducer: order_lines should handle action: cancelOrderLine after beginOrderL
 
 it('reducer: order_lines should handle action: cancelOrderLine after beginOrderLineCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numOrderLines = store
         .getState()['order_lines']
@@ -218,7 +218,7 @@ it('reducer: order_lines should handle action: cancelOrderLine after beginOrderL
 
 it('reducer: order_lines should handle action: cancelOrderLine after beginOrderLineDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numOrderLines = store
         .getState()['order_lines']
@@ -239,7 +239,7 @@ it('reducer: order_lines should handle action: cancelOrderLine after beginOrderL
 
 it('reducer: order_lines should handle action: cancelOrderLine after beginOrderLineDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderLine(2))
 
@@ -261,7 +261,7 @@ it('reducer: order_lines should handle action: cancelOrderLine after beginOrderL
 
 it('reducer: order_lines should handle action: saveOrderLineCompleted in mode: edit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderLine(2))
     store.dispatch(act.beginOrderLineEdit())
@@ -277,7 +277,7 @@ it('reducer: order_lines should handle action: saveOrderLineCompleted in mode: e
 
 it('reducer: order_lines should handle action: saveOrderLineCompleted in mode: duplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderLine(2))
     store.dispatch(act.beginOrderLineDuplicate())
@@ -292,7 +292,7 @@ it('reducer: order_lines should handle action: saveOrderLineCompleted in mode: d
 
 it('reducer: order_lines should handle action: saveOrderLineCompleted in mode: new', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.beginOrderLineCreate())
     store.dispatch(act.saveOrderLineCompleted(99))
@@ -306,7 +306,7 @@ it('reducer: order_lines should handle action: saveOrderLineCompleted in mode: n
 
 it('reducer: order_lines should handle action: deleteOrderLineCompleted in mode: delete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numOrderLines = store
         .getState()['order_lines']
@@ -325,7 +325,7 @@ it('reducer: order_lines should handle action: deleteOrderLineCompleted in mode:
 
 it('reducer: order_lines should handle action: loadOrderLineListCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderLine(2))
 
@@ -352,7 +352,7 @@ it('reducer: order_lines should handle action: loadOrderLineListCompleted', () =
 
 it('reducer: order_lines should handle action: loadOrderLineReferenceCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = [
         {

@@ -1,20 +1,20 @@
 import {createStore} from 'redux'
 import act from '../actions/'
-import rootReducer from './rootReducer'
+import root_reducer from './root_reducer'
 
 it('should return the initial state', () => {
-    expect(rootReducer(undefined, {})).toBeDefined()
+    expect(root_reducer(undefined, {})).toBeDefined()
 })
 
 it('reducer: compensation_plans should handle action: selectCompensationPlan', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectCompensationPlan(2))
     const newState = store.getState()['compensation_plans']
     expect(newState.get('selected_id')).toEqual(2)
 })
 
 it('reducer: compensation_plans should handle action: selectCompensationPlanTab', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectCompensationPlanTab('foo'))
     const newState = store.getState()['compensation_plans']
     expect(newState.getIn(['details_template', 'current_tab'])).toEqual('foo')
@@ -22,7 +22,7 @@ it('reducer: compensation_plans should handle action: selectCompensationPlanTab'
 
 it('reducer: compensation_plans should handle action: changeCompensationPlanData', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCompensationPlan(2))
 
@@ -44,7 +44,7 @@ it('reducer: compensation_plans should handle action: changeCompensationPlanData
 
 it('reducer: compensation_plans should handle action: changeCompensationPlanFilter', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = {
         column: 'code',
@@ -77,7 +77,7 @@ it('reducer: compensation_plans should handle action: changeCompensationPlanFilt
 
 it('reducer: compensation_plans should handle action: changeCompensationPlanSort', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.changeCompensationPlanSort('foo'))
 
@@ -91,7 +91,7 @@ it('reducer: compensation_plans should handle action: changeCompensationPlanSort
 
 it('reducer: compensation_plans should handle action: beginCompensationPlanEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCompensationPlan(2))
 
@@ -105,7 +105,7 @@ it('reducer: compensation_plans should handle action: beginCompensationPlanEdit'
 
 it('reducer: compensation_plans should handle action: beginCompensationPlanCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCompensationPlan(2))
 
@@ -128,7 +128,7 @@ it('reducer: compensation_plans should handle action: beginCompensationPlanCreat
 
 it('reducer: compensation_plans should handle action: beginCompensationPlanDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCompensationPlan(2))
 
@@ -143,7 +143,7 @@ it('reducer: compensation_plans should handle action: beginCompensationPlanDelet
 
 it('reducer: compensation_plans should handle action: beginCompensationPlanDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCompensationPlan(2))
 
@@ -166,7 +166,7 @@ it('reducer: compensation_plans should handle action: beginCompensationPlanDupli
 
 it('reducer: compensation_plans should handle action: cancelCompensationPlan after beginCompensationPlanEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCompensationPlan(2))
 
@@ -197,7 +197,7 @@ it('reducer: compensation_plans should handle action: cancelCompensationPlan aft
 
 it('reducer: compensation_plans should handle action: cancelCompensationPlan after beginCompensationPlanCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numCompensationPlans = store
         .getState()['compensation_plans']
@@ -218,7 +218,7 @@ it('reducer: compensation_plans should handle action: cancelCompensationPlan aft
 
 it('reducer: compensation_plans should handle action: cancelCompensationPlan after beginCompensationPlanDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numCompensationPlans = store
         .getState()['compensation_plans']
@@ -239,7 +239,7 @@ it('reducer: compensation_plans should handle action: cancelCompensationPlan aft
 
 it('reducer: compensation_plans should handle action: cancelCompensationPlan after beginCompensationPlanDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCompensationPlan(2))
 
@@ -261,7 +261,7 @@ it('reducer: compensation_plans should handle action: cancelCompensationPlan aft
 
 it('reducer: compensation_plans should handle action: saveCompensationPlanCompleted in mode: edit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCompensationPlan(2))
     store.dispatch(act.beginCompensationPlanEdit())
@@ -277,7 +277,7 @@ it('reducer: compensation_plans should handle action: saveCompensationPlanComple
 
 it('reducer: compensation_plans should handle action: saveCompensationPlanCompleted in mode: duplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCompensationPlan(2))
     store.dispatch(act.beginCompensationPlanDuplicate())
@@ -292,7 +292,7 @@ it('reducer: compensation_plans should handle action: saveCompensationPlanComple
 
 it('reducer: compensation_plans should handle action: saveCompensationPlanCompleted in mode: new', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.beginCompensationPlanCreate())
     store.dispatch(act.saveCompensationPlanCompleted(99))
@@ -306,7 +306,7 @@ it('reducer: compensation_plans should handle action: saveCompensationPlanComple
 
 it('reducer: compensation_plans should handle action: deleteCompensationPlanCompleted in mode: delete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numCompensationPlans = store
         .getState()['compensation_plans']
@@ -325,7 +325,7 @@ it('reducer: compensation_plans should handle action: deleteCompensationPlanComp
 
 it('reducer: compensation_plans should handle action: loadCompensationPlanListCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectCompensationPlan(2))
 
@@ -352,7 +352,7 @@ it('reducer: compensation_plans should handle action: loadCompensationPlanListCo
 
 it('reducer: compensation_plans should handle action: loadCompensationPlanReferenceCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = [
         {

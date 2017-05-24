@@ -1,21 +1,21 @@
 import { createStore } from 'redux'
 import act from '../actions/'
-import rootReducer from './rootReducer'
+import root_reducer from './root_reducer'
 
 
 it('should return the initial state', () => {
-    expect(rootReducer(undefined, {})).toBeDefined()
+    expect(root_reducer(undefined, {})).toBeDefined()
 })
 
 it('reducer: finding_lines should handle action: selectFindingLine', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectFindingLine(2))
     const newState = store.getState()['finding_lines']
     expect(newState.get('selected_id')).toEqual(2)
 })
 
 it('reducer: finding_lines should handle action: selectFindingLineTab', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectFindingLineTab('foo'))
     const newState = store.getState()['finding_lines']
     expect(newState.getIn(['details_template', 'current_tab'])).toEqual('foo')
@@ -23,7 +23,7 @@ it('reducer: finding_lines should handle action: selectFindingLineTab', () => {
 
 it('reducer: finding_lines should handle action: changeFindingLineData', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectFindingLine(2))
 
@@ -42,7 +42,7 @@ it('reducer: finding_lines should handle action: changeFindingLineData', () => {
 
 it('reducer: finding_lines should handle action: changeFindingLineFilter', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = {
         column: 'code',
@@ -72,7 +72,7 @@ it('reducer: finding_lines should handle action: changeFindingLineFilter', () =>
 
 it('reducer: finding_lines should handle action: changeFindingLineSort', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.changeFindingLineSort('foo'))
 
@@ -84,7 +84,7 @@ it('reducer: finding_lines should handle action: changeFindingLineSort', () => {
 
 it('reducer: finding_lines should handle action: beginFindingLineEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectFindingLine(2))
 
@@ -98,7 +98,7 @@ it('reducer: finding_lines should handle action: beginFindingLineEdit', () => {
 
 it('reducer: finding_lines should handle action: beginFindingLineCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectFindingLine(2))
 
@@ -116,7 +116,7 @@ it('reducer: finding_lines should handle action: beginFindingLineCreate', () => 
 
 it('reducer: finding_lines should handle action: beginFindingLineDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectFindingLine(2))
 
@@ -131,7 +131,7 @@ it('reducer: finding_lines should handle action: beginFindingLineDelete', () => 
 
 it('reducer: finding_lines should handle action: beginFindingLineDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectFindingLine(2))
 
@@ -149,7 +149,7 @@ it('reducer: finding_lines should handle action: beginFindingLineDuplicate', () 
 
 it('reducer: finding_lines should handle action: cancelFindingLine after beginFindingLineEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectFindingLine(2))
 
@@ -176,7 +176,7 @@ it('reducer: finding_lines should handle action: cancelFindingLine after beginFi
 
 it('reducer: finding_lines should handle action: cancelFindingLine after beginFindingLineCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numFindingLines = store.getState()['finding_lines'].get('list').count()
 
@@ -194,7 +194,7 @@ it('reducer: finding_lines should handle action: cancelFindingLine after beginFi
 
 it('reducer: finding_lines should handle action: cancelFindingLine after beginFindingLineDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numFindingLines = store.getState()['finding_lines'].get('list').count()
     
@@ -212,7 +212,7 @@ it('reducer: finding_lines should handle action: cancelFindingLine after beginFi
 
 it('reducer: finding_lines should handle action: cancelFindingLine after beginFindingLineDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectFindingLine(2))
 
@@ -231,7 +231,7 @@ it('reducer: finding_lines should handle action: cancelFindingLine after beginFi
 
 it('reducer: finding_lines should handle action: saveFindingLineCompleted in mode: edit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectFindingLine(2))
     store.dispatch(act.beginFindingLineEdit())
@@ -247,7 +247,7 @@ it('reducer: finding_lines should handle action: saveFindingLineCompleted in mod
 
 it('reducer: finding_lines should handle action: saveFindingLineCompleted in mode: duplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectFindingLine(2))
     store.dispatch(act.beginFindingLineDuplicate())
@@ -262,7 +262,7 @@ it('reducer: finding_lines should handle action: saveFindingLineCompleted in mod
 
 it('reducer: finding_lines should handle action: saveFindingLineCompleted in mode: new', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.beginFindingLineCreate())
     store.dispatch(act.saveFindingLineCompleted(99))
@@ -276,7 +276,7 @@ it('reducer: finding_lines should handle action: saveFindingLineCompleted in mod
 
 it('reducer: finding_lines should handle action: deleteFindingLineCompleted in mode: delete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numFindingLines = store.getState()['finding_lines'].get('list').count()
 
@@ -292,7 +292,7 @@ it('reducer: finding_lines should handle action: deleteFindingLineCompleted in m
 
 it('reducer: finding_lines should handle action: loadFindingLineListCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectFindingLine(2))
 
@@ -314,7 +314,7 @@ it('reducer: finding_lines should handle action: loadFindingLineListCompleted', 
 
 it('reducer: finding_lines should handle action: loadFindingLineReferenceCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData =  [
         { id: 1, display: 'foo' },

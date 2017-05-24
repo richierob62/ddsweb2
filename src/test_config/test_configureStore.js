@@ -4,7 +4,7 @@ import auth from './auth';
 import pageChange from './page-change';
 import customers from './customers';
 
-const rootReducer = combineReducers( {auth, pageChange, customers} );
+const root_reducer = combineReducers( {auth, pageChange, customers} );
 const test_configureStore = () => {
 
     //   const sagaMiddleware = createSagaMiddleware();
@@ -14,7 +14,7 @@ const test_configureStore = () => {
     //     : applyMiddleware(sagaMiddleware, createLogger());
 
     //   const store = createStore(
-    //     rootReducer,
+    //     root_reducer,
     //     compose(
     //       middlewareList,
     //       window.devToolsExtension ? window.devToolsExtension() : f => f
@@ -24,8 +24,8 @@ const test_configureStore = () => {
     //   if (module.hot) {
     //     // Enable Webpack hot module replacement for reducer
     //     module.hot.accept('./reducer', () => {
-    //       const nextRootReducer = require('./reducer').default;
-    //       store.replaceReducer(nextRootReducer);
+    //       const nextroot_reducer = require('./reducer').default;
+    //       store.replaceReducer(nextroot_reducer);
     //     });
     //   }
 
@@ -33,7 +33,7 @@ const test_configureStore = () => {
     //   store.close = () => store.dispatch(END);
     //   return store;
 
-    return createStore(rootReducer,  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+    return createStore(root_reducer,  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 };
 

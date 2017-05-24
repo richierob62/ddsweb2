@@ -1,21 +1,21 @@
 import {createStore } from 'redux'
 import act from '../actions/'
-import rootReducer from './rootReducer'
+import root_reducer from './root_reducer'
 
 
 it('should return the initial state', () => {
-    expect(rootReducer(undefined, {})).toBeDefined()
+    expect(root_reducer(undefined, {})).toBeDefined()
 })
 
 it('reducer: source_books should handle action: selectSourceBook', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectSourceBook(2))
     const newState = store.getState()['source_books']
     expect(newState.get('selected_id')).toEqual(2)
 })
 
 it('reducer: source_books should handle action: selectSourceBookTab', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectSourceBookTab('foo'))
     const newState = store.getState()['source_books']
     expect(newState.getIn(['details_template', 'current_tab'])).toEqual('foo')
@@ -23,7 +23,7 @@ it('reducer: source_books should handle action: selectSourceBookTab', () => {
 
 it('reducer: source_books should handle action: changeSourceBookData', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSourceBook(2))
 
@@ -45,7 +45,7 @@ it('reducer: source_books should handle action: changeSourceBookData', () => {
 
 it('reducer: source_books should handle action: changeSourceBookFilter', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = {
         column: 'code',
@@ -78,7 +78,7 @@ it('reducer: source_books should handle action: changeSourceBookFilter', () => {
 
 it('reducer: source_books should handle action: changeSourceBookSort', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.changeSourceBookSort('foo'))
 
@@ -92,7 +92,7 @@ it('reducer: source_books should handle action: changeSourceBookSort', () => {
 
 it('reducer: source_books should handle action: beginSourceBookEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSourceBook(2))
 
@@ -106,7 +106,7 @@ it('reducer: source_books should handle action: beginSourceBookEdit', () => {
 
 it('reducer: source_books should handle action: beginSourceBookCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSourceBook(2))
 
@@ -129,7 +129,7 @@ it('reducer: source_books should handle action: beginSourceBookCreate', () => {
 
 it('reducer: source_books should handle action: beginSourceBookDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSourceBook(2))
 
@@ -144,7 +144,7 @@ it('reducer: source_books should handle action: beginSourceBookDelete', () => {
 
 it('reducer: source_books should handle action: beginSourceBookDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSourceBook(2))
 
@@ -167,7 +167,7 @@ it('reducer: source_books should handle action: beginSourceBookDuplicate', () =>
 
 it('reducer: source_books should handle action: cancelSourceBook after beginSourceBookEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSourceBook(2))
 
@@ -198,7 +198,7 @@ it('reducer: source_books should handle action: cancelSourceBook after beginSour
 
 it('reducer: source_books should handle action: cancelSourceBook after beginSourceBookCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numSourceBooks = store
         .getState()['source_books']
@@ -219,7 +219,7 @@ it('reducer: source_books should handle action: cancelSourceBook after beginSour
 
 it('reducer: source_books should handle action: cancelSourceBook after beginSourceBookDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numSourceBooks = store
         .getState()['source_books']
@@ -240,7 +240,7 @@ it('reducer: source_books should handle action: cancelSourceBook after beginSour
 
 it('reducer: source_books should handle action: cancelSourceBook after beginSourceBookDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSourceBook(2))
 
@@ -262,7 +262,7 @@ it('reducer: source_books should handle action: cancelSourceBook after beginSour
 
 it('reducer: source_books should handle action: saveSourceBookCompleted in mode: edit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSourceBook(2))
     store.dispatch(act.beginSourceBookEdit())
@@ -278,7 +278,7 @@ it('reducer: source_books should handle action: saveSourceBookCompleted in mode:
 
 it('reducer: source_books should handle action: saveSourceBookCompleted in mode: duplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSourceBook(2))
     store.dispatch(act.beginSourceBookDuplicate())
@@ -293,7 +293,7 @@ it('reducer: source_books should handle action: saveSourceBookCompleted in mode:
 
 it('reducer: source_books should handle action: saveSourceBookCompleted in mode: new', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.beginSourceBookCreate())
     store.dispatch(act.saveSourceBookCompleted(99))
@@ -307,7 +307,7 @@ it('reducer: source_books should handle action: saveSourceBookCompleted in mode:
 
 it('reducer: source_books should handle action: deleteSourceBookCompleted in mode: delete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numSourceBooks = store
         .getState()['source_books']
@@ -326,7 +326,7 @@ it('reducer: source_books should handle action: deleteSourceBookCompleted in mod
 
 it('reducer: source_books should handle action: loadSourceBookListCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectSourceBook(2))
 
@@ -353,7 +353,7 @@ it('reducer: source_books should handle action: loadSourceBookListCompleted', ()
 
 it('reducer: source_books should handle action: loadSourceBookReferenceCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = [
         {

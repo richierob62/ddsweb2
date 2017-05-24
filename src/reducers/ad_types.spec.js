@@ -1,21 +1,21 @@
 import { createStore } from 'redux'
 import act from '../actions/'
-import rootReducer from './rootReducer'
+import root_reducer from './root_reducer'
 
 
 it('should return the initial state', () => {
-    expect(rootReducer(undefined, {})).toBeDefined()
+    expect(root_reducer(undefined, {})).toBeDefined()
 })
 
 it('reducer: ad_types should handle action: selectAdType', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectAdType(2))
     const newState = store.getState()['ad_types']
     expect(newState.get('selected_id')).toEqual(2)
 })
 
 it('reducer: ad_types should handle action: selectAdTypeTab', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectAdTypeTab('foo'))
     const newState = store.getState()['ad_types']
     expect(newState.getIn(['details_template', 'current_tab'])).toEqual('foo')
@@ -23,7 +23,7 @@ it('reducer: ad_types should handle action: selectAdTypeTab', () => {
 
 it('reducer: ad_types should handle action: changeAdTypeData', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectAdType(2))
 
@@ -42,7 +42,7 @@ it('reducer: ad_types should handle action: changeAdTypeData', () => {
 
 it('reducer: ad_types should handle action: changeAdTypeFilter', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = {
         column: 'code',
@@ -72,7 +72,7 @@ it('reducer: ad_types should handle action: changeAdTypeFilter', () => {
 
 it('reducer: ad_types should handle action: changeAdTypeSort', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.changeAdTypeSort('foo'))
 
@@ -84,7 +84,7 @@ it('reducer: ad_types should handle action: changeAdTypeSort', () => {
 
 it('reducer: ad_types should handle action: beginAdTypeEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectAdType(2))
 
@@ -98,7 +98,7 @@ it('reducer: ad_types should handle action: beginAdTypeEdit', () => {
 
 it('reducer: ad_types should handle action: beginAdTypeCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectAdType(2))
 
@@ -116,7 +116,7 @@ it('reducer: ad_types should handle action: beginAdTypeCreate', () => {
 
 it('reducer: ad_types should handle action: beginAdTypeDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectAdType(2))
 
@@ -131,7 +131,7 @@ it('reducer: ad_types should handle action: beginAdTypeDelete', () => {
 
 it('reducer: ad_types should handle action: beginAdTypeDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectAdType(2))
 
@@ -149,7 +149,7 @@ it('reducer: ad_types should handle action: beginAdTypeDuplicate', () => {
 
 it('reducer: ad_types should handle action: cancelAdType after beginAdTypeEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectAdType(2))
 
@@ -176,7 +176,7 @@ it('reducer: ad_types should handle action: cancelAdType after beginAdTypeEdit',
 
 it('reducer: ad_types should handle action: cancelAdType after beginAdTypeCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numAdTypes = store.getState()['ad_types'].get('list').count()
 
@@ -194,7 +194,7 @@ it('reducer: ad_types should handle action: cancelAdType after beginAdTypeCreate
 
 it('reducer: ad_types should handle action: cancelAdType after beginAdTypeDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numAdTypes = store.getState()['ad_types'].get('list').count()
     
@@ -212,7 +212,7 @@ it('reducer: ad_types should handle action: cancelAdType after beginAdTypeDelete
 
 it('reducer: ad_types should handle action: cancelAdType after beginAdTypeDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectAdType(2))
 
@@ -231,7 +231,7 @@ it('reducer: ad_types should handle action: cancelAdType after beginAdTypeDuplic
 
 it('reducer: ad_types should handle action: saveAdTypeCompleted in mode: edit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectAdType(2))
     store.dispatch(act.beginAdTypeEdit())
@@ -247,7 +247,7 @@ it('reducer: ad_types should handle action: saveAdTypeCompleted in mode: edit', 
 
 it('reducer: ad_types should handle action: saveAdTypeCompleted in mode: duplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectAdType(2))
     store.dispatch(act.beginAdTypeDuplicate())
@@ -262,7 +262,7 @@ it('reducer: ad_types should handle action: saveAdTypeCompleted in mode: duplica
 
 it('reducer: ad_types should handle action: saveAdTypeCompleted in mode: new', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.beginAdTypeCreate())
     store.dispatch(act.saveAdTypeCompleted(99))
@@ -276,7 +276,7 @@ it('reducer: ad_types should handle action: saveAdTypeCompleted in mode: new', (
 
 it('reducer: ad_types should handle action: deleteAdTypeCompleted in mode: delete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numAdTypes = store.getState()['ad_types'].get('list').count()
 
@@ -292,7 +292,7 @@ it('reducer: ad_types should handle action: deleteAdTypeCompleted in mode: delet
 
 it('reducer: ad_types should handle action: loadAdTypeListCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectAdType(2))
 
@@ -314,7 +314,7 @@ it('reducer: ad_types should handle action: loadAdTypeListCompleted', () => {
 
 it('reducer: ad_types should handle action: loadAdTypeReferenceCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData =  [
         { id: 1, display: 'foo' },

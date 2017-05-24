@@ -1,21 +1,21 @@
 import {createStore} from 'redux'
 import act from '../actions/'
-import rootReducer from './rootReducer'
+import root_reducer from './root_reducer'
 
 
 it('should return the initial state', () => {
-    expect(rootReducer(undefined, {})).toBeDefined()
+    expect(root_reducer(undefined, {})).toBeDefined()
 })
 
 it('reducer: local_foreigns should handle action: selectLocalForeign', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectLocalForeign(2))
     const newState = store.getState()['local_foreigns']
     expect(newState.get('selected_id')).toEqual(2)
 })
 
 it('reducer: local_foreigns should handle action: selectLocalForeignTab', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectLocalForeignTab('foo'))
     const newState = store.getState()['local_foreigns']
     expect(newState.getIn(['details_template', 'current_tab'])).toEqual('foo')
@@ -23,7 +23,7 @@ it('reducer: local_foreigns should handle action: selectLocalForeignTab', () => 
 
 it('reducer: local_foreigns should handle action: changeLocalForeignData', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectLocalForeign(2))
 
@@ -45,7 +45,7 @@ it('reducer: local_foreigns should handle action: changeLocalForeignData', () =>
 
 it('reducer: local_foreigns should handle action: changeLocalForeignFilter', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = {
         column: 'code',
@@ -78,7 +78,7 @@ it('reducer: local_foreigns should handle action: changeLocalForeignFilter', () 
 
 it('reducer: local_foreigns should handle action: changeLocalForeignSort', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.changeLocalForeignSort('foo'))
 
@@ -92,7 +92,7 @@ it('reducer: local_foreigns should handle action: changeLocalForeignSort', () =>
 
 it('reducer: local_foreigns should handle action: beginLocalForeignEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectLocalForeign(2))
 
@@ -106,7 +106,7 @@ it('reducer: local_foreigns should handle action: beginLocalForeignEdit', () => 
 
 it('reducer: local_foreigns should handle action: beginLocalForeignCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectLocalForeign(2))
 
@@ -129,7 +129,7 @@ it('reducer: local_foreigns should handle action: beginLocalForeignCreate', () =
 
 it('reducer: local_foreigns should handle action: beginLocalForeignDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectLocalForeign(2))
 
@@ -144,7 +144,7 @@ it('reducer: local_foreigns should handle action: beginLocalForeignDelete', () =
 
 it('reducer: local_foreigns should handle action: beginLocalForeignDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectLocalForeign(2))
 
@@ -167,7 +167,7 @@ it('reducer: local_foreigns should handle action: beginLocalForeignDuplicate', (
 
 it('reducer: local_foreigns should handle action: cancelLocalForeign after beginLocalForeignEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectLocalForeign(2))
 
@@ -198,7 +198,7 @@ it('reducer: local_foreigns should handle action: cancelLocalForeign after begin
 
 it('reducer: local_foreigns should handle action: cancelLocalForeign after beginLocalForeignCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numLocalForeigns = store
         .getState()['local_foreigns']
@@ -219,7 +219,7 @@ it('reducer: local_foreigns should handle action: cancelLocalForeign after begin
 
 it('reducer: local_foreigns should handle action: cancelLocalForeign after beginLocalForeignDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numLocalForeigns = store
         .getState()['local_foreigns']
@@ -240,7 +240,7 @@ it('reducer: local_foreigns should handle action: cancelLocalForeign after begin
 
 it('reducer: local_foreigns should handle action: cancelLocalForeign after beginLocalForeignDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectLocalForeign(2))
 
@@ -262,7 +262,7 @@ it('reducer: local_foreigns should handle action: cancelLocalForeign after begin
 
 it('reducer: local_foreigns should handle action: saveLocalForeignCompleted in mode: edit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectLocalForeign(2))
     store.dispatch(act.beginLocalForeignEdit())
@@ -278,7 +278,7 @@ it('reducer: local_foreigns should handle action: saveLocalForeignCompleted in m
 
 it('reducer: local_foreigns should handle action: saveLocalForeignCompleted in mode: duplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectLocalForeign(2))
     store.dispatch(act.beginLocalForeignDuplicate())
@@ -293,7 +293,7 @@ it('reducer: local_foreigns should handle action: saveLocalForeignCompleted in m
 
 it('reducer: local_foreigns should handle action: saveLocalForeignCompleted in mode: new', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.beginLocalForeignCreate())
     store.dispatch(act.saveLocalForeignCompleted(99))
@@ -307,7 +307,7 @@ it('reducer: local_foreigns should handle action: saveLocalForeignCompleted in m
 
 it('reducer: local_foreigns should handle action: deleteLocalForeignCompleted in mode: delete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numLocalForeigns = store
         .getState()['local_foreigns']
@@ -326,7 +326,7 @@ it('reducer: local_foreigns should handle action: deleteLocalForeignCompleted in
 
 it('reducer: local_foreigns should handle action: loadLocalForeignListCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectLocalForeign(2))
 
@@ -353,7 +353,7 @@ it('reducer: local_foreigns should handle action: loadLocalForeignListCompleted'
 
 it('reducer: local_foreigns should handle action: loadLocalForeignReferenceCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = [
         {

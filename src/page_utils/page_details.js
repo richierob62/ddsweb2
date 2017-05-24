@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import DetailsHeader from '../page_utils/details_header'
+import DetailsLayout from '../page_utils/details_layout'
 
 
 const DetailsWrapper = styled.div`
@@ -10,14 +11,10 @@ const DetailsWrapper = styled.div`
     justify-content: flex-start;
 `
 
-const FieldsSection = styled.div`
-
-`
-
 const PageDetails = ({ page }) => (
     <DetailsWrapper>
         <DetailsHeader page={page} />
-        <FieldsSection page={page} />
+        <DetailsLayout page={page} />
     </DetailsWrapper>
 )
 

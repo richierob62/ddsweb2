@@ -216,7 +216,6 @@ const pageChangeWatcher = function* () {
     const page = yield getNewPage();
 
     switch (page) {
-
       case '/customers':
 
         // list dirty?
@@ -237,6 +236,24 @@ const pageChangeWatcher = function* () {
 
         break
 
+      default:
+        // list dirty?
+        reducer = table_hash['customer'].reducer
+        if (yield listIsDirty(reducer)) {
+
+          // main file
+          forks.push(loadFilteredAndSortedData('customer'))
+
+          // reference lists
+          if (yield refListIsDirty('sales_reps')) { forks.push(loadReferenceList('sales_rep')) }
+          if (yield refListIsDirty('categories')) forks.push(loadReferenceList('category'))
+          if (yield refListIsDirty('local_foreigns')) forks.push(loadReferenceList('local_foreign'))
+          if (yield refListIsDirty('pay_plans')) forks.push(loadReferenceList('pay_plan'))
+          if (yield refListIsDirty('primary_books')) forks.push(loadReferenceList('primary_book'))
+
+        }
+
+        break
     }
 
     yield [forks]

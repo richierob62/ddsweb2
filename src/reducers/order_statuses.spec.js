@@ -1,20 +1,20 @@
 import {createStore} from 'redux'
 import act from '../actions/'
-import rootReducer from './rootReducer'
+import root_reducer from './root_reducer'
 
 it('should return the initial state', () => {
-    expect(rootReducer(undefined, {})).toBeDefined()
+    expect(root_reducer(undefined, {})).toBeDefined()
 })
 
 it('reducer: order_statuses should handle action: selectOrderStatus', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectOrderStatus(2))
     const newState = store.getState()['order_statuses']
     expect(newState.get('selected_id')).toEqual(2)
 })
 
 it('reducer: order_statuses should handle action: selectOrderStatusTab', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectOrderStatusTab('foo'))
     const newState = store.getState()['order_statuses']
     expect(newState.getIn(['details_template', 'current_tab'])).toEqual('foo')
@@ -22,7 +22,7 @@ it('reducer: order_statuses should handle action: selectOrderStatusTab', () => {
 
 it('reducer: order_statuses should handle action: changeOrderStatusData', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderStatus(2))
 
@@ -44,7 +44,7 @@ it('reducer: order_statuses should handle action: changeOrderStatusData', () => 
 
 it('reducer: order_statuses should handle action: changeOrderStatusFilter', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = {
         column: 'code',
@@ -77,7 +77,7 @@ it('reducer: order_statuses should handle action: changeOrderStatusFilter', () =
 
 it('reducer: order_statuses should handle action: changeOrderStatusSort', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.changeOrderStatusSort('foo'))
 
@@ -91,7 +91,7 @@ it('reducer: order_statuses should handle action: changeOrderStatusSort', () => 
 
 it('reducer: order_statuses should handle action: beginOrderStatusEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderStatus(2))
 
@@ -105,7 +105,7 @@ it('reducer: order_statuses should handle action: beginOrderStatusEdit', () => {
 
 it('reducer: order_statuses should handle action: beginOrderStatusCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderStatus(2))
 
@@ -128,7 +128,7 @@ it('reducer: order_statuses should handle action: beginOrderStatusCreate', () =>
 
 it('reducer: order_statuses should handle action: beginOrderStatusDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderStatus(2))
 
@@ -143,7 +143,7 @@ it('reducer: order_statuses should handle action: beginOrderStatusDelete', () =>
 
 it('reducer: order_statuses should handle action: beginOrderStatusDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderStatus(2))
 
@@ -166,7 +166,7 @@ it('reducer: order_statuses should handle action: beginOrderStatusDuplicate', ()
 
 it('reducer: order_statuses should handle action: cancelOrderStatus after beginOrderStatusEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderStatus(2))
 
@@ -197,7 +197,7 @@ it('reducer: order_statuses should handle action: cancelOrderStatus after beginO
 
 it('reducer: order_statuses should handle action: cancelOrderStatus after beginOrderStatusCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numOrderStatuss = store
         .getState()['order_statuses']
@@ -218,7 +218,7 @@ it('reducer: order_statuses should handle action: cancelOrderStatus after beginO
 
 it('reducer: order_statuses should handle action: cancelOrderStatus after beginOrderStatusDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numOrderStatuss = store
         .getState()['order_statuses']
@@ -239,7 +239,7 @@ it('reducer: order_statuses should handle action: cancelOrderStatus after beginO
 
 it('reducer: order_statuses should handle action: cancelOrderStatus after beginOrderStatusDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderStatus(2))
 
@@ -261,7 +261,7 @@ it('reducer: order_statuses should handle action: cancelOrderStatus after beginO
 
 it('reducer: order_statuses should handle action: saveOrderStatusCompleted in mode: edit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderStatus(2))
     store.dispatch(act.beginOrderStatusEdit())
@@ -277,7 +277,7 @@ it('reducer: order_statuses should handle action: saveOrderStatusCompleted in mo
 
 it('reducer: order_statuses should handle action: saveOrderStatusCompleted in mode: duplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderStatus(2))
     store.dispatch(act.beginOrderStatusDuplicate())
@@ -292,7 +292,7 @@ it('reducer: order_statuses should handle action: saveOrderStatusCompleted in mo
 
 it('reducer: order_statuses should handle action: saveOrderStatusCompleted in mode: new', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.beginOrderStatusCreate())
     store.dispatch(act.saveOrderStatusCompleted(99))
@@ -306,7 +306,7 @@ it('reducer: order_statuses should handle action: saveOrderStatusCompleted in mo
 
 it('reducer: order_statuses should handle action: deleteOrderStatusCompleted in mode: delete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numOrderStatuss = store
         .getState()['order_statuses']
@@ -325,7 +325,7 @@ it('reducer: order_statuses should handle action: deleteOrderStatusCompleted in 
 
 it('reducer: order_statuses should handle action: loadOrderStatusListCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectOrderStatus(2))
 
@@ -352,7 +352,7 @@ it('reducer: order_statuses should handle action: loadOrderStatusListCompleted',
 
 it('reducer: order_statuses should handle action: loadOrderStatusReferenceCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = [
         {

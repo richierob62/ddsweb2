@@ -1,21 +1,21 @@
 import {createStore } from 'redux'
 import act from '../actions/'
-import rootReducer from './rootReducer'
+import root_reducer from './root_reducer'
 
 
 it('should return the initial state', () => {
-    expect(rootReducer(undefined, {})).toBeDefined()
+    expect(root_reducer(undefined, {})).toBeDefined()
 })
 
 it('reducer: udacs should handle action: selectUdac', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectUdac(2))
     const newState = store.getState()['udacs']
     expect(newState.get('selected_id')).toEqual(2)
 })
 
 it('reducer: udacs should handle action: selectUdacTab', () => {
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
     store.dispatch(act.selectUdacTab('foo'))
     const newState = store.getState()['udacs']
     expect(newState.getIn(['details_template', 'current_tab'])).toEqual('foo')
@@ -23,7 +23,7 @@ it('reducer: udacs should handle action: selectUdacTab', () => {
 
 it('reducer: udacs should handle action: changeUdacData', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectUdac(2))
 
@@ -45,7 +45,7 @@ it('reducer: udacs should handle action: changeUdacData', () => {
 
 it('reducer: udacs should handle action: changeUdacFilter', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = {
         column: 'code',
@@ -78,7 +78,7 @@ it('reducer: udacs should handle action: changeUdacFilter', () => {
 
 it('reducer: udacs should handle action: changeUdacSort', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.changeUdacSort('foo'))
 
@@ -92,7 +92,7 @@ it('reducer: udacs should handle action: changeUdacSort', () => {
 
 it('reducer: udacs should handle action: beginUdacEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectUdac(2))
 
@@ -106,7 +106,7 @@ it('reducer: udacs should handle action: beginUdacEdit', () => {
 
 it('reducer: udacs should handle action: beginUdacCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectUdac(2))
 
@@ -129,7 +129,7 @@ it('reducer: udacs should handle action: beginUdacCreate', () => {
 
 it('reducer: udacs should handle action: beginUdacDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectUdac(2))
 
@@ -144,7 +144,7 @@ it('reducer: udacs should handle action: beginUdacDelete', () => {
 
 it('reducer: udacs should handle action: beginUdacDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectUdac(2))
 
@@ -167,7 +167,7 @@ it('reducer: udacs should handle action: beginUdacDuplicate', () => {
 
 it('reducer: udacs should handle action: cancelUdac after beginUdacEdit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectUdac(2))
 
@@ -198,7 +198,7 @@ it('reducer: udacs should handle action: cancelUdac after beginUdacEdit', () => 
 
 it('reducer: udacs should handle action: cancelUdac after beginUdacCreate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numUdacs = store
         .getState()['udacs']
@@ -219,7 +219,7 @@ it('reducer: udacs should handle action: cancelUdac after beginUdacCreate', () =
 
 it('reducer: udacs should handle action: cancelUdac after beginUdacDelete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numUdacs = store
         .getState()['udacs']
@@ -240,7 +240,7 @@ it('reducer: udacs should handle action: cancelUdac after beginUdacDelete', () =
 
 it('reducer: udacs should handle action: cancelUdac after beginUdacDuplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectUdac(2))
 
@@ -262,7 +262,7 @@ it('reducer: udacs should handle action: cancelUdac after beginUdacDuplicate', (
 
 it('reducer: udacs should handle action: saveUdacCompleted in mode: edit', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectUdac(2))
     store.dispatch(act.beginUdacEdit())
@@ -278,7 +278,7 @@ it('reducer: udacs should handle action: saveUdacCompleted in mode: edit', () =>
 
 it('reducer: udacs should handle action: saveUdacCompleted in mode: duplicate', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectUdac(2))
     store.dispatch(act.beginUdacDuplicate())
@@ -293,7 +293,7 @@ it('reducer: udacs should handle action: saveUdacCompleted in mode: duplicate', 
 
 it('reducer: udacs should handle action: saveUdacCompleted in mode: new', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.beginUdacCreate())
     store.dispatch(act.saveUdacCompleted(99))
@@ -307,7 +307,7 @@ it('reducer: udacs should handle action: saveUdacCompleted in mode: new', () => 
 
 it('reducer: udacs should handle action: deleteUdacCompleted in mode: delete', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const numUdacs = store
         .getState()['udacs']
@@ -326,7 +326,7 @@ it('reducer: udacs should handle action: deleteUdacCompleted in mode: delete', (
 
 it('reducer: udacs should handle action: loadUdacListCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     store.dispatch(act.selectUdac(2))
 
@@ -353,7 +353,7 @@ it('reducer: udacs should handle action: loadUdacListCompleted', () => {
 
 it('reducer: udacs should handle action: loadUdacReferenceCompleted', () => {
 
-    const store = createStore(rootReducer)
+    const store = createStore(root_reducer)
 
     const newData = [
         {
