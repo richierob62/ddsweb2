@@ -195,7 +195,7 @@ const changeSortGenerator = (act_string, table) => {
 
 const changeFilterGenerator = (act_string, table) => {
   return function* () {
-    yield throttle(150, act_string, loadFilteredAndSortedData, table)
+    yield throttle(500, act_string, loadFilteredAndSortedData, table)
   }
 }
 

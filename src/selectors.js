@@ -21,8 +21,6 @@ export const getFilteredRefList = (state) => {
 
 export const getPageTitle = state => state.get('page_title')
 
-export const getFields = state => state.get('fields')
-
 export const getListTemplate = state => state.get('list_template')
 
 export const getCurrentSort = state => state.get('current_sort')
@@ -53,6 +51,18 @@ export const getTabNames = state => state.getIn(['details_template', 'tabs']).ma
 
 export const getCurrentTab = state => state.getIn(['details_template', 'current_tab'])
 
+export const getCurrentTabRows = state => {
+    const current_tab = getCurrentTab(state)
+    return state
+        .getIn(['details_template', 'tabs'])
+        .find(tab => tab.get('name') === current_tab)
+        .get('rows')
+}
+
 export const getFirstIndexInList = state => state.get('first_index')
 
 export const getListSize = state => state.get('list').count()
+
+export const getMode = state => state.get('mode')
+
+export const getFieldDefinitions = state => state.get('fields')

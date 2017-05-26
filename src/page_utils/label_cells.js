@@ -2,10 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import actions from '../actions'
-import { getFields, getListTemplate, getCurrentSort, getActionWord } from '../selectors'
+import { getFieldDefinitions, getListTemplate, getCurrentSort, getActionWord } from '../selectors'
 
 const mstp = (state, ownProps) => ({
-    fields: getFields(state[ownProps.page]),
+    fields_definitions: getFieldDefinitions(state[ownProps.page]),
     list_template: getListTemplate(state[ownProps.page]),
     current_sort: getCurrentSort(state[ownProps.page]),
     action_word: getActionWord(state[ownProps.page]),
@@ -49,12 +49,12 @@ const LabelCells = (props) => {
         dispatch,
          list_template,
          current_sort,
-         fields,
+         fields_definitions,
          action_word, 
         } = props
 
     // labels
-    const labels = fields.map(field => field.get('label'))
+    const labels = fields_definitions.map(def => def.get('label'))
 
     // sort_field
     const sort_field = current_sort.get('field_name')

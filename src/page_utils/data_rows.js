@@ -2,12 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import actions from '../actions'
-import { getSelectedID, getFields, getListTemplate, getActionWord, getFilteredList, refSelector } from '../selectors'
+import { getSelectedID, getFieldDefinitions, getListTemplate, getActionWord, getFilteredList, refSelector } from '../selectors'
 
 const mstp = (state, ownProps) => {
     return ({
         list: getFilteredList(state[ownProps.page]),
-        fields: getFields(state[ownProps.page]),
+        field_definitionss: getFieldDefinitions(state[ownProps.page]),
         list_template: getListTemplate(state[ownProps.page]),
         action_word: getActionWord(state[ownProps.page]),
         selected_id: getSelectedID(state[ownProps.page]),
@@ -45,7 +45,7 @@ const DataRows = (props) => {
     const {
         dispatch,
         list,
-        fields,
+        field_definitionss,
         list_template,
         selected_id,
         action_word,
@@ -61,7 +61,7 @@ const DataRows = (props) => {
     const select_handler = (payload) => dispatch(actions[select_handler_action_name](payload))
 
     const fixReferenceFields = (line, column) => {
-        const ref_table = fields.getIn([column.get('field_name'), 'ref_table'])
+        const ref_table = field_definitionss.getIn([column.get('field_name'), 'ref_table'])
         if (ref_table === undefined)
             return line.get(column.get('field_name'))
 
