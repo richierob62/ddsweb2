@@ -13,21 +13,15 @@ const DetailsRow = (props) => {
     const {
         field_definitions,
         row_fields,
-        current_record,
-        action_word,
-        mode,
-        dispatch,
     } = props
     return (
         <RowWrapper>
-            {row_fields.map(field => {
+            {row_fields.map(field_name => {
                 return <DetailField
-                    key={field}
-                    field_definition={field_definitions.get(field)}
-                    current_record={current_record}
-                    action_word={action_word}
-                    mode={mode}
-                    dispatch={dispatch}
+                    key={field_name}
+                    field_name={field_name}
+                    field_definition={field_definitions.get(field_name)}
+                    {...props}
                 />
             })}
         </RowWrapper>

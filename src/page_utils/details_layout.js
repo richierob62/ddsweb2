@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { getCurrentRecord, getActionWord, getCurrentTabRows, getMode, getFieldDefinitions } from '../selectors'
+import { getCurrentRecord, getActionWord, getCurrentTabRows, getMode, getFieldDefinitions, refSelector, getRefList } from '../selectors'
 import DetailsRow from './details_row'
 
 const mstp = (state, ownProps) => ({
@@ -9,7 +9,17 @@ const mstp = (state, ownProps) => ({
     current_record: getCurrentRecord(state[ownProps.page]),
     action_word: getActionWord(state[ownProps.page]),
     mode: getMode(state[ownProps.page]),
-    field_definitions: getFieldDefinitions(state[ownProps.page])
+    field_definitions: getFieldDefinitions(state[ownProps.page]),
+    ref_selector_sales_rep: refSelector(state['sales_reps']),
+    ref_selector_local_foreign: refSelector(state['local_foreigns']),
+    ref_selector_pay_plan: refSelector(state['pay_plans']),
+    ref_selector_primary_book: refSelector(state['primary_books']),
+    ref_selector_category: refSelector(state['categories']),
+    sales_rep_ref_list: getRefList(state['sales_reps']),
+    local_foreign_ref_list: getRefList(state['local_foreigns']),
+    pay_plan_ref_list: getRefList(state['pay_plans']),
+    primary_book_ref_list: getRefList(state['primary_books']),
+    category_ref_list: getRefList(state['categories']),
 })
 
 const DetailsWrapper = styled.div`
@@ -21,10 +31,6 @@ const DetailsLayout = (props) => {
     const {
         current_tab_rows,
         current_record,
-        field_definitions,
-        action_word,
-        mode,
-        dispatch,
     } = props
 
     return (
@@ -34,13 +40,10 @@ const DetailsLayout = (props) => {
                 {
                     current_tab_rows.map((row, idx) => {
                         return (
-                            <DetailsRow key={idx}
-                                current_record={current_record}
-                                action_word={action_word}
-                                dispatch={dispatch}
-                                mode={mode}
+                            <DetailsRow
+                                key={idx}
                                 row_fields={row}
-                                field_definitions={field_definitions}
+                                {...props}
                             />
                         )
                     })

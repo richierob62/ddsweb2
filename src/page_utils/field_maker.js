@@ -157,7 +157,7 @@ const select = (p, field, value) => {
         })
     }
 
-    const selected_id = ref_list ?
+    const selected_id = ref_list ? 
         ref_list.find(option => option.display === value) ?
             ref_list.find(option => option.display === value).id :
             undefined :

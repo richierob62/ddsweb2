@@ -7,8 +7,6 @@ export const getDisplayValueFromID = (list) => {
     }
 }
 
-
-
 export const getFilteredRefList = (state) => {
     const filter = state.get('typeahead')
 
@@ -66,3 +64,5 @@ export const getListSize = state => state.get('list').count()
 export const getMode = state => state.get('mode')
 
 export const getFieldDefinitions = state => state.get('fields')
+
+export const getRefList = state => state.get('ref_list')

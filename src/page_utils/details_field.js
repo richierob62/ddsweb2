@@ -15,19 +15,46 @@ const FieldWrapper = styled.div`
 `
 
 const DetailsField = (props) => {
+
     const {
         field_definition,
         current_record,
-        action_word,
+        field_name,
         mode,
-        dispatch,
     } = props
+
+    // current_record updated
+
+    const ref_table_name = field_definition.get('ref_table')
+
+    const suffixed_field_name = ref_table_name === undefined ?
+        field_name :
+        field_name + '_id'
+
+    const value = current_record.get(suffixed_field_name)
 
     const label = field_definition.get('label')
     const input_type = field_definition.get('input_type')
-    const ref_table = field_definition.get('ref_table')
     const readonly = field_definition.get('readonly')
     const display = readonly || mode === 'display'
+
+    const ref_function =
+        (ref_table_name === undefined) ? undefined :
+            (ref_table_name === 'sales_rep') ? props.ref_selector_sales_rep :
+                (ref_table_name === 'local_foreign') ? props.ref_selector_local_foreign :
+                    (ref_table_name === 'pay_plan') ? props.ref_selector_pay_plan :
+                        (ref_table_name === 'primary_book') ? props.ref_selector_primary_book :
+                            (ref_table_name === 'category') ? props.ref_selector_category :
+                                undefined
+
+    const ref_list =
+        (ref_table_name === undefined) ? undefined :
+            (ref_table_name === 'sales_rep') ? props.sales_rep_ref_list :
+                (ref_table_name === 'local_foreign') ? props.local_foreign_ref_list :
+                    (ref_table_name === 'pay_plan') ? props.pay_plan_ref_list :
+                        (ref_table_name === 'primary_book') ? props.primary_book_ref_list :
+                            (ref_table_name === 'category') ? props.category_ref_list :
+                                undefined
 
     const relevant_component = () => {
         switch (input_type) {
@@ -35,62 +62,58 @@ const DetailsField = (props) => {
                 return (
                     <TextInput
                         label={label}
-                        record={current_record}
-                        action_word={action_word}
-                        dispatch={dispatch}
                         display={display}
+                        value={value}
+                        {...props}
                     />
                 )
             case 'select':
                 return (
                     <SelectInput
                         label={label}
-                        record={current_record}
-                        action_word={action_word}
-                        dispatch={dispatch}
-                        ref_table={ref_table}
                         display={display}
+                        value={value}
+                        ref_function={ref_function}
+                        ref_list={ref_list}
+                        {...props}
                     />
                 )
             case 'typeahead':
                 return (
                     <TypeaheadInput
                         label={label}
-                        record={current_record}
-                        action_word={action_word}
-                        dispatch={dispatch}
-                        ref_table={ref_table}
+                        ref_function={ref_function}
+                        ref_list={ref_list}
                         display={display}
+                        value={value}
+                        {...props}
                     />
                 )
             case 'date':
                 return (
                     <DateInput
                         label={label}
-                        record={current_record}
-                        action_word={action_word}
-                        dispatch={dispatch}
                         display={display}
+                        value={value}
+                        {...props}
                     />
                 )
             case 'radio':
                 return (
                     <RadioInput
                         label={label}
-                        record={current_record}
-                        action_word={action_word}
-                        dispatch={dispatch}
                         display={display}
+                        value={value}
+                        {...props}
                     />
                 )
             case 'checkbox':
                 return (
                     <CheckboxInput
                         label={label}
-                        record={current_record}
-                        action_word={action_word}
-                        dispatch={dispatch}
                         display={display}
+                        value={value}
+                        {...props}
                     />
                 )
 
