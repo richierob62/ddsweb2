@@ -23,6 +23,17 @@ const DisplayOnlyInput = styled.input`
     color: rgb(42, 5, 49);
 `
 
+const EditableInput = styled.input`
+    flex: 1;
+    font-size: .8rem;
+    color: rgb(201, 71, 225);
+    border: none;
+    border-bottom: 1px solid #767676;
+    margin-left: .75rem;
+    margin-right: 2rem;
+`
+
+
 const comp = (props) => {
 
     const {
@@ -37,14 +48,16 @@ const comp = (props) => {
 
     // change_handler
     const change_handler_action_name = 'change' + action_word + 'Data'
-    const change_handler = (display === true) ?
-        () => { } :
-        (fld, e) => dispatch(actions[change_handler_action_name]({ field: field_name, value: e.currentTarget.value }))
+    const change_handler = (fld, e) => dispatch(actions[change_handler_action_name]({ field: field_name, value: e.currentTarget.value }))
 
     return (
         <Wrapper>
             <StyledLabel>{label}:</StyledLabel>
-            <DisplayOnlyInput type="text" value={value} onChange={change_handler.bind(null, field_name)} />
+            {
+                display === true ?
+                    <DisplayOnlyInput type="text" value={value} onChange={() => { }} /> :
+                    <EditableInput type="text" value={value} onChange={change_handler.bind(null, field_name)} />
+            }
         </Wrapper>
     )
 }
