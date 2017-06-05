@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 import TextInput from './text_input'
 import SelectInput from './select_input'
-import TypeaheadInput from './typeahead_input'
 import DateInput from './date_input'
 import RadioInput from './radio_input'
 import CheckboxInput from './checkbox_input'
@@ -36,7 +35,7 @@ const DetailsField = (props) => {
     const label = field_definition.get('label')
     const input_type = field_definition.get('input_type')
     const readonly = field_definition.get('readonly')
-    const display = readonly || mode === 'display'
+    const display = !(readonly || mode === 'display')
 
     const ref_function =
         (ref_table_name === undefined) ? undefined :
@@ -46,6 +45,10 @@ const DetailsField = (props) => {
                         (ref_table_name === 'primary_book') ? props.ref_selector_primary_book :
                             (ref_table_name === 'category') ? props.ref_selector_category :
                                 undefined
+
+    const display_value = ref_function ?
+        ref_function(value).get('display') :
+        value
 
     const ref_list =
         (ref_table_name === undefined) ? undefined :
@@ -69,25 +72,20 @@ const DetailsField = (props) => {
                 )
             case 'select':
                 return (
-                    <SelectInput
-                        label={label}
-                        display={display}
-                        value={value}
-                        ref_function={ref_function}
-                        ref_list={ref_list}
-                        {...props}
-                    />
-                )
-            case 'typeahead':
-                return (
-                    <TypeaheadInput
-                        label={label}
-                        ref_function={ref_function}
-                        ref_list={ref_list}
-                        display={display}
-                        value={value}
-                        {...props}
-                    />
+                    display ?
+                        <TextInput
+                            label={label}
+                            display={display}
+                            value={display_value}
+                            {...props}
+                        /> :
+                        <SelectInput
+                            label={label}
+                            display={display}
+                            value={value}
+                            ref_list={ref_list}
+                            {...props}
+                        />
                 )
             case 'date':
                 return (
@@ -116,7 +114,7 @@ const DetailsField = (props) => {
                         {...props}
                     />
                 )
-
+            default: return null
         }
     }
 

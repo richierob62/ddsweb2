@@ -20,17 +20,17 @@ const mstp = (state, ownProps) => {
 }
 
 const WrappingTBody = styled.tbody`
-    border-bottom: 1px solid #9c27b0;
+    border-bottom: 1px solid #8E44AD;
 `
 
 const DataLine = styled.tr`
-    background-color: ${ ({ selected }) => selected ? 'rgb(201, 71, 225)' : 'white'};
+    background-color: ${ ({ selected }) => selected ? 'rgba(44, 62, 80, 0.65)' : 'white'};
     color: ${ ({ selected }) => selected ? 'white' : 'black'};
     height: 30px;
 
     &:hover {
         color: ${ ({ selected }) => selected ? 'white' : '#2f2f2f'};  
-        background-color: ${ ({ selected }) => selected ? 'rgb(201, 71, 225)' : 'rgb(245, 189, 255)'};      
+        background-color: ${ ({ selected }) => selected ? 'rgba(44, 62, 80, 0.65)' : 'rgba(189, 195, 199, 0.35)'};      
     }
 `
 

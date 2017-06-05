@@ -14,7 +14,7 @@ const createTypeaheadEventDispatcher = (p, field) => {
 const StyledEditableText = styled.input`
     flex: 1;
     font-size: .75rem;
-    color: rgb(201, 71, 225);
+    color: #2C3E50;
     border: none;
     border-bottom: 1px solid #767676;
     margin-left: .75rem;
@@ -41,7 +41,7 @@ const StyledSelect = styled.select`
     vertical-align: middle;
     margin-top: -4px;
     margin-left: 5px;    
-    border: 1px solid rgb(201, 71, 225);
+    border: 1px solid #2C3E50;
     border-radius: .25rem;
     font-size: .75rem;
 
@@ -74,7 +74,7 @@ const StyledTypeahead = styled.div`
             vertical-align: middle;
             margin-top: -4px;
             margin-left: 5px;    
-            border: 1px solid rgb(201, 71, 225);
+            border: 1px solid #2C3E50;
             border-radius: .25rem;
             font-size: .75rem;
         }
@@ -88,7 +88,7 @@ const StyledTypeahead = styled.div`
             width: 100%;
             z-index: 101;
             color: rgb(42, 5, 49);
-            border: 1px solid rgb(201, 71, 225);
+            border: 1px solid #2C3E50;
             border-radius: .25rem;
             font-size: .75rem;    
 
@@ -105,7 +105,7 @@ const StyledTypeahead = styled.div`
 
 const StyledDate = styled.input`
     font-size: .75rem;
-    color: rgb(201, 71, 225);
+    color: #2C3E50;
     border: none;
     border-bottom: 1px solid #767676;
     margin-left: .75rem;
@@ -114,7 +114,7 @@ const StyledDate = styled.input`
 
 const StyledCheckboxOrRadioDescription = styled.span`
     font-size: .75rem;
-    color: rgb(201, 71, 225);
+    color: #2C3E50;
     border: none;
     vertical-align: middle;
     display: inline-block;

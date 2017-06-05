@@ -9,10 +9,10 @@ const Tab = styled.div`
     border-top-left-radius: 14px;
     border-top-right-radius: 14px;
     border-bottom: ${ props => props.is_current
-        ? '8px solid rgb(201, 71, 225)'
+        ? '4px solid #2C3E50'
         : 'none'};
     color: ${  props => props.is_current
-        ? 'rgb(201, 71, 225)'
+        ? '#2C3E50'
         : 'inherit'};
     margin-bottom: ${  props => props.is_current
         ? '-5px'

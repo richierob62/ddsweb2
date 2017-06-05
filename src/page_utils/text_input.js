@@ -26,7 +26,7 @@ const DisplayOnlyInput = styled.input`
 const EditableInput = styled.input`
     flex: 1;
     font-size: .8rem;
-    color: rgb(201, 71, 225);
+    color: #2C3E50;
     border: none;
     border-bottom: 1px solid #767676;
     margin-left: .75rem;

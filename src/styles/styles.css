@@ -51,6 +51,7 @@ table>thead>tr>th,
 table>tbody>td {
     display: block;
 }
+
 table>thead>tr:after,
 table>tbody>tr:after {
     content: ' ';
@@ -63,7 +64,6 @@ table>tbody {
     /*overflow-y: scroll;
     height: 200px;*/
 }
-
 
 table>tbody>tr {
     display: flex;
@@ -98,7 +98,27 @@ table>tbody tr td {
 }
 
 .active-link {
-    color: #9c27b0 !important;
+    color: #141c25 !important;
     font-weight: bold;
-    margin-left: 1rem;
+    margin-left: 1rem !important;
+    border-left: 4px solid #141c25;
+    transition: margin-left 200ms ease-out
+}
+
+.rw-dropdown-list-input,
+.rw-list-option,
+.rw-input,
+.rw-filter-input {
+    font-size: .75rem;
+    color: #2C3E50 !important;
+}
+
+.react-datepicker,
+.react-datepicker__day,
+.react-datepicker__day--selected, 
+.react-datepicker__day--selected:hover, 
+.react-datepicker__day--in-selecting-range:hover, 
+.react-datepicker__day--in-range:hover {
+    font-size: .75rem;
+    margin: .1rem;    
 }

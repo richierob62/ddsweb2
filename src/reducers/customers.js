@@ -56,7 +56,7 @@ const initial_state = Immutable.fromJS({
         primary_book: { label: 'Primary Book', input_type: 'select', ref_table: 'primary_book' },
         residency: { label: 'Residency', input_type: 'text', ref_table: undefined },
         room_num: { label: 'Room Number', input_type: 'text', ref_table: undefined },
-        sales_rep: { label: 'Sales Rep', input_type: 'typeahead', ref_table: 'sales_rep' },
+        sales_rep: { label: 'Sales Rep', input_type: 'select', ref_table: 'sales_rep' },
         special_interest: { label: 'Special Int', input_type: 'checkbox', ref_table: undefined },
         state: { label: 'State', input_type: 'text', ref_table: undefined },
         undergraduate_education: { label: 'Undergrad Ed', input_type: 'text', ref_table: undefined },
@@ -133,8 +133,6 @@ const initial_state = Immutable.fromJS({
             ]
         },
     ],
-    ref_list: [],
-    typeahead: ''
 })
 
 export default initial_state

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import actions from '../actions'
+import DropdownList from 'react-widgets/lib/DropdownList'
 
 const Wrapper = styled.div`
     display: flex;
@@ -16,66 +17,73 @@ const StyledLabel = styled.label`
     min-width: 100px;
     text-align: right;
 `
-const DisplayOnlyInput = styled.input`
-    flex: 1;
-    border: none;
-    font-size: .8rem;
-    color: rgb(42, 5, 49);
-`
 
-const EditableSelect = styled.select`
-    display: inline-block;
-    max-width: 100%;
-    height: calc(1.6rem - 2px);
-    padding: 2px 1.75rem 2px 2px;
-    color: rgb(42, 5, 49);
-    vertical-align: middle;
-    margin-top: -4px;
-    margin-left: 5px;    
-    border: 1px solid rgb(201, 71, 225);
-    border-radius: .25rem;
-    font-size: .75rem;
+const filter_func = (item, value) => item.display.toUpperCase().indexOf(value.toUpperCase()) >= 0
 
-    option {
-        color: rgb(42, 5, 49);
-    }
-`
 const comp = (props) => {
 
     const {
-        label,
-        field_name,
-        value,
-        action_word,
-        dispatch,
-        display,
-        ref_function,
         ref_list,
-    } = props
+        value,
+        label,
+        action_word,
+        display,
+        dispatch,
+        field_name,
+     } = props
 
-    const select_options = ref_list.map(option => {
-        return <option key={option.get('id')} value={option.get('id')}>{option.get('display')}</option>
-    })
+    const data = ref_list.toJS()
 
-    const value_to_display = ref_function(value).get('display')
 
-    // change_handler
-    const change_handler_action_name = 'change' + action_word + 'Data'
-    const change_handler = (fld, e) => {
-        dispatch(actions[change_handler_action_name]({ field: field_name + '_id', value: parseInt(e.currentTarget.value) }))
+    // select_handler
+    const select_handler_action_name = 'change' + action_word + 'Data'
+    const select_handler = (selected) => {
+        dispatch(actions[select_handler_action_name]({ field: field_name + '_id', value: selected.id }))
     }
 
-    return (
-        <Wrapper>
-            <StyledLabel>{label}:</StyledLabel>
-            {
-                display === true ?
-                    <DisplayOnlyInput type="text" value={value_to_display} onChange={() => { }} /> :
-                    <EditableSelect type="text" value={value} onChange={change_handler.bind(null, field_name)}>
-                        {select_options}
-                    </EditableSelect>
-            }
-        </Wrapper>
-    )
+    return <Wrapper>
+        <StyledLabel>{label}:</StyledLabel>
+        <DropdownList
+            data={data}
+            valueField='id'
+            textField='display'
+            defaultValue={value}
+            filter={filter_func}
+            readOnly={display}
+            onSelect={select_handler}
+        />
+    </Wrapper>
+
+
 }
+
 export default comp
+
+// const foo = () => {
+//     <DropdownList
+//         defaultValue={}
+//         data={[]}
+//         onSelect={}
+//         onChange={}
+//         valueField={}
+//         filter={
+//             // false / "startsWith" / "endsWith" / "contains" / (item, value) => boolean 
+//         }
+//         caseSensitive={}
+//         minLength={}
+//         textField={}
+//         valueComponent={}
+//         itemComponent={}
+//         placeholder={}
+//         readOnly
+//         disabled
+//         busy
+//         groupBy={}
+//         searchTerm={}
+//         onSearch={}
+//         open={}
+//         defaultOpen={}
+//         onToggle={}
+//         duration={}
+//     />
+// }

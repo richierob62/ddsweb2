@@ -28,7 +28,7 @@ const TabWrapper = styled.div`
     margin-bottom: 10px;
     padding-top: .5rem;
     border-bottom: ${props => props.current
-        ? '1px solid rgb(201, 71, 225)'
+        ? '1px solid #2C3E50'
         : 'none'};
 `
 

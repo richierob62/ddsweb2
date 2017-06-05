@@ -51,10 +51,10 @@ const StyledMenu = styled.div`
                     padding: 3px 5px;
 
                     &:hover {
-                        background-color: rgb(216, 133, 231);
-                        color: #FFFFFF !important;
-                        box-shadow: 0 16px 26px -10px rgba(156, 39, 176, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(156, 39, 176, 0.2);
+                        background-color: #BDC3C7;
+                        color: #141c25 !important;
                         text-decoration: none;
+                        font-weight: bold;                        
                     }
 
                 }
@@ -68,9 +68,9 @@ const StyledLink = styled(Link) `
     color: #525252;
     font-size: .8rem;
     line-height: 1.2rem;
-    margin-left: .5rem;
-    transition: margin-left 300ms;  
+    margin-left: .1rem;
     padding: 5px;
+    transition: margin-left 200ms ease-out
 `
 
 const Menu = () => <StyledMenu>

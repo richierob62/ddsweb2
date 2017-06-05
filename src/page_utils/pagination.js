@@ -21,7 +21,7 @@ const PrevIcon = styled.i`
     margin: 0 10px;
 
     &:hover {
-        color: ${ props => props.first_index === 0 ? 'rgba(118, 118, 118, 0.48)' : '#9c27b0' };
+        color: ${ props => props.first_index === 0 ? 'rgba(118, 118, 118, 0.48)' : '#8E44AD' };
     }
 `
 
@@ -32,7 +32,7 @@ const NextIcon = styled.i`
     margin: 0 10px;
 
     &:hover {
-        color: ${ props =>  props.first_index + 5 >= props.list_size ? 'rgba(118, 118, 118, 0.48)' : '#9c27b0' };
+        color: ${ props =>  props.first_index + 5 >= props.list_size ? 'rgba(118, 118, 118, 0.48)' : '#8E44AD' };
     }
 `
 
