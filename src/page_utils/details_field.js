@@ -59,6 +59,8 @@ const DetailsField = (props) => {
                             (ref_table_name === 'category') ? props.category_ref_list :
                                 undefined
 
+    const options = field_definition.get('options')
+
     const relevant_component = () => {
         switch (input_type) {
             case 'text':
@@ -102,6 +104,7 @@ const DetailsField = (props) => {
                         label={label}
                         display={display}
                         value={value}
+                        options={options}
                         {...props}
                     />
                 )

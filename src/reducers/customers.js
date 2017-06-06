@@ -48,7 +48,12 @@ const initial_state = Immutable.fromJS({
         medical_director: { label: 'Medical Dir', input_type: 'text', ref_table: undefined },
         medical_education: { label: 'Medical Educ', input_type: 'text', ref_table: undefined },
         name: { label: 'Name', input_type: 'text', ref_table: undefined },
-        other_1: { label: 'Other 1', input_type: 'radio', ref_table: undefined },
+        other_1: {
+            label: 'Other 1', input_type: 'radio', ref_table: undefined, options: [
+                { id: 1, display: 'option 1' },
+                { id: 2, display: 'option 2' },
+            ]
+        },
         other_2: { label: 'Other 2', input_type: 'date', ref_table: undefined },
         outreach_locations: { label: 'Outrch Locns', input_type: 'text', ref_table: undefined },
         pay_plan: { label: 'Pay Plan', input_type: 'select', ref_table: 'pay_plan' },
@@ -123,15 +128,6 @@ const initial_state = Immutable.fromJS({
         { label: 'Orders', link: 'orders', filter_on: 'account_num', select_on: undefined },
         { label: 'Primary Book', link: 'primary_books', filter_on: undefined, select_on: 'primary_book' },
         { label: 'Sales Rep', link: 'sales_reps', filter_on: undefined, select_on: 'sales_rep' },
-    ],
-    radio_groups: [
-        {
-            field_name: 'other_1',
-            options: [
-                { id: 1, display: 'option 1' },
-                { id: 2, display: 'option 2' },
-            ]
-        },
     ],
 })
 
