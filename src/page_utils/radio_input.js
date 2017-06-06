@@ -41,6 +41,7 @@ const comp = (props) => {
 
     const {
         options,
+        display,
         value,
         label,
         action_word,
@@ -54,13 +55,16 @@ const comp = (props) => {
         dispatch(actions[select_handler_action_name]({ field: field_name, value: selected }))
     }
 
+    const match = options.find( item => item.get('id') === parseInt(value,10) )
+    const chosen_display_value = match ? match.get('display') : ''
+
     const option_display_values = options.map(option => {
         return (
             <label className="custom-control custom-radio" key={option.get('id')} >
                 <input
                     type="radio"
                     className="custom-control-input"
-                    checked={option.get('id') === value}
+                    checked={option.get('id') === parseInt(value)}
                     onChange={select_handler.bind(null, option.get('id'))}
                 />
                 <span className="custom-control-indicator"></span>
@@ -69,13 +73,20 @@ const comp = (props) => {
         )
     })
 
-    return <Wrapper>
-        <StyledLabel>{label}:</StyledLabel>
-        <OptionsWrapper>
-            {option_display_values}
-        </OptionsWrapper>
-    </Wrapper>
-
+    return (
+        <Wrapper>
+            <StyledLabel>{label}:</StyledLabel>
+            {
+                display ?
+                    <div style={{ fontSize: '.75rem', color: 'rgb(42, 5, 49)' }}>
+                        {chosen_display_value}
+                    </div> :
+                    <OptionsWrapper>
+                        {option_display_values}
+                    </OptionsWrapper>
+            }
+        </Wrapper>
+    )
 
 }
 

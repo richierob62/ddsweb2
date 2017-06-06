@@ -35,7 +35,7 @@ const DetailsField = (props) => {
     const label = field_definition.get('label')
     const input_type = field_definition.get('input_type')
     const readonly = field_definition.get('readonly')
-    const display = !(readonly || mode === 'display')
+    const display = (readonly || mode === 'display')
 
     const ref_function =
         (ref_table_name === undefined) ? undefined :
