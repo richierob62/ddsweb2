@@ -64,7 +64,7 @@ const comp = (props) => {
                 <input
                     type="radio"
                     className="custom-control-input"
-                    checked={option.get('id') === parseInt(value)}
+                    checked={option.get('id') === parseInt(value,10)}
                     onChange={select_handler.bind(null, option.get('id'))}
                 />
                 <span className="custom-control-indicator"></span>

@@ -51,7 +51,7 @@ const comp = (props) => {
     // select_handler
     const select_handler_action_name = 'change' + action_word + 'Data'
     const select_handler = () => {
-        dispatch(actions[select_handler_action_name]({ field: field_name, value: parseInt(value) === 1 ? 0 : 1 }))
+        dispatch(actions[select_handler_action_name]({ field: field_name, value: parseInt(value,10) === 1 ? 0 : 1 }))
     }
 
     return <Wrapper>
@@ -59,19 +59,19 @@ const comp = (props) => {
         {
             display ?
                 <div style={{ fontSize: '.75rem', color: 'rgb(42, 5, 49)' }}>
-                    {parseInt(value) === 1 ? 'Yes' : 'No'}
+                    {parseInt(value,10) === 1 ? 'Yes' : 'No'}
                 </div> :
                 <CheckboxWrapper>
                     <label className="custom-control custom-checkbox">
                         <input
                             type="checkbox"
-                            value={parseInt(value) === 1 ? 'on' : 'off'}
+                            value={parseInt(value,10) === 1 ? 'on' : 'off'}
                             className="custom-control-input"
-                            checked={parseInt(value) === 1 ? 'checked' : ''}
+                            checked={parseInt(value,10) === 1 ? 'checked' : ''}
                             onChange={select_handler}
                         />
                         <span className="custom-control-indicator"></span>
-                        <CheckboxDisplay>{parseInt(value) === 1 ? 'Yes' : 'No'}</CheckboxDisplay>
+                        <CheckboxDisplay>{parseInt(value,10) === 1 ? 'Yes' : 'No'}</CheckboxDisplay>
                     </label>
                 </CheckboxWrapper>
         }
