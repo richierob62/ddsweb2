@@ -85,10 +85,9 @@ const initial_state = Immutable.fromJS({
                     ['name'],
                     ['address', 'city'],
                     ['state', 'zip'],
-                    ['area', 'fax_area'],
-                    ['phone', 'fax_phone'],
-                    ['email'],
-                    ['website'],
+                    ['area', 'phone'],
+                    ['fax_area', 'fax_phone'],
+                    ['email', 'website'],
                 ]
             },
             {
@@ -98,8 +97,8 @@ const initial_state = Immutable.fromJS({
                     ['billing_address', 'billing_city'],
                     ['billing_state', 'billing_zip'],
                     ['billing_contact'],
-                    ['billing_area', 'billing_email'],
-                    ['billing_phone']
+                    ['billing_area', 'billing_phone'],
+                    ['billing_email']
                 ]
             },
             {
@@ -113,13 +112,16 @@ const initial_state = Immutable.fromJS({
             {
                 name: 'Credentials',
                 rows: [
-                    ['building', 'department', 'room_num'],
-                    ['hours', 'hospital_affiliations', 'special_interest'],
-                    ['medical_education', 'undergraduate_education', 'certification'],
-                    ['fellowship', 'residency', 'advanced_training'],
-                    ['entered_public_practice', 'outreach_locations', 'affiliated_clinics'],
-                    ['medical_director', 'director', 'affiliated_networks'],
-                    ['other_1', 'other_2']
+                    ['building', 'department'],
+                    ['room_num', 'hours'],
+                    ['hospital_affiliations', 'special_interest'],
+                    ['medical_education', 'undergraduate_education'],
+                    ['certification', 'fellowship'],
+                    ['residency', 'advanced_training'],
+                    ['entered_public_practice', 'outreach_locations'],
+                    ['affiliated_clinics', 'medical_director'],
+                    ['director', 'affiliated_networks'],
+                    ['other_1', 'other_2'],
                 ]
             }
         ]

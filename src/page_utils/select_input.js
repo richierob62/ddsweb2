@@ -44,6 +44,12 @@ const comp = (props) => {
     return <Wrapper>
         <StyledLabel>{label}:</StyledLabel>
         <DropdownList
+            style={
+                {
+                    marginLeft: '.75rem',
+                    marginRight: '2rem'
+                }
+            }
             data={data}
             valueField='id'
             textField='display'

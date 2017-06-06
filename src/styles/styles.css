@@ -115,10 +115,20 @@ table>tbody tr td {
 
 .react-datepicker,
 .react-datepicker__day,
-.react-datepicker__day--selected, 
-.react-datepicker__day--selected:hover, 
-.react-datepicker__day--in-selecting-range:hover, 
+.react-datepicker__day--selected,
+.react-datepicker__day--selected:hover,
+.react-datepicker__day--in-selecting-range:hover,
 .react-datepicker__day--in-range:hover {
     font-size: .75rem;
-    margin: .1rem;    
+    margin: .1rem;
+}
+
+.custom-control.custom-checkbox
+{
+    margin-bottom: -2px !important;
+}
+
+.custom-control.custom-radio
+{
+    margin-bottom: -2px !important;
 }
