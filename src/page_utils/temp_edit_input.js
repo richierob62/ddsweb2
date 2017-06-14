@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
-const temp = (props) => {
-    return (
-        <div>edit</div>
-    )
-}
+const temp = props => {
+  return <div>edit</div>;
+};
 
-export default temp
+export default temp;
