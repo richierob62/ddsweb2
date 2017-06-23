@@ -1,13 +1,14 @@
-import Immutable from 'immutable'
+import Immutable from "immutable";
 
 const initial_state = Immutable.fromJS({
-    loggedIn: true
-})
+  loggedIn: true
+});
 
 const auth = (state = initial_state, action) => {
-    switch (action.type) {
-        default: return state
-    }
-}
+  switch (action.type) {
+    default:
+      return state;
+  }
+};
 
-export default auth
+export default auth;

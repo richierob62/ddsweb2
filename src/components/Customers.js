@@ -1,5 +1,5 @@
-import buildPage from '../page_utils/page_builder'
+import buildPage from "../page_utils/page_builder";
 
-const pageToRender = () => buildPage('customers')
+const pageToRender = () => buildPage("customers");
 
-export default  pageToRender
+export default pageToRender;

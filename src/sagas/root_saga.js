@@ -5,120 +5,129 @@
 // select = use reducer selector, passing state
 // cancel = cancel promise
 
-import { take, put, call, fork, select, throttle } from 'redux-saga/effects'
-import act from '../actions'
-
+import {
+  take,
+  put,
+  call,
+  fork,
+  select,
+  takeLatest
+} from "redux-saga/effects";
+import act from "../actions";
 
 // /******************************************************************************/
 // /********************************* CONFIG *************************************/
 // /******************************************************************************/
 
-const domain = 'http://ddsweb-api.app/'
+const domain = "http://ddsweb-api.app/";
 
 const table_hash = {
-  customer: { reducer: 'customers' },
-  category: { reducer: 'categories' },
-  pay_plan: { reducer: 'pay_plans' },
-  local_foreign: { reducer: 'local_foreigns' },
-  primary_book: { reducer: 'primary_books' },
-  sales_rep: { reducer: 'sales_reps' },
-}
+  customer: { reducer: "customers" },
+  category: { reducer: "categories" },
+  pay_plan: { reducer: "pay_plans" },
+  local_foreign: { reducer: "local_foreigns" },
+  primary_book: { reducer: "primary_books" },
+  sales_rep: { reducer: "sales_reps" }
+};
 
 // /******************************************************************************/
 // /********************** API CALLING MACHINE ***********************************/
 // /******************************************************************************/
 
-const statusHelper = (response) => {
+const statusHelper = response => {
   if (response.status >= 200 && response.status < 300) {
-    return Promise.resolve(response)
+    return Promise.resolve(response);
   } else {
-    return Promise.reject(new Error(response))
+    return Promise.reject(new Error(response));
   }
-}
-
-const postApi = (uri, payload) => {
-
-  const headers = new Headers()
-  headers.append('Content-Type', 'application/json');
-
-  const body = JSON.stringify(payload)
-
-  return fetch(uri, { headers, method: 'POST', body })
-    .then(statusHelper)
-    .then(response => response.json())
 };
 
+const postApi = (uri, payload) => {
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+
+  const body = JSON.stringify(payload);
+
+  return fetch(uri, { headers, method: "POST", body })
+    .then(statusHelper)
+    .then(response => response.json());
+};
 
 // /******************************************************************************/
 // /********************** SIDE EFFECT CENTRAL ***********************************/
 // /******************************************************************************/
 
-
 function* loadReferenceList(table) {
+  const reducer = table_hash[table].reducer;
+  const url = domain + table + "_reference";
+  const action_word = yield getActionWord(reducer);
 
-  const reducer = table_hash[table].reducer
-  const url = domain + table + '_reference'
-  const action_word = yield getActionWord(reducer)
+  const { data } = yield call(postApi, url);
 
-  const { data } = yield call(postApi, url)
-
-  const closing_action = 'load' + action_word + 'ReferenceCompleted'
-  yield put(act[closing_action](data))
-
+  const closing_action = "load" + action_word + "ReferenceCompleted";
+  yield put(act[closing_action](data));
 }
 
 function* loadFilteredAndSortedData(table) {
-  const reducer = table_hash[table].reducer
-  const url = domain + reducer
-  const sort_name = yield getSortName(reducer)
-  const sort_dir = yield getSortDir(reducer)
-  const filters = yield getFilters(reducer)
-
-  const action_word = yield getActionWord(reducer)
-  const { data } = yield call(postApi, url, { filters, sort_name, sort_dir })
-  const closing_action = 'load' + action_word + 'ListCompleted'
-  yield put(act[closing_action](data))
+  const reducer = table_hash[table].reducer;
+  const url = domain + reducer;
+  const sort_name = yield getSortName(reducer);
+  const sort_dir = yield getSortDir(reducer);
+  const filters = yield getFilters(reducer);
+  const action_word = yield getActionWord(reducer);
+  const { data } = yield call(postApi, url, { filters, sort_name, sort_dir });
+  const closing_action = "load" + action_word + "ListCompleted";
+  yield put(act[closing_action](data));
 }
 
 function* handleSort(table, action) {
+  const reducer = table_hash[table].reducer;
+  const prev_sorted_on = yield getSortName(reducer);
+  const prev_sorted_dir = yield getSortDir(reducer);
+  const new_sort_field = action.payload;
+  const ref_table_name = yield getReferenceTableName(reducer, new_sort_field);
+  const ref_reducer_name = ref_table_name !== undefined
+    ? table_hash[ref_table_name].reducer
+    : undefined;
 
-  const reducer = table_hash[table].reducer
-  const prev_sorted_on = yield getSortName(reducer)
-  const prev_sorted_dir = yield getSortDir(reducer)
-  const new_sort_field = action.payload
-  const ref_table_name = yield getReferenceTableName(reducer, new_sort_field)
-  const ref_reducer_name = (ref_table_name !== undefined) ? table_hash[ref_table_name].reducer : undefined
-
-  let valueMapper
-  if (ref_reducer_name === undefined)
-    valueMapper = a => a.get(new_sort_field)
+  let valueMapper;
+  if (ref_reducer_name === undefined) valueMapper = a => a.get(new_sort_field);
   else
-    valueMapper = yield valueMapperGenerator(ref_reducer_name, new_sort_field + '_id')
+    valueMapper = yield valueMapperGenerator(
+      ref_reducer_name,
+      new_sort_field + "_id"
+    );
 
   const new_direction = action.payload === prev_sorted_on
-    ? (prev_sorted_dir === 'ASC'
-      ? 'DESC'
-      : 'ASC')
-    : 'ASC'
+    ? prev_sorted_dir === "ASC" ? "DESC" : "ASC"
+    : "ASC";
 
   const sortFunc = (a, b) => {
-    const multiplier = new_direction === 'ASC' ? 1 : -1
-    if (a < b) { return -1 * multiplier }
-    if (a > b) { return 1 * multiplier }
-    if (a === b) { return 0 }
-  }
+    const multiplier = new_direction === "ASC" ? 1 : -1;
+    if (a < b) {
+      return -1 * multiplier;
+    }
+    if (a > b) {
+      return 1 * multiplier;
+    }
+    if (a === b) {
+      return 0;
+    }
+  };
 
-  const sorted_list = (yield getFilteredList(reducer)).sortBy(valueMapper, sortFunc)
+  const sorted_list = (yield getFilteredList(reducer)).sortBy(
+    valueMapper,
+    sortFunc
+  );
 
   const payload = {
     reducer: reducer,
     list: sorted_list,
     field_name: new_sort_field,
     direction: new_direction
-  }
+  };
 
-  yield put(act.sortChangeCompleted(payload))
-
+  yield put(act.sortChangeCompleted(payload));
 }
 
 // /******************************************************************************/
@@ -126,52 +135,52 @@ function* handleSort(table, action) {
 // /******************************************************************************/
 
 function* getNewPage() {
-  const state = yield select(s => s['pageChange'])
-  return state.get('current_path')
+  const state = yield select(s => s["pageChange"]);
+  return state.get("current_path");
 }
 
 function* getFilters(reducer) {
-  const state = yield select(s => s[reducer])
-  return state.get('current_filters').toJS()
+  const state = yield select(s => s[reducer]);
+  return state.get("current_filters").toJS();
 }
 
 function* getActionWord(reducer) {
-  const state = yield select(s => s[reducer])
-  return state.get('action_word')
+  const state = yield select(s => s[reducer]);
+  return state.get("action_word");
 }
 
 function* getSortName(reducer) {
-  const state = yield select(s => s[reducer])
-  return state.getIn(['current_sort', 'field_name'])
+  const state = yield select(s => s[reducer]);
+  return state.getIn(["current_sort", "field_name"]);
 }
 
 function* listIsDirty(reducer) {
-  const state = yield select(s => s[reducer])
-  return state.get('list_dirty')
+  const state = yield select(s => s[reducer]);
+  return state.get("list_dirty");
 }
 
 function* refListIsDirty(reducer) {
-  const state = yield select(s => s[reducer])
-  return state.get('ref_list_dirty')
+  const state = yield select(s => s[reducer]);
+  return state.get("ref_list_dirty");
 }
 
 function* getSortDir(reducer) {
-  const state = yield select(s => s[reducer])
-  return state.getIn(['current_sort', 'direction'])
+  const state = yield select(s => s[reducer]);
+  return state.getIn(["current_sort", "direction"]);
 }
 
 function* getReferenceTableName(reducer, field_name) {
-  const state = yield select(s => s[reducer])
-  return state.getIn(['fields', field_name, 'ref_table'])
+  const state = yield select(s => s[reducer]);
+  return state.getIn(["fields", field_name, "ref_table"]);
 }
 
 function* getReducer(reducer) {
-  return yield select(s => s[reducer])
+  return yield select(s => s[reducer]);
 }
 
 function* getFilteredList(reducer) {
-  const state = yield select(s => s[reducer])
-  return state.get('list')
+  const state = yield select(s => s[reducer]);
+  return state.get("list");
 }
 
 // /******************************************************************************/
@@ -179,96 +188,106 @@ function* getFilteredList(reducer) {
 // /******************************************************************************/
 
 function* valueMapperGenerator(ref_reducer_name, sort_field) {
-  const reducer = yield getReducer(ref_reducer_name)
-  const ref_list = reducer.get('ref_list')
-  return (a) => {
-    const id = a.get(sort_field)
-    return ref_list.find(item => item.get('id') === id).get('display')
-  }
+  const reducer = yield getReducer(ref_reducer_name);
+  const ref_list = reducer.get("ref_list");
+  return a => {
+    const id = a.get(sort_field);
+    return ref_list.find(item => item.get("id") === id).get("display");
+  };
 }
 
 const changeSortGenerator = (act_string, table) => {
-  return function* () {
-    yield throttle(150, act_string, handleSort, table)
-  }
-}
+  return function*() {
+    yield takeLatest(act_string, handleSort, table);
+  };
+};
 
 const changeFilterGenerator = (act_string, table) => {
-  return function* () {
-    yield throttle(500, act_string, loadFilteredAndSortedData, table)
-  }
-}
+  return function*() {
+    yield takeLatest(act_string, loadFilteredAndSortedData, table);
+  };
+};
 
 // /******************************************************************************/
 // /******************************* WATCHERS *************************************/
 // /******************************************************************************/
 
-const pageChangeWatcher = function* () {
-
-  const forever = true
+const pageChangeWatcher = function*() {
+  const forever = true;
   while (forever) {
-
-    yield take('PAGE_CHANGE')
+    yield take("PAGE_CHANGE");
 
     let reducer;
-    const forks = []
+    const forks = [];
     // which page?
     const page = yield getNewPage();
 
     switch (page) {
-      case '/customers':
-
+      case "/customers":
         // list dirty?
-        reducer = table_hash['customer'].reducer
+        reducer = table_hash["customer"].reducer;
         if (yield listIsDirty(reducer)) {
-
           // main file
-          forks.push(loadFilteredAndSortedData('customer'))
+          forks.push(loadFilteredAndSortedData("customer"));
 
           // reference lists
-          if (yield refListIsDirty('sales_reps')) { forks.push(loadReferenceList('sales_rep')) }
-          if (yield refListIsDirty('categories')) forks.push(loadReferenceList('category'))
-          if (yield refListIsDirty('local_foreigns')) forks.push(loadReferenceList('local_foreign'))
-          if (yield refListIsDirty('pay_plans')) forks.push(loadReferenceList('pay_plan'))
-          if (yield refListIsDirty('primary_books')) forks.push(loadReferenceList('primary_book'))
-
+          if (yield refListIsDirty("sales_reps")) {
+            forks.push(loadReferenceList("sales_rep"));
+          }
+          if (yield refListIsDirty("categories"))
+            forks.push(loadReferenceList("category"));
+          if (yield refListIsDirty("local_foreigns"))
+            forks.push(loadReferenceList("local_foreign"));
+          if (yield refListIsDirty("pay_plans"))
+            forks.push(loadReferenceList("pay_plan"));
+          if (yield refListIsDirty("primary_books"))
+            forks.push(loadReferenceList("primary_book"));
         }
 
-        break
+        break;
 
       default:
         // list dirty?
-        reducer = table_hash['customer'].reducer
+        reducer = table_hash["customer"].reducer;
         if (yield listIsDirty(reducer)) {
-
           // main file
-          forks.push(loadFilteredAndSortedData('customer'))
+          forks.push(loadFilteredAndSortedData("customer"));
 
           // reference lists
-          if (yield refListIsDirty('sales_reps')) { forks.push(loadReferenceList('sales_rep')) }
-          if (yield refListIsDirty('categories')) forks.push(loadReferenceList('category'))
-          if (yield refListIsDirty('local_foreigns')) forks.push(loadReferenceList('local_foreign'))
-          if (yield refListIsDirty('pay_plans')) forks.push(loadReferenceList('pay_plan'))
-          if (yield refListIsDirty('primary_books')) forks.push(loadReferenceList('primary_book'))
-
+          if (yield refListIsDirty("sales_reps")) {
+            forks.push(loadReferenceList("sales_rep"));
+          }
+          if (yield refListIsDirty("categories"))
+            forks.push(loadReferenceList("category"));
+          if (yield refListIsDirty("local_foreigns"))
+            forks.push(loadReferenceList("local_foreign"));
+          if (yield refListIsDirty("pay_plans"))
+            forks.push(loadReferenceList("pay_plan"));
+          if (yield refListIsDirty("primary_books"))
+            forks.push(loadReferenceList("primary_book"));
         }
 
-        break
+        break;
     }
 
-    yield [forks]
+    yield [forks];
   }
-}
+};
 
-const changeCustomerSort = changeSortGenerator('CHANGE_CUSTOMER_SORT', 'customer')
-const changeCustomerFilter = changeFilterGenerator('CHANGE_CUSTOMER_FILTER', 'customer')
-
+const changeCustomerSort = changeSortGenerator(
+  "CHANGE_CUSTOMER_SORT",
+  "customer"
+);
+const changeCustomerFilter = changeFilterGenerator(
+  "CHANGE_CUSTOMER_FILTER",
+  "customer"
+);
 
 // start watchers in parallel
 export default function* root() {
   yield [
     fork(pageChangeWatcher),
     fork(changeCustomerSort),
-    fork(changeCustomerFilter),
-  ]
+    fork(changeCustomerFilter)
+  ];
 }

@@ -1,15 +1,17 @@
-import Immutable from 'immutable'
+import Immutable from "immutable";
 
 const initial_state = Immutable.fromJS({
-    current_path: '/'
-})
+  current_path: "/"
+});
 
 const pageChange = (state = initial_state, action) => {
-    switch (action.type) {
-        case 'PAGE_CHANGE':
-            return state.set('current_path', action.payload)
-        default: return state
-    }
-}
+  switch (action.type) {
+    case "PAGE_CHANGE":
+      return state.set("current_path", action.payload);
 
-export default pageChange
+    default:
+      return state;
+  }
+};
+
+export default pageChange;
