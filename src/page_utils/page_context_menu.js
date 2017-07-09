@@ -1,39 +1,42 @@
-import React from 'react'
-// import createLink from '../page_utils/context_menu_link'
-// import contextMenuButtons from '../page_utils/context_menu_buttons'
-// import styled from 'styled-components'
+import React from "react";
+import ContextLinks from '../page_utils/context_links'
+import CrudButtons from '../page_utils/crud_buttons'
+import styled from "styled-components";
 
-// const StyledContextMenu = styled.div`
-//         width: 15%;
-//         margin-top: 50px;
-//         padding-left: 20px;
-//         color: rgb(162; 156; 156);
-//         font-weight: 100;
-//         font-size: 0.9rem;
-//         display: flex;
-//         flex-direction: column;
-//         justify-content: flex-start;
-//         align-items: center;
+const StyledContextMenu = styled.div`
+        width: 15%;
+        margin-top: 10px;
+        padding-left: 20px;
+        color: rgb(162; 156; 156);
+        font-weight: 100;
+        font-size: 0.9rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
 
-//         p {
-//             margin-bottom: 0;
-//             padding-bottom: 0;            
-//         }
-// `
+        p {
+            margin-bottom: 0;
+            padding-bottom: 0;            
+        }
+`;
 
+const LinksLabel = styled.h6`
+    font-weight: normal;
+    padding: 14px 0 5px 0;
+    color: rgba(0, 0, 0, 0.41);
+    text-transform: uppercase;
+    margin-top: 20px;
+    font-size: 1rem;
+    margin-bottom: 0;
+`
 
-// const buildPageContextMenu = p => {
-//     if (!p.current) return null
-//     const links = p.data.get('context_menu').toJS()
-//         .map(link => createLink(p, link))
-//     return (
-//         <StyledContextMenu>
-//             <p>Related Items</p>
-//             {links}
-//             {contextMenuButtons(p)}
-//         </StyledContextMenu>
-//     )
-// }
+const PageContextMenu = (props) => (
+  <StyledContextMenu>
+    <CrudButtons {...props} />
+    <LinksLabel>LINKS</LinksLabel>
+    <ContextLinks {...props} />
+  </StyledContextMenu>
+);
 
-const buildPageContextMenu = ({page}) => <p>Menu for {page}</p>
-export default buildPageContextMenu
+export default PageContextMenu;

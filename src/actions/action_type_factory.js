@@ -1,22 +1,24 @@
 import proper_camel from "./../utils/proper_camel";
 
 export const action_templates = [
-  "select_*",
-  "change_*_Sort",
-  "change_*_Filter",
-  "select_*_Tab",
-  "change_*_Data",
-  "begin_*_Edit",
   "begin_*_Create",
-  "begin_*_Duplicate",
   "begin_*_Delete",
+  "begin_*_Duplicate",
+  "begin_*_Edit",
   "cancel_*",
-  "save_*_Completed",
+  "change_*_Data",
+  "change_*_Filter",
+  "change_*_Sort",
   "delete_*_Completed",
+  "do_*_Delete",
+  "do_*_Save",
   "load_*_List_Completed",
   "load_*_Reference_Completed",
+  "next_*_Sublist",
   "previous_*_Sublist",
-  "next_*_Sublist"
+  "save_*_Completed",
+  "select_*",
+  "select_*_Tab",
 ];
 
 const factory = table => {

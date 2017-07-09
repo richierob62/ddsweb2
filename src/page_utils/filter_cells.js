@@ -5,13 +5,15 @@ import actions from "../actions";
 import {
   getListTemplate,
   getCurrentFilters,
-  getActionWord
+  getActionWord,
+  getMode
 } from "../selectors";
 
 const mstp = (state, ownProps) => ({
   list_template: getListTemplate(state[ownProps.page]),
   current_filters: getCurrentFilters(state[ownProps.page]),
-  action_word: getActionWord(state[ownProps.page])
+  action_word: getActionWord(state[ownProps.page]),
+  mode: getMode(state[ownProps.page])
 });
 
 const WrappingRow = styled.tr`
@@ -31,8 +33,14 @@ const ColumnFilter = styled.input`
     margin-bottom: 0;
 `;
 
+const Placeholder = styled.div`
+    margin-top: 0;
+    height: 1.25rem;
+    margin-bottom: 0;
+`;
+
 const FilterCells = props => {
-  const { dispatch, list_template, current_filters, action_word } = props;
+  const { dispatch, list_template, current_filters, action_word, mode } = props;
 
   // change_handler
   const change_handler_action_name = "change" + action_word + "Filter";
@@ -53,12 +61,14 @@ const FilterCells = props => {
             key={column.get("field_name")}
             width={column.get("width")}
           >
-            <ColumnFilter
-              type="text"
-              className="form-control"
-              value={cell_value}
-              onChange={change_handler.bind(null, column.get("field_name"))}
-            />
+            {mode === "display"
+              ? <ColumnFilter
+                  type="text"
+                  className="form-control"
+                  value={cell_value}
+                  onChange={change_handler.bind(null, column.get("field_name"))}
+                />
+              : <Placeholder />}
           </ColumnHeading>
         );
       })}

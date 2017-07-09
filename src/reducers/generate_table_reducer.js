@@ -23,21 +23,22 @@ const generateTableReducer = (table_name, initial_state) => {
     switch (action.type) {
       case BEGIN_x_CREATE: {
         const id = Math.floor(Math.random() * 1000000 + 1000000);
-        const new_copy = state.get("fields").toJS().reduce((acc, field) => {
-          if (field.ref_table !== undefined)
+
+        const new_copy = state.get("fields").reduce((acc, field) => {
+          if (field.get('ref_table') !== undefined)
             return Object.assign({}, acc, {
-              [field.field_name]: undefined
+              [field.get('field_name')]: undefined
             });
-          if (field.input_type === "radio")
+          if (field.get('input_type') === "radio")
             return Object.assign({}, acc, {
-              [field.field_name]: 1
+              [field.get('field_name')]: 1
             });
-          if (field.input_type === "date")
+          if (field.get('input_type') === "date")
             return Object.assign({}, acc, {
-              [field.field_name]: undefined
+              [field.get('field_name')]: undefined
             });
           return Object.assign({}, acc, {
-            [field.field_name]: ""
+            [field.get('field_name')]: ""
           });
         }, { id: id });
         return state
@@ -69,7 +70,7 @@ const generateTableReducer = (table_name, initial_state) => {
 
       case BEGIN_x_EDIT: {
         const id = state.get("selected_id");
-        const current = state.get("list").find(cust => cust.get("id") === id);
+        const current = state.get("list").find(item => item.get("id") === id);
         const backup_copy = Immutable.fromJS(Object.assign({}, current.toJS()));
         return state.set("mode", "edit").set("backup_copy", backup_copy);
       }
