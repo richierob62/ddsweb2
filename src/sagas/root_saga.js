@@ -5,15 +5,9 @@
 // select = use reducer selector, passing state
 // cancel = cancel promise
 
-import {
-  take,
-  put,
-  call,
-  fork,
-  select,
-  takeLatest
-} from "redux-saga/effects";
+import { take, put, call, fork, select, takeLatest } from "redux-saga/effects";
 import act from "../actions";
+import { getCurrentRecord } from "../selectors";
 
 // /******************************************************************************/
 // /********************************* CONFIG *************************************/
@@ -80,6 +74,35 @@ function* loadFilteredAndSortedData(table) {
   yield put(act[closing_action](data));
 }
 
+function* saveToDatabase(table) {
+  const reducer = table_hash[table].reducer;
+  const url = domain + "new_" + table;
+
+  // get data to save
+  const payload = (yield getRecordToSave(reducer)).toJS();
+  delete payload['id'];
+  
+  // get a new account number
+  const acc_num = yield getNextCustomerAccountNumber();
+  payload.account_num = acc_num;
+
+  const action_word = yield getActionWord(reducer);
+  const returned = yield call(postApi, url, payload);
+  let closing_action;
+  if (returned.errors) {
+    closing_action = "save" + action_word + "Failed";
+    yield put(act[closing_action](returned.errors));
+  } else {
+    closing_action = "save" + action_word + "Completed";
+    yield put(act[closing_action](returned.data));
+  }
+}
+
+function* getNextCustomerAccountNumber() {
+  const url = domain + "next_customer_number";
+  return yield call(postApi, url);
+}
+
 function* handleSort(table, action) {
   const reducer = table_hash[table].reducer;
   const prev_sorted_on = yield getSortName(reducer);
@@ -103,14 +126,16 @@ function* handleSort(table, action) {
     : "ASC";
 
   const sortFunc = (a, b) => {
+    const first = a.toUpperCase()
+    const second = b.toUpperCase()
     const multiplier = new_direction === "ASC" ? 1 : -1;
-    if (a < b) {
+    if (first < second) {
       return -1 * multiplier;
     }
-    if (a > b) {
+    if (first > second) {
       return 1 * multiplier;
     }
-    if (a === b) {
+    if (first === second) {
       return 0;
     }
   };
@@ -183,6 +208,11 @@ function* getFilteredList(reducer) {
   return state.get("list");
 }
 
+function* getRecordToSave(reducer) {
+  const state = yield select(s => s[reducer]);
+  return getCurrentRecord(state);
+}
+
 // /******************************************************************************/
 // /************************** FUNCTION GENERATORS *******************************/
 // /******************************************************************************/
@@ -205,6 +235,12 @@ const changeSortGenerator = (act_string, table) => {
 const changeFilterGenerator = (act_string, table) => {
   return function*() {
     yield takeLatest(act_string, loadFilteredAndSortedData, table);
+  };
+};
+
+const saveGenerator = (act_string, table) => {
+  return function*() {
+    yield takeLatest(act_string, saveToDatabase, table);
   };
 };
 
@@ -278,16 +314,20 @@ const changeCustomerSort = changeSortGenerator(
   "CHANGE_CUSTOMER_SORT",
   "customer"
 );
+
 const changeCustomerFilter = changeFilterGenerator(
   "CHANGE_CUSTOMER_FILTER",
   "customer"
 );
+
+const saveCustomer = saveGenerator("DO_CUSTOMER_SAVE", "customer");
 
 // start watchers in parallel
 export default function* root() {
   yield [
     fork(pageChangeWatcher),
     fork(changeCustomerSort),
-    fork(changeCustomerFilter)
+    fork(changeCustomerFilter),
+    fork(saveCustomer)
   ];
 }

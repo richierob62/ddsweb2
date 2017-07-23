@@ -19,10 +19,13 @@ import primary_books from "./primary_books";
 import sales_reps from "./sales_reps";
 import source_books from "./source_books";
 import udacs from "./udacs";
+import modal from "./modal";
+
 
 const root_reducer = combineReducers({
   auth,
   pageChange,
+  modal,
   ad_types: generateTableReducer("ad_type", ad_types),
   categories: generateTableReducer("category", categories),
   compensation_plans: generateTableReducer(

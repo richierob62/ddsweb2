@@ -1,5 +1,5 @@
 import factory from "./action_type_factory";
-import { pageChange, sortChangeCompleted } from "./general_actions";
+import { pageChange, sortChangeCompleted, closeModal } from "./general_actions";
 
 const grouped_actions = Object.assign(
   {},
@@ -20,7 +20,8 @@ const grouped_actions = Object.assign(
   factory("source_book"),
   factory("udac"),
   { pageChange },
-  { sortChangeCompleted }
+  { sortChangeCompleted },
+  { closeModal }
 );
 
 export default grouped_actions;

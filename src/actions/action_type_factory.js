@@ -17,6 +17,7 @@ export const action_templates = [
   "next_*_Sublist",
   "previous_*_Sublist",
   "save_*_Completed",
+  "save_*_Failed",
   "select_*",
   "select_*_Tab",
 ];

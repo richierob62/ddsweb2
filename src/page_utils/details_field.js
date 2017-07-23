@@ -16,15 +16,14 @@ const FieldWrapper = styled.div`
 const DetailsField = props => {
   const { field_definition, current_record, field_name, mode } = props;
 
-  // current_record updated
-
   const ref_table_name = field_definition.get("ref_table");
 
   const suffixed_field_name = ref_table_name === undefined
     ? field_name
     : field_name + "_id";
 
-  const value = current_record.get(suffixed_field_name);
+  const raw_value = current_record.get(suffixed_field_name);
+  const value = raw_value ? raw_value : ref_table_name ? undefined : "";
 
   const label = field_definition.get("label");
   const input_type = field_definition.get("input_type");
@@ -45,9 +44,9 @@ const DetailsField = props => {
                         ? props.ref_selector_category
                         : undefined;
 
-  const display_value = ref_function
+  const display_value = ref_function && value
     ? ref_function(value).get("display")
-    : value;
+    : value
 
   const ref_list = ref_table_name === undefined
     ? undefined

@@ -66,3 +66,11 @@ export const getMode = state => state.get('mode')
 export const getFieldDefinitions = state => state.get('fields')
 
 export const getRefList = state => state.get('ref_list')
+
+export const getModalVisibility = state => state['modal'].get('visible')
+
+export const getModalType = state => state['modal'].get('type')
+
+export const getModalMessageList = state => state['modal'].get('message_list')
+
+export const getModalTitle = state => state['modal'].get('title')

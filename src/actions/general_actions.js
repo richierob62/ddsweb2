@@ -6,4 +6,8 @@ const sortChangeCompleted = payload => {
   return { type: "SORT_CHANGE_COMPLETED", payload };
 };
 
-export { pageChange, sortChangeCompleted };
+const closeModal = payload => {
+  return { type: "CLOSE_MODAL", payload };
+};
+
+export { pageChange, sortChangeCompleted, closeModal };

@@ -14,7 +14,7 @@ import {
 const mstp = (state, ownProps) => {
   return {
     list: getFilteredList(state[ownProps.page]),
-    field_definitionss: getFieldDefinitions(state[ownProps.page]),
+    field_definitions: getFieldDefinitions(state[ownProps.page]),
     list_template: getListTemplate(state[ownProps.page]),
     action_word: getActionWord(state[ownProps.page]),
     selected_id: getSelectedID(state[ownProps.page]),
@@ -51,7 +51,7 @@ const DataRows = props => {
   const {
     dispatch,
     list,
-    field_definitionss,
+    field_definitions,
     list_template,
     selected_id,
     action_word,
@@ -68,7 +68,7 @@ const DataRows = props => {
     dispatch(actions[select_handler_action_name](payload));
 
   const fixReferenceFields = (line, column) => {
-    const ref_table = field_definitionss.getIn([
+    const ref_table = field_definitions.getIn([
       column.get("field_name"),
       "ref_table"
     ]);

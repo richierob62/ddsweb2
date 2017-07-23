@@ -38,7 +38,7 @@ class CustomersController extends Controller
         $return_value = Cache::remember($cache_key, 1, function() use($filters, $sort_name, $sort_dir) {
             
             $filter_array = $filters ? Customer::buildFilter($filters) : [];
-            
+
             $query = Customer::select(\DB::raw('customers.*'))
             ->join('sales_reps', 'sales_reps.id', '=', 'customers.sales_rep_id')
             ->where($filter_array)
@@ -88,7 +88,7 @@ class CustomersController extends Controller
         );
         
         if($validator->fails()) {
-            return response()->json(['errors' => $validator->messages()], 422);
+            return response()->json(['errors' => $validator->messages()]);
         }
         
         try {

@@ -185,6 +185,7 @@ const generateTableReducer = (table_name, initial_state) => {
       }
 
       case SAVE_x_COMPLETED: {
+        
         const mode = state.get("mode");
 
         if (mode === "edit")
@@ -194,12 +195,13 @@ const generateTableReducer = (table_name, initial_state) => {
         const currentObj = state
           .get("list")
           .findEntry(item => item.get("id") === temp_id);
-        const current = currentObj[1].set("id", action.payload);
+        // const current = currentObj[1].set("id", action.payload);
+        const current = Immutable.fromJS(action.payload);
 
         return state
           .updateIn(["list"], list => list.set(currentObj[0], current))
           .set("mode", "display")
-          .set("selected_id", action.payload);
+          .set("selected_id", current.get('id'));
       }
 
       case SELECT_x: {
