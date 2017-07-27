@@ -20,11 +20,14 @@ const modal = (state = initial_state, action) => {
         .set("message_list", message_list)
         .set("title", "Please fix the following...");
 
-    case "CLOSE_MODAL":
+    case "SAVE_CUSTOMER_COMPLETED":
       return state
-        .set("type", "")
-        .set("message_list", [])
-        .set("title", "");
+        .set("type", "save_success")
+        .set("title", "Success")
+        .set("text", "Saved successfully");
+
+    case "CLOSE_MODAL":
+      return state.set("type", "").set("message_list", []).set("title", "");
 
     default:
       return state;
