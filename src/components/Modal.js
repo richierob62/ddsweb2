@@ -2,11 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import ValidationModal from "./ValidationModal";
 
-import { getModalVisibility, getModalType } from "../selectors";
+import { getModalType } from "../selectors";
 
 const mstp = state => {
   return {
-    visible: getModalVisibility(state),
     modal_type: getModalType(state)
   };
 };
