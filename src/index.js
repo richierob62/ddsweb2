@@ -1,8 +1,9 @@
 import './fa/css/font-awesome.min.css'
 import './styles/bootstrap.min.css'
-import './styles/styles.css'
 import '../node_modules/react-widgets/dist/css/react-widgets.css'
 import 'react-datepicker/dist/react-datepicker.css';
+import "sweetalert/dist/sweetalert.css";
+import './styles/styles.css'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
