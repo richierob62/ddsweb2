@@ -1,6 +1,5 @@
-import { Link } from 'react-router';
 import React from 'react'
-import styled from 'styled-components'
+// import styled from 'styled-components'
 
 const ContextLinks = ( {page} ) => {
 

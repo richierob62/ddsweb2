@@ -3,26 +3,33 @@ import styled from "styled-components";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { isLoggedIn } from "./selectors.js";
 import act from "./actions/";
+import asyncComponent from "./utils/async_loader";
 
-import Login from "./components/Login";
-import AdTypes from "./components/AdTypes";
-import Categories from "./components/Categories";
-import CompensationPlans from "./components/CompensationPlans";
-import Customers from "./components/Customers";
-import Fields from "./components/Fields";
-import FindingLines from "./components/FindingLines";
-import Headings from "./components/Headings";
-import LocalForeigns from "./components/LocalForeigns";
-import OrderLines from "./components/OrderLines";
-import OrderStatuses from "./components/OrderStatuses";
-import Orders from "./components/Orders";
-import PageTypes from "./components/PageTypes";
-import PayPlans from "./components/PayPlans";
-import Permissions from "./components/Permissions";
-import PrimaryBooks from "./components/PrimaryBooks";
-import SalesReps from "./components/SalesReps";
-import SourceBooks from "./components/SourceBooks";
-import Udacs from "./components/Udacs";
+const Login = asyncComponent(() => import("./components/Login"));
+const AdTypes = asyncComponent(() => import("./components/AdTypes"));
+const Categories = asyncComponent(() => import("./components/Categories"));
+const CompensationPlans = asyncComponent(() =>
+  import("./components/CompensationPlans")
+);
+const Customers = asyncComponent(() => import("./components/Customers"));
+const Fields = asyncComponent(() => import("./components/Fields"));
+const FindingLines = asyncComponent(() => import("./components/FindingLines"));
+const Headings = asyncComponent(() => import("./components/Headings"));
+const LocalForeigns = asyncComponent(() =>
+  import("./components/LocalForeigns")
+);
+const OrderLines = asyncComponent(() => import("./components/OrderLines"));
+const OrderStatuses = asyncComponent(() =>
+  import("./components/OrderStatuses")
+);
+const Orders = asyncComponent(() => import("./components/Orders"));
+const PageTypes = asyncComponent(() => import("./components/PageTypes"));
+const PayPlans = asyncComponent(() => import("./components/PayPlans"));
+const Permissions = asyncComponent(() => import("./components/Permissions"));
+const PrimaryBooks = asyncComponent(() => import("./components/PrimaryBooks"));
+const SalesReps = asyncComponent(() => import("./components/SalesReps"));
+const SourceBooks = asyncComponent(() => import("./components/SourceBooks"));
+const Udacs = asyncComponent(() => import("./components/Udacs"));
 
 const StyledMain = styled.div`
     flex: 1;
