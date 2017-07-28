@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from './components/Header'
 import Menu from './components/Menu'
-import Page from './components/Page'
+import Main from './Main'
 import styled, { ThemeProvider } from 'styled-components'
 
 const theme = { foo: 'bar' }
@@ -13,7 +13,7 @@ const App = (props) => {
         <Header />
         <MainSection>
           <Menu />
-          <Page {...props} />
+          <Main {...props} />
         </MainSection>
       </div>
     </ThemeProvider>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 // import '../styles/styles.scss'
 
@@ -63,7 +63,7 @@ const StyledMenu = styled.div`
     }
 `
 
-const StyledLink = styled(Link) `
+const StyledNavLink = styled(NavLink) `
     text-decoration: none !important;
     color: #525252;
     font-size: .8rem;
@@ -79,62 +79,62 @@ const Menu = () => <StyledMenu>
         <h5>Main Activity</h5>
         <ul>
             <li>
-                <StyledLink to="/customers" activeClassName="active-link">Customers</StyledLink>
+                <StyledNavLink to="/customers" activeClassName="active-navlink ">Customers</StyledNavLink>
             </li>
             <li>
-                <StyledLink to="/orders" activeClassName="active-link">Orders</StyledLink>
+                <StyledNavLink to="/orders" activeClassName="active-navlink ">Orders</StyledNavLink>
             </li>
             <li>
-                <StyledLink to="/order_lines" activeClassName="active-link">Order Lines</StyledLink>
+                <StyledNavLink to="/order_lines" activeClassName="active-navlink ">Order Lines</StyledNavLink>
             </li>
 
         </ul>
         <h5>Other Files</h5>
         <ul>
             <li>
-                <StyledLink to="/ad_types" activeClassName="active-link">AdTypes</StyledLink>
+                <StyledNavLink to="/ad_types" activeClassName="active-navlink ">AdTypes</StyledNavLink>
             </li>
             <li>
-                <StyledLink to="/categories" activeClassName="active-link">Categories</StyledLink>
+                <StyledNavLink to="/categories" activeClassName="active-navlink ">Categories</StyledNavLink>
             </li>
             <li>
-                <StyledLink to="/compensation_plans" activeClassName="active-link">Comp Plans</StyledLink>
+                <StyledNavLink to="/compensation_plans" activeClassName="active-navlink ">Comp Plans</StyledNavLink>
             </li>
             <li>
-                <StyledLink to="/fields" activeClassName="active-link">Data Fields (Ads)</StyledLink>
+                <StyledNavLink to="/fields" activeClassName="active-navlink ">Data Fields (Ads)</StyledNavLink>
             </li>
             <li>
-                <StyledLink to="/findinglines" activeClassName="active-link">Finding Lines</StyledLink>
+                <StyledNavLink to="/findinglines" activeClassName="active-navlink ">Finding Lines</StyledNavLink>
             </li>
             <li>
-                <StyledLink to="/headings" activeClassName="active-link">Headings</StyledLink>
+                <StyledNavLink to="/headings" activeClassName="active-navlink ">Headings</StyledNavLink>
             </li>
             <li>
-                <StyledLink to="/localforeign" activeClassName="active-link">Local/Foreign</StyledLink>
+                <StyledNavLink to="/localforeign" activeClassName="active-navlink ">Local/Foreign</StyledNavLink>
             </li>
             <li>
-                <StyledLink to="/order_statuses" activeClassName="active-link">Order Statuses</StyledLink>
+                <StyledNavLink to="/order_statuses" activeClassName="active-navlink ">Order Statuses</StyledNavLink>
             </li>
             <li>
-                <StyledLink to="/page_types" activeClassName="active-link">Page Types</StyledLink>
+                <StyledNavLink to="/page_types" activeClassName="active-navlink ">Page Types</StyledNavLink>
             </li>
             <li>
-                <StyledLink to="/payplans" activeClassName="active-link">Pay Plans</StyledLink>
+                <StyledNavLink to="/payplans" activeClassName="active-navlink ">Pay Plans</StyledNavLink>
             </li>
             <li>
-                <StyledLink to="/permissions" activeClassName="active-link">Permissions</StyledLink>
+                <StyledNavLink to="/permissions" activeClassName="active-navlink ">Permissions</StyledNavLink>
             </li>
             <li>
-                <StyledLink to="/primary_books" activeClassName="active-link">Primary Books</StyledLink>
+                <StyledNavLink to="/primary_books" activeClassName="active-navlink ">Primary Books</StyledNavLink>
             </li>
             <li>
-                <StyledLink to="/sales_reps" activeClassName="active-link">Sales Reps</StyledLink>
+                <StyledNavLink to="/sales_reps" activeClassName="active-navlink ">Sales Reps</StyledNavLink>
             </li>
             <li>
-                <StyledLink to="/source_books" activeClassName="active-link">Source Books</StyledLink>
+                <StyledNavLink to="/source_books" activeClassName="active-navlink ">Source Books</StyledNavLink>
             </li>
             <li>
-                <StyledLink to="/udacs" activeClassName="active-link">Udacs</StyledLink>
+                <StyledNavLink to="/udacs" activeClassName="active-navlink ">Udacs</StyledNavLink>
             </li>
         </ul>
     </div>

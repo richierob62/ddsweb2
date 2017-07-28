@@ -1,17 +1,19 @@
 import React from "react";
 import { Provider } from "react-redux";
-import { Router } from "react-router";
+import { BrowserRouter } from "react-router-dom";
 import Modal from "./components/Modal";
-
+import App from "./App";
 
 const Root = props => {
-  const { store, history, routes } = props;
+  const { store } = props;
 
   return (
     <Provider store={store}>
       <div>
         <Modal store={store} />
-        <Router history={history} routes={routes} />
+        <BrowserRouter>
+          <App {...props} />
+        </BrowserRouter>
       </div>
     </Provider>
   );
