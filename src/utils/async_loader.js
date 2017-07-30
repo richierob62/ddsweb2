@@ -28,4 +28,4 @@ const asyncLoader = importComponent => {
   return AsyncComponent;
 };
 
-export default asyncLoader
+export default asyncLoader;

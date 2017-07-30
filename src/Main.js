@@ -59,6 +59,8 @@ const Main = props => {
           return (
             <CSSTransitionGroup
               transitionName="page"
+              transitionAppear={true}
+              transitionAppearTimeout={500}
               transitionEnterTimeout={500}
               transitionLeaveTimeout={300}
             >
