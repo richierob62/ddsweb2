@@ -118,18 +118,18 @@ const AnimatedRoute = ({ component, loggedIn, dispatch, action, ...rest }) => {
       children={({ location, match }) => (
         <TransitionMotion
           willEnter={() => {
-            return { opacity: 0, translateX: 24 };
+            return { opacity: 0, scale: 0 };
           }}
           willLeave={() => {
             return {
               opacity: spring(0, presets.gentle),
-              translateX: spring(24)
+              scale: spring(1)
             };
           }}
           defaultStyles={[
             {
               key: location.pathname,
-              style: { opacity: 0, translateX: 24 },
+              style: { opacity: 0, scale: 0 },
               data: match
             }
           ]}
@@ -140,9 +140,8 @@ const AnimatedRoute = ({ component, loggedIn, dispatch, action, ...rest }) => {
                     key: location.pathname,
                     style: {
                       opacity: spring(1, presets.gentle),
-                      translateX: spring(0)
-                    },
-                    data: match
+                      scale: spring(1)
+                    }
                   }
                 ]
               : []
@@ -156,7 +155,7 @@ const AnimatedRoute = ({ component, loggedIn, dispatch, action, ...rest }) => {
                   style={{
                     position: "absolute",
                     opacity: `${config.style.opacity}`,
-                    transform: `translateX(-${config.style.translateX}px)`
+                    transform: `scale(${config.style.scale})`
                   }}
                 >
                   {comp_to_render}
