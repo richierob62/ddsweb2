@@ -6,7 +6,7 @@ import presets from "react-motion/lib/presets";
 const AnimatedRoute = ({ component, loggedIn, ...rest }) => {
   if (!loggedIn) return <Redirect to="/login" />;
 
-     return (
+  return (
     <Route
       {...rest}
       children={({ location, match }) => (
@@ -42,12 +42,14 @@ const AnimatedRoute = ({ component, loggedIn, ...rest }) => {
           }
         >
           {interpolatedStyles => (
-            <div className="route">
+            <div className="route" style={{ position: "relative" }}>
               {interpolatedStyles.map(config => (
                 <div
                   key={config.key}
                   style={{
                     position: "absolute",
+                    right: 0,
+                    left: 0,
                     opacity: `${config.style.opacity}`,
                     transform: `scale(${config.style.scale})`
                   }}
