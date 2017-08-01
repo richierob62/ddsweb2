@@ -1,36 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import { isLoggedIn } from "./selectors.js";
 import act from "./actions/";
-import asyncComponent from "./utils/async_loader";
-import { CSSTransitionGroup } from "react-transition-group";
-
-const Login = asyncComponent(() => import("./components/Login"));
-const AdTypes = asyncComponent(() => import("./components/AdTypes"));
-const Categories = asyncComponent(() => import("./components/Categories"));
-const CompensationPlans = asyncComponent(() =>
-  import("./components/CompensationPlans")
-);
-const Customers = asyncComponent(() => import("./components/Customers"));
-const Fields = asyncComponent(() => import("./components/Fields"));
-const FindingLines = asyncComponent(() => import("./components/FindingLines"));
-const Headings = asyncComponent(() => import("./components/Headings"));
-const LocalForeigns = asyncComponent(() =>
-  import("./components/LocalForeigns")
-);
-const OrderLines = asyncComponent(() => import("./components/OrderLines"));
-const OrderStatuses = asyncComponent(() =>
-  import("./components/OrderStatuses")
-);
-const Orders = asyncComponent(() => import("./components/Orders"));
-const PageTypes = asyncComponent(() => import("./components/PageTypes"));
-const PayPlans = asyncComponent(() => import("./components/PayPlans"));
-const Permissions = asyncComponent(() => import("./components/Permissions"));
-const PrimaryBooks = asyncComponent(() => import("./components/PrimaryBooks"));
-const SalesReps = asyncComponent(() => import("./components/SalesReps"));
-const SourceBooks = asyncComponent(() => import("./components/SourceBooks"));
-const Udacs = asyncComponent(() => import("./components/Udacs"));
+import AnimatedRoute from "./components/AnimatedRoute";
 
 const StyledMain = styled.div`
     flex: 1;
@@ -44,213 +17,120 @@ const Main = props => {
   const state = store.getState();
   const loggedIn = isLoggedIn(state);
 
-  const loadPageDataOrRedirect = Component => {
-    if (!loggedIn) {
-      return <Redirect to="/login" />;
-    } else {
-      return Component;
-    }
-  };
-
   return (
     <StyledMain>
       <Route
         render={({ location }) => {
+
+
+          const common_props = {
+            dispatch: store.dispatch,
+            action: act.pageChange(location.pathname),
+            loggedIn
+          };
+
           return (
-            <CSSTransitionGroup
-              transitionName="page"
-              transitionAppear={true}
-              transitionAppearTimeout={500}
-              transitionEnterTimeout={500}
-              transitionLeaveTimeout={300}
-            >
-              <Switch location={location} key={location.key}>
-                <Route path="/login" component={Login} />
+            <Switch>
 
-                <Route
-                  path="/ad_types"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <AdTypes
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
+              <AnimatedRoute
+                path="/login"
+                component="Login"
+                {...common_props}
+              />
 
-                <Route
-                  path="/categories"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <Categories
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
+              <AnimatedRoute
+                path="/ad_types"
+                component="AdTypes"
+                {...common_props}
+              />
 
-                <Route
-                  path="/compensation_plans"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <CompensationPlans
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
-                <Route
-                  path="/customers"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <Customers
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
-                <Route
-                  path="/fields"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <Fields
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
-                <Route
-                  path="/findinglines"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <FindingLines
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
-                <Route
-                  path="/headings"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <Headings
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
-                <Route
-                  path="/localforeign"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <LocalForeigns
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
-                <Route
-                  path="/order_lines"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <OrderLines
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
-                <Route
-                  path="/order_statuses"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <OrderStatuses
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
-                <Route
-                  path="/orders"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <Orders
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
-                <Route
-                  path="/page_types"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <PageTypes
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
-                <Route
-                  path="/payplans"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <PayPlans
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
-                <Route
-                  path="/permissions"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <Permissions
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
-                <Route
-                  path="/primary_books"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <PrimaryBooks
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
-                <Route
-                  path="/sales_reps"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <SalesReps
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
-                <Route
-                  path="/source_books"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <SourceBooks
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
-                <Route
-                  path="/udacs"
-                  render={({ location }) =>
-                    loadPageDataOrRedirect(
-                      <Udacs
-                        dispatch={store.dispatch}
-                        action={act.pageChange(location.pathname)}
-                      />
-                    )}
-                />
-              </Switch>
-            </CSSTransitionGroup>
+              <AnimatedRoute
+                path="/categories"
+                component="Categories"
+                {...common_props}
+              />
+
+              <AnimatedRoute
+                path="/compensation_plans"
+                component="CompensationPlans"
+                {...common_props}
+              />
+              <AnimatedRoute
+                path="/customers"
+                component="Customers"
+                {...common_props}
+              />
+              <AnimatedRoute
+                path="/fields"
+                component="Fields"
+                {...common_props}
+              />
+              <AnimatedRoute
+                path="/findinglines"
+                component="FindingLines"
+                {...common_props}
+              />
+              <AnimatedRoute
+                path="/headings"
+                component="Headings"
+                {...common_props}
+              />
+              <AnimatedRoute
+                path="/localforeign"
+                component="LocalForeigns"
+                {...common_props}
+              />
+              <AnimatedRoute
+                path="/order_lines"
+                component="OrderLines"
+                {...common_props}
+              />
+              <AnimatedRoute
+                path="/order_statuses"
+                component="OrderStatuses"
+                {...common_props}
+              />
+              <AnimatedRoute
+                path="/orders"
+                component="Orders"
+                {...common_props}
+              />
+              <AnimatedRoute
+                path="/page_types"
+                component="PageTypes"
+                {...common_props}
+              />
+              <AnimatedRoute
+                path="/payplans"
+                component="PayPlans"
+                {...common_props}
+              />
+              <AnimatedRoute
+                path="/permissions"
+                component="Permissions"
+                {...common_props}
+              />
+              <AnimatedRoute
+                path="/primary_books"
+                component="PrimaryBooks"
+                {...common_props}
+              />
+              <AnimatedRoute
+                path="/sales_reps"
+                component="SalesReps"
+                {...common_props}
+              />
+              <AnimatedRoute
+                path="/source_books"
+                component="SourceBooks"
+                {...common_props}
+              />
+              <AnimatedRoute
+                path="/udacs"
+                component="Udacs"
+                {...common_props}
+              />
+            </Switch>
           );
         }}
       />
