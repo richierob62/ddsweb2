@@ -4,6 +4,33 @@ import { Switch, Route } from "react-router-dom";
 import { isLoggedIn } from "./selectors.js";
 import act from "./actions/";
 import AnimatedRoute from "./components/AnimatedRoute";
+import asyncComponent from "./utils/async_loader";
+
+const Login = asyncComponent(() => import("./components/Login"));
+const AdTypes = asyncComponent(() => import("./components/AdTypes"));
+const Categories = asyncComponent(() => import("./components/Categories"));
+const CompensationPlans = asyncComponent(() =>
+  import("./components/CompensationPlans")
+);
+const Customers = asyncComponent(() => import("./components/Customers"));
+const Fields = asyncComponent(() => import("./components/Fields"));
+const FindingLines = asyncComponent(() => import("./components/FindingLines"));
+const Headings = asyncComponent(() => import("./components/Headings"));
+const LocalForeigns = asyncComponent(() =>
+  import("./components/LocalForeigns")
+);
+const OrderLines = asyncComponent(() => import("./components/OrderLines"));
+const OrderStatuses = asyncComponent(() =>
+  import("./components/OrderStatuses")
+);
+const Orders = asyncComponent(() => import("./components/Orders"));
+const PageTypes = asyncComponent(() => import("./components/PageTypes"));
+const PayPlans = asyncComponent(() => import("./components/PayPlans"));
+const Permissions = asyncComponent(() => import("./components/Permissions"));
+const PrimaryBooks = asyncComponent(() => import("./components/PrimaryBooks"));
+const SalesReps = asyncComponent(() => import("./components/SalesReps"));
+const SourceBooks = asyncComponent(() => import("./components/SourceBooks"));
+const Udacs = asyncComponent(() => import("./components/Udacs"));
 
 const StyledMain = styled.div`
     flex: 1;
@@ -21,115 +48,110 @@ const Main = props => {
     <StyledMain>
       <Route
         render={({ location }) => {
-
-
           const common_props = {
             dispatch: store.dispatch,
-            action: act.pageChange(location.pathname),
-            loggedIn
+            action: act.pageChange(location.pathname)
           };
 
           return (
             <Switch>
-
+            
               <AnimatedRoute
                 path="/login"
-                component="Login"
-                {...common_props}
+                component={<Login {...common_props} />}
+                loggedIn={loggedIn}
               />
-
               <AnimatedRoute
                 path="/ad_types"
-                component="AdTypes"
-                {...common_props}
+                component={<AdTypes {...common_props} />}
+                loggedIn={loggedIn}
               />
-
               <AnimatedRoute
                 path="/categories"
-                component="Categories"
-                {...common_props}
+                component={<Categories {...common_props} />}
+                loggedIn={loggedIn}
               />
-
               <AnimatedRoute
                 path="/compensation_plans"
-                component="CompensationPlans"
-                {...common_props}
+                component={<CompensationPlans {...common_props} />}
+                loggedIn={loggedIn}
               />
               <AnimatedRoute
                 path="/customers"
-                component="Customers"
-                {...common_props}
+                component={<Customers {...common_props} />}
+                loggedIn={loggedIn}
               />
               <AnimatedRoute
                 path="/fields"
-                component="Fields"
-                {...common_props}
+                component={<Fields {...common_props} />}
+                loggedIn={loggedIn}
               />
               <AnimatedRoute
                 path="/findinglines"
-                component="FindingLines"
-                {...common_props}
+                component={<FindingLines {...common_props} />}
+                loggedIn={loggedIn}
               />
               <AnimatedRoute
                 path="/headings"
-                component="Headings"
-                {...common_props}
+                component={<Headings {...common_props} />}
+                loggedIn={loggedIn}
               />
               <AnimatedRoute
                 path="/localforeign"
-                component="LocalForeigns"
-                {...common_props}
+                component={<LocalForeigns {...common_props} />}
+                loggedIn={loggedIn}
               />
               <AnimatedRoute
                 path="/order_lines"
-                component="OrderLines"
-                {...common_props}
+                component={<OrderLines {...common_props} />}
+                loggedIn={loggedIn}
               />
               <AnimatedRoute
                 path="/order_statuses"
-                component="OrderStatuses"
-                {...common_props}
+                component={<Orders {...common_props} />}
+                loggedIn={loggedIn}
               />
               <AnimatedRoute
                 path="/orders"
-                component="Orders"
-                {...common_props}
+                component={<OrderStatuses {...common_props} />}
+                loggedIn={loggedIn}
               />
               <AnimatedRoute
                 path="/page_types"
-                component="PageTypes"
-                {...common_props}
+                component={<PageTypes {...common_props} />}
+                loggedIn={loggedIn}
               />
               <AnimatedRoute
                 path="/payplans"
-                component="PayPlans"
-                {...common_props}
+                component={<PayPlans {...common_props} />}
+                loggedIn={loggedIn}
               />
               <AnimatedRoute
                 path="/permissions"
-                component="Permissions"
-                {...common_props}
+                component={<Permissions {...common_props} />}
+                loggedIn={loggedIn}
               />
               <AnimatedRoute
                 path="/primary_books"
-                component="PrimaryBooks"
-                {...common_props}
+                component={<PrimaryBooks {...common_props} />}
+                loggedIn={loggedIn}
               />
               <AnimatedRoute
                 path="/sales_reps"
-                component="SalesReps"
-                {...common_props}
+                component={<SalesReps {...common_props} />}
+                loggedIn={loggedIn}
               />
               <AnimatedRoute
                 path="/source_books"
-                component="SourceBooks"
-                {...common_props}
+                component={<SourceBooks {...common_props} />}
+                loggedIn={loggedIn}
               />
               <AnimatedRoute
                 path="/udacs"
-                component="Udacs"
-                {...common_props}
+                component={<Udacs {...common_props} />}
+                loggedIn={loggedIn}
               />
+
             </Switch>
           );
         }}
