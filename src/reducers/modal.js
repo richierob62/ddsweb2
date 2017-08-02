@@ -40,7 +40,7 @@ const modal = (state = initial_state, action) => {
       return state
         .set("type", "success")
         .set("title", "Success")
-        .set("text", "Saved deleted");
+        .set("text", "Customer deleted");
 
     case "CLOSE_MODAL":
       return state.set("type", "").set("message_list", []).set("title", "");
