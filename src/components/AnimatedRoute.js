@@ -12,19 +12,15 @@ const AnimatedRoute = ({ component, loggedIn, ...rest }) => {
       children={({ location, match }) => (
         <TransitionMotion
           willEnter={() => {
-            return { opacity: 0, scale: 0 };
+            return { rotation: 180 };
           }}
           willLeave={() => {
-            return {
-              opacity: spring(0, presets.gentle),
-              scale: spring(1)
-            };
+            return { rotation: 0 };
           }}
           defaultStyles={[
             {
               key: location.pathname,
-              style: { opacity: 0, scale: 0 },
-              data: match
+              style: { rotation: 180 },
             }
           ]}
           styles={
@@ -33,8 +29,7 @@ const AnimatedRoute = ({ component, loggedIn, ...rest }) => {
                   {
                     key: location.pathname,
                     style: {
-                      opacity: spring(1, presets.gentle),
-                      scale: spring(1)
+                      rotation: spring(0, { stiffness: 200, damping: 25 } )
                     }
                   }
                 ]
@@ -42,7 +37,9 @@ const AnimatedRoute = ({ component, loggedIn, ...rest }) => {
           }
         >
           {interpolatedStyles => (
-            <div className="route" style={{ position: "relative" }}>
+            <div className="route" style={{ position: "relative", transformStyle: 'preserve-3d', perspective: '900px'
+                
+        }}>
               {interpolatedStyles.map(config => (
                 <div
                   key={config.key}
@@ -50,8 +47,7 @@ const AnimatedRoute = ({ component, loggedIn, ...rest }) => {
                     position: "absolute",
                     right: 0,
                     left: 0,
-                    opacity: `${config.style.opacity}`,
-                    transform: `scale(${config.style.scale})`
+                    transform: `rotateY(${config.style.rotation}deg)`
                   }}
                 >
                   {component}
