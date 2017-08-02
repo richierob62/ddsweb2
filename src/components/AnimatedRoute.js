@@ -37,7 +37,7 @@ const AnimatedRoute = ({ component, loggedIn, ...rest }) => {
           }
         >
           {interpolatedStyles => (
-            <div className="route" style={{ position: "relative", transformStyle: 'preserve-3d', perspective: '900px'
+            <div className="route" style={{ position: "relative", transformStyle: 'preserve-3d', perspective: '1000px'
                 
         }}>
               {interpolatedStyles.map(config => (
@@ -47,7 +47,7 @@ const AnimatedRoute = ({ component, loggedIn, ...rest }) => {
                     position: "absolute",
                     right: 0,
                     left: 0,
-                    transform: `rotateY(${config.style.rotation}deg)`
+                    transform: `rotateX(${config.style.rotation}deg)`
                   }}
                 >
                   {component}
