@@ -36,9 +36,12 @@ const statusHelper = response => {
   }
 };
 
-const postApi = (uri, payload) => {
+const postApi = (uri, payload, token) => {
+
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
+
+  headers.append("Api-Token", token);
 
   const body = JSON.stringify(payload);
 
@@ -56,7 +59,9 @@ function* loadReferenceList(table) {
   const url = domain + table + "_reference";
   const action_word = yield getActionWord(reducer);
 
-  const { data } = yield call(postApi, url);
+  const token = yield getToken();
+
+  const { data } = yield call(postApi, url, {}, token);
 
   const closing_action = "load" + action_word + "ReferenceCompleted";
   yield put(act[closing_action](data));
@@ -69,7 +74,8 @@ function* loadFilteredAndSortedData(table) {
   const sort_dir = yield getSortDir(reducer);
   const filters = yield getFilters(reducer);
   const action_word = yield getActionWord(reducer);
-  const { data } = yield call(postApi, url, { filters, sort_name, sort_dir });
+  const token = yield getToken();
+  const { data } = yield call(postApi, url, { filters, sort_name, sort_dir }, token);
   const closing_action = "load" + action_word + "ListCompleted";
   yield put(act[closing_action](data));
 }
@@ -80,14 +86,15 @@ function* saveNewToDatabase(table) {
 
   // get data to save
   const payload = (yield getRecordToSave(reducer)).toJS();
-  delete payload['id'];
-  
+  delete payload["id"];
+
   // get a new account number
   const acc_num = yield getNextCustomerAccountNumber();
   payload.account_num = acc_num;
 
   const action_word = yield getActionWord(reducer);
-  const returned = yield call(postApi, url, payload);
+  const token = yield getToken();
+  const returned = yield call(postApi, url, payload, token);
   let closing_action;
   if (returned.errors) {
     closing_action = "save" + action_word + "Failed";
@@ -99,17 +106,17 @@ function* saveNewToDatabase(table) {
 }
 
 function* saveEditToDatabase(table) {
-
   const reducer = table_hash[table].reducer;
   const url = domain + "edit_" + table;
 
   // get data to save
   const payload = (yield getRecordToSave(reducer)).toJS();
   Object.keys(payload).map(key => {
-    if(!payload[key]) payload[key] = ''
-  })
+    if (!payload[key]) payload[key] = "";
+  });
   const action_word = yield getActionWord(reducer);
-  const returned = yield call(postApi, url, payload);
+  const token = yield getToken();
+  const returned = yield call(postApi, url, payload, token);
 
   let closing_action;
   if (returned.errors) {
@@ -122,15 +129,15 @@ function* saveEditToDatabase(table) {
 }
 
 function* deleteItem(table) {
-
   const reducer = table_hash[table].reducer;
   const url = domain + "delete_" + table;
 
   // get data to save
-  const payload = {id: yield getIdOfRecordToDelete(reducer) }
+  const payload = { id: yield getIdOfRecordToDelete(reducer) };
 
   const action_word = yield getActionWord(reducer);
-  const returned = yield call(postApi, url, payload);
+  const token = yield getToken();
+  const returned = yield call(postApi, url, payload, token);
 
   let closing_action;
   if (returned.errors) {
@@ -144,7 +151,8 @@ function* deleteItem(table) {
 
 function* getNextCustomerAccountNumber() {
   const url = domain + "next_customer_number";
-  return yield call(postApi, url);
+  const token = yield getToken();
+  return yield call(postApi, url, {}, token);
 }
 
 function* handleSort(table, action) {
@@ -170,8 +178,8 @@ function* handleSort(table, action) {
     : "ASC";
 
   const sortFunc = (a, b) => {
-    const first = a.toUpperCase()
-    const second = b.toUpperCase()
+    const first = a.toUpperCase();
+    const second = b.toUpperCase();
     const multiplier = new_direction === "ASC" ? 1 : -1;
     if (first < second) {
       return -1 * multiplier;
@@ -206,6 +214,11 @@ function* handleSort(table, action) {
 function* getNewPage() {
   const state = yield select(s => s["pageChange"]);
   return state.get("current_path");
+}
+
+function* getToken() {
+  const state = yield select(s => s["auth"]);
+  return state.get("token");
 }
 
 function* getFilters(reducer) {
