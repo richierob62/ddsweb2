@@ -74,7 +74,7 @@ function* loadFilteredAndSortedData(table) {
   yield put(act[closing_action](data));
 }
 
-function* saveToDatabase(table) {
+function* saveNewToDatabase(table) {
   const reducer = table_hash[table].reducer;
   const url = domain + "new_" + table;
 
@@ -88,6 +88,29 @@ function* saveToDatabase(table) {
 
   const action_word = yield getActionWord(reducer);
   const returned = yield call(postApi, url, payload);
+  let closing_action;
+  if (returned.errors) {
+    closing_action = "save" + action_word + "Failed";
+    yield put(act[closing_action](returned.errors));
+  } else {
+    closing_action = "save" + action_word + "Completed";
+    yield put(act[closing_action](returned.data));
+  }
+}
+
+function* saveEditToDatabase(table) {
+
+  const reducer = table_hash[table].reducer;
+  const url = domain + "edit_" + table;
+
+  // get data to save
+  const payload = (yield getRecordToSave(reducer)).toJS();
+  Object.keys(payload).map(key => {
+    if(!payload[key]) payload[key] = ''
+  })
+  const action_word = yield getActionWord(reducer);
+  const returned = yield call(postApi, url, payload);
+
   let closing_action;
   if (returned.errors) {
     closing_action = "save" + action_word + "Failed";
@@ -238,9 +261,15 @@ const changeFilterGenerator = (act_string, table) => {
   };
 };
 
-const saveGenerator = (act_string, table) => {
+const saveNewGenerator = (act_string, table) => {
   return function*() {
-    yield takeLatest(act_string, saveToDatabase, table);
+    yield takeLatest(act_string, saveNewToDatabase, table);
+  };
+};
+
+const saveEditGenerator = (act_string, table) => {
+  return function*() {
+    yield takeLatest(act_string, saveEditToDatabase, table);
   };
 };
 
@@ -320,7 +349,9 @@ const changeCustomerFilter = changeFilterGenerator(
   "customer"
 );
 
-const saveCustomer = saveGenerator("DO_CUSTOMER_SAVE", "customer");
+const saveNewCustomer = saveNewGenerator("DO_CUSTOMER_CREATE", "customer");
+
+const saveEditCustomer = saveEditGenerator("DO_CUSTOMER_EDIT", "customer");
 
 // start watchers in parallel
 export default function* root() {
@@ -328,6 +359,7 @@ export default function* root() {
     fork(pageChangeWatcher),
     fork(changeCustomerSort),
     fork(changeCustomerFilter),
-    fork(saveCustomer)
+    fork(saveNewCustomer),
+    fork(saveEditCustomer)
   ];
 }

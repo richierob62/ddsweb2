@@ -94,11 +94,29 @@ const DeleteButton = props => {
   );
 };
 
-const SaveButton = props => {
+const SaveNewButton = props => {
   const { action_word, dispatch } = props;
 
   // click_handler
-  const click_handler_action_name = "do" + action_word + "Save";
+  const click_handler_action_name = "do" + action_word + "Create";
+  const click_handler = () => dispatch(actions[click_handler_action_name]());
+
+  return (
+    <button
+      type="button"
+      onClick={click_handler.bind(null)}
+      className="btn btn-sm btn-outline-success"
+    >
+      Save
+    </button>
+  );
+};
+
+const SaveEditButton = props => {
+  const { action_word, dispatch } = props;
+
+  // click_handler
+  const click_handler_action_name = "do" + action_word + "Edit";
   const click_handler = () => dispatch(actions[click_handler_action_name]());
 
   return (
@@ -160,7 +178,8 @@ const contextMenuButtons = props => {
     edit: mode === "display" && current_record !== null,
     duplicate: mode === "display" && current_record !== null,
     delete: mode === "display" && current_record !== null,
-    save: mode !== "display" && mode !== "delete" && current_record !== null,
+    save_new: (mode === 'new' || mode === 'duplicate') && current_record !== null,
+    save_edit: mode === 'edit' && current_record !== null,
     confirm_del: mode === "delete" && current_record !== null,
     cancel: mode !== "display" && current_record !== null
   };
@@ -171,7 +190,8 @@ const contextMenuButtons = props => {
       {button_decisions.edit && <EditButton {...props} />}
       {button_decisions.duplicate && <DuplicateButton {...props} />}
       {button_decisions.delete && <DeleteButton {...props} />}
-      {button_decisions.save && <SaveButton {...props} />}
+      {button_decisions.save_new && <SaveNewButton {...props} />}
+      {button_decisions.save_edit && <SaveEditButton {...props} />}
       {button_decisions.confirm_del && <ConfirmDeleteButton {...props} />}
       {button_decisions.cancel && <CancelButton {...props} />}
     </StyledButtonCollection>

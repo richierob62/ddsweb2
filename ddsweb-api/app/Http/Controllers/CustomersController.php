@@ -101,7 +101,7 @@ class CustomersController extends Controller
             
         } catch (ModelNotFoundException $e) {
             
-            return response()->json(['error' => 'Not Created'],404);
+            return response()->json(['error' => 'Not Created']);
             
         };
         
@@ -111,7 +111,7 @@ class CustomersController extends Controller
     {
         
         $id = $request->input('id');
-        
+
         $validator = Validator::make(
         $request->all(),
         Customer::rules($id),
@@ -119,13 +119,13 @@ class CustomersController extends Controller
         );
         
         if($validator->fails()) {
-            return response()->json(['errors' => $validator->messages()], 422);
+            return response()->json(['errors' => $validator->messages()]);
         }
         
         try {
             $customer = Customer::findOrFail($id);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Not Found'],404);
+            return response()->json(['errors' => 'Not Found']);
         }
         
         $customer->fill($request->all());
@@ -143,7 +143,7 @@ class CustomersController extends Controller
             $customer = Customer::findOrFail($id);
             
             if(!$customer->okToDelete()) {
-                return response()->json(['error' => 'Cannot be deleted: Orders exist'],422);
+                return response()->json(['error' => 'Cannot be deleted: Orders exist']);
             }
             
             $customer->delete();

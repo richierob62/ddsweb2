@@ -31,7 +31,7 @@ const StyledDatePicker = styled(DatePicker)`
 const comp = props => {
   const { value, label, action_word, display, dispatch, field_name } = props;
 
-  const moment_val = moment(value);
+  const moment_val = moment(value ? value : new Date());
   const display_value = moment_val.format("MM/DD/YY");
 
   // select_handler

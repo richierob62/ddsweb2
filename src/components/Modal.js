@@ -7,14 +7,14 @@ import { getModalType } from "../selectors";
 
 const mstp = state => {
   return {
-    modal_type: getModalType(state)
+    type: getModalType(state)
   };
 };
 
 const modal = props => {
-  const { modal_type } = props;
+  const { type } = props;
 
-  switch (modal_type) {
+  switch (type) {
     case "validation":
       return <ValidationModal {...props} />;
 
