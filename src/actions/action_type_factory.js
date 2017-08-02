@@ -9,6 +9,7 @@ export const action_templates = [
   "change_*_Data",
   "change_*_Filter",
   "change_*_Sort",
+  "delete_*_Failed",
   "delete_*_Completed",
   "do_*_Delete",
   "do_*_Create",

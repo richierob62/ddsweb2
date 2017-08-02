@@ -35,7 +35,7 @@ class CustomersController extends Controller
         // build cache key
         $cache_key = $this->buildFilteredCollectionCacheKey($filters, $sort_name, $sort_dir);
         
-        $return_value = Cache::remember($cache_key, 1, function() use($filters, $sort_name, $sort_dir) {
+        $return_value = Cache::remember($cache_key, 0.1, function() use($filters, $sort_name, $sort_dir) {
             
             $filter_array = $filters ? Customer::buildFilter($filters) : [];
 
@@ -143,16 +143,16 @@ class CustomersController extends Controller
             $customer = Customer::findOrFail($id);
             
             if(!$customer->okToDelete()) {
-                return response()->json(['error' => 'Cannot be deleted: Orders exist']);
+                return response()->json(['errors' => ['Cannot be deleted: Orders exist']]);
             }
             
             $customer->delete();
             return response()->json([
             'deleted' => true,
             'id' => $id
-            ], 201);
+            ]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Not Found'],404);
+            return response()->json(['errors' => ['Not Found']]);
         }
     }
     

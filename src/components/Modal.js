@@ -18,7 +18,7 @@ const modal = props => {
     case "validation":
       return <ValidationModal {...props} />;
 
-    case "save_success":
+    case "success":
       return <SuccessModal {...props} />;
 
     default:

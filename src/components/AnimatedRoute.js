@@ -1,7 +1,6 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { TransitionMotion, spring } from "react-motion";
-import presets from "react-motion/lib/presets";
 
 const AnimatedRoute = ({ component, loggedIn, ...rest }) => {
   if (!loggedIn) return <Redirect to="/login" />;

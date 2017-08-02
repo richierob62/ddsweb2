@@ -7,7 +7,7 @@
 
 import { take, put, call, fork, select, takeLatest } from "redux-saga/effects";
 import act from "../actions";
-import { getCurrentRecord } from "../selectors";
+import { getCurrentRecord, getSelectedID } from "../selectors";
 
 // /******************************************************************************/
 // /********************************* CONFIG *************************************/
@@ -117,6 +117,27 @@ function* saveEditToDatabase(table) {
     yield put(act[closing_action](returned.errors));
   } else {
     closing_action = "save" + action_word + "Completed";
+    yield put(act[closing_action](returned.data));
+  }
+}
+
+function* deleteItem(table) {
+
+  const reducer = table_hash[table].reducer;
+  const url = domain + "delete_" + table;
+
+  // get data to save
+  const payload = {id: yield getIdOfRecordToDelete(reducer) }
+
+  const action_word = yield getActionWord(reducer);
+  const returned = yield call(postApi, url, payload);
+
+  let closing_action;
+  if (returned.errors) {
+    closing_action = "delete" + action_word + "Failed";
+    yield put(act[closing_action](returned.errors));
+  } else {
+    closing_action = "delete" + action_word + "Completed";
     yield put(act[closing_action](returned.data));
   }
 }
@@ -236,6 +257,11 @@ function* getRecordToSave(reducer) {
   return getCurrentRecord(state);
 }
 
+function* getIdOfRecordToDelete(reducer) {
+  const state = yield select(s => s[reducer]);
+  return getSelectedID(state);
+}
+
 // /******************************************************************************/
 // /************************** FUNCTION GENERATORS *******************************/
 // /******************************************************************************/
@@ -270,6 +296,12 @@ const saveNewGenerator = (act_string, table) => {
 const saveEditGenerator = (act_string, table) => {
   return function*() {
     yield takeLatest(act_string, saveEditToDatabase, table);
+  };
+};
+
+const doDeleteGenerator = (act_string, table) => {
+  return function*() {
+    yield takeLatest(act_string, deleteItem, table);
   };
 };
 
@@ -353,6 +385,8 @@ const saveNewCustomer = saveNewGenerator("DO_CUSTOMER_CREATE", "customer");
 
 const saveEditCustomer = saveEditGenerator("DO_CUSTOMER_EDIT", "customer");
 
+const doCustomerDelete = doDeleteGenerator("DO_CUSTOMER_DELETE", "customer");
+
 // start watchers in parallel
 export default function* root() {
   yield [
@@ -360,6 +394,7 @@ export default function* root() {
     fork(changeCustomerSort),
     fork(changeCustomerFilter),
     fork(saveNewCustomer),
-    fork(saveEditCustomer)
+    fork(saveEditCustomer),
+    fork(doCustomerDelete)
   ];
 }

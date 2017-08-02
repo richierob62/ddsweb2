@@ -22,9 +22,25 @@ const modal = (state = initial_state, action) => {
 
     case "SAVE_CUSTOMER_COMPLETED":
       return state
-        .set("type", "save_success")
+        .set("type", "success")
         .set("title", "Success")
         .set("text", "Saved successfully");
+
+    case "DELETE_CUSTOMER_FAILED":
+      message_list = Object.keys(action.payload).map(
+        key => action.payload[key]
+      );
+
+      return state
+        .set("type", "validation")
+        .set("message_list", message_list)
+        .set("title", "Deletion Not Permitted");
+
+    case "DELETE_CUSTOMER_COMPLETED":
+      return state
+        .set("type", "success")
+        .set("title", "Success")
+        .set("text", "Saved deleted");
 
     case "CLOSE_MODAL":
       return state.set("type", "").set("message_list", []).set("title", "");
