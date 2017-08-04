@@ -5,6 +5,8 @@ const asyncLoader = importComponent => {
     constructor(props) {
       super(props);
 
+      this.noLongerMounted = false;
+
       this.state = {
         component: null
       };
@@ -12,10 +14,14 @@ const asyncLoader = importComponent => {
 
     async componentDidMount() {
       const { default: component } = await importComponent();
+      if (!this.noLongerMounted)
+        this.setState({
+          component: component
+        });
+    }
 
-      this.setState({
-        component: component
-      });
+    componentWillUnmount() {
+      this.noLongerMounted = true;
     }
 
     render() {
