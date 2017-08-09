@@ -1,4 +1,4 @@
-export const isLoggedIn = state => state.auth.get("loggedIn");
+export const isLoggedInFn = state => () => state.auth.get("loggedIn");
 
 export const getDisplayValueFromID = list => {
   return id => {

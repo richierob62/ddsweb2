@@ -19,16 +19,22 @@ const auth = (state = initial_state, action) => {
       return state.set("message", action.payload.message);
 
     case "AUTH_SUCCESS":
-      return state.set("email", action.payload.email)
-      .set("name", action.payload.name)
-      .set("code", action.payload.code)
-      .set("token", action.payload.token)
-      .set("loggedIn", true)
-      .set("message", '')
-      .set("sleep_start_time", (new Date()).getTime())
+      return state
+        .set("email", action.payload.email)
+        .set("name", action.payload.name)
+        .set("code", action.payload.code)
+        .set("token", action.payload.token)
+        .set("loggedIn", true)
+        .set("message", "")
+        .set("sleep_start_time", new Date().getTime());
 
     case "CLEAR_LOGIN_ERROR":
       return state.set("message", "");
+
+    case "CHECK_SLEEP":
+      if (new Date().getTime() - state.get("sleep_start_time") > 5 * 60 * 1000)
+        return state.set("loggedIn", false).set("token", "");
+      return state;
 
     default:
       return state;

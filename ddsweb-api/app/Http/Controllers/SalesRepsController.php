@@ -77,7 +77,7 @@ class SalesRepsController extends Controller
         try {
             $user = SalesRep::where('email', $request->email)->firstOrFail();
             if (!$user || !(Hash::check($request->password, $user->password)) ) {
-                return response()->json(['errors' => ['Not Found']]);
+                return response()->json(['error' => ['That Email-Password combination wasn\'t found']]);
             }
             $token = $this->token();
             $user->token = $token;

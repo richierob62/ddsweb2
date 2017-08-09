@@ -65,7 +65,8 @@ const login = props => {
   const { dispatch, message } = props;
 
   const clearErrorMessage = () => {
-    dispatch(actions.clearLoginError());
+    if (message !== "" && message !== undefined)
+      dispatch(actions.clearLoginError());
   };
 
   const submitHandler = () => {

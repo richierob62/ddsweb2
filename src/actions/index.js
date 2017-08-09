@@ -7,7 +7,8 @@ import {
   attemptLogin,
   authFail,
   authSuccess,
-  clearLoginError
+  clearLoginError,
+  checkSleep,
 } from "./general_actions";
 
 const grouped_actions = Object.assign(
@@ -35,7 +36,8 @@ const grouped_actions = Object.assign(
   { attemptLogin },
   { authFail },
   { authSuccess },
-  { clearLoginError }
+  { clearLoginError },
+  { checkSleep },
 );
 
 export default grouped_actions;

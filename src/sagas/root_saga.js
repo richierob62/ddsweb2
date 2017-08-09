@@ -5,7 +5,14 @@
 // select = use reducer selector, passing state
 // cancel = cancel promise
 
-import { take, put, call, fork, select, takeLatest } from "redux-saga/effects";
+import {
+  take,
+  put,
+  call,
+  fork,
+  select,
+  takeLatest,
+} from "redux-saga/effects";
 import act from "../actions";
 import { getCurrentRecord, getSelectedID } from "../selectors";
 
@@ -444,6 +451,6 @@ export default function* root() {
     fork(saveNewCustomer),
     fork(saveEditCustomer),
     fork(doCustomerDelete),
-    fork(doLogin)
+    fork(doLogin),
   ];
 }

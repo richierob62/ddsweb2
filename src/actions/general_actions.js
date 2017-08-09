@@ -30,6 +30,10 @@ const clearLoginError = () => {
   return { type: "CLEAR_LOGIN_ERROR" };
 };
 
+const checkSleep = () => {
+  return { type: "CHECK_SLEEP" };
+};
+
 export {
   pageChange,
   sortChangeCompleted,
@@ -38,5 +42,6 @@ export {
   attemptLogin,
   authFail,
   authSuccess,
-  clearLoginError
+  clearLoginError,
+  checkSleep,
 };

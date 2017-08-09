@@ -3,11 +3,11 @@ import { Route } from "react-router-dom";
 import { TransitionMotion, spring } from "react-motion";
 import act from "../actions/";
 
-const AnimatedRoute = ({ component, loggedIn, dispatch, path, history, ...rest }) => {
+const AnimatedRoute = ({ component, loggedInFn, dispatch, path, history, ...rest }) => {
 
-  // pass the history function as well??????
+  dispatch(act["checkSleep"]());
 
-  if (!loggedIn) {
+  if (!loggedInFn()) {
     dispatch(act["beginLogin"]({path, history}));
     return null;
   }
