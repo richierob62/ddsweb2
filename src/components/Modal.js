@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import ValidationModal from "./ValidationModal";
 import SuccessModal from "./SuccessModal";
+import LoginModal from './LoginModal'
 
 import { getModalType } from "../selectors";
 
@@ -20,6 +21,9 @@ const modal = props => {
 
     case "success":
       return <SuccessModal {...props} />;
+
+    case "login":
+      return  <LoginModal />
 
     default:
       return null;

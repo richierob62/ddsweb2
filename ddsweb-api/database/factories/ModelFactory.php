@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Hash;
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -233,6 +234,7 @@ $factory->define(App\SalesRep::class, function (Faker\Generator $faker) {
     'zip' => $faker->postcode,
     'phone' => $faker->phoneNumber,
     'email' => $faker->email,
+    'password' => Hash::make($faker->password),
     'is_rep' => 1,
     'is_admin' => 1,
     'is_active' => 1,

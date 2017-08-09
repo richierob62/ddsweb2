@@ -6,7 +6,6 @@ import act from "./actions/";
 import AnimatedRoute from "./components/AnimatedRoute";
 import asyncComponent from "./utils/async_loader";
 
-const Login = asyncComponent(() => import("./components/Login"));
 const AdTypes = asyncComponent(() => import("./components/AdTypes"));
 const Categories = asyncComponent(() => import("./components/Categories"));
 const CompensationPlans = asyncComponent(() =>
@@ -47,7 +46,8 @@ const Main = props => {
   return (
     <StyledMain>
       <Route
-        render={({ location }) => {
+        render={({ location, history }) => {
+
           const common_props = {
             dispatch: store.dispatch,
             action: act.pageChange(location.pathname)
@@ -57,99 +57,130 @@ const Main = props => {
             <Switch>
             
               <AnimatedRoute
-                path="/login"
-                component={<Login {...common_props} />}
-                loggedIn={loggedIn}
-              />
-              <AnimatedRoute
                 path="/ad_types"
                 component={<AdTypes {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
               <AnimatedRoute
                 path="/categories"
                 component={<Categories {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
               <AnimatedRoute
                 path="/compensation_plans"
                 component={<CompensationPlans {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
               <AnimatedRoute
                 path="/customers"
                 component={<Customers {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
               <AnimatedRoute
                 path="/fields"
                 component={<Fields {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
               <AnimatedRoute
                 path="/findinglines"
                 component={<FindingLines {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
               <AnimatedRoute
                 path="/headings"
                 component={<Headings {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
               <AnimatedRoute
                 path="/localforeign"
                 component={<LocalForeigns {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
               <AnimatedRoute
                 path="/order_lines"
                 component={<OrderLines {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
               <AnimatedRoute
                 path="/order_statuses"
                 component={<Orders {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
               <AnimatedRoute
                 path="/orders"
                 component={<OrderStatuses {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
               <AnimatedRoute
                 path="/page_types"
                 component={<PageTypes {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
               <AnimatedRoute
                 path="/payplans"
                 component={<PayPlans {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
               <AnimatedRoute
                 path="/permissions"
                 component={<Permissions {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
               <AnimatedRoute
                 path="/primary_books"
                 component={<PrimaryBooks {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
               <AnimatedRoute
                 path="/sales_reps"
                 component={<SalesReps {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
               <AnimatedRoute
                 path="/source_books"
                 component={<SourceBooks {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
               <AnimatedRoute
                 path="/udacs"
                 component={<Udacs {...common_props} />}
                 loggedIn={loggedIn}
+                dispatch={store.dispatch}
+                history={history}
               />
 
             </Switch>

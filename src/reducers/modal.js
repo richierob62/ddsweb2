@@ -45,6 +45,12 @@ const modal = (state = initial_state, action) => {
     case "CLOSE_MODAL":
       return state.set("type", "").set("message_list", []).set("title", "");
 
+    case "BEGIN_LOGIN":
+      return state.set("type", 'login').set("message_list", []).set("title", "Please log in");
+
+    case "AUTH_SUCCESS":
+      return state.set("type", '').set("message_list", []).set("title", "");
+
     default:
       return state;
   }

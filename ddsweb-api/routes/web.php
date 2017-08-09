@@ -18,6 +18,8 @@
 //     ]);
 // });
 
+$app->post('login', 'SalesRepsController@login');
+
 $app->group(['middleware' => 'auth'], function () use ($app) {
     
     $app->post('customers', 'CustomersController@customers');

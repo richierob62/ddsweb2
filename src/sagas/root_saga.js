@@ -37,7 +37,6 @@ const statusHelper = response => {
 };
 
 const postApi = (uri, payload, token) => {
-
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
 
@@ -75,7 +74,12 @@ function* loadFilteredAndSortedData(table) {
   const filters = yield getFilters(reducer);
   const action_word = yield getActionWord(reducer);
   const token = yield getToken();
-  const { data } = yield call(postApi, url, { filters, sort_name, sort_dir }, token);
+  const { data } = yield call(
+    postApi,
+    url,
+    { filters, sort_name, sort_dir },
+    token
+  );
   const closing_action = "load" + action_word + "ListCompleted";
   yield put(act[closing_action](data));
 }
@@ -153,6 +157,25 @@ function* getNextCustomerAccountNumber() {
   const url = domain + "next_customer_number";
   const token = yield getToken();
   return yield call(postApi, url, {}, token);
+}
+
+function* attemptLogin(action) {
+  const payload = {
+    email: action.payload.email,
+    password: action.payload.pass
+  };
+  const url = domain + "login";
+  const returned = yield call(postApi, url, payload);
+
+  let closing_action;
+  if (returned.error) {
+    closing_action = "authFail";
+    yield put(act[closing_action]({ message: returned.error }));
+  } else {
+    closing_action = "authSuccess";
+    yield put(act[closing_action](returned.data));
+    yield gotoOriginalDestination();
+  }
 }
 
 function* handleSort(table, action) {
@@ -275,6 +298,14 @@ function* getIdOfRecordToDelete(reducer) {
   return getSelectedID(state);
 }
 
+function* gotoOriginalDestination() {
+  const state = yield select(s => s["auth"]);
+  const history_obj = state.get("history_obj");
+  const dest = state.get("next_page");
+  history_obj.push(dest);
+  return null;
+}
+
 // /******************************************************************************/
 // /************************** FUNCTION GENERATORS *******************************/
 // /******************************************************************************/
@@ -321,6 +352,10 @@ const doDeleteGenerator = (act_string, table) => {
 // /******************************************************************************/
 // /******************************* WATCHERS *************************************/
 // /******************************************************************************/
+
+const doLogin = function*() {
+  yield takeLatest("ATTEMPT_LOGIN", attemptLogin);
+};
 
 const pageChangeWatcher = function*() {
   const forever = true;
@@ -408,6 +443,7 @@ export default function* root() {
     fork(changeCustomerFilter),
     fork(saveNewCustomer),
     fork(saveEditCustomer),
-    fork(doCustomerDelete)
+    fork(doCustomerDelete),
+    fork(doLogin)
   ];
 }

@@ -33,10 +33,9 @@ class AuthServiceProvider extends ServiceProvider
         
         // clean this up later
         $this->app['auth']->viaRequest('api', function ($request) {
-            $header = $request->header('Api-Token');
-            if ($header && $header == 'foo') {
-                return new User();
-            }
+            $token = $request->header('Api-Token');
+            $user = \App\SalesRep::where('token', $token)->first();
+            return $user ? $user : null;
         });
         
         return null;

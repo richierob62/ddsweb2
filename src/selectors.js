@@ -76,3 +76,5 @@ export const getModalMessageList = state => state["modal"].get("message_list");
 export const getModalTitle = state => state["modal"].get("title");
 
 export const getModalText = state => state["modal"].get("text");
+
+export const loginErrorMessage = state => state["auth"].get("message");

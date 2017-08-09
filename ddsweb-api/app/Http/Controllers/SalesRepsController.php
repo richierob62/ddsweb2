@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
 
 
 /**
@@ -32,8 +33,8 @@ class SalesRepsController extends Controller
         }
         
         $query = SalesRep::select(\DB::raw('sales_reps.*'))
-        ->orderBy(SalesRep::orderField($sort_name), $sort_dir); 
-
+        ->orderBy(SalesRep::orderField($sort_name), $sort_dir);
+        
         if(sizeof($filters) > 0) {
             foreach( $filters as $key => $filter) {
                 $query = SalesRep::filterOn($key, $filter);
@@ -66,9 +67,44 @@ class SalesRepsController extends Controller
         try {
             return ['data' => SalesRep::findOrFail($id)->toArray()];
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Not Found'],404);
+            return response()->json(['error' => 'Not Found']);
         }
     }
+    
+    
+    public function login(Request $request)
+    {
+        try {
+            $user = SalesRep::where('email', $request->email)->firstOrFail();
+            if (!$user || !(Hash::check($request->password, $user->password)) ) {
+                return response()->json(['errors' => ['Not Found']]);
+            }
+            $token = $this->token();
+            $user->token = $token;
+            $user->save();
+            $user = [
+            'email' => $user->email,
+            'name' => $user->name,
+            'code' => $user->code,
+            'token' => $token,
+            ];
+            return response()->json(['data' => $user]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'That Email-Password combination wasn\'t found']);
+        }
+    }
+    
+    function token()
+    {
+        $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEF!@_GHIJKLMNOPQRSTUVWXYZ';
+        $max = strlen($keyspace) -1;
+        $str = '';
+        for ($i = 0; $i < 64; $i++) {
+            $str .= $keyspace[random_int(0, $max)];
+        }
+        return $str;
+    }
+    
     
     public function newSalesRep(Request $request)
     {
@@ -92,7 +128,7 @@ class SalesRepsController extends Controller
             
         } catch (ModelNotFoundException $e) {
             
-            return response()->json(['error' => 'Not Created'],404);
+            return response()->json(['error' => 'Not Created']);
             
         };
         
@@ -116,7 +152,7 @@ class SalesRepsController extends Controller
         try {
             $sales_rep = SalesRep::findOrFail($id);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Not Found'],404);
+            return response()->json(['error' => 'Not Found']);
         }
         
         $sales_rep->fill($request->all());
@@ -132,21 +168,21 @@ class SalesRepsController extends Controller
         $id = $request->input('id');
         try {
             $sales_rep = SalesRep::findOrFail($id);
-
+            
             if(!$sales_rep->okToDelete()) {
                 return response()->json(['error' => 'Cannot be deleted: Being used'],422);
-            } 
-                       
+            }
+            
             $sales_rep->delete();
             return response()->json([
             'deleted' => true,
             'id' => $id
             ], 201);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Not Found'],404);
+            return response()->json(['error' => 'Not Found']);
         }
     }
-
+    
     protected function buildReferenceCollectionCacheKey() {
         return 'sales_rep_reference';
     }

@@ -1,5 +1,14 @@
 import factory from "./action_type_factory";
-import { pageChange, sortChangeCompleted, closeModal } from "./general_actions";
+import {
+  pageChange,
+  sortChangeCompleted,
+  closeModal,
+  beginLogin,
+  attemptLogin,
+  authFail,
+  authSuccess,
+  clearLoginError
+} from "./general_actions";
 
 const grouped_actions = Object.assign(
   {},
@@ -21,7 +30,12 @@ const grouped_actions = Object.assign(
   factory("udac"),
   { pageChange },
   { sortChangeCompleted },
-  { closeModal }
+  { closeModal },
+  { beginLogin },
+  { attemptLogin },
+  { authFail },
+  { authSuccess },
+  { clearLoginError }
 );
 
 export default grouped_actions;

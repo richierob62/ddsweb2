@@ -19,6 +19,9 @@ class CreateSalesRepsTable extends Migration
             
             $table->string('code')->index();
             $table->string('name')->index();
+
+            $table->string('password');
+            $table->string('token')->nullable();            
             
             $table->integer('compensation_plan_id')->unsigned()->index();
             

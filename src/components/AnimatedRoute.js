@@ -1,9 +1,16 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Route } from "react-router-dom";
 import { TransitionMotion, spring } from "react-motion";
+import act from "../actions/";
 
-const AnimatedRoute = ({ component, loggedIn, ...rest }) => {
-  if (!loggedIn) return <Redirect to="/login" />;
+const AnimatedRoute = ({ component, loggedIn, dispatch, path, history, ...rest }) => {
+
+  // pass the history function as well??????
+
+  if (!loggedIn) {
+    dispatch(act["beginLogin"]({path, history}));
+    return null;
+  }
 
   return (
     <Route
@@ -19,7 +26,7 @@ const AnimatedRoute = ({ component, loggedIn, ...rest }) => {
           defaultStyles={[
             {
               key: location.pathname,
-              style: { rotation: 180 },
+              style: { rotation: 180 }
             }
           ]}
           styles={
@@ -28,7 +35,7 @@ const AnimatedRoute = ({ component, loggedIn, ...rest }) => {
                   {
                     key: location.pathname,
                     style: {
-                      rotation: spring(0, { stiffness: 200, damping: 25 } )
+                      rotation: spring(0, { stiffness: 200, damping: 25 })
                     }
                   }
                 ]
@@ -36,9 +43,14 @@ const AnimatedRoute = ({ component, loggedIn, ...rest }) => {
           }
         >
           {interpolatedStyles => (
-            <div className="route" style={{ position: "relative", transformStyle: 'preserve-3d', perspective: '1000px'
-                
-        }}>
+            <div
+              className="route"
+              style={{
+                position: "relative",
+                transformStyle: "preserve-3d",
+                perspective: "1000px"
+              }}
+            >
               {interpolatedStyles.map(config => (
                 <div
                   key={config.key}
