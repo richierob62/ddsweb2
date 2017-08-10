@@ -5,14 +5,7 @@
 // select = use reducer selector, passing state
 // cancel = cancel promise
 
-import {
-  take,
-  put,
-  call,
-  fork,
-  select,
-  takeLatest,
-} from "redux-saga/effects";
+import { take, put, call, fork, select, takeLatest } from "redux-saga/effects";
 import act from "../actions";
 import { getCurrentRecord, getSelectedID } from "../selectors";
 
@@ -124,6 +117,7 @@ function* saveEditToDatabase(table) {
   const payload = (yield getRecordToSave(reducer)).toJS();
   Object.keys(payload).map(key => {
     if (!payload[key]) payload[key] = "";
+    return null;
   });
   const action_word = yield getActionWord(reducer);
   const token = yield getToken();
@@ -451,6 +445,6 @@ export default function* root() {
     fork(saveNewCustomer),
     fork(saveEditCustomer),
     fork(doCustomerDelete),
-    fork(doLogin),
+    fork(doLogin)
   ];
 }
