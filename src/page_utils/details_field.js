@@ -42,11 +42,13 @@ const DetailsField = props => {
                     ? props.ref_selector_primary_book
                     : ref_table_name === "category"
                         ? props.ref_selector_category
-                        : undefined;
+                        : ref_table_name === "compensation_plan"
+                            ? props.ref_selector_compensation_plan
+                            : undefined;
 
   const display_value = ref_function && value
     ? ref_function(value).get("display")
-    : value
+    : value;
 
   const ref_list = ref_table_name === undefined
     ? undefined
@@ -60,7 +62,9 @@ const DetailsField = props => {
                     ? props.primary_book_ref_list
                     : ref_table_name === "category"
                         ? props.category_ref_list
-                        : undefined;
+                        : ref_table_name === "compensation_plan"
+                            ? props.compensation_plan_ref_list
+                            : undefined;
 
   const options = field_definition.get("options");
 

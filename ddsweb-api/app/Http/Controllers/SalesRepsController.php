@@ -10,8 +10,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 
-
-/**
+/**k
 * Class SalesRepsController
 * @package App\Http\Controllers
 */
@@ -20,32 +19,40 @@ class SalesRepsController extends Controller
     
     public function salesReps(Request $request)
     {
+        
         $filters = $request->input('filters');
         
         $sort_name = $request->input('sort_name');
         if(sizeof($sort_name) == 0) {
             $sort_name = 'name';
         }
+        $sort_name = 'sales_reps.' . $sort_name;
         
         $sort_dir = $request->input('sort_dir');
         if(sizeof($sort_dir) == 0) {
             $sort_dir = 'asc';
         }
         
-        $query = SalesRep::select(\DB::raw('sales_reps.*'))
-        ->orderBy(SalesRep::orderField($sort_name), $sort_dir);
+        // build cache key
+        $cache_key = $this->buildFilteredCollectionCacheKey($filters, $sort_name, $sort_dir);
         
-        if(sizeof($filters) > 0) {
-            foreach( $filters as $key => $filter) {
-                $query = SalesRep::filterOn($key, $filter);
-            }
-        }
+        $return_value = Cache::remember($cache_key, 0.1, function() use($filters, $sort_name, $sort_dir) {
+            
+            $filter_array = $filters ? SalesRep::buildFilter($filters) : [];
+
+            $query = SalesRep::select(\DB::raw('sales_reps.*'))
+            ->where($filter_array)
+            ->orderBy(SalesRep::orderField($sort_name), $sort_dir);
+            
+            return response()->json(['data' => $query->get()]);
+        });
         
+        return $return_value;
         
-        return response()->json(['data' => $query->get()]);
     }
     
     public function referenceList() {
+        
         // build cache key
         $cache_key = $this->buildReferenceCollectionCacheKey();
         
@@ -59,6 +66,7 @@ class SalesRepsController extends Controller
         });
         
         return $return_value;
+        
     }
     
     public function salesRepByID(Request $request)
@@ -67,10 +75,100 @@ class SalesRepsController extends Controller
         try {
             return ['data' => SalesRep::findOrFail($id)->toArray()];
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Not Found']);
+            return response()->json(['error' => 'Not Found'],404);
         }
     }
     
+    public function newSalesRep(Request $request)
+    {
+        $validator = Validator::make(
+        $request->all(),
+        SalesRep::rules(),
+        SalesRep::errorMessages()
+        );
+        
+        if($validator->fails()) {
+            return response()->json(['errors' => $validator->messages()]);
+        }
+        
+        try {
+            
+            $sales_rep = SalesRep::create($request->all());
+            return response()->json([
+            'created' => true,
+            'data' => $sales_rep->toArray()
+            ], 201);
+            
+        } catch (ModelNotFoundException $e) {
+            
+            return response()->json(['error' => 'Not Created']);
+            
+        };
+        
+    }
+    
+    public function editSalesRep(Request $request)
+    {
+        
+        $id = $request->input('id');
+
+        $validator = Validator::make(
+        $request->all(),
+        SalesRep::rules($id),
+        SalesRep::errorMessages()
+        );
+        
+        if($validator->fails()) {
+            return response()->json(['errors' => $validator->messages()]);
+        }
+        
+        try {
+            $sales_rep = SalesRep::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['errors' => 'Not Found']);
+        }
+        
+        $sales_rep->fill($request->all());
+        $sales_rep->save();
+        return response()->json([
+        'updated' => true,
+        'data' => $sales_rep->toArray()
+        ], 201);
+    }
+    
+    public function deleteSalesRep(Request $request)
+    {
+        $id = $request->input('id');
+        try {
+            $sales_rep = SalesRep::findOrFail($id);
+            
+            if(!$sales_rep->okToDelete()) {
+                return response()->json(['errors' => ['Cannot be deleted: Customers are assigned to this user']]);
+            }
+            
+            $sales_rep->delete();
+            return response()->json([
+            'deleted' => true,
+            'id' => $id
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['errors' => ['Not Found']]);
+        }
+    }
+    
+    protected function buildFilteredCollectionCacheKey($filters, $sort_name, $sort_dir) {
+        $cache_key = 'sales_reps.';
+        if ($filters) {
+            foreach( $filters as $key => $value) {
+                $cache_key .= $key . $value;
+            };
+        }
+        return $cache_key . '.' . $sort_name . '.' . $sort_dir;
+    }
+    
+    protected function buildReferenceCollectionCacheKey() {
+        return 'sales_rep_reference';
+    }
     
     public function login(Request $request)
     {
@@ -103,87 +201,6 @@ class SalesRepsController extends Controller
             $str .= $keyspace[random_int(0, $max)];
         }
         return $str;
-    }
+    }    
     
-    
-    public function newSalesRep(Request $request)
-    {
-        $validator = Validator::make(
-        $request->all(),
-        SalesRep::rules(),
-        SalesRep::errorMessages()
-        );
-        
-        if($validator->fails()) {
-            return response()->json(['errors' => $validator->messages()], 422);
-        }
-        
-        try {
-            
-            $sales_rep = SalesRep::create($request->all());
-            return response()->json([
-            'created' => true,
-            'data' => $sales_rep->toArray()
-            ], 201);
-            
-        } catch (ModelNotFoundException $e) {
-            
-            return response()->json(['error' => 'Not Created']);
-            
-        };
-        
-    }
-    
-    public function editSalesRep(Request $request)
-    {
-        
-        $id = $request->input('id');
-        
-        $validator = Validator::make(
-        $request->all(),
-        SalesRep::rules($id),
-        SalesRep::errorMessages()
-        );
-        
-        if($validator->fails()) {
-            return response()->json(['errors' => $validator->messages()], 422);
-        }
-        
-        try {
-            $sales_rep = SalesRep::findOrFail($id);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Not Found']);
-        }
-        
-        $sales_rep->fill($request->all());
-        $sales_rep->save();
-        return response()->json([
-        'updated' => true,
-        'data' => $sales_rep->toArray()
-        ], 201);
-    }
-    
-    public function deleteSalesRep(Request $request)
-    {
-        $id = $request->input('id');
-        try {
-            $sales_rep = SalesRep::findOrFail($id);
-            
-            if(!$sales_rep->okToDelete()) {
-                return response()->json(['error' => 'Cannot be deleted: Being used'],422);
-            }
-            
-            $sales_rep->delete();
-            return response()->json([
-            'deleted' => true,
-            'id' => $id
-            ], 201);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Not Found']);
-        }
-    }
-    
-    protected function buildReferenceCollectionCacheKey() {
-        return 'sales_rep_reference';
-    }
 }

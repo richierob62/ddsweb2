@@ -33,54 +33,57 @@ class SalesRep extends Model
         'compensation_plan_id.exists' => 'You must select a valid compensation plan.'
         ];
     }
-
+    
     public function okToDelete() {
-        return ($this->customers()->count() == 0) && ($this->orders()->count() == 0);
+        return $this->customers()->count() == 0;
     }
     public function customers() { return $this->hasMany(Customer::class); }
     public function orders() { return $this->hasMany(Order::class); }
-
-
-    public function compensation_plan() { return $this->belongsTo(CompensationPLan::class);  }
     
-    static public function scopeFilterOn($query, $key, $filter)
+    public function compensation_plan() { return $this->belongsTo(CompensationPlan::class, 'compensation_plan_id');  }
+    
+    static public function buildFilter($filters)
     {
-
-        switch ($key) {
-            case 'name':
-                $query->where('name', 'LIKE', '%'.$filter.'%');
-                break;
-            case 'email':
-                $query->where('email', 'LIKE', '%'.$filter.'%');
-                break;
-            case 'phone':
-                $query->where('phone', 'LIKE', '%'.$filter.'%');
-                break;
-            case 'is_rep':
-                $query->where('is_rep', $filter);
-                break;
-            case 'is_admin':
-                $query->where('is_admin', $filter);
-                break;
-            case 'is_active':
-                $query->where('is_active', $filter);
-                break;
-            case 'id':
-                $query->where('id', $filter);
-                break;
-            default:
-                $query;
+        $filter_array = [];
+        foreach( $filters as $key => $filter) {
+            switch ($key) {
+                case 'code':
+                    $filter_array[] =  ['sales_reps.code', 'LIKE', '%'.$filter.'%'];
+                    break;
+                case 'name':
+                    $filter_array[] =  ['sales_reps.name', 'LIKE', '%'.$filter.'%'];
+                    break;
+                case 'email':
+                    $filter_array[] =  ['sales_reps.email', 'LIKE', '%'.$filter.'%'];
+                    break;
+                case 'address':
+                    $filter_array[] =  ['sales_reps.address', 'LIKE', '%'.$filter.'%'];
+                    break;
+                case 'city':
+                    $filter_array[] =  ['sales_reps.city', 'LIKE', '%'.$filter.'%'];
+                    break;
+                case 'state':
+                    $filter_array[] =  ['sales_reps.state', 'LIKE', '%'.$filter.'%'];
+                    break;
+                case 'zip':
+                    $filter_array[] =  ['sales_reps.zip', 'LIKE', '%'.$filter.'%'];
+                    break;
+                case 'id':
+                    $filter_array[] =  ['sales_reps.id', '=', $filter];
+                    break;
         }
     }
-    
-    static public function orderField($sort_name) {
-        switch ($sort_name) {
-            case 'foo':
-            return 'huh';
-            break;
-            default:
-            return $sort_name;
-        }  
-    }
-    
+    return $filter_array;
+}
+
+static public function orderField($sort_name) {
+    // switch ($sort_name) {
+    //     case 'customers.sales_rep':
+    //         return 'sales_reps.name';
+    //         break;
+    //     default:
+    // }
+    return $sort_name;
+}
+
 }

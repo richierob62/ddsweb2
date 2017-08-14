@@ -23,15 +23,16 @@ const mstp = (state, ownProps) => ({
   ref_selector_pay_plan: refSelector(state["pay_plans"]),
   ref_selector_primary_book: refSelector(state["primary_books"]),
   ref_selector_category: refSelector(state["categories"]),
+  ref_selector_compensation_plan: refSelector(state["compensation_plans"]),
   sales_rep_ref_list: getRefList(state["sales_reps"]),
   local_foreign_ref_list: getRefList(state["local_foreigns"]),
   pay_plan_ref_list: getRefList(state["pay_plans"]),
   primary_book_ref_list: getRefList(state["primary_books"]),
-  category_ref_list: getRefList(state["categories"])
+  category_ref_list: getRefList(state["categories"]),
+  compensation_plan_ref_list: getRefList(state["compensation_plans"])
 });
 
 const DetailsWrapper = styled.div`
-
 `;
 
 const DetailsLayout = props => {

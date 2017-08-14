@@ -21,7 +21,8 @@ const table_hash = {
   pay_plan: { reducer: "pay_plans" },
   local_foreign: { reducer: "local_foreigns" },
   primary_book: { reducer: "primary_books" },
-  sales_rep: { reducer: "sales_reps" }
+  sales_rep: { reducer: "sales_reps" },
+  compensation_plan: { reducer: "compensation_plans" },
 };
 
 // /******************************************************************************/
@@ -392,27 +393,21 @@ const pageChangeWatcher = function*() {
 
         break;
 
-      default:
+      case "/sales_reps":
         // list dirty?
-        reducer = table_hash["customer"].reducer;
+        reducer = table_hash["sales_rep"].reducer;
         if (yield listIsDirty(reducer)) {
           // main file
-          forks.push(loadFilteredAndSortedData("customer"));
-
-          // reference lists
-          if (yield refListIsDirty("sales_reps")) {
-            forks.push(loadReferenceList("sales_rep"));
+          forks.push(loadFilteredAndSortedData("sales_rep"));
+                    // reference lists
+          if (yield refListIsDirty("compensation_plans")) {
+            forks.push(loadReferenceList("compensation_plan"));
           }
-          if (yield refListIsDirty("categories"))
-            forks.push(loadReferenceList("category"));
-          if (yield refListIsDirty("local_foreigns"))
-            forks.push(loadReferenceList("local_foreign"));
-          if (yield refListIsDirty("pay_plans"))
-            forks.push(loadReferenceList("pay_plan"));
-          if (yield refListIsDirty("primary_books"))
-            forks.push(loadReferenceList("primary_book"));
         }
 
+        break;
+
+      default:
         break;
     }
 
@@ -420,31 +415,33 @@ const pageChangeWatcher = function*() {
   }
 };
 
-const changeCustomerSort = changeSortGenerator(
-  "CHANGE_CUSTOMER_SORT",
-  "customer"
-);
+const table_watchers = Object.keys(table_hash).map(table => {
+  const forks = [];
 
-const changeCustomerFilter = changeFilterGenerator(
-  "CHANGE_CUSTOMER_FILTER",
-  "customer"
-);
+  // sort change
+  let action = "CHANGE_" + table.toUpperCase() + "_SORT";
+  forks.push(fork(changeSortGenerator(action, table)));
 
-const saveNewCustomer = saveNewGenerator("DO_CUSTOMER_CREATE", "customer");
+  // filter change
+  action = "CHANGE_" + table.toUpperCase() + "_FILTER";
+  forks.push(fork(changeFilterGenerator(action, table)));
 
-const saveEditCustomer = saveEditGenerator("DO_CUSTOMER_EDIT", "customer");
+  // save new
+  action = "DO_" + table.toUpperCase() + "_CREATE";
+  forks.push(fork(saveNewGenerator(action, table)));
 
-const doCustomerDelete = doDeleteGenerator("DO_CUSTOMER_DELETE", "customer");
+  // save edit
+  action = "DO_" + table.toUpperCase() + "_EDIT";
+  forks.push(fork(saveEditGenerator(action, table)));
+
+  // delete
+  action = "DO_" + table.toUpperCase() + "_DELETE";
+  forks.push(fork(doDeleteGenerator(action, table)));
+
+  return forks;
+});
 
 // start watchers in parallel
 export default function* root() {
-  yield [
-    fork(pageChangeWatcher),
-    fork(changeCustomerSort),
-    fork(changeCustomerFilter),
-    fork(saveNewCustomer),
-    fork(saveEditCustomer),
-    fork(doCustomerDelete),
-    fork(doLogin)
-  ];
+  yield [fork(doLogin), fork(pageChangeWatcher), ...table_watchers];
 }

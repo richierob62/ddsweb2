@@ -5,7 +5,7 @@ import DetailField from "./details_field";
 const RowWrapper = styled.div`
     display: flex;
     font-size: 0.7rem;
-    width: 100%;
+    flex: 100%;
     flex-wrap: nowrap;
 `;
 

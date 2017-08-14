@@ -11,6 +11,7 @@ const modal = (state = initial_state, action) => {
 
   switch (action.type) {
     case "SAVE_CUSTOMER_FAILED":
+    case "SAVE_SALES_REP_FAILED":
       message_list = Object.keys(action.payload).map(
         key => action.payload[key]
       );
@@ -21,12 +22,14 @@ const modal = (state = initial_state, action) => {
         .set("title", "Please fix the following...");
 
     case "SAVE_CUSTOMER_COMPLETED":
+    case "SAVE_SALES_REP_COMPLETED":
       return state
         .set("type", "success")
         .set("title", "Success")
         .set("text", "Saved successfully");
 
     case "DELETE_CUSTOMER_FAILED":
+    case "DELETE_SALES_REP_FAILED":
       message_list = Object.keys(action.payload).map(
         key => action.payload[key]
       );
@@ -37,6 +40,7 @@ const modal = (state = initial_state, action) => {
         .set("title", "Deletion Not Permitted");
 
     case "DELETE_CUSTOMER_COMPLETED":
+    case "DELETE_SALES_REP_COMPLETED":
       return state
         .set("type", "success")
         .set("title", "Success")

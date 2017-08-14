@@ -1,61 +1,101 @@
-import Immutable from 'immutable'
+import Immutable from "immutable";
 
 const initial_state = Immutable.fromJS({
-    list: [
-        { id: 1, name: 'foo', code: 'foo', email: 'foo', address: 'foo', city: 'foo', state: 'foo', zip: 'foo', phone: 'foo', is_rep: 'foo', is_admin: 'foo', is_active: 'foo', compensation_plan: 'foo', commission_new: 'foo', commission_renew: 'foo' },
-        { id: 2, name: 'foo', code: 'foo', email: 'foo', address: 'foo', city: 'foo', state: 'foo', zip: 'foo', phone: 'foo', is_rep: 'foo', is_admin: 'foo', is_active: 'foo', compensation_plan: 'foo', commission_new: 'foo', commission_renew: 'foo' }
-    ],
-    page_title: 'Sales Reps',
-    action_word: 'SalesRep',
-    selected_id: -1,
-    current_sort: {
-        field_name: 'name',
-        direction: 'ASC'
+  list: [],
+  first_index: 0,
+  list_dirty: true,
+  page_title: "Sales Reps",
+  action_word: "SalesRep",
+  reducer_name: "sales_reps",
+  selected_id: -1,
+  current_sort: {
+    field_name: "name",
+    direction: "ASC"
+  },
+  current_filters: {},
+  mode: "display",
+  fields: {
+    name: { label: "Name", input_type: "text", ref_table: undefined },
+    code: { label: "Code", input_type: "text", ref_table: undefined },
+    email: { label: "Email", input_type: "text", ref_table: undefined },
+    address: { label: "Address", input_type: "text", ref_table: undefined },
+    city: { label: "City", input_type: "text", ref_table: undefined },
+    state: { label: "State", input_type: "text", ref_table: undefined },
+    zip: { label: "Zip", input_type: "text", ref_table: undefined },
+    phone: { label: "Phone", input_type: "text", ref_table: undefined },
+    is_rep: { label: "Is Rep", input_type: "checkbox", ref_table: undefined },
+    is_admin: { label: "Is Admin", input_type: "checkbox", ref_table: undefined },
+    is_active: {
+      label: "Is Active",
+      input_type: "checkbox",
+      ref_table: undefined
     },
-    current_filters: {},
-    mode: 'display',
-    fields: [
-        { field_name: 'name', label: 'Name', input_type: 'text', ref_table: undefined },
-        { field_name: 'code', label: 'Code', input_type: 'text', ref_table: undefined },
-        { field_name: 'email', label: 'Email', input_type: 'text', ref_table: undefined },
-        { field_name: 'address', label: 'Address', input_type: 'text', ref_table: undefined },
-        { field_name: 'city', label: 'City', input_type: 'text', ref_table: undefined },
-        { field_name: 'state', label: 'State', input_type: 'text', ref_table: undefined },
-        { field_name: 'zip', label: 'Zip', input_type: 'text', ref_table: undefined },
-        { field_name: 'phone', label: 'Phone', input_type: 'text', ref_table: undefined },
-        { field_name: 'is_rep', label: 'Rep', input_type: 'checkbox', ref_table: undefined },
-        { field_name: 'is_admin', label: 'Admin', input_type: 'checkbox', ref_table: undefined },
-        { field_name: 'is_active', label: 'Active', input_type: 'checkbox', ref_table: undefined },
-        { field_name: 'compensation_plan', label: 'Compensation Plan', input_type: 'select', ref_table: 'compensation_plan' },
-        { field_name: 'commission_new', label: 'Commission on New', input_type: 'text', ref_table: undefined },
-        { field_name: 'commission_renew', label: 'Commission on Renewal', input_type: 'text', ref_table: undefined },
-    ],
-    list_template: [
-        { field_name: 'code', width: '10%' },
-        { field_name: 'name', width: '25%' },
-        { field_name: 'email', width: '20%' },
-        { field_name: 'address', width: '25%' },
-        { field_name: 'city', width: '10%' },
-        { field_name: 'state', width: '5%' },
-        { field_name: 'zip', width: '5%' },
-    ],
-    details_template: {
-        current_tab: '',
-        tabs: [
-            {
-                name: '',
-                rows: [
-                    ['name'],
-                    ['code'],
-                ]
-            }
+    compensation_plan: {
+      label: "Comp. Plan",
+      input_type: "select",
+      ref_table: "compensation_plan"
+    },
+    commission_new: {
+      label: "New Comm",
+      input_type: "text",
+      ref_table: undefined
+    },
+    commission_renew: {
+      label: "Renewal Comm.",
+      input_type: "text",
+      ref_table: undefined
+    }
+  },
+  list_template: [
+    { field_name: "code", width: "7%" },
+    { field_name: "name", width: "20%" },
+    { field_name: "email", width: "20%" },
+    { field_name: "address", width: "20%" },
+    { field_name: "city", width: "15%" },
+    { field_name: "state", width: "10%" },
+    { field_name: "zip", width: "8%" }
+  ],
+  details_template: {
+    current_tab: "Contact",
+    tabs: [
+      {
+        name: "Contact",
+        rows: [
+          ["code"],
+          ["name"],
+          ["address"],
+          ["city"],
+          ["state", "zip"],
+          ["email", "phone"]
         ]
+      },
+      {
+        name: "Payment",
+        rows: [["compensation_plan"], ["commission_new"], ["commission_renew"]]
+      },
+      {
+        name: "Access",
+        rows: [["is_active"], ["is_rep"], ["is_admin"]]
+      }
+    ]
+  },
+  context_menu: [
+    {
+      label: "Customers",
+      link: "customets",
+      filter_on: "sales_rep",
+      select_on: undefined
     },
-    context_menu: [],
-    radio_groups: [],
-    ref_list: [],
-    ref_list_dirty: true,
-    typeahead: ''
-})
+    {
+      label: "Orders",
+      link: "orders",
+      filter_on: "sales_rep",
+      select_on: undefined
+    }
+  ],
+  ref_list: [],
+  ref_list_dirty: true,
+  typeahead: ""
+});
 
-export default initial_state
+export default initial_state;
