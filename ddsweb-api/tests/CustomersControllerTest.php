@@ -136,7 +136,7 @@ class CustomersControllerTest extends TestCase
     {
         $this
             ->post('/customer', ['id' => 999999])
-            ->seeStatusCode(404)
+            ->seeStatusCode(200)
             ->seeJson(['errors' => ['Not Found']]);
     }
 

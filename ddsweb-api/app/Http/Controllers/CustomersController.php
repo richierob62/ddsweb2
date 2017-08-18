@@ -70,7 +70,7 @@ class CustomersController extends Controller
         try {
             return ['data' => Customer::findOrFail($id)->toArray()];
         } catch (ModelNotFoundException $e) {
-            return response()->json(['errors' => ['Not Found']], 404);
+            return response()->json(['errors' => ['Not Found']], 200);
         }
     }
 

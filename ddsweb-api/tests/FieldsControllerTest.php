@@ -126,8 +126,8 @@ class FieldsControllerTest extends TestCase
     {
         $this
         ->post('/field', ['id' => 999999])
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     /** @test **/
@@ -157,7 +157,7 @@ class FieldsControllerTest extends TestCase
         $this->assertTrue($data['id'] > 0);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['created' => true])
         ->seeInDatabase('fields', [
         'name' => 'foo',
@@ -191,7 +191,7 @@ class FieldsControllerTest extends TestCase
         $this->assertArrayHasKey('data', $body);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['updated' => true, 'id' => $id])
         ->seeInDatabase('fields', [
         'name' => 'foo_edited',
@@ -219,8 +219,8 @@ class FieldsControllerTest extends TestCase
         ]);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     
@@ -235,7 +235,7 @@ class FieldsControllerTest extends TestCase
         
         $this
         ->post('/delete_field', ['id' => $id])
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['deleted' => true]);
         
         $data = json_decode($this->response->getContent(), true);
@@ -250,8 +250,8 @@ class FieldsControllerTest extends TestCase
         $this->post('/delete_field', ['id' => 999999 ]);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
 
@@ -266,8 +266,8 @@ class FieldsControllerTest extends TestCase
 
         $this
         ->post('/delete_field', ['id' => $field->id])
-        ->seeStatusCode(422)
-        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Cannot be deleted: It is being used']]);
     }
 
     // required - create
@@ -276,7 +276,7 @@ class FieldsControllerTest extends TestCase
     {
         $this->post('/new_field', [], ['Accept' => 'application/json']);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
@@ -284,9 +284,9 @@ class FieldsControllerTest extends TestCase
         $this->assertArrayHasKey('description', $errors);
         $this->assertArrayHasKey('input_type', $errors);
         
-        $this->assertEquals(["A field name is required."], $errors['name']);
-        $this->assertEquals(["A field description is required."], $errors['description']);
-        $this->assertEquals(["An input type is required."], $errors['input_type']);
+        $this->assertEquals("A field name is required.", $errors['name']);
+        $this->assertEquals("A field description is required.", $errors['description']);
+        $this->assertEquals("An input type is required.", $errors['input_type']);
         
     }
     
@@ -300,7 +300,7 @@ class FieldsControllerTest extends TestCase
         
         $this->post('/edit_field', ['id' => $field->id], ['Accept' => 'application/json']);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
@@ -308,9 +308,9 @@ class FieldsControllerTest extends TestCase
         $this->assertArrayHasKey('description', $errors);
         $this->assertArrayHasKey('input_type', $errors);
         
-        $this->assertEquals(["A field name is required."], $errors['name']);
-        $this->assertEquals(["A field description is required."], $errors['description']);
-        $this->assertEquals(["An input type is required."], $errors['input_type']);
+        $this->assertEquals("A field name is required.", $errors['name']);
+        $this->assertEquals("A field description is required.", $errors['description']);
+        $this->assertEquals("An input type is required.", $errors['input_type']);
         
     }
     
@@ -330,15 +330,15 @@ class FieldsControllerTest extends TestCase
         'filter_val' => 'foo_val',        
         ]);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('description', $errors);
         
-        $this->assertEquals(["That field name has already been used."], $errors['name']);
-        $this->assertEquals(["That field description has already been used."], $errors['description']);
+        $this->assertEquals("That field name has already been used.", $errors['name']);
+        $this->assertEquals("That field description has already been used.", $errors['description']);
         
     }
     
@@ -362,15 +362,15 @@ class FieldsControllerTest extends TestCase
         ]);
         
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('description', $errors);
         
-        $this->assertEquals(["That field name has already been used."], $errors['name']);
-        $this->assertEquals(["That field description has already been used."], $errors['description']);
+        $this->assertEquals("That field name has already been used.", $errors['name']);
+        $this->assertEquals("That field description has already been used.", $errors['description']);
         
     }
     
