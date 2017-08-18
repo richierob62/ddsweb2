@@ -127,8 +127,8 @@ class HeadingsControllerTest extends TestCase
     {
         $this
         ->post('/heading', ['id' => 999999])
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     /** @test **/
@@ -149,7 +149,7 @@ class HeadingsControllerTest extends TestCase
         $this->assertTrue($data['id'] > 0);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['created' => true])
         ->seeInDatabase('headings', ['name' => $name]);
         
@@ -172,7 +172,7 @@ class HeadingsControllerTest extends TestCase
         $this->assertArrayHasKey('data', $body);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['updated' => true, 'id' => $id])
         ->seeInDatabase('headings', ['name' => $name ]);
         
@@ -188,8 +188,8 @@ class HeadingsControllerTest extends TestCase
         $this->post('/edit_heading', $updated);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     
@@ -204,7 +204,7 @@ class HeadingsControllerTest extends TestCase
         
         $this
         ->post('/delete_heading', ['id' => $id])
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['deleted' => true]);
         
         $data = json_decode($this->response->getContent(), true);
@@ -219,8 +219,8 @@ class HeadingsControllerTest extends TestCase
         $this->post('/delete_heading', ['id' => 999999 ]);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
 
 
@@ -265,8 +265,8 @@ class HeadingsControllerTest extends TestCase
 
         $this
         ->post('/delete_heading', ['id' => $heading->id])
-        ->seeStatusCode(422)
-        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Cannot be deleted: It is being used']]);
     }
 
 
@@ -276,7 +276,7 @@ class HeadingsControllerTest extends TestCase
     {
         $this->post('/new_heading', [], ['Accept' => 'application/json']);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
@@ -284,9 +284,9 @@ class HeadingsControllerTest extends TestCase
         $this->assertArrayHasKey('heading_num', $errors);
         $this->assertArrayHasKey('sort_name', $errors);
         
-        $this->assertEquals(["A heading name is required."], $errors['name']);
-        $this->assertEquals(["A heading number is required."], $errors['heading_num']);
-        $this->assertEquals(["A sort heading is required."], $errors['sort_name']);
+        $this->assertEquals("A heading name is required.", $errors['name']);
+        $this->assertEquals("A heading number is required.", $errors['heading_num']);
+        $this->assertEquals("A sort heading is required.", $errors['sort_name']);
         
     }
     
@@ -300,7 +300,7 @@ class HeadingsControllerTest extends TestCase
         
         $this->post('/edit_heading', ['id' => $heading->id], ['Accept' => 'application/json']);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
@@ -308,9 +308,9 @@ class HeadingsControllerTest extends TestCase
         $this->assertArrayHasKey('heading_num', $errors);
         $this->assertArrayHasKey('sort_name', $errors);
         
-        $this->assertEquals(["A heading name is required."], $errors['name']);
-        $this->assertEquals(["A heading number is required."], $errors['heading_num']);
-        $this->assertEquals(["A sort heading is required."], $errors['sort_name']);
+        $this->assertEquals("A heading name is required.", $errors['name']);
+        $this->assertEquals("A heading number is required.", $errors['heading_num']);
+        $this->assertEquals("A sort heading is required.", $errors['sort_name']);
         
     }
     
@@ -324,7 +324,7 @@ class HeadingsControllerTest extends TestCase
         
         $this->post('/new_heading', $new);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
@@ -333,9 +333,9 @@ class HeadingsControllerTest extends TestCase
         $this->assertArrayHasKey('heading_num', $errors);
         $this->assertArrayHasKey('sort_name', $errors);
         
-        $this->assertEquals(["That heading name has already been used."], $errors['name']);
-        $this->assertEquals(["That heading number has already been used."], $errors['heading_num']);
-        $this->assertEquals(["That sort heading has already been used."], $errors['sort_name']);
+        $this->assertEquals("That heading name has already been used.", $errors['name']);
+        $this->assertEquals("That heading number has already been used.", $errors['heading_num']);
+        $this->assertEquals("That sort heading has already been used.", $errors['sort_name']);
         
         
     }
@@ -358,7 +358,7 @@ class HeadingsControllerTest extends TestCase
         ]);
         
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
@@ -366,9 +366,9 @@ class HeadingsControllerTest extends TestCase
         $this->assertArrayHasKey('heading_num', $errors);
         $this->assertArrayHasKey('sort_name', $errors);
         
-        $this->assertEquals(["That heading name has already been used."], $errors['name']);
-        $this->assertEquals(["That heading number has already been used."], $errors['heading_num']);
-        $this->assertEquals(["That sort heading has already been used."], $errors['sort_name']);
+        $this->assertEquals("That heading name has already been used.", $errors['name']);
+        $this->assertEquals("That heading number has already been used.", $errors['heading_num']);
+        $this->assertEquals("That sort heading has already been used.", $errors['sort_name']);
         
     }
     
@@ -397,13 +397,13 @@ class HeadingsControllerTest extends TestCase
         
         $this->post('/new_heading', $new);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('page_type_id', $errors);
         
-        $this->assertEquals(["You must select a valid page type."], $errors['page_type_id']);
+        $this->assertEquals("You must select a valid page type.", $errors['page_type_id']);
     }
     
     
@@ -417,13 +417,13 @@ class HeadingsControllerTest extends TestCase
         
         $this->post('/edit_heading', $heading);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('page_type_id', $errors);
         
-        $this->assertEquals(["You must select a valid page type."], $errors['page_type_id']);
+        $this->assertEquals("You must select a valid page type.", $errors['page_type_id']);
     }
     
 }

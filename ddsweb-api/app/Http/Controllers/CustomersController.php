@@ -92,7 +92,7 @@ class CustomersController extends Controller
             return response()->json([
                 'created' => true,
                 'data' => $customer->toArray(),
-            ], 201);
+            ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json(['errors' => ['Not Created']]);
         };
@@ -124,7 +124,7 @@ class CustomersController extends Controller
         return response()->json([
             'updated' => true,
             'data' => $customer->toArray(),
-        ], 201);
+        ], 200);
     }
 
     public function deleteCustomer(Request $request)

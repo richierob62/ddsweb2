@@ -158,7 +158,7 @@ class CustomersControllerTest extends TestCase
         $this->assertTrue($data['id'] > 0);
 
         $this
-            ->seeStatusCode(201)
+            ->seeStatusCode(200)
             ->seeJson(['created' => true])
             ->seeInDatabase('customers', ['name' => $name]);
 
@@ -181,7 +181,7 @@ class CustomersControllerTest extends TestCase
         $this->assertArrayHasKey('data', $body);
 
         $this
-            ->seeStatusCode(201)
+            ->seeStatusCode(200)
             ->seeJson(['updated' => true, 'id' => $id])
             ->seeInDatabase('customers', ['name' => $name]);
 

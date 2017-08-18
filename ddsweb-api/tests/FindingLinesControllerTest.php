@@ -63,6 +63,7 @@ class FindingLinesControllerTest extends TestCase
         'sort_dir' => 'desc'
         ]);
         $data = json_decode($this->response->getContent(), true)['data'];
+
         $this->assertEquals(1, sizeOf($data));
         
         $this->post('/finding_lines', [
@@ -118,8 +119,8 @@ class FindingLinesControllerTest extends TestCase
     {
         $this
         ->post('/finding_line', ['id' => 999999])
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     /** @test **/
@@ -140,7 +141,7 @@ class FindingLinesControllerTest extends TestCase
         $this->assertTrue($data['id'] > 0);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['created' => true])
         ->seeInDatabase('finding_lines', [
         'name' => 'foo',
@@ -166,7 +167,7 @@ class FindingLinesControllerTest extends TestCase
         $this->assertArrayHasKey('data', $body);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['updated' => true, 'id' => $id])
         ->seeInDatabase('finding_lines', ['name' => 'foo_edited']);
         
@@ -183,8 +184,8 @@ class FindingLinesControllerTest extends TestCase
         ]);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     
@@ -199,7 +200,7 @@ class FindingLinesControllerTest extends TestCase
         
         $this
         ->post('/delete_finding_line', ['id' => $id])
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['deleted' => true]);
         
         $data = json_decode($this->response->getContent(), true);
@@ -214,8 +215,8 @@ class FindingLinesControllerTest extends TestCase
         $this->post('/delete_finding_line', ['id' => 999999 ]);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
 
 
@@ -260,8 +261,8 @@ class FindingLinesControllerTest extends TestCase
 
         $this
         ->post('/delete_finding_line', ['id' => $finding_line->id])
-        ->seeStatusCode(422)
-        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Cannot be deleted: It is being used']]);
     }
 
 
@@ -271,15 +272,15 @@ class FindingLinesControllerTest extends TestCase
     {
         $this->post('/new_finding_line', [], ['Accept' => 'application/json']);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["A finding line name is required."], $errors['name']);
-        $this->assertEquals(["A finding line code is required."], $errors['code']);
+        $this->assertEquals("A finding line name is required.", $errors['name']);
+        $this->assertEquals("A finding line code is required.", $errors['code']);
         
     }
     
@@ -293,15 +294,15 @@ class FindingLinesControllerTest extends TestCase
         
         $this->post('/edit_finding_line', ['id' => $finding_line->id], ['Accept' => 'application/json']);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["A finding line name is required."], $errors['name']);
-        $this->assertEquals(["A finding line code is required."], $errors['code']);
+        $this->assertEquals("A finding line name is required.", $errors['name']);
+        $this->assertEquals("A finding line code is required.", $errors['code']);
         
     }
     
@@ -320,7 +321,7 @@ class FindingLinesControllerTest extends TestCase
         'name' => 'foo'
         ]);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
@@ -328,8 +329,8 @@ class FindingLinesControllerTest extends TestCase
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["That name has already been used."], $errors['name']);
-        $this->assertEquals(["That code has already been used."], $errors['code']);
+        $this->assertEquals("That name has already been used.", $errors['name']);
+        $this->assertEquals("That code has already been used.", $errors['code']);
         
     }
     
@@ -349,15 +350,15 @@ class FindingLinesControllerTest extends TestCase
         ]);
         
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["That code has already been used."], $errors['code']);
-        $this->assertEquals(["That name has already been used."], $errors['name']);
+        $this->assertEquals("That code has already been used.", $errors['code']);
+        $this->assertEquals("That name has already been used.", $errors['name']);
         
     }
     
