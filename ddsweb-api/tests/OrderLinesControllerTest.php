@@ -118,7 +118,7 @@ class OrderLinesControllerTest extends TestCase
         $this->assertTrue($data['id'] > 0);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['created' => true])
         ->seeInDatabase('order_lines', ['order_id' => $order_id]);
         
@@ -142,7 +142,7 @@ class OrderLinesControllerTest extends TestCase
         $this->assertArrayHasKey('data', $body);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['updated' => true, 'id' => $id])
         ->seeInDatabase('order_lines', ['udac_id' => $udac_id ]);
         
@@ -154,8 +154,8 @@ class OrderLinesControllerTest extends TestCase
     {
         $this
         ->post('/order_line', ['id' => 999999])
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     /** @test **/
@@ -169,7 +169,7 @@ class OrderLinesControllerTest extends TestCase
         
         $this
         ->post('/delete_order_line', ['id' => $id])
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['deleted' => true]);
         
         $data = json_decode($this->response->getContent(), true);
@@ -189,8 +189,8 @@ class OrderLinesControllerTest extends TestCase
         $this->post('/edit_order_line', $updated);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     /** @test **/
@@ -199,8 +199,8 @@ class OrderLinesControllerTest extends TestCase
         $this->post('/delete_order_line', ['id' => 999999 ]);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     // required - create
@@ -209,15 +209,15 @@ class OrderLinesControllerTest extends TestCase
     {
         $this->post('/new_order_line', [], ['Accept' => 'application/json']);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('udac_id', $errors);
         $this->assertArrayHasKey('order_id', $errors);
         
-        $this->assertEquals(["A udac is required."], $errors['udac_id']);
-        $this->assertEquals(["An order number is required."], $errors['order_id']);
+        $this->assertEquals("A udac is required.", $errors['udac_id']);
+        $this->assertEquals("An order number is required.", $errors['order_id']);
         
     }
     
@@ -230,15 +230,15 @@ class OrderLinesControllerTest extends TestCase
         
         $this->post('/edit_order_line', ['id' => $order_line->id]);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('udac_id', $errors);
         $this->assertArrayHasKey('order_id', $errors);
         
-        $this->assertEquals(["A udac is required."], $errors['udac_id']);
-        $this->assertEquals(["An order number is required."], $errors['order_id']);
+        $this->assertEquals("A udac is required.", $errors['udac_id']);
+        $this->assertEquals("An order number is required.", $errors['order_id']);
         
     }
     
@@ -252,15 +252,15 @@ class OrderLinesControllerTest extends TestCase
         
         $this->post('/new_order_line', $new);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('order_id', $errors);
         $this->assertArrayHasKey('udac_id', $errors);
         
-        $this->assertEquals(["You must select a valid order number."], $errors['order_id']);
-        $this->assertEquals(["You must select a valid udac."], $errors['udac_id']);
+        $this->assertEquals("You must select a valid order number.", $errors['order_id']);
+        $this->assertEquals("You must select a valid udac.", $errors['udac_id']);
     }
     
     // type - edit
@@ -274,15 +274,15 @@ class OrderLinesControllerTest extends TestCase
         
         $this->post('/edit_order_line', $order_line);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('order_id', $errors);
         $this->assertArrayHasKey('udac_id', $errors);
         
-        $this->assertEquals(["You must select a valid order number."], $errors['order_id']);
-        $this->assertEquals(["You must select a valid udac."], $errors['udac_id']);
+        $this->assertEquals("You must select a valid order number.", $errors['order_id']);
+        $this->assertEquals("You must select a valid udac.", $errors['udac_id']);
     }
     
     // $app->post('edit_udac_data', 'OrderLinesController@editUdacData');

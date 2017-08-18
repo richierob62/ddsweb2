@@ -118,8 +118,8 @@ class LocalForeignsControllerTest extends TestCase
     {
         $this
         ->post('/local_foreign', ['id' => 999999])
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     /** @test **/
@@ -140,7 +140,7 @@ class LocalForeignsControllerTest extends TestCase
         $this->assertTrue($data['id'] > 0);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['created' => true])
         ->seeInDatabase('local_foreigns', [
         'name' => 'foo',
@@ -166,7 +166,7 @@ class LocalForeignsControllerTest extends TestCase
         $this->assertArrayHasKey('data', $body);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['updated' => true, 'id' => $id])
         ->seeInDatabase('local_foreigns', ['name' => 'foo_edited']);
         
@@ -183,8 +183,8 @@ class LocalForeignsControllerTest extends TestCase
         ]);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     
@@ -199,7 +199,7 @@ class LocalForeignsControllerTest extends TestCase
         
         $this
         ->post('/delete_local_foreign', ['id' => $id])
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['deleted' => true]);
         
         $data = json_decode($this->response->getContent(), true);
@@ -214,8 +214,8 @@ class LocalForeignsControllerTest extends TestCase
         $this->post('/delete_local_foreign', ['id' => 999999 ]);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
 
 
@@ -230,8 +230,8 @@ class LocalForeignsControllerTest extends TestCase
 
         $this
         ->post('/delete_local_foreign', ['id' => $local_foreign->id])
-        ->seeStatusCode(422)
-        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Cannot be deleted: It is being used']]);
     }
 
 
@@ -242,15 +242,15 @@ class LocalForeignsControllerTest extends TestCase
     {
         $this->post('/new_local_foreign', [], ['Accept' => 'application/json']);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["A local\/foreign name is required."], $errors['name']);
-        $this->assertEquals(["A local\/foreign code is required."], $errors['code']);
+        $this->assertEquals("A local\/foreign name is required.", $errors['name']);
+        $this->assertEquals("A local\/foreign code is required.", $errors['code']);
         
     }
     
@@ -264,15 +264,15 @@ class LocalForeignsControllerTest extends TestCase
         
         $this->post('/edit_local_foreign', ['id' => $local_foreign->id], ['Accept' => 'application/json']);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["A local\/foreign name is required."], $errors['name']);
-        $this->assertEquals(["A local\/foreign code is required."], $errors['code']);
+        $this->assertEquals("A local\/foreign name is required.", $errors['name']);
+        $this->assertEquals("A local\/foreign code is required.", $errors['code']);
         
     }
     
@@ -291,7 +291,7 @@ class LocalForeignsControllerTest extends TestCase
         'name' => 'foo'
         ]);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
@@ -299,8 +299,8 @@ class LocalForeignsControllerTest extends TestCase
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["That name has already been used."], $errors['name']);
-        $this->assertEquals(["That code has already been used."], $errors['code']);
+        $this->assertEquals("That name has already been used.", $errors['name']);
+        $this->assertEquals("That code has already been used.", $errors['code']);
         
     }
     
@@ -320,15 +320,15 @@ class LocalForeignsControllerTest extends TestCase
         ]);
         
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["That code has already been used."], $errors['code']);
-        $this->assertEquals(["That name has already been used."], $errors['name']);
+        $this->assertEquals("That code has already been used.", $errors['code']);
+        $this->assertEquals("That name has already been used.", $errors['name']);
         
     }
     

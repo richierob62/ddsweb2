@@ -8,14 +8,16 @@ class LocalForeign extends Model
 {
     protected $guarded = [];
     
-    static public function rules($id = null) {
+    public static function rules($id = null)
+    {
         return [
         'name' => 'required|unique:local_foreigns,name,'.$id,
         'code' => 'required|unique:local_foreigns,code,'.$id
         ];
     }
     
-    static public function errorMessages() {
+    public static function errorMessages()
+    {
         return [
         'name.unique' => 'That name has already been used.',
         'name.required' => 'A local\/foreign name is required.',
@@ -24,37 +26,43 @@ class LocalForeign extends Model
         ];
     }
 
-    public function okToDelete() {
+    public function okToDelete()
+    {
         return $this->customers()->count() == 0;
     }
 
-    public function customers() { return $this->hasMany(Customer::class);  }
-    
-    static public function scopeFilterOn($query, $key, $filter)
+    public function customers()
     {
-        switch ($key) {
-            case 'name':
-                $query->where('name', 'LIKE', '%'.$filter.'%');
-                break;
-            case 'code':
-                $query->where('code', 'LIKE', '%'.$filter.'%');
-                break;
-            case 'id':
-                $query->where('id', $filter);
-                break;
-            default:
-                $query;
-        }
+        return $this->hasMany(Customer::class);
     }
     
-    static public function orderField($sort_name) {
+    public static function buildFilter($filters)
+    {
+        $filter_array = [];
+        foreach ($filters as $key => $filter) {
+            switch ($key) {
+                case 'name':
+                    $filter_array[] = ['local_foreigns.name', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'code':
+                    $filter_array[] = ['local_foreigns.code', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'id':
+                    $filter_array[] = ['local_foreigns.id', '=', $filter];
+                    break;
+            }
+        }
+        return $filter_array;
+    }
+    
+    public static function orderField($sort_name)
+    {
         switch ($sort_name) {
             case 'foo':
             return 'huh';
             break;
             default:
             return $sort_name;
-        }  
+        }
     }
-    
 }
