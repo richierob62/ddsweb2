@@ -7,112 +7,129 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $guarded = [];
-    
+
     protected $dates = [
-    'created_at',
-    'updated_at',
-    'deleted_at',
-    // 'order_date'
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        // 'order_date'
     ];
-    
-    static public function rules($id = null) {
-        return [
-        'order_num' => 'required|unique:orders,order_num,'.$id,
-        'order_date' => 'required|date',
-        'primary_book_id'  => 'required|exists:primary_books,id',
-        'customer_id' => 'required|exists:customers,id',
-        'order_status_id' => 'required|exists:order_statuses,id',
-        'sales_rep_id' => 'required|exists:sales_reps,id'
-        ];
-    }
-    
-    static public function errorMessages() {
-        return [
-        'order_num.unique' => 'That order number has already been used.',
-        
-        'order_num.required' => 'An order number is required.',
-        'order_date.required' => 'An order date is required.',
-        
-        'primary_book_id.exists' => 'You must select a primary book.',
-        'customer_id.exists' => 'You must select a customer.',
-        'order_status_id.exists' => 'You must select an order status.',
-        'sales_rep_id.exists' => 'You must select a sales rep.',
-        
-        'primary_book_id.required' => 'You must select a primary book.',
-        'customer_id.required' => 'You must select a customer.',
-        'order_status_id.required' => 'You must select an order status.',
-        'sales_rep_id.required' => 'You must select a sales rep.',
-        
-        'order_date.date' => 'The order date must be a valid date.',
-        
-        ];
-    }
-    
-    public function primary_book() { return $this->belongsTo(PrimaryBook::class, 'primary_book_id');  }
-    public function customer() { return $this->belongsTo(Customer::class, 'customer_id');  }
-    public function order_status() { return $this->belongsTo(OrderStatus::class, 'order_status_id');  }
-    public function sales_rep() { return $this->belongsTo(SalesRep::class, 'sales_rep_id');  }
-    public function order_lines() { return $this->hasMany(OrderLine::class);  }
-    
-    static public function scopeFilterOn($query, $key, $filter)
+
+    public static function rules($id = null)
     {
-        switch ($key) {
-            case 'order_num':
-                return $query->where('order_num', 'LIKE', '%'.$filter.'%');
-                break;
-            case 'order_date':
-                return $query->where('order_date', 'LIKE', '%'.$filter.'%');
+        return [
+            'order_num' => 'required|unique:orders,order_num,' . $id,
+            'order_date' => 'required|date',
+            'primary_book_id' => 'required|exists:primary_books,id',
+            'customer_id' => 'required|exists:customers,id',
+            'order_status_id' => 'required|exists:order_statuses,id',
+            'sales_rep_id' => 'required|exists:sales_reps,id',
+        ];
+    }
+
+    public static function errorMessages()
+    {
+        return [
+            'order_num.unique' => 'That order number has already been used.',
+
+            'order_num.required' => 'An order number is required.',
+            'order_date.required' => 'An order date is required.',
+
+            'primary_book_id.exists' => 'You must select a primary book.',
+            'customer_id.exists' => 'You must select a customer.',
+            'order_status_id.exists' => 'You must select an order status.',
+            'sales_rep_id.exists' => 'You must select a sales rep.',
+
+            'primary_book_id.required' => 'You must select a primary book.',
+            'customer_id.required' => 'You must select a customer.',
+            'order_status_id.required' => 'You must select an order status.',
+            'sales_rep_id.required' => 'You must select a sales rep.',
+
+            'order_date.date' => 'The order date must be a valid date.',
+
+        ];
+    }
+
+    public function primary_book()
+    {
+        return $this->belongsTo(PrimaryBook::class, 'primary_book_id');
+    }
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
+    public function order_status()
+    {
+        return $this->belongsTo(OrderStatus::class, 'order_status_id');
+    }
+    public function sales_rep()
+    {
+        return $this->belongsTo(SalesRep::class, 'sales_rep_id');
+    }
+    public function order_lines()
+    {
+        return $this->hasMany(OrderLine::class);
+    }
+
+    public static function buildFilter($filters)
+    {
+        $filter_array = [];
+        foreach ($filters as $key => $filter) {
+            switch ($key) {
+                case 'order_num':
+                    $filter_array[] = ['orders.order_num', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'order_date':
+                    $filter_array[] = ['orders.order_date', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'primary_book':
+                    $filter_array[] = ['primary_books.name', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'customer':
+                    $filter_array[] = ['customers.name', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'order_status':
+                    $filter_array[] = ['order_statuses.name', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'sales_rep':
+                    $filter_array[] = ['sales_reps.name', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'id':
+                    $filter_array[] = ['orders.id', '=', $filter];
+                    break;
+            }
+        }
+        return $filter_array;
+    }
+
+    public static function orderField($sort_name)
+    {
+        switch ($sort_name) {
+            case 'sales_rep':
+                return 'sales_reps.name';
                 break;
             case 'primary_book':
-                return $query->whereHas('primary_book', function($q) use ($filter) {
-                    $q->where('name', 'LIKE', '%'.$filter.'%');
-            });
-            break;
+                return 'primary_books.name';
+                break;
             case 'customer':
-                return $query->whereHas('customer', function($q) use ($filter) {
-                    $q->where('name', 'LIKE', '%'.$filter.'%');
-            });
-            break;
+                return 'customers.name';
+                break;
             case 'order_status':
-                return $query->whereHas('order_status', function($q) use ($filter) {
-                    $q->where('name', 'LIKE', '%'.$filter.'%');
-            });
-            break;
-            case 'sales_rep':
-                return $query->whereHas('sales_rep', function($q) use ($filter) {
-                    $q->where('name', 'LIKE', '%'.$filter.'%');
-            });
-            break;
-            case 'id':
-                return $query->where('id', $filter);
+                return 'order_statuses.name';
                 break;
             default:
-                return $query;
+                return $sort_name;
         }
     }
 
-    static public function orderField($sort_name) {
-        switch ($sort_name) {
-            case 'sales_rep':
-            return 'sales_reps.name';
-            break;
-            case 'primary_book':
-            return 'primary_books.name';
-            break;
-            case 'customer':
-            return 'customers.name';
-            break;
-            case 'order_status':
-            return 'order_statuses.name';
-            break;
-            default:
-            return $sort_name;
-        }  
+    public function okToDelete()
+    {
+        return true;
     }
 
-    public function deleteOrderAndLines() {
+    public function deleteOrderAndLines()
+    {
         OrderLine::where('order_id', $this->id)->delete();
         $this->delete();
     }
-
 }
