@@ -3,6 +3,7 @@
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
+
 class OrderStatusesControllerTest extends TestCase
 {
     use DatabaseMigrations;
@@ -118,8 +119,8 @@ class OrderStatusesControllerTest extends TestCase
     {
         $this
         ->post('/order_status', ['id' => 999999])
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     /** @test **/
@@ -140,7 +141,7 @@ class OrderStatusesControllerTest extends TestCase
         $this->assertTrue($data['id'] > 0);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['created' => true])
         ->seeInDatabase('order_statuses', [
         'name' => 'foo',
@@ -166,7 +167,7 @@ class OrderStatusesControllerTest extends TestCase
         $this->assertArrayHasKey('data', $body);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['updated' => true, 'id' => $id])
         ->seeInDatabase('order_statuses', ['name' => 'foo_edited']);
         
@@ -183,8 +184,8 @@ class OrderStatusesControllerTest extends TestCase
         ]);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     
@@ -199,7 +200,7 @@ class OrderStatusesControllerTest extends TestCase
         
         $this
         ->post('/delete_order_status', ['id' => $id])
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['deleted' => true]);
         
         $data = json_decode($this->response->getContent(), true);
@@ -214,8 +215,8 @@ class OrderStatusesControllerTest extends TestCase
         $this->post('/delete_order_status', ['id' => 999999 ]);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
 
 
@@ -230,8 +231,8 @@ class OrderStatusesControllerTest extends TestCase
 
         $this
         ->post('/delete_order_status', ['id' => $order_status->id])
-        ->seeStatusCode(422)
-        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Cannot be deleted: It is being used']]);
     }
 
 
@@ -242,15 +243,15 @@ class OrderStatusesControllerTest extends TestCase
     {
         $this->post('/new_order_status', [], ['Accept' => 'application/json']);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["An order status name is required."], $errors['name']);
-        $this->assertEquals(["An order status code is required."], $errors['code']);
+        $this->assertEquals("An order status name is required.", $errors['name']);
+        $this->assertEquals("An order status code is required.", $errors['code']);
         
     }
     
@@ -264,15 +265,15 @@ class OrderStatusesControllerTest extends TestCase
         
         $this->post('/edit_order_status', ['id' => $order_status->id], ['Accept' => 'application/json']);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["An order status name is required."], $errors['name']);
-        $this->assertEquals(["An order status code is required."], $errors['code']);
+        $this->assertEquals("An order status name is required.", $errors['name']);
+        $this->assertEquals("An order status code is required.", $errors['code']);
         
     }
     
@@ -291,7 +292,7 @@ class OrderStatusesControllerTest extends TestCase
         'name' => 'foo'
         ]);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
@@ -299,8 +300,8 @@ class OrderStatusesControllerTest extends TestCase
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["That name has already been used."], $errors['name']);
-        $this->assertEquals(["That code has already been used."], $errors['code']);
+        $this->assertEquals("That name has already been used.", $errors['name']);
+        $this->assertEquals("That code has already been used.", $errors['code']);
         
     }
     
@@ -320,15 +321,15 @@ class OrderStatusesControllerTest extends TestCase
         ]);
         
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["That code has already been used."], $errors['code']);
-        $this->assertEquals(["That name has already been used."], $errors['name']);
+        $this->assertEquals("That code has already been used.", $errors['code']);
+        $this->assertEquals("That name has already been used.", $errors['name']);
         
     }
     

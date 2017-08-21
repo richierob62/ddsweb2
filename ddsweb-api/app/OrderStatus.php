@@ -8,14 +8,16 @@ class OrderStatus extends Model
 {
     protected $guarded = [];
     
-    static public function rules($id = null) {
+    public static function rules($id = null)
+    {
         return [
         'name' => 'required|unique:order_statuses,name,'.$id,
         'code' => 'required|unique:order_statuses,code,'.$id
         ];
     }
     
-    static public function errorMessages() {
+    public static function errorMessages()
+    {
         return [
         'name.unique' => 'That name has already been used.',
         'name.required' => 'An order status name is required.',
@@ -25,36 +27,42 @@ class OrderStatus extends Model
     }
 
 
-    public function okToDelete() {
+    public function okToDelete()
+    {
         return $this->orders()->count() == 0;
     }
-    public function orders() { return $this->hasMany(Order::class); }
-
-    static public function scopeFilterOn($query, $key, $filter)
+    public function orders()
     {
-        switch ($key) {
-            case 'name':
-                $query->where('name', 'LIKE', '%'.$filter.'%');
-                break;
-            case 'code':
-                $query->where('code', 'LIKE', '%'.$filter.'%');
-                break;
-            case 'id':
-                $query->where('id', $filter);
-                break;
-            default:
-                $query;
+        return $this->hasMany(Order::class);
+    }
+
+    public static function buildFilter($filters)
+    {
+        $filter_array = [];
+        foreach ($filters as $key => $filter) {
+            switch ($key) {
+                case 'name':
+                    $filter_array[] = ['order_statuses.name', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'code':
+                    $filter_array[] = ['order_statuses.code', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'id':
+                    $filter_array[] = ['order_statuses.id', '=', $filter];
+                    break;
+            }
         }
+        return $filter_array;
     }
     
-    static public function orderField($sort_name) {
+    public static function orderField($sort_name)
+    {
         switch ($sort_name) {
             case 'foo':
             return 'huh';
             break;
             default:
             return $sort_name;
-        }  
+        }
     }
-    
 }
