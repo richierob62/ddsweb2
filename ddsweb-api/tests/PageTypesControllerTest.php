@@ -118,8 +118,8 @@ class PageTypesControllerTest extends TestCase
     {
         $this
         ->post('/page_type', ['id' => 999999])
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     /** @test **/
@@ -140,7 +140,7 @@ class PageTypesControllerTest extends TestCase
         $this->assertTrue($data['id'] > 0);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['created' => true])
         ->seeInDatabase('page_types', [
         'name' => 'foo',
@@ -166,7 +166,7 @@ class PageTypesControllerTest extends TestCase
         $this->assertArrayHasKey('data', $body);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['updated' => true, 'id' => $id])
         ->seeInDatabase('page_types', ['name' => 'foo_edited']);
         
@@ -183,8 +183,8 @@ class PageTypesControllerTest extends TestCase
         ]);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     
@@ -199,7 +199,7 @@ class PageTypesControllerTest extends TestCase
         
         $this
         ->post('/delete_page_type', ['id' => $id])
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['deleted' => true]);
         
         $data = json_decode($this->response->getContent(), true);
@@ -214,8 +214,8 @@ class PageTypesControllerTest extends TestCase
         $this->post('/delete_page_type', ['id' => 999999 ]);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
 
 
@@ -231,8 +231,8 @@ class PageTypesControllerTest extends TestCase
 
         $this
         ->post('/delete_page_type', ['id' => $page_type->id])
-        ->seeStatusCode(422)
-        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Cannot be deleted: It is being used']]);
     }
 
     /** @test **/
@@ -246,8 +246,8 @@ class PageTypesControllerTest extends TestCase
 
         $this
         ->post('/delete_page_type', ['id' => $page_type->id])
-        ->seeStatusCode(422)
-        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Cannot be deleted: It is being used']]);
     }
 
 
@@ -257,15 +257,15 @@ class PageTypesControllerTest extends TestCase
     {
         $this->post('/new_page_type', [], ['Accept' => 'application/json']);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["A page type name is required."], $errors['name']);
-        $this->assertEquals(["A page type code is required."], $errors['code']);
+        $this->assertEquals("A page type name is required.", $errors['name']);
+        $this->assertEquals("A page type code is required.", $errors['code']);
         
     }
     
@@ -279,15 +279,15 @@ class PageTypesControllerTest extends TestCase
         
         $this->post('/edit_page_type', ['id' => $page_type->id], ['Accept' => 'application/json']);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["A page type name is required."], $errors['name']);
-        $this->assertEquals(["A page type code is required."], $errors['code']);
+        $this->assertEquals("A page type name is required.", $errors['name']);
+        $this->assertEquals("A page type code is required.", $errors['code']);
         
     }
     
@@ -306,7 +306,7 @@ class PageTypesControllerTest extends TestCase
         'name' => 'foo'
         ]);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
@@ -314,8 +314,8 @@ class PageTypesControllerTest extends TestCase
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["That name has already been used."], $errors['name']);
-        $this->assertEquals(["That code has already been used."], $errors['code']);
+        $this->assertEquals("That name has already been used.", $errors['name']);
+        $this->assertEquals("That code has already been used.", $errors['code']);
         
     }
     
@@ -335,15 +335,15 @@ class PageTypesControllerTest extends TestCase
         ]);
         
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["That code has already been used."], $errors['code']);
-        $this->assertEquals(["That name has already been used."], $errors['name']);
+        $this->assertEquals("That code has already been used.", $errors['code']);
+        $this->assertEquals("That name has already been used.", $errors['name']);
         
     }
     

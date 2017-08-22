@@ -8,14 +8,16 @@ class PageType extends Model
 {
     protected $guarded = [];
     
-    static public function rules($id = null) {
+    public static function rules($id = null)
+    {
         return [
         'name' => 'required|unique:page_types,name,'.$id,
         'code' => 'required|unique:page_types,code,'.$id
         ];
     }
     
-    static public function errorMessages() {
+    public static function errorMessages()
+    {
         return [
         'name.unique' => 'That name has already been used.',
         'name.required' => 'A page type name is required.',
@@ -24,38 +26,47 @@ class PageType extends Model
         ];
     }
 
-    public function okToDelete() {
+    public function okToDelete()
+    {
         return ($this->ad_types()->count() == 0) && ($this->headings()->count() == 0);
     }
-    public function ad_types() { return $this->hasMany(AdType::class); }
-
-    public function headings() { return $this->hasMany(Heading::class);  }
-    
-    static public function scopeFilterOn($query, $key, $filter)
+    public function ad_types()
     {
-        switch ($key) {
-            case 'name':
-                $query->where('name', 'LIKE', '%'.$filter.'%');
-                break;
-            case 'code':
-                $query->where('code', 'LIKE', '%'.$filter.'%');
-                break;
-            case 'id':
-                $query->where('id', $filter);
-                break;
-            default:
-                $query;
-        }
+        return $this->hasMany(AdType::class);
+    }
+
+    public function headings()
+    {
+        return $this->hasMany(Heading::class);
     }
     
-    static public function orderField($sort_name) {
+    public static function buildFilter($filters)
+    {
+        $filter_array = [];
+        foreach ($filters as $key => $filter) {
+            switch ($key) {
+                case 'name':
+                    $filter_array[] = ['page_types.name', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'code':
+                    $filter_array[] = ['page_types.code', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'id':
+                    $filter_array[] = ['page_types.id', '=', $filter];
+                    break;
+            }
+        }
+        return $filter_array;
+    }
+    
+    public static function orderField($sort_name)
+    {
         switch ($sort_name) {
             case 'foo':
             return 'huh';
             break;
             default:
             return $sort_name;
-        }  
+        }
     }
-    
 }
