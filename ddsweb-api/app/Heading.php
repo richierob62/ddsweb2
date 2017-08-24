@@ -80,31 +80,6 @@ class Heading extends Model
         return $filter_array;
     }
 
-    public static function scopeFilterOn($query, $key, $filter)
-    {
-        switch ($key) {
-            case 'name':
-                $query->where('name', 'LIKE', '%' . $filter . '%');
-                break;
-            case 'sort_name':
-                $query->where('sort_name', 'LIKE', '%' . $filter . '%');
-                break;
-            case 'heading_num':
-                $query->where('heading_num', 'LIKE', '%' . $filter . '%');
-                break;
-            case 'page_type':
-                $query->whereHas('page_type', function ($q) use ($filter) {
-                    $q->where('name', 'LIKE', '%' . $filter . '%');
-                });
-                break;
-            case 'id':
-                $query->where('id', $filter);
-                break;
-            default:
-                $query;
-        }
-    }
-
     public static function orderField($sort_name)
     {
         switch ($sort_name) {
