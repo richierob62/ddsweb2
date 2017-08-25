@@ -125,8 +125,8 @@ class SourceBooksControllerTest extends TestCase
     {
         $this
         ->post('/source_book', ['id' => 999999])
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     /** @test **/
@@ -155,7 +155,7 @@ class SourceBooksControllerTest extends TestCase
         $this->assertTrue($data['id'] > 0);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['created' => true])
         ->seeInDatabase('source_books', ['name' => 'foo']);
         
@@ -182,7 +182,7 @@ class SourceBooksControllerTest extends TestCase
         $this->assertArrayHasKey('data', $body);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['updated' => true, 'id' => $id])
         ->seeInDatabase('source_books', ['name' => 'foo_edited']);
         
@@ -203,8 +203,8 @@ class SourceBooksControllerTest extends TestCase
         ]);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     
@@ -219,7 +219,7 @@ class SourceBooksControllerTest extends TestCase
         
         $this
         ->post('/delete_source_book', ['id' => $id])
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['deleted' => true]);
         
         $data = json_decode($this->response->getContent(), true);
@@ -234,8 +234,8 @@ class SourceBooksControllerTest extends TestCase
         $this->post('/delete_source_book', ['id' => 999999 ]);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
 
 
@@ -250,8 +250,8 @@ class SourceBooksControllerTest extends TestCase
 
         $this
         ->post('/delete_source_book', ['id' => $source_book->id])
-        ->seeStatusCode(422)
-        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Cannot be deleted: It is being used']]);
     }
 
 
@@ -261,7 +261,7 @@ class SourceBooksControllerTest extends TestCase
     {
         $this->post('/new_source_book', [], ['Accept' => 'application/json']);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
@@ -271,11 +271,11 @@ class SourceBooksControllerTest extends TestCase
         $this->assertArrayHasKey('sales_start', $errors);
         $this->assertArrayHasKey('sales_close', $errors);
         
-        $this->assertEquals(["A source book name is required."], $errors['name']);
-        $this->assertEquals(["A source book code is required."], $errors['code']);
-        $this->assertEquals(["A publication month is required."], $errors['pub_month']);
-        $this->assertEquals(["A sales start date is required."], $errors['sales_start']);
-        $this->assertEquals(["A sales close date is required."], $errors['sales_close']);
+        $this->assertEquals("A source book name is required.", $errors['name']);
+        $this->assertEquals("A source book code is required.", $errors['code']);
+        $this->assertEquals("A publication month is required.", $errors['pub_month']);
+        $this->assertEquals("A sales start date is required.", $errors['sales_start']);
+        $this->assertEquals("A sales close date is required.", $errors['sales_close']);
         
     }
     
@@ -289,7 +289,7 @@ class SourceBooksControllerTest extends TestCase
         
         $this->post('/edit_source_book', ['id' => $source_book->id], ['Accept' => 'application/json']);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
@@ -299,11 +299,11 @@ class SourceBooksControllerTest extends TestCase
         $this->assertArrayHasKey('sales_start', $errors);
         $this->assertArrayHasKey('sales_close', $errors);
         
-        $this->assertEquals(["A source book name is required."], $errors['name']);
-        $this->assertEquals(["A source book code is required."], $errors['code']);
-        $this->assertEquals(["A publication month is required."], $errors['pub_month']);
-        $this->assertEquals(["A sales start date is required."], $errors['sales_start']);
-        $this->assertEquals(["A sales close date is required."], $errors['sales_close']);
+        $this->assertEquals("A source book name is required.", $errors['name']);
+        $this->assertEquals("A source book code is required.", $errors['code']);
+        $this->assertEquals("A publication month is required.", $errors['pub_month']);
+        $this->assertEquals("A sales start date is required.", $errors['sales_start']);
+        $this->assertEquals("A sales close date is required.", $errors['sales_close']);
         
     }
     
@@ -330,7 +330,7 @@ class SourceBooksControllerTest extends TestCase
         'sales_close' => '2017-10-31'
         ]);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
@@ -338,8 +338,8 @@ class SourceBooksControllerTest extends TestCase
         $this->assertArrayHasKey('code', $errors);
         $this->assertArrayHasKey('name', $errors);
         
-        $this->assertEquals(["That code has already been used."], $errors['code']);
-        $this->assertEquals(["That name has already been used."], $errors['name']);
+        $this->assertEquals("That code has already been used.", $errors['code']);
+        $this->assertEquals("That name has already been used.", $errors['name']);
         
     }
     
@@ -359,15 +359,15 @@ class SourceBooksControllerTest extends TestCase
         ]);
         
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('code', $errors);
         $this->assertArrayHasKey('name', $errors);
         
-        $this->assertEquals(["That code has already been used."], $errors['code']);
-        $this->assertEquals(["That name has already been used."], $errors['name']);
+        $this->assertEquals("That code has already been used.", $errors['code']);
+        $this->assertEquals("That name has already been used.", $errors['name']);
         
     }
     
@@ -386,7 +386,7 @@ class SourceBooksControllerTest extends TestCase
         'sales_close' => 'foo'
         ]);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
@@ -394,9 +394,9 @@ class SourceBooksControllerTest extends TestCase
         $this->assertArrayHasKey('sales_start', $errors);
         $this->assertArrayHasKey('sales_close', $errors);
         
-        $this->assertEquals(["Publication month must be a valid date."], $errors['pub_month']);
-        $this->assertEquals(["Sales start must be a valid date."], $errors['sales_start']);
-        $this->assertEquals(["Sales close must be a valid date."], $errors['sales_close']);
+        $this->assertEquals("Publication month must be a valid date.", $errors['pub_month']);
+        $this->assertEquals("Sales start must be a valid date.", $errors['sales_start']);
+        $this->assertEquals("Sales close must be a valid date.", $errors['sales_close']);
     }
     
     
@@ -411,7 +411,7 @@ class SourceBooksControllerTest extends TestCase
         $source_book['sales_close'] = 'foo';
         $this->post('/edit_source_book', $source_book);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
@@ -419,9 +419,9 @@ class SourceBooksControllerTest extends TestCase
         $this->assertArrayHasKey('sales_start', $errors);
         $this->assertArrayHasKey('sales_close', $errors);
         
-        $this->assertEquals(["Publication month must be a valid date."], $errors['pub_month']);
-        $this->assertEquals(["Sales start must be a valid date."], $errors['sales_start']);
-        $this->assertEquals(["Sales close must be a valid date."], $errors['sales_close']);
+        $this->assertEquals("Publication month must be a valid date.", $errors['pub_month']);
+        $this->assertEquals("Sales start must be a valid date.", $errors['sales_start']);
+        $this->assertEquals("Sales close must be a valid date.", $errors['sales_close']);
     }
     
     // type - create

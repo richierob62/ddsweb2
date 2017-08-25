@@ -105,16 +105,16 @@ class Order extends Model
     public static function orderField($sort_name)
     {
         switch ($sort_name) {
-            case 'sales_rep':
+            case 'orders.sales_rep':
                 return 'sales_reps.name';
                 break;
-            case 'primary_book':
+            case 'orders.primary_book':
                 return 'primary_books.name';
                 break;
-            case 'customer':
+            case 'orders.customer':
                 return 'customers.name';
                 break;
-            case 'order_status':
+            case 'orders.order_status':
                 return 'order_statuses.name';
                 break;
             default:

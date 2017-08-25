@@ -61,6 +61,7 @@ class CompensationPlansControllerTest extends TestCase
             'sort_name' => 'name',
             'sort_dir' => 'desc',
         ]);
+
         $data = json_decode($this->response->getContent(), true)['data'];
         $this->assertEquals(1, sizeOf($data));
 
@@ -219,9 +220,9 @@ class CompensationPlansControllerTest extends TestCase
     {
         $compensation_plan = factory(App\CompensationPlan::class)->create();
 
-        $customer = factory(App\Customer::class)->raw();
-        $customer['compensation_plan_id'] = $compensation_plan->id;
-        $this->post('/new_customer', $customer);
+        $sales_rep = factory(App\SalesRep::class)->raw();
+        $sales_rep['compensation_plan_id'] = $compensation_plan->id;
+        $this->post('/new_sales_rep', $sales_rep);
 
         $this
             ->post('/delete_compensation_plan', ['id' => $compensation_plan->id])
@@ -242,8 +243,8 @@ class CompensationPlansControllerTest extends TestCase
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
 
-        $this->assertEquals("A compensation_plan name is required.", $errors['name']);
-        $this->assertEquals("A compensation_plan code is required.", $errors['code']);
+        $this->assertEquals("A compensation plan name is required.", $errors['name']);
+        $this->assertEquals("A compensation plan code is required.", $errors['code']);
 
     }
 
@@ -263,8 +264,8 @@ class CompensationPlansControllerTest extends TestCase
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
 
-        $this->assertEquals("A compensation_plan name is required.", $errors['name']);
-        $this->assertEquals("A compensation_plan code is required.", $errors['code']);
+        $this->assertEquals("A compensation plan name is required.", $errors['name']);
+        $this->assertEquals("A compensation plan code is required.", $errors['code']);
 
     }
 

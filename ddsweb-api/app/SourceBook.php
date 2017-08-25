@@ -18,7 +18,8 @@ class SourceBook extends Model
     // 'sales_close'
     ];
     
-    static public function rules($id = null) {
+    public static function rules($id = null)
+    {
         return [
         'name' => 'required|unique:source_books,name,'.$id,
         'code' => 'required|unique:source_books,code,'.$id,
@@ -28,7 +29,8 @@ class SourceBook extends Model
         ];
     }
     
-    static public function errorMessages() {
+    public static function errorMessages()
+    {
         return [
         'name.unique' => 'That name has already been used.',
         'name.required' => 'A source book name is required.',
@@ -43,41 +45,59 @@ class SourceBook extends Model
         ];
     }
 
-    public function okToDelete() {
+    public function okToDelete()
+    {
         return $this->primary_books()->count() == 0;
     }
 
-    public function primary_books() { return $this->belongsToMany(PrimaryBook::class); }
-
-    static public function scopeFilterOn($query, $key, $filter)
+    public function primary_books()
     {
-        switch ($key) {
-            case 'name':
-                $query->where('name', 'LIKE', '%'.$filter.'%');
-                break;
-            case 'code':
-                $query->where('code', 'LIKE', '%'.$filter.'%');
-                break;
-            case 'pub_month':
-                $query->whereMonth('pub_month', '=', date('m', strtotime($filter)) )
-                ->whereYear('pub_month', '=', date('Y', strtotime($filter)) );
-                break;
-            case 'id':
-                $query->where('id', $filter);
-                break;
-            default:
-                $query;
+        return $this->belongsToMany(PrimaryBook::class);
+    }
+
+    public static function buildFilter($filters)
+    {
+        $filter_array = [];
+        foreach ($filters as $key => $filter) {
+            switch ($key) {
+                case 'name':
+                    $filter_array[] = ['source_books.name', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'code':
+                    $filter_array[] = ['source_books.code', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'pub_month':
+                    // handled by special function
+                    break;
+                case 'id':
+                    $filter_array[] = ['source_books.id', '=', $filter];
+                    break;
+            }
         }
+        return $filter_array;
+    }
+
+    public static function pubMonthFilter($query, $pub_date)
+    {
+        if (app()->environment() == 'testing') {
+            // strftime('%m', source_books.pub_month )
+            return $query->whereRaw('cast( strftime(\'%m\', source_books.pub_month ) as INTEGER)  = ? ', [(int) date('m', strtotime($pub_date))])
+                ->whereRaw('cast( strftime(\'%Y\', source_books.pub_month ) as INTEGER)  = ? ', [(int) date('Y', strtotime($pub_date))]);
+        }
+
+        return $query->whereRaw('MONTH(source_books.pub_month) = ? ', [(int) date('m', strtotime($pub_date))])
+            ->whereRaw('YEAR(source_books.pub_month) = ? ', [(int) date('Y', strtotime($pub_date))]);
+
     }
     
-    static public function orderField($sort_name) {
+    public static function orderField($sort_name)
+    {
         switch ($sort_name) {
             case 'foo':
             return 'huh';
             break;
             default:
             return $sort_name;
-        }  
+        }
     }
-    
 }

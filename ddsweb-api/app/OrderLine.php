@@ -63,10 +63,10 @@ class OrderLine extends Model
     public static function orderField($sort_name)
     {
         switch ($sort_name) {
-            case 'order':
+            case 'order_lines.order':
                 return 'orders.order_num';
                 break;
-            case 'udac':
+            case 'order_lines.udac':
                 return 'udacs.name';
                 break;
             default:

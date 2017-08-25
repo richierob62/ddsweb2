@@ -47,9 +47,6 @@ class CompensationPlan extends Model
                 case 'code':
                     $filter_array[] = ['compensation_plans.code', 'LIKE', '%' . $filter . '%'];
                     break;
-                case 'sales_rep':
-                    $filter_array[] = ['sales_reps.name', 'LIKE', '%' . $filter . '%'];
-                    break;
                 case 'id':
                     $filter_array[] = ['compensation_plans.id', '=', $filter];
                     break;
@@ -60,12 +57,6 @@ class CompensationPlan extends Model
 
     public static function orderField($sort_name)
     {
-        switch ($sort_name) {
-            case 'customers.sales_rep':
-                return 'sales_reps.name';
-                break;
-            default:
-                return $sort_name;
-        }
+        return $sort_name;
     }
 }

@@ -131,8 +131,8 @@ class UdacsControllerTest extends TestCase
     {
         $this
         ->post('/udac', ['id' => 999999])
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     /** @test **/
@@ -153,7 +153,7 @@ class UdacsControllerTest extends TestCase
         $this->assertTrue($data['id'] > 0);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['created' => true])
         ->seeInDatabase('udacs', ['name' => $name]);
         
@@ -176,7 +176,7 @@ class UdacsControllerTest extends TestCase
         $this->assertArrayHasKey('data', $body);
         
         $this
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['updated' => true, 'id' => $id])
         ->seeInDatabase('udacs', ['name' => $name ]);
         
@@ -192,8 +192,8 @@ class UdacsControllerTest extends TestCase
         $this->post('/edit_udac', $updated);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
     
     
@@ -208,7 +208,7 @@ class UdacsControllerTest extends TestCase
         
         $this
         ->post('/delete_udac', ['id' => $id])
-        ->seeStatusCode(201)
+        ->seeStatusCode(200)
         ->seeJson(['deleted' => true]);
         
         $data = json_decode($this->response->getContent(), true);
@@ -223,8 +223,8 @@ class UdacsControllerTest extends TestCase
         $this->post('/delete_udac', ['id' => 999999 ]);
         
         $this
-        ->seeStatusCode(404)
-        ->seeJson(['error' => 'Not Found']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Not Found']]);
     }
 
 
@@ -239,8 +239,8 @@ class UdacsControllerTest extends TestCase
 
         $this
         ->post('/delete_udac', ['id' => $udac->id])
-        ->seeStatusCode(422)
-        ->seeJson(['error' => 'Cannot be deleted: Being used']);
+        ->seeStatusCode(200)
+        ->seeJson(['errors' => ['Cannot be deleted: It is being used']]);
     }
     
         
@@ -250,15 +250,15 @@ class UdacsControllerTest extends TestCase
     {
         $this->post('/new_udac', [], ['Accept' => 'application/json']);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["A udac name is required."], $errors['name']);
-        $this->assertEquals(["A udac code is required."], $errors['code']);
+        $this->assertEquals("A udac name is required.", $errors['name']);
+        $this->assertEquals("A udac code is required.", $errors['code']);
         
     }
     
@@ -272,15 +272,15 @@ class UdacsControllerTest extends TestCase
         
         $this->post('/edit_udac', ['id' => $udac->id], ['Accept' => 'application/json']);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["A udac name is required."], $errors['name']);
-        $this->assertEquals(["A udac code is required."], $errors['code']);
+        $this->assertEquals("A udac name is required.", $errors['name']);
+        $this->assertEquals("A udac code is required.", $errors['code']);
         
     }
     
@@ -294,7 +294,7 @@ class UdacsControllerTest extends TestCase
         
         $this->post('/new_udac', $new);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
@@ -302,8 +302,8 @@ class UdacsControllerTest extends TestCase
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["That udac name has already been used."], $errors['name']);
-        $this->assertEquals(["That udac code has already been used."], $errors['code']);
+        $this->assertEquals("That udac name has already been used.", $errors['name']);
+        $this->assertEquals("That udac code has already been used.", $errors['code']);
         
         
     }
@@ -326,15 +326,15 @@ class UdacsControllerTest extends TestCase
         ]);
         
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('code', $errors);
         
-        $this->assertEquals(["That udac name has already been used."], $errors['name']);
-        $this->assertEquals(["That udac code has already been used."], $errors['code']);
+        $this->assertEquals("That udac name has already been used.", $errors['name']);
+        $this->assertEquals("That udac code has already been used.", $errors['code']);
         
     }
     
@@ -364,15 +364,15 @@ class UdacsControllerTest extends TestCase
         
         $this->post('/new_udac', $new);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('primary_book_id', $errors);
         $this->assertArrayHasKey('ad_type_id', $errors);
         
-        $this->assertEquals(["You must select a valid primary book."], $errors['primary_book_id']);
-        $this->assertEquals(["You must select a valid ad type."], $errors['ad_type_id']);
+        $this->assertEquals("You must select a valid primary book.", $errors['primary_book_id']);
+        $this->assertEquals("You must select a valid ad type.", $errors['ad_type_id']);
     }
     
     
@@ -387,15 +387,15 @@ class UdacsControllerTest extends TestCase
         
         $this->post('/edit_udac', $udac);
         
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(200, $this->response->getStatusCode());
         
         $errors = json_decode($this->response->getContent(), true)['errors'];
         
         $this->assertArrayHasKey('primary_book_id', $errors);
         $this->assertArrayHasKey('ad_type_id', $errors);
         
-        $this->assertEquals(["You must select a valid primary book."], $errors['primary_book_id']);
-        $this->assertEquals(["You must select a valid ad type."], $errors['ad_type_id']);
+        $this->assertEquals("You must select a valid primary book.", $errors['primary_book_id']);
+        $this->assertEquals("You must select a valid ad type.", $errors['ad_type_id']);
     }
     
 }

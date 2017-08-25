@@ -83,7 +83,7 @@ class Heading extends Model
     public static function orderField($sort_name)
     {
         switch ($sort_name) {
-            case 'page_type':
+            case 'headings.page_type':
                 return 'page_types.name';
                 break;
             default:

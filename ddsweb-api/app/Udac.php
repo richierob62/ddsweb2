@@ -8,7 +8,8 @@ class Udac extends Model
 {
     protected $guarded = [];
     
-    static public function rules($id = null) {
+    public static function rules($id = null)
+    {
         return [
         'name' => 'required|unique:udacs,name,'.$id,
         'code' => 'required|unique:udacs,code,'.$id,
@@ -16,7 +17,8 @@ class Udac extends Model
         'ad_type_id'  => 'required|exists:ad_types,id'
         ];
     }
-    static public function errorMessages() {
+    public static function errorMessages()
+    {
         return [
             
         'name.unique' => 'That udac name has already been used.',
@@ -34,52 +36,62 @@ class Udac extends Model
         ];
     }
 
-    public function okToDelete() {
+    public function okToDelete()
+    {
         return $this->order_lines()->count() == 0;
     }
-    public function order_lines() { return $this->hasMany(OrderLine::class); }
-
-    public function primary_book() { return $this->belongsTo(PrimaryBook::class, 'primary_book_id');  }
-    public function ad_type() { return $this->belongsTo(AdType::class, 'ad_type_id');  }
-    
-    static public function scopeFilterOn($query, $key, $filter)
+    public function order_lines()
     {
-        switch ($key) {
-            case 'name':
-                $query->where('name', 'LIKE', '%'.$filter.'%');
-                break;
-            case 'code':
-                $query->where('code', 'LIKE', '%'.$filter.'%');
-                break;
-            case 'primary_book':
-                $query->whereHas('primary_book', function($q) use ($filter) {
-                    $q->where('name', 'LIKE', '%'.$filter.'%');
-                });
-                break;
-            case 'ad_type':
-                $query->whereHas('ad_type', function($q) use ($filter) {
-                    $q->where('name', 'LIKE', '%'.$filter.'%');
-                });
-                break;
-            case 'id':
-                $query->where('id', $filter);
-                break;
-            default:
-                $query;
-        }
+        return $this->hasMany(OrderLine::class);
     }
 
-    static public function orderField($sort_name) {
+    public function primary_book()
+    {
+        return $this->belongsTo(PrimaryBook::class, 'primary_book_id');
+    }
+    public function ad_type()
+    {
+        return $this->belongsTo(AdType::class, 'ad_type_id');
+    }
+    
+
+    public static function buildFilter($filters)
+    {
+        $filter_array = [];
+        foreach ($filters as $key => $filter) {
+            switch ($key) {
+                case 'name':
+                    $filter_array[] = ['udacs.name', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'code':
+                    $filter_array[] = ['udacs.code', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'primary_book':
+                    $filter_array[] = ['primary_books.name', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'ad_type':
+                    $filter_array[] = ['ad_types.name', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'id':
+                    $filter_array[] = ['udacs.id', '=', $filter];
+                    break;
+            }
+        }
+        return $filter_array;
+    }
+
+
+    public static function orderField($sort_name)
+    {
         switch ($sort_name) {
-            case 'primary_book':
+            case 'udacs.primary_book':
             return 'primary_books.name';
             break;
-            case 'ad_type':
+            case 'udacs.ad_type':
             return 'ad_types.name';
             break;
             default:
             return $sort_name;
-        }  
+        }
     }
-
 }
