@@ -35,10 +35,14 @@ class Authenticate
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if ($this->auth->guard($guard)->guest()) {
-            // return response('Unauthorized.', 401);
+        $token = $request->input('token');
+        $user = \App\SalesRep::where('token', '=', $token)->get();
+        if (!$user) {
             return response('Unauthorized.');
         }
+        // if ($this->auth->guard($guard)->guest()) {
+        //     return response('Unauthorized.', 401);
+        // }
 
         return $next($request);
     }

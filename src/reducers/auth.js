@@ -1,7 +1,7 @@
 import Immutable from "immutable";
 
 const initial_state = Immutable.fromJS({
-  loggedIn: true,
+  loggedIn: false,
   token: "fzaFYGONet5LzorDpUpNGWNEeK91BRqnEaKr!vZulvC0YEuUyPKxqX0SFnOIE@Jr",
   message: ""
 });

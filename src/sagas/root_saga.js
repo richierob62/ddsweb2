@@ -156,17 +156,20 @@ function* getNextCustomerAccountNumber() {
 }
 
 function* attemptLogin(action) {
+
 	const payload = {
 		email: action.payload.email,
 		password: action.payload.pass
 	}
+
 	const url = domain + 'login'
 	const returned = yield call(postApi, url, payload)
 
+
 	let closing_action
-	if (returned.error) {
+	if (returned.errors) {
 		closing_action = 'authFail'
-		yield put(act[closing_action]({ message: returned.error }))
+		yield put(act[closing_action]({ message: returned.errors }))
 	} else {
 		closing_action = 'authSuccess'
 		yield put(act[closing_action](returned.data))
