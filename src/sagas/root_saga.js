@@ -16,13 +16,23 @@ import { getCurrentRecord, getSelectedID } from '../selectors'
 const domain = 'http://ddsweb-api.app/'
 
 const table_hash = {
-	customer: { reducer: 'customers' },
+	ad_type: { reducer: 'ad_types' },
 	category: { reducer: 'categories' },
-	pay_plan: { reducer: 'pay_plans' },
+	compensation_plan: { reducer: 'compensation_plans' },
+	customer: { reducer: 'customers' },
+	field: { reducer: 'fields' },
+	finding_line: { reducer: 'finding_lines' },
+	heading: { reducer: 'headings' },
 	local_foreign: { reducer: 'local_foreigns' },
+	order_line: { reducer: 'order_lines' },
+	order: { reducer: 'orders' },
+	order_status: { reducer: 'order_statuses' },
+	page_type: { reducer: 'page_types' },
+	pay_plan: { reducer: 'pay_plans' },
 	primary_book: { reducer: 'primary_books' },
 	sales_rep: { reducer: 'sales_reps' },
-	compensation_plan: { reducer: 'compensation_plans' }
+	source_book: { reducer: 'source_books' },
+	udac: { reducer: 'udacs' }
 }
 
 // /******************************************************************************/
@@ -156,7 +166,6 @@ function* getNextCustomerAccountNumber() {
 }
 
 function* attemptLogin(action) {
-
 	const payload = {
 		email: action.payload.email,
 		password: action.payload.pass
@@ -164,7 +173,6 @@ function* attemptLogin(action) {
 
 	const url = domain + 'login'
 	const returned = yield call(postApi, url, payload)
-
 
 	let closing_action
 	if (returned.errors) {
@@ -356,6 +364,20 @@ const pageChangeWatcher = function*() {
 		const page = yield getNewPage()
 
 		switch (page) {
+			case '/ad_types':
+				// list dirty?
+				reducer = table_hash['ad_type'].reducer
+				if (yield listIsDirty(reducer)) {
+					// main file
+					forks.push(loadFilteredAndSortedData('ad_type'))
+
+					// reference lists
+					if (yield refListIsDirty('page_types')) {
+						forks.push(loadReferenceList('page_type'))
+					}
+				}
+				break
+
 			case '/customers':
 				// list dirty?
 				reducer = table_hash['customer'].reducer
@@ -372,7 +394,6 @@ const pageChangeWatcher = function*() {
 					if (yield refListIsDirty('pay_plans')) forks.push(loadReferenceList('pay_plan'))
 					if (yield refListIsDirty('primary_books')) forks.push(loadReferenceList('primary_book'))
 				}
-
 				break
 
 			case '/sales_reps':
@@ -386,7 +407,6 @@ const pageChangeWatcher = function*() {
 						forks.push(loadReferenceList('compensation_plan'))
 					}
 				}
-
 				break
 
 			default:

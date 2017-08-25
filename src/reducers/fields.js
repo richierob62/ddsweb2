@@ -59,9 +59,10 @@ const initial_state = Immutable.fromJS({
                 { id: 3, display: 'typeahead' },
             ]
         },
-    ],    
+    ],
     ref_list: [],
-    typeahead: ''    
+    ref_list_dirty: true,
+    typeahead: ""
 })
 
 export default initial_state
