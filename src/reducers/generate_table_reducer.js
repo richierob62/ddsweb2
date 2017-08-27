@@ -60,7 +60,6 @@ const generateTableReducer = (table_name, initial_state) => {
           .toJS();
         const new_copy = Object.assign({}, current, {
           id: new_id,
-          account_num: ""
         });
         return state
           .updateIn(["list"], list => list.push(Immutable.fromJS(new_copy)))

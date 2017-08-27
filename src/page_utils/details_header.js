@@ -1,15 +1,15 @@
-import React from 'react';
-import styled from 'styled-components';
-import { connect } from 'react-redux';
-import Tab from './details_tab';
-import { getCurrentRecord, getTabNames, getCurrentTab, getActionWord } from '../selectors';
+import React from 'react'
+import styled from 'styled-components'
+import { connect } from 'react-redux'
+import Tab from './details_tab'
+import { getCurrentRecord, getTabNames, getCurrentTab, getActionWord } from '../selectors'
 
 const mstp = (state, ownProps) => ({
 	current_record: getCurrentRecord(state[ownProps.page]),
 	tab_names: getTabNames(state[ownProps.page]),
 	current_tab: getCurrentTab(state[ownProps.page]),
 	action_word: getActionWord(state[ownProps.page])
-});
+})
 
 const HeaderWrapper = styled.div`
 	color: rgba(26, 26, 26, 0.74);
@@ -17,7 +17,7 @@ const HeaderWrapper = styled.div`
 	font-size: 1rem;
 	margin-bottom: -8px;
 	margintop: 10px;
-`;
+`
 
 const TabWrapper = styled.div`
 	display: flex;
@@ -27,16 +27,20 @@ const TabWrapper = styled.div`
 	margin-bottom: 10px;
 	padding-top: .5rem;
 	border-bottom: ${(props) => (props.current ? '1px solid #2C3E50' : 'none')};
-`;
+`
 
 const DetailsHeader = (props) => {
-	const { current_record, tab_names, current_tab, action_word, dispatch } = props;
+	const { current_record, tab_names, current_tab, action_word, dispatch } = props
 
 	return (
 		<div>
 			<HeaderWrapper>
-				{current_record ? (
+				{current_record ? current_record.get('account_num') ? (
 					`${current_record.get('name')} - Acc# ${current_record.get('account_num')}`
+				) : current_record.get('name') ? (
+					`${current_record.get('name')}`
+				) : (
+					''
 				) : (
 					'No current selection'
 				)}
@@ -57,7 +61,7 @@ const DetailsHeader = (props) => {
 				</TabWrapper>
 			)}
 		</div>
-	);
-};
+	)
+}
 
-export default connect(mstp)(DetailsHeader);
+export default connect(mstp)(DetailsHeader)

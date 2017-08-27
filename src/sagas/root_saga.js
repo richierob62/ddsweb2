@@ -94,11 +94,14 @@ function* saveNewToDatabase(table) {
 
 	// get data to save
 	const payload = (yield getRecordToSave(reducer)).toJS()
+
 	delete payload['id']
 
-	// get a new account number
-	const acc_num = yield getNextCustomerAccountNumber()
-	payload.account_num = acc_num
+	if (table === 'customer') {
+		// get a new account number (customer)
+		const acc_num = yield getNextCustomerAccountNumber()
+		payload.account_num = acc_num
+	}
 
 	const action_word = yield getActionWord(reducer)
 	const token = yield getToken()
