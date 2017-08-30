@@ -179,7 +179,7 @@ class SalesRepsController extends Controller
             if (!$user || !(Hash::check($request->password, $user->password))) {
                 return response()->json(['errors' => ['That Email-Password combination wasn\'t found']]);
             }
-            $token = $this->generateToken();
+            $token = $this->generateToken($user);
             $user->token = $token;
             $user->save();
             $user = [
@@ -194,14 +194,8 @@ class SalesRepsController extends Controller
         }
     }
 
-    public function generateToken()
+    public function generateToken($user)
     {
-        $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEF!@_GHIJKLMNOPQRSTUVWXYZ';
-        $max = strlen($keyspace) - 1;
-        $str = '';
-        for ($i = 0; $i < 64; $i++) {
-            $str .= $keyspace[random_int(0, $max)];
-        }
-        return $str;
+        return md5($user->email).md5($user->name);
     }
 }
