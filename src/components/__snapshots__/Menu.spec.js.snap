@@ -1,4 +1,6 @@
-exports[`test renders without crashing 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
 <styled.div>
   <h2>
     M E N U
@@ -9,135 +11,153 @@ exports[`test renders without crashing 1`] = `
     </h5>
     <ul>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/customers">
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/customers"
+        >
           Customers
-        </Styled(Link)>
+        </Styled(NavLink)>
       </li>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/orders">
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/orders"
+        >
           Orders
-        </Styled(Link)>
+        </Styled(NavLink)>
       </li>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/order_lines">
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/order_lines"
+        >
           Order Lines
-        </Styled(Link)>
+        </Styled(NavLink)>
       </li>
     </ul>
     <h5>
-      Supporting Files
+      Other Files
     </h5>
     <ul>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/ad_types">
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/ad_types"
+        >
           AdTypes
-        </Styled(Link)>
+        </Styled(NavLink)>
       </li>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/categories">
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/categories"
+        >
           Categories
-        </Styled(Link)>
+        </Styled(NavLink)>
       </li>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/compensation_plans">
-          Compensation Plans
-        </Styled(Link)>
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/compensation_plans"
+        >
+          Comp Plans
+        </Styled(NavLink)>
       </li>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/fields">
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/fields"
+        >
           Data Fields (Ads)
-        </Styled(Link)>
+        </Styled(NavLink)>
       </li>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/findinglines">
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/findinglines"
+        >
           Finding Lines
-        </Styled(Link)>
+        </Styled(NavLink)>
       </li>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/headings">
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/headings"
+        >
           Headings
-        </Styled(Link)>
+        </Styled(NavLink)>
       </li>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/localforeign">
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/localforeign"
+        >
           Local/Foreign
-        </Styled(Link)>
+        </Styled(NavLink)>
       </li>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/order_statuses">
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/order_statuses"
+        >
           Order Statuses
-        </Styled(Link)>
+        </Styled(NavLink)>
       </li>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/page_types">
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/page_types"
+        >
           Page Types
-        </Styled(Link)>
+        </Styled(NavLink)>
       </li>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/payplans">
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/payplans"
+        >
           Pay Plans
-        </Styled(Link)>
+        </Styled(NavLink)>
       </li>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/permissions">
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/permissions"
+        >
           Permissions
-        </Styled(Link)>
+        </Styled(NavLink)>
       </li>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/primary_books">
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/primary_books"
+        >
           Primary Books
-        </Styled(Link)>
+        </Styled(NavLink)>
       </li>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/sales_reps">
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/sales_reps"
+        >
           Sales Reps
-        </Styled(Link)>
+        </Styled(NavLink)>
       </li>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/source_books">
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/source_books"
+        >
           Source Books
-        </Styled(Link)>
+        </Styled(NavLink)>
       </li>
       <li>
-        <Styled(Link)
-          activeClassName="active-link"
-          to="/udacs">
+        <Styled(NavLink)
+          activeClassName="active-navlink "
+          to="/udacs"
+        >
           Udacs
-        </Styled(Link)>
+        </Styled(NavLink)>
       </li>
     </ul>
   </div>

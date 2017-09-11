@@ -381,6 +381,15 @@ const pageChangeWatcher = function*() {
 				}
 				break
 
+			case '/categories':
+				// list dirty?
+				reducer = table_hash['category'].reducer
+				if (yield listIsDirty(reducer)) {
+					// main file
+					forks.push(loadFilteredAndSortedData('category'))
+				}
+				break
+
 			case '/customers':
 				// list dirty?
 				reducer = table_hash['customer'].reducer

@@ -1,7 +1,11 @@
 [ignore]
+.*/node_modules/.*
+.*/ddsweb-api/.*
 
 [include]
 
 [libs]
+
+[lints]
 
 [options]

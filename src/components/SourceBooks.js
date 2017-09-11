@@ -1,11 +1,15 @@
-import React from 'react';
+import buildPage from '../page_utils/page_builder'
+import { Component } from 'react'
 
-const placeholder = () => {
-    return (
-        <div className="placeholder">
-            <h1>This is the placeholder</h1>
-        </div>
-    );
+class pageToRender extends Component {
+	componentWillMount() {
+		const { dispatch, action } = this.props
+		dispatch(action)
+	}
+
+	render() {
+		return buildPage('source_books')
+	}
 }
 
-export default placeholder;
+export default pageToRender

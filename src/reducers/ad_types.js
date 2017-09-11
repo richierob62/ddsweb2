@@ -4,7 +4,7 @@ const initial_state = Immutable.fromJS({
 	list: [],
 	first_index: 0,
 	list_dirty: true,
-	page_title: 'AdTypes',
+	page_title: 'Ad Types',
 	action_word: 'AdType',
 	reducer_name: 'ad_types',
 	selected_id: -1,

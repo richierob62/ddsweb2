@@ -6,10 +6,12 @@ const initial_state = Immutable.fromJS({
 	message_list: []
 })
 
-const modal = (state = initial_state, action) => {
+const modal = (state = initial_state, action = {}) => {
 	let message_list
 
 	let action_family = action.type
+	if (!action_family) return state
+
 	if (action_family.indexOf('SAVE') !== -1 && action_family.indexOf('FAILED') !== -1) action_family = 'SAVE_FAILED'
 	if (action_family.indexOf('DELETE') !== -1 && action_family.indexOf('FAILED') !== -1)
 		action_family = 'DELETE_FAILED'

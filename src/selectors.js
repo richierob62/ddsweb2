@@ -36,7 +36,7 @@ export const getFilteredList = state => {
 
 export const getSelectedID = state => state.get("selected_id");
 
-export const refSelector = state => id =>
+export const refMatcher = state => id =>
   state.get("ref_list").find(entry => entry.get("id") === id);
 
 export const getCurrentRecord = state => {

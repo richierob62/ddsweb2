@@ -36,10 +36,10 @@ const initial_state = Immutable.fromJS({
 			}
 		]
 	},
-    context_menu: [],
-    ref_list: [],
-    ref_list_dirty: true,
-    typeahead: ""
+	context_menu: [],
+	ref_list: [],
+	ref_list_dirty: true,
+	typeahead: ''
 })
 
 export default initial_state

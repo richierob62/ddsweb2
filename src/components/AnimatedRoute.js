@@ -5,7 +5,7 @@ import act from "../actions/";
 
 const AnimatedRoute = ({ component, loggedInFn, dispatch, path, history, ...rest }) => {
 
-  dispatch(act["checkSleep"]());
+  // dispatch(act["checkSleep"]());
 
   if (!loggedInFn()) {
     dispatch(act["beginLogin"]({path, history}));

@@ -121,14 +121,14 @@ const Main = props => {
               />
               <AnimatedRoute
                 path="/order_statuses"
-                component={<Orders {...common_props} />}
+                component={<OrderStatuses {...common_props} />}
                 loggedInFn={loggedInFn}
                 dispatch={store.dispatch}
                 history={history}
               />
               <AnimatedRoute
                 path="/orders"
-                component={<OrderStatuses {...common_props} />}
+                component={<Orders {...common_props} />}
                 loggedInFn={loggedInFn}
                 dispatch={store.dispatch}
                 history={history}
