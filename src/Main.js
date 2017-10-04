@@ -1,61 +1,55 @@
-import React from "react";
-import styled from "styled-components";
-import { Switch, Route } from "react-router-dom";
-import { isLoggedInFn } from "./selectors.js";
-import act from "./actions/";
-import AnimatedRoute from "./components/AnimatedRoute";
-import asyncComponent from "./utils/async_loader";
+import React from 'react'
+import styled from 'styled-components'
+import { Switch, Route } from 'react-router-dom'
+import { isLoggedInFn } from './selectors.js'
+import act from './actions/'
+import AnimatedRoute from './components/AnimatedRoute'
+import asyncComponent from './utils/async_loader'
 
-const AdTypes = asyncComponent(() => import("./components/AdTypes"));
-const Categories = asyncComponent(() => import("./components/Categories"));
+const AdTypes = asyncComponent(() => import('./components/AdTypes'))
+const Categories = asyncComponent(() => import('./components/Categories'))
 const CompensationPlans = asyncComponent(() =>
-  import("./components/CompensationPlans")
-);
-const Customers = asyncComponent(() => import("./components/Customers"));
-const Fields = asyncComponent(() => import("./components/Fields"));
-const FindingLines = asyncComponent(() => import("./components/FindingLines"));
-const Headings = asyncComponent(() => import("./components/Headings"));
-const LocalForeigns = asyncComponent(() =>
-  import("./components/LocalForeigns")
-);
-const OrderLines = asyncComponent(() => import("./components/OrderLines"));
-const OrderStatuses = asyncComponent(() =>
-  import("./components/OrderStatuses")
-);
-const Orders = asyncComponent(() => import("./components/Orders"));
-const PageTypes = asyncComponent(() => import("./components/PageTypes"));
-const PayPlans = asyncComponent(() => import("./components/PayPlans"));
-const Permissions = asyncComponent(() => import("./components/Permissions"));
-const PrimaryBooks = asyncComponent(() => import("./components/PrimaryBooks"));
-const SalesReps = asyncComponent(() => import("./components/SalesReps"));
-const SourceBooks = asyncComponent(() => import("./components/SourceBooks"));
-const Udacs = asyncComponent(() => import("./components/Udacs"));
+  import('./components/CompensationPlans')
+)
+const Customers = asyncComponent(() => import('./components/Customers'))
+const Fields = asyncComponent(() => import('./components/Fields'))
+const FindingLines = asyncComponent(() => import('./components/FindingLines'))
+const Headings = asyncComponent(() => import('./components/Headings'))
+const LocalForeigns = asyncComponent(() => import('./components/LocalForeigns'))
+const OrderLines = asyncComponent(() => import('./components/OrderLines'))
+const OrderStatuses = asyncComponent(() => import('./components/OrderStatuses'))
+const Orders = asyncComponent(() => import('./components/Orders'))
+const PageTypes = asyncComponent(() => import('./components/PageTypes'))
+const PayPlans = asyncComponent(() => import('./components/PayPlans'))
+const Permissions = asyncComponent(() => import('./components/Permissions'))
+const PrimaryBooks = asyncComponent(() => import('./components/PrimaryBooks'))
+const SalesReps = asyncComponent(() => import('./components/SalesReps'))
+const SourceBooks = asyncComponent(() => import('./components/SourceBooks'))
+const Udacs = asyncComponent(() => import('./components/Udacs'))
 
 const StyledMain = styled.div`
-    flex: 1;
-    background-color: white;
-    border-left: 1px solid cadetblue;
-    padding: 1rem;
-`;
+  flex: 1;
+  background-color: white;
+  border-left: 1px solid cadetblue;
+  padding: 1rem;
+`
 
 const Main = props => {
-  const store = props.store;
-  const state = store.getState();
-  const loggedInFn = isLoggedInFn(state);
+  const store = props.store
+  const state = store.getState()
+  const loggedInFn = isLoggedInFn(state)
 
   return (
     <StyledMain>
       <Route
         render={({ location, history }) => {
-
           const common_props = {
             dispatch: store.dispatch,
             action: act.pageChange(location.pathname)
-          };
+          }
 
           return (
             <Switch>
-            
               <AnimatedRoute
                 path="/ad_types"
                 component={<AdTypes {...common_props} />}
@@ -92,7 +86,7 @@ const Main = props => {
                 history={history}
               />
               <AnimatedRoute
-                path="/findinglines"
+                path="/finding_lines"
                 component={<FindingLines {...common_props} />}
                 loggedInFn={loggedInFn}
                 dispatch={store.dispatch}
@@ -106,7 +100,7 @@ const Main = props => {
                 history={history}
               />
               <AnimatedRoute
-                path="/localforeign"
+                path="/local_foreigns"
                 component={<LocalForeigns {...common_props} />}
                 loggedInFn={loggedInFn}
                 dispatch={store.dispatch}
@@ -141,7 +135,7 @@ const Main = props => {
                 history={history}
               />
               <AnimatedRoute
-                path="/payplans"
+                path="/pay_plans"
                 component={<PayPlans {...common_props} />}
                 loggedInFn={loggedInFn}
                 dispatch={store.dispatch}
@@ -182,12 +176,11 @@ const Main = props => {
                 dispatch={store.dispatch}
                 history={history}
               />
-
             </Switch>
-          );
+          )
         }}
       />
     </StyledMain>
-  );
-};
-export default Main;
+  )
+}
+export default Main

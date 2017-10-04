@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import generateTableReducer from './generate_table_reducer'
 
-// redicers for table types
+// reducers for table types
 import ad_types from './ad_types'
 import categories from './categories'
 import compensation_plans from './compensation_plans'
@@ -29,23 +29,23 @@ const root_reducer = combineReducers({
 	auth,
 	modal,
 	pageChange,
-	ad_types: generateTableReducer('ad_type', ad_types),
-	categories: generateTableReducer('category', categories),
-	compensation_plans: generateTableReducer('compensation_plan', compensation_plans),
-	customers: generateTableReducer('customer', customers),
-	fields: generateTableReducer('field', fields),
-	finding_lines: generateTableReducer('finding_line', finding_lines),
-	headings: generateTableReducer('heading', headings),
-	local_foreigns: generateTableReducer('local_foreign', local_foreigns),
-	order_lines: generateTableReducer('order_line', order_lines),
-	orders: generateTableReducer('order', orders),
-	order_statuses: generateTableReducer('order_status', order_statuses),
-	page_types: generateTableReducer('page_type', page_types),
-	pay_plans: generateTableReducer('pay_plan', pay_plans),
-	primary_books: generateTableReducer('primary_book', primary_books),
-	sales_reps: generateTableReducer('sales_rep', sales_reps),
-	source_books: generateTableReducer('source_book', source_books),
-	udacs: generateTableReducer('udac', udacs)
+	ad_types: generateTableReducer('ad_types', ad_types),
+	categories: generateTableReducer('categories', categories),
+	compensation_plans: generateTableReducer('compensation_plans', compensation_plans),
+	customers: generateTableReducer('customers', customers),
+	fields: generateTableReducer('fields', fields),
+	finding_lines: generateTableReducer('finding_lines', finding_lines),
+	headings: generateTableReducer('headings', headings),
+	local_foreigns: generateTableReducer('local_foreigns', local_foreigns),
+	order_lines: generateTableReducer('order_lines', order_lines),
+	orders: generateTableReducer('orders', orders),
+	order_statuses: generateTableReducer('order_statuses', order_statuses),
+	page_types: generateTableReducer('page_types', page_types),
+	pay_plans: generateTableReducer('pay_plans', pay_plans),
+	primary_books: generateTableReducer('primary_books', primary_books),
+	sales_reps: generateTableReducer('sales_reps', sales_reps),
+	source_books: generateTableReducer('source_books', source_books),
+	udacs: generateTableReducer('udacs', udacs)
 })
 
 export default root_reducer

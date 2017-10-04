@@ -74,7 +74,7 @@ exports[`renders without crashing 1`] = `
       <li>
         <Styled(NavLink)
           activeClassName="active-navlink "
-          to="/findinglines"
+          to="/finding_lines"
         >
           Finding Lines
         </Styled(NavLink)>
@@ -90,7 +90,7 @@ exports[`renders without crashing 1`] = `
       <li>
         <Styled(NavLink)
           activeClassName="active-navlink "
-          to="/localforeign"
+          to="/local_foreigns"
         >
           Local/Foreign
         </Styled(NavLink)>
@@ -114,7 +114,7 @@ exports[`renders without crashing 1`] = `
       <li>
         <Styled(NavLink)
           activeClassName="active-navlink "
-          to="/payplans"
+          to="/pay_plans"
         >
           Pay Plans
         </Styled(NavLink)>

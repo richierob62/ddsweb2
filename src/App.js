@@ -6,7 +6,7 @@ import styled, { ThemeProvider } from 'styled-components'
 
 const theme = { foo: 'bar' }
 
-const App = (props) => {
+const App = props => {
   return (
     <ThemeProvider theme={theme}>
       <div>
@@ -21,13 +21,13 @@ const App = (props) => {
 }
 
 const MainSection = styled.div`
-    display: flex;
-    width: 100%
+  display: flex;
+  width: 100%;
 `
 
-const Wrapper = styled(App) `
-    display: flex;
-    flex-direction: column;
+const Wrapper = styled(App)`
+  display: flex;
+  flex-direction: column;
 `
 
 export default Wrapper

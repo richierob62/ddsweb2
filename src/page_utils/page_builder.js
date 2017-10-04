@@ -1,22 +1,18 @@
-import React from "react";
-import PageTitle from "./page_title";
-import PageList from "./page_list";
-import PageDetails from "./page_details";
-import PageContextMenu from "./page_context_menu";
-import styled from "styled-components";
+import React from 'react'
+import PageTitle from './page_title'
+import PageList from './page_list'
+import PageDetails from './page_details'
+import PageContextMenu from './page_context_menu'
+import styled from 'styled-components'
 
-const Page = styled.div`
-
-`;
+const Page = styled.div``
 
 const MainPageSection = styled.div`
-    display:flex;
-    flex-direction: column;
-`;
+  display: flex;
+  flex-direction: column;
+`
 
-const DetailsSection = styled.div`
-    display:flex;
-`;
+const DetailsSection = styled.div`display: flex;`
 
 const buildPage = page => {
   return (
@@ -30,7 +26,7 @@ const buildPage = page => {
         </DetailsSection>
       </MainPageSection>
     </Page>
-  );
-};
+  )
+}
 
-export default buildPage;
+export default buildPage

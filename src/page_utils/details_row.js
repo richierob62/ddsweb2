@@ -1,16 +1,16 @@
-import React from "react";
-import styled from "styled-components";
-import DetailField from "./details_field";
+import React from 'react'
+import styled from 'styled-components'
+import DetailField from './details_field'
 
 const RowWrapper = styled.div`
-    display: flex;
-    font-size: 0.7rem;
-    flex: 100%;
-    flex-wrap: nowrap;
-`;
+  display: flex;
+  font-size: 0.7rem;
+  flex: 100%;
+  flex-wrap: nowrap;
+`
 
 const DetailsRow = props => {
-  const { field_definitions, row_fields } = props;
+  const { field_definitions, row_fields } = props
   return (
     <RowWrapper>
       {row_fields.map(field_name => {
@@ -21,10 +21,10 @@ const DetailsRow = props => {
             field_definition={field_definitions.get(field_name)}
             {...props}
           />
-        );
+        )
       })}
     </RowWrapper>
-  );
-};
+  )
+}
 
-export default DetailsRow;
+export default DetailsRow

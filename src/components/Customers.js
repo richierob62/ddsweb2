@@ -1,16 +1,15 @@
-import buildPage from "../page_utils/page_builder";
-import { Component } from "react";
+import buildPage from '../page_utils/page_builder'
+import { Component } from 'react'
 
 class pageToRender extends Component {
-
   componentWillMount() {
-    const { dispatch, action } = this.props;
-    dispatch(action);
+    const { dispatch, action } = this.props
+    dispatch(action)
   }
 
   render() {
-    return buildPage("customers");
+    return buildPage('customers')
   }
 }
 
-export default pageToRender;
+export default pageToRender
