@@ -48,15 +48,18 @@ const initial_state = Immutable.fromJS({
       ref_table: undefined
     }
   },
-  list_template: [
-    { field_name: 'code', width: '7%' },
-    { field_name: 'name', width: '20%' },
-    { field_name: 'email', width: '20%' },
-    { field_name: 'address', width: '20%' },
-    { field_name: 'city', width: '15%' },
-    { field_name: 'state', width: '10%' },
-    { field_name: 'zip', width: '8%' }
-  ],
+  list_template: {
+    fields: [
+      { field_name: 'code', width: '7%' },
+      { field_name: 'name', width: '20%' },
+      { field_name: 'email', width: '20%' },
+      { field_name: 'address', width: '20%' },
+      { field_name: 'city', width: '15%' },
+      { field_name: 'state', width: '10%' },
+      { field_name: 'zip', width: '8%' }
+    ],
+    width: '100%'
+  },  
   details_template: {
     current_tab: 'Contact',
     tabs: [

@@ -191,7 +191,7 @@ const initial_state = Immutable.fromJS({
     },
     other_2: {
       label: 'Other 2',
-      input_type: 'date',
+      input_type: 'text',
       ref_table: undefined
     },
     outreach_locations: {
@@ -255,14 +255,17 @@ const initial_state = Immutable.fromJS({
       ref_table: undefined
     }
   },
-  list_template: [
-    { field_name: 'name', width: '26%' },
-    { field_name: 'address', width: '24%' },
-    { field_name: 'city', width: '16%' },
-    { field_name: 'state', width: '8%' },
-    { field_name: 'account_num', width: '10%' },
-    { field_name: 'sales_rep', width: '15%' }
-  ],
+  list_template: {
+    fields: [
+      { field_name: 'name', width: '26%' },
+      { field_name: 'address', width: '25%' },
+      { field_name: 'city', width: '16%' },
+      { field_name: 'state', width: '8%' },
+      { field_name: 'account_num', width: '10%' },
+      { field_name: 'sales_rep', width: '15%' }
+    ],
+    width: '100%'
+  },
   details_template: {
     current_tab: 'Contact Info',
     tabs: [

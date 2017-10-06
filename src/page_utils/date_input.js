@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import actions from '../actions'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
+import proper_camel from '../utils/proper_camel'
 
 const Wrapper = styled.div`display: flex;`
 
@@ -27,12 +28,13 @@ const StyledDatePicker = styled(DatePicker)`
 `
 
 const comp = props => {
-  const { value, label, action_word, display, dispatch, field_name } = props
-  const moment_val = moment(!value || isNaN(value) ? new Date() : value)
+  const { value, label, page, display, dispatch, field_name } = props
+  const moment_val = moment(!value ? new Date() : value)
+
   const display_value = moment_val.format('MM/DD/YY')
 
   // select_handler
-  const select_handler_action_name = 'change' + action_word + 'Data'
+  const select_handler_action_name = 'change' + proper_camel(page) + 'Data'
   const select_handler = val => {
     dispatch(
       actions[select_handler_action_name]({ field: field_name, value: val })

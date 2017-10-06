@@ -44,14 +44,17 @@ const initial_state = Immutable.fromJS({
       ref_table: undefined
     }
   },
-  list_template: [
-    { field_name: 'code', width: '10%' },
-    { field_name: 'name', width: '30%' },
-    { field_name: 'yppa_num', width: '15%' },
-    { field_name: 'pub_month', width: '15%' },
-    { field_name: 'sales_start', width: '15%' },
-    { field_name: 'sales_close', width: '15%' }
-  ],
+  list_template: {
+    fields: [
+      { field_name: 'code', width: '10%' },
+      { field_name: 'name', width: '30%' },
+      { field_name: 'yppa_num', width: '15%' },
+      { field_name: 'pub_month', width: '15%' },
+      { field_name: 'sales_start', width: '15%' },
+      { field_name: 'sales_close', width: '15%' }
+    ],
+    width: '80%'
+  },  
   details_template: {
     current_tab: '',
     tabs: [

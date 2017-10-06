@@ -79,7 +79,16 @@ class PrimaryBook extends Model
                     $filter_array[] = ['primary_books.code', 'LIKE', '%' . $filter . '%'];
                     break;
                 case 'pub_month':
-                    // handled by special function
+                    $filter_array[] = ['primary_books.pub_month', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'yppa_num':
+                    $filter_array[] = ['primary_books.yppa_num', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'sales_start':
+                    $filter_array[] = ['primary_books.sales_start', 'LIKE', '%' . $filter . '%'];
+                    break;
+                case 'sales_close':
+                    $filter_array[] = ['primary_books.sales_close', 'LIKE', '%' . $filter . '%'];
                     break;
                 case 'id':
                     $filter_array[] = ['primary_books.id', '=', $filter];
@@ -87,19 +96,6 @@ class PrimaryBook extends Model
             }
         }
         return $filter_array;
-    }
-
-    public static function pubMonthFilter($query, $pub_date)
-    {
-        if (app()->environment() == 'testing') {
-            // strftime('%m', primary_books.pub_month )
-            return $query->whereRaw('cast( strftime(\'%m\', primary_books.pub_month ) as INTEGER)  = ? ', [(int) date('m', strtotime($pub_date))])
-                ->whereRaw('cast( strftime(\'%Y\', primary_books.pub_month ) as INTEGER)  = ? ', [(int) date('Y', strtotime($pub_date))]);
-        }
-
-        return $query->whereRaw('MONTH(primary_books.pub_month) = ? ', [(int) date('m', strtotime($pub_date))])
-            ->whereRaw('YEAR(primary_books.pub_month) = ? ', [(int) date('Y', strtotime($pub_date))]);
-
     }
 
     public static function orderField($sort_name)

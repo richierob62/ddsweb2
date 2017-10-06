@@ -28,10 +28,9 @@ const SourceBooks = asyncComponent(() => import('./components/SourceBooks'))
 const Udacs = asyncComponent(() => import('./components/Udacs'))
 
 const StyledMain = styled.div`
-  flex: 1;
-  background-color: white;
   border-left: 1px solid cadetblue;
   padding: 1rem;
+  height: 100%
 `
 
 const Main = props => {

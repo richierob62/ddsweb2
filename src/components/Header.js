@@ -1,13 +1,24 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const StyledH1 = styled.h1`
+const HeaderWrapper = styled.div`
+  grid-area: header;
+  height: 100%
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #8e44ad;
-  color: rgba(255, 255, 255, 0.7);
-  text-align: center;
-  padding: 10px 5px;
+
+  h1 {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 2rem;
+  }
 `
 
-const Header = () => <StyledH1>DDSWeb Directory Data Manager</StyledH1>
+const Header = () => (
+  <HeaderWrapper>
+    <h1>DDSWeb Directory Data Manager</h1>
+  </HeaderWrapper>
+)
 
 export default Header

@@ -22,7 +22,8 @@ export const getFilteredRefList = state => {
 
 export const getPageTitle = state => state.get('page_title')
 
-export const getListTemplate = state => state.get('list_template')
+export const getListTemplateFields = state => state.getIn(['list_template','fields'])
+export const getListWidth = state => state.getIn(['list_template','width'])
 
 export const getCurrentSort = state => state.get('current_sort')
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import actions from '../actions'
+import proper_camel from '../utils/proper_camel'
 
 const Wrapper = styled.div`display: flex;`
 
@@ -32,10 +33,10 @@ const EditableInput = styled.input`
 `
 
 const comp = props => {
-  const { label, field_name, value, action_word, dispatch, display } = props
+  const { label, field_name, value, page, dispatch, display } = props
 
   // change_handler
-  const change_handler_action_name = 'change' + action_word + 'Data'
+  const change_handler_action_name = 'change' + proper_camel(page) + 'Data'
   const change_handler = (fld, e) =>
     dispatch(
       actions[change_handler_action_name]({

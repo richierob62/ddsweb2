@@ -39,13 +39,16 @@ const initial_state = Immutable.fromJS({
       ref_table: 'ad_types'
     }
   },
-  list_template: [
-    { field_name: 'code', width: '10%' },
-    { field_name: 'name', width: '30%' },
-    { field_name: 'primary_book', width: '20%' },
-    { field_name: 'ad_type', width: '20%' },
-    { field_name: 'rate', width: '20%' }
-  ],
+  list_template: {
+    fields: [
+      { field_name: 'code', width: '10%' },
+      { field_name: 'name', width: '30%' },
+      { field_name: 'primary_book', width: '20%' },
+      { field_name: 'ad_type', width: '20%' },
+      { field_name: 'rate', width: '20%' }
+    ],
+    width: '70%'
+  },  
   details_template: {
     current_tab: 'Main',
     tabs: [

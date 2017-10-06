@@ -8,7 +8,6 @@ const mstp = (state, ownProps) => ({
 })
 
 const StyledWrapper = styled.h1`
-  margin: 0;
   color: rgba(26, 26, 26, 0.45);
   font-weight: lighter;
   font-size: 1.5rem;

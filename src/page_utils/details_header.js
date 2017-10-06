@@ -15,8 +15,9 @@ const HeaderWrapper = styled.div`
   color: rgba(26, 26, 26, 0.74);
   font-weight: lighter;
   font-size: 1rem;
-  margin-bottom: -8px;
-  margintop: 10px;
+  margin-bottom: -10px;
+  text-align: center;
+  border-bottom: 1px solid rgba(44, 62, 80, 0.5);
 `
 
 const TabWrapper = styled.div`
@@ -66,4 +67,4 @@ const DetailsHeader = props => {
   )
 }
 
-export default connect(mstp)(DetailsHeader)
+  export default connect(mstp)(DetailsHeader)

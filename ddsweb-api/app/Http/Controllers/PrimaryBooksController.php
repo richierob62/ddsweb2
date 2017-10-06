@@ -40,10 +40,6 @@ class PrimaryBooksController extends Controller
             $query = PrimaryBook::select(\DB::raw('primary_books.*'))
                 ->where($filter_array);
 
-            if ($filters && $filters['pub_month']) {
-                $query = PrimaryBook::pubMonthFilter($query, $filters['pub_month']);
-            }
-
             $query = $query->orderBy(PrimaryBook::orderField($sort_name), $sort_dir);
 
             return response()->json(['data' => $query->get()]);

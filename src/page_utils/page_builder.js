@@ -5,27 +5,34 @@ import PageDetails from './page_details'
 import PageContextMenu from './page_context_menu'
 import styled from 'styled-components'
 
-const Page = styled.div``
-
-const MainPageSection = styled.div`
-  display: flex;
-  flex-direction: column;
+const MainSectionLayout = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 150px;
+  grid-template-rows: 60px 1fr 2fr;
+  grid-template-areas: 'title title' 'list list' 'details context';
 `
 
-const DetailsSection = styled.div`display: flex;`
+const PageTitlePlacement = styled.div`grid-area: title;`
+const PageListPlacement = styled.div`grid-area: list;`
+const PageDetailsPlacement = styled.div`grid-area: details;`
+const PageContextMenuPlacement = styled.div`grid-area: context;`
 
 const buildPage = page => {
   return (
-    <Page>
-      <PageTitle page={page} />
-      <MainPageSection>
+    <MainSectionLayout>
+      <PageTitlePlacement>
+        <PageTitle page={page} />
+      </PageTitlePlacement>
+      <PageListPlacement>
         <PageList page={page} />
-        <DetailsSection>
-          <PageDetails page={page} />
-          <PageContextMenu page={page} />
-        </DetailsSection>
-      </MainPageSection>
-    </Page>
+      </PageListPlacement>
+      <PageContextMenuPlacement>
+        <PageContextMenu page={page} />
+      </PageContextMenuPlacement>
+      <PageDetailsPlacement>
+        <PageDetails page={page} />
+      </PageDetailsPlacement>
+    </MainSectionLayout>
   )
 }
 

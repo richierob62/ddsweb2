@@ -141,7 +141,7 @@ table > tbody tr td {
 .list-enter.list-enter-active {
   height: 260px;
   opacity: 1;
-  transition: all 500ms ease-in;
+  transition: all 750ms ease-in;
 }
 
 .list-leave {

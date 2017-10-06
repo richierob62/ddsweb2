@@ -51,6 +51,8 @@ class PrimaryBooksControllerTest extends TestCase
         $primary_book['name'] = '0000something-123name-something';
         $primary_book['code'] = '0000something-123code-something';
         $primary_book['pub_month'] = '2017-01-01';
+        $primary_book['sales_start'] = '2017-01-01';
+        $primary_book['sales_close'] = '2017-01-01';
         $primary_book['yppa_num'] = 'something-123yppa_num-something';
         $this->post('/edit_primary_book', $primary_book);
 
@@ -61,6 +63,8 @@ class PrimaryBooksControllerTest extends TestCase
                 'name' => '123name',
                 'code' => '123code',
                 'pub_month' => '2017-01-01',
+                'sales_start' => '2017-01-01',
+                'sales_close' => '2017-01-01',
                 'yppa_num' => '123yppa_num',
                 'id' => $primary_book['id'],
             ],

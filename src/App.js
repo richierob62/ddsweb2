@@ -4,30 +4,35 @@ import Menu from './components/Menu'
 import Main from './Main'
 import styled, { ThemeProvider } from 'styled-components'
 
-const theme = { foo: 'bar' }
+const theme = {}
+
+const MasterPageLayout = styled.div`
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  grid-template-rows: 60px 1fr;
+  grid-template-areas: 'header header' 'menu main';
+`
+
+const HeaderPlacement = styled.div`grid-area: header;`
+const MenuPlacement = styled.div`grid-area: menu;`
+const MainPlacement = styled.div`grid-area: main;`
 
 const App = props => {
   return (
     <ThemeProvider theme={theme}>
-      <div>
-        <Header />
-        <MainSection>
+      <MasterPageLayout>
+        <HeaderPlacement>
+          <Header />
+        </HeaderPlacement>
+        <MenuPlacement>
           <Menu />
+        </MenuPlacement>
+        <MainPlacement>
           <Main {...props} />
-        </MainSection>
-      </div>
+        </MainPlacement>
+      </MasterPageLayout>
     </ThemeProvider>
   )
 }
 
-const MainSection = styled.div`
-  display: flex;
-  width: 100%;
-`
-
-const Wrapper = styled(App)`
-  display: flex;
-  flex-direction: column;
-`
-
-export default Wrapper
+export default App

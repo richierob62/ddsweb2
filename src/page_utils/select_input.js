@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import actions from '../actions'
 import DropdownList from 'react-widgets/lib/DropdownList'
+import proper_camel from '../utils/proper_camel'
 
 const Wrapper = styled.div`display: flex;`
 
@@ -24,7 +25,7 @@ const comp = props => {
     ref_list,
     value,
     label,
-    action_word,
+    page,
     display,
     dispatch,
     field_name
@@ -33,7 +34,7 @@ const comp = props => {
   const data = ref_list.toJS()
 
   // select_handler
-  const select_handler_action_name = 'change' + action_word + 'Data'
+  const select_handler_action_name = 'change' + proper_camel(page) + 'Data'
   const select_handler = selected => {
     dispatch(
       actions[select_handler_action_name]({

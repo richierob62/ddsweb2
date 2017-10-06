@@ -2,10 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import actions from '../actions'
-import { getListTemplate, getCurrentFilters, getMode } from '../selectors'
+import { getListTemplateFields, getCurrentFilters, getMode } from '../selectors'
+import proper_camel from '../utils/proper_camel'
 
 const mstp = (state, { page }) => ({
-  list_template: getListTemplate(state[page]),
+  list_template: getListTemplateFields(state[page]),
   current_filters: getCurrentFilters(state[page]),
   page,
   mode: getMode(state[page])
@@ -36,7 +37,7 @@ const FilterCells = props => {
   const { dispatch, list_template, current_filters, page, mode } = props
 
   // change_handler
-  const change_handler_action_name = 'change' + page + 'Filter'
+  const change_handler_action_name = 'change' + proper_camel(page) + 'Filter'
   const change_handler = (column, e) =>
     dispatch(
       actions[change_handler_action_name]({

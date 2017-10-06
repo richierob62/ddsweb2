@@ -4,7 +4,6 @@ import CrudButtons from '../page_utils/crud_buttons'
 import styled from 'styled-components'
 
 const StyledContextMenu = styled.div`
-  width: 15%;
   margin-top: 10px;
   padding-left: 20px;
   color: rgb(162; 156; 156);

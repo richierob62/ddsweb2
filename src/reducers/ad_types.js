@@ -29,11 +29,14 @@ const initial_state = Immutable.fromJS({
       ref_table: 'page_types'
     }
   },
-  list_template: [
-    { field_name: 'code', width: '20%' },
-    { field_name: 'name', width: '30%' },
-    { field_name: 'page_type', width: '25%' }
-  ],
+  list_template: {
+    fields: [
+      { field_name: 'code', width: '20%' },
+      { field_name: 'name', width: '40%' },
+      { field_name: 'page_type', width: '40%' }
+    ],
+    width: '50%'
+  },  
   details_template: {
     current_tab: 'Main',
     tabs: [

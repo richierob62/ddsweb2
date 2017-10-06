@@ -4,10 +4,9 @@ import styled from 'styled-components'
 // import '../styles/styles.scss'
 
 const StyledMenu = styled.div`
-  width: 15%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   padding-left: 10px;
   align-self: flex-start;
 

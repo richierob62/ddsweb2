@@ -34,7 +34,8 @@ const mstp = (state, { page }) => {
   }
 }
 
-const DetailsWrapper = styled.div``
+const DetailsWrapper = styled.div`
+`
 
 const DetailsLayout = props => {
   const { current_tab_rows, current_record } = props

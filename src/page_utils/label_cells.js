@@ -4,13 +4,14 @@ import { connect } from 'react-redux'
 import actions from '../actions'
 import {
   getFieldDefinitions,
-  getListTemplate,
+  getListTemplateFields,
   getCurrentSort
 } from '../selectors'
+import proper_camel from '../utils/proper_camel'
 
 const mstp = (state, { page }) => ({
   fields_definitions: getFieldDefinitions(state[page]),
-  list_template: getListTemplate(state[page]),
+  list_template: getListTemplateFields(state[page]),
   current_sort: getCurrentSort(state[page]),
   page
 })
@@ -63,7 +64,7 @@ const LabelCells = props => {
   const sort_direction = current_sort.get('direction')
 
   // sort_handler
-  const sort_handler_action_name = 'change' + page + 'Sort'
+  const sort_handler_action_name = 'change' + proper_camel(page) + 'Sort'
   const sort_handler = payload =>
     dispatch(actions[sort_handler_action_name](payload))
 

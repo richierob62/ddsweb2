@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import actions from '../actions'
 import { getCurrentRecord, getMode } from '../selectors'
+import proper_camel from '../utils/proper_camel'
 
 const mstp = (state, { page }) => ({
   mode: getMode(state[page]),
@@ -26,7 +27,7 @@ const NewButton = props => {
   const { page, dispatch } = props
 
   // click_handler
-  const click_handler_action_name = 'begin' + page + 'Create'
+  const click_handler_action_name = 'begin' + proper_camel(page) + 'Create'
   const click_handler = () => dispatch(actions[click_handler_action_name]())
 
   return (
@@ -44,7 +45,7 @@ const EditButton = props => {
   const { page, dispatch } = props
 
   // click_handler
-  const click_handler_action_name = 'begin' + page + 'Edit'
+  const click_handler_action_name = 'begin' + proper_camel(page) + 'Edit'
   const click_handler = () => dispatch(actions[click_handler_action_name]())
 
   return (
@@ -62,7 +63,7 @@ const DuplicateButton = props => {
   const { page, dispatch } = props
 
   // click_handler
-  const click_handler_action_name = 'begin' + page + 'Duplicate'
+  const click_handler_action_name = 'begin' + proper_camel(page) + 'Duplicate'
   const click_handler = () => dispatch(actions[click_handler_action_name]())
 
   return (
@@ -80,7 +81,7 @@ const DeleteButton = props => {
   const { page, dispatch } = props
 
   // click_handler
-  const click_handler_action_name = 'begin' + page + 'Delete'
+  const click_handler_action_name = 'begin' + proper_camel(page) + 'Delete'
   const click_handler = () => dispatch(actions[click_handler_action_name]())
 
   return (
@@ -98,7 +99,7 @@ const SaveNewButton = props => {
   const { page, dispatch } = props
 
   // click_handler
-  const click_handler_action_name = 'do' + page + 'Create'
+  const click_handler_action_name = 'do' + proper_camel(page) + 'Create'
   const click_handler = () => dispatch(actions[click_handler_action_name]())
 
   return (
@@ -116,7 +117,7 @@ const SaveEditButton = props => {
   const { page, dispatch } = props
 
   // click_handler
-  const click_handler_action_name = 'do' + page + 'Edit'
+  const click_handler_action_name = 'do' + proper_camel(page) + 'Edit'
   const click_handler = () => dispatch(actions[click_handler_action_name]())
 
   return (
@@ -134,7 +135,7 @@ const ConfirmDeleteButton = props => {
   const { page, dispatch } = props
 
   // click_handler
-  const click_handler_action_name = 'do' + page + 'Delete'
+  const click_handler_action_name = 'do' + proper_camel(page) + 'Delete'
   const click_handler = () => dispatch(actions[click_handler_action_name]())
 
   return (
@@ -152,7 +153,7 @@ const CancelButton = props => {
   const { page, dispatch, mode } = props
 
   // click_handler
-  const click_handler_action_name = 'cancel' + page
+  const click_handler_action_name = 'cancel' + proper_camel(page)
   const click_handler = () => dispatch(actions[click_handler_action_name]())
 
   const btn_classes =

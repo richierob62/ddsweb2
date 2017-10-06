@@ -5,11 +5,12 @@ import actions from '../actions'
 import {
   getSelectedID,
   getFieldDefinitions,
-  getListTemplate,
+  getListTemplateFields,
   getFilteredList,
   refMatcher
 } from '../selectors'
 import table_names from '../reducers/table_list'
+import proper_camel from '../utils/proper_camel'
 
 const mstp = (state, { page }) => {
   const ref_matchers = table_names.reduce((acc, name) => {
@@ -19,7 +20,7 @@ const mstp = (state, { page }) => {
   return {
     list: getFilteredList(state[page]),
     field_definitions: getFieldDefinitions(state[page]),
-    list_template: getListTemplate(state[page]),
+    list_template: getListTemplateFields(state[page]),
     page,
     selected_id: getSelectedID(state[page]),
     ref_matchers
@@ -58,7 +59,7 @@ const DataRows = props => {
   } = props
 
   // select_handler
-  const select_handler_action_name = 'select' + page
+  const select_handler_action_name = 'select' + proper_camel(page)
   const select_handler = payload =>
     dispatch(actions[select_handler_action_name](payload))
 

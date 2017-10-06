@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import actions from '../actions'
+import proper_camel from '../utils/proper_camel'
 
 const Wrapper = styled.div`display: flex;`
 
@@ -35,10 +36,10 @@ const CheckboxWrapper = styled.span`
 `
 
 const comp = props => {
-  const { value, display, label, action_word, dispatch, field_name } = props
+  const { value, display, label, page, dispatch, field_name } = props
 
   // select_handler
-  const select_handler_action_name = 'change' + action_word + 'Data'
+  const select_handler_action_name = 'change' + proper_camel(page) + 'Data'
   const select_handler = () => {
     dispatch(
       actions[select_handler_action_name]({
