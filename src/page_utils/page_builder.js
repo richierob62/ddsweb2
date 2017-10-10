@@ -7,8 +7,8 @@ import styled from 'styled-components'
 
 const MainSectionLayout = styled.div`
   display: grid;
-  grid-template-columns: 1fr 150px;
-  grid-template-rows: 60px 1fr 2fr;
+  grid-template-columns: 1fr 80px;
+  grid-template-rows: 30px 1fr 2fr;
   grid-template-areas: 'title title' 'list list' 'details context';
 `
 

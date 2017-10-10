@@ -55,9 +55,10 @@ const initial_state = Immutable.fromJS({
       { field_name: 'sales_rep', width: '15%' }
     ],
     width: '100%'
-  },  
+  },
   details_template: {
     current_tab: '',
+    label_field: 'order_num',
     tabs: [
       {
         name: '',

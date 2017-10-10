@@ -2,12 +2,18 @@ import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import Tab from './details_tab'
-import { getCurrentRecord, getTabNames, getCurrentTab } from '../selectors'
+import {
+  getCurrentRecord,
+  getTabNames,
+  getCurrentTab,
+  getDetailsLabelField
+} from '../selectors'
 
 const mstp = (state, { page }) => ({
   current_record: getCurrentRecord(state[page]),
   tab_names: getTabNames(state[page]),
   current_tab: getCurrentTab(state[page]),
+  details_label_field: getDetailsLabelField(state[page]),
   page
 })
 
@@ -16,7 +22,6 @@ const HeaderWrapper = styled.div`
   font-weight: lighter;
   font-size: 1rem;
   margin-bottom: -10px;
-  text-align: center;
   border-bottom: 1px solid rgba(44, 62, 80, 0.5);
 `
 
@@ -31,40 +36,37 @@ const TabWrapper = styled.div`
 `
 
 const DetailsHeader = props => {
-  const { current_record, tab_names, current_tab, page, dispatch } = props
+  const {
+    current_record,
+    details_label_field,
+    tab_names,
+    current_tab,
+    page,
+    dispatch
+  } = props
 
   return (
     <div>
-      <HeaderWrapper>
-        {current_record ? current_record.get('account_num') ? (
-          `${current_record.get('name')} - Acc# ${current_record.get(
-            'account_num'
-          )}`
-        ) : current_record.get('name') ? (
-          `${current_record.get('name')}`
-        ) : (
-          ''
-        ) : (
-          'No current selection'
-        )}
-      </HeaderWrapper>
+      {current_record && (
+        <HeaderWrapper>{current_record.get(details_label_field)}</HeaderWrapper>
+      )}
       {current_record && (
         <TabWrapper>
-          {tab_names.size < 2 ? null : (
-            tab_names.map(name => (
-              <Tab
-                key={name}
-                name={name}
-                is_current={name === current_tab}
-                page={page}
-                dispatch={dispatch}
-              />
-            ))
-          )}
+          {tab_names.size < 2
+            ? null
+            : tab_names.map(name => (
+                <Tab
+                  key={name}
+                  name={name}
+                  is_current={name === current_tab}
+                  page={page}
+                  dispatch={dispatch}
+                />
+              ))}
         </TabWrapper>
       )}
     </div>
   )
 }
 
-  export default connect(mstp)(DetailsHeader)
+export default connect(mstp)(DetailsHeader)

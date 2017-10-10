@@ -36,9 +36,10 @@ const initial_state = Immutable.fromJS({
       { field_name: 'udac', width: '40%' }
     ],
     width: '40%'
-  },  
+  },
   details_template: {
     current_tab: '',
+    label_field: 'sequence',
     tabs: [
       {
         name: '',

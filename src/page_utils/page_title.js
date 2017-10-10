@@ -12,7 +12,7 @@ const StyledWrapper = styled.h1`
   font-weight: lighter;
   font-size: 1.5rem;
   border-bottom: 1px solid rgba(128, 128, 128, 0.47);
-  margin-bottom: 10px;
+  margin-bottom: 0;
 `
 
 const PageTitle = ({ title }) => <StyledWrapper>{title}</StyledWrapper>

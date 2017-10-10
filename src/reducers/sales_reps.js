@@ -59,9 +59,10 @@ const initial_state = Immutable.fromJS({
       { field_name: 'zip', width: '8%' }
     ],
     width: '100%'
-  },  
+  },
   details_template: {
     current_tab: 'Contact',
+    label_field: 'name',
     tabs: [
       {
         name: 'Contact',

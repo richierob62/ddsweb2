@@ -1,5 +1,4 @@
 import React from 'react'
-import styled from 'styled-components'
 import { connect } from 'react-redux'
 import {
   getCurrentRecord,
@@ -34,19 +33,14 @@ const mstp = (state, { page }) => {
   }
 }
 
-const DetailsWrapper = styled.div`
-`
-
 const DetailsLayout = props => {
   const { current_tab_rows, current_record } = props
 
-  return current_record === null ? null : (
-    <DetailsWrapper>
-      {current_tab_rows.map((row, idx) => {
-        return <DetailsRow key={idx} row_fields={row} {...props} />
-      })}
-    </DetailsWrapper>
-  )
+  return current_record === null
+    ? null
+    : current_tab_rows.map((row, idx) => (
+        <DetailsRow key={idx} row_fields={row} {...props} />
+      ))
 }
 
 export default connect(mstp)(DetailsLayout)

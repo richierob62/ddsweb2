@@ -36,9 +36,10 @@ const initial_state = Immutable.fromJS({
       { field_name: 'page_type', width: '40%' }
     ],
     width: '50%'
-  },  
+  },
   details_template: {
     current_tab: 'Main',
+    label_field: 'name',
     tabs: [
       {
         name: 'Main',

@@ -2,6 +2,15 @@ import React from 'react'
 import styled from 'styled-components'
 import DetailsHeader from '../page_utils/details_header'
 import DetailsLayout from '../page_utils/details_layout'
+import { getCurrentRecord } from '../selectors'
+import { connect } from 'react-redux'
+
+const mstp = (state, { page }) => {
+  return {
+    current_record: getCurrentRecord(state[page]),
+    page
+  }
+}
 
 const DetailsWrapper = styled.div`
   display: flex;
@@ -14,11 +23,12 @@ const DetailsWrapper = styled.div`
 }
 `
 
-const PageDetails = ({ page }) => (
-  <DetailsWrapper>
-    <DetailsHeader page={page} />
-    <DetailsLayout page={page} />
-  </DetailsWrapper>
-)
+const PageDetails = ({ page, current_record }) =>
+  current_record && (
+    <DetailsWrapper>
+      <DetailsHeader page={page} />
+      <DetailsLayout page={page} />
+    </DetailsWrapper>
+  )
 
-export default PageDetails
+export default connect(mstp)(PageDetails)

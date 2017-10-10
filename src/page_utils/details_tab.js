@@ -12,7 +12,7 @@ const Tab = styled.div`
   margin-bottom: ${props => (props.is_current ? '0' : 'inherit')};
   padding-top: ${props => (props.is_current ? '17px' : 'inherit')};
   padding-bottom: 0px;
-  transition: all 200ms ease-in;
+  transition: all 250ms ease-in;
   font-size: .8rem;
 `
 

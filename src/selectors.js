@@ -54,6 +54,10 @@ export const getTabNames = state =>
 export const getCurrentTab = state =>
   state.getIn(['details_template', 'current_tab'])
 
+
+export const getDetailsLabelField = state =>
+  state.getIn(['details_template', 'label_field'])
+
 export const getCurrentTabRows = state => {
   const current_tab = getCurrentTab(state)
   return state

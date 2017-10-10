@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 const StyledContextMenu = styled.div`
   margin-top: 10px;
-  padding-left: 20px;
+  padding-left: 10px;
   color: rgb(162; 156; 156);
   font-weight: 100;
   font-size: 0.9rem;
