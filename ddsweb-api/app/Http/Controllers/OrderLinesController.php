@@ -127,6 +127,9 @@ class OrderLinesController extends Controller
         $order_line->save();
 
         $this->checkFieldOrderLineValues($order_line->id, $order_line->udac_id, 'EDIT');
+
+        $this->renumberLines($order_line->order_id);
+        
         return response()->json([
             'updated' => true,
             'data' => $order_line->toArray(),
