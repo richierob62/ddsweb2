@@ -96,7 +96,13 @@ function* saveNewToDatabase(reducer) {
   if (reducer === 'customers') {
     // get a new account number (customer)
     const acc_num = yield getNextCustomerAccountNumber()
-    payload.account_num = acc_num
+    payload.account_num = String(acc_num)
+  }
+
+  if (reducer === 'orders') {
+    // get a new order number
+    const order_num = yield getNextOrderNumber()
+    payload.order_num = String(order_num)
   }
 
   const token = yield getToken()
@@ -107,6 +113,7 @@ function* saveNewToDatabase(reducer) {
     yield put(act[closing_action](returned.errors))
   } else {
     closing_action = 'save' + proper_camel(reducer) + 'Completed'
+
     yield put(act[closing_action](returned.data))
   }
 }
@@ -155,6 +162,12 @@ function* deleteItem(reducer) {
 
 function* getNextCustomerAccountNumber() {
   const url = domain + 'next_customer_number'
+  const token = yield getToken()
+  return yield call(postApi, url, {}, token)
+}
+
+function* getNextOrderNumber() {
+  const url = domain + 'next_order_number'
   const token = yield getToken()
   return yield call(postApi, url, {}, token)
 }
