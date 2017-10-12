@@ -142,6 +142,8 @@ class OrderLinesController extends Controller
             $this->checkFieldOrderLineValues($id, $order_line->udac_id, 'DEL');
             $order_line->delete();
 
+            $this->renumberLines($order_line->order_id);
+
             return response()->json([
                 'deleted' => true,
                 'id' => $id,

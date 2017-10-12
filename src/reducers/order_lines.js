@@ -26,6 +26,7 @@ const initial_state = Immutable.fromJS({
     sequence: {
       label: 'Sequence',
       input_type: 'text',
+      readonly: true,
       ref_table: undefined
     }
   },
