@@ -35,7 +35,7 @@ const generateTableReducer = (table_name, initial_state) => {
             })
           if (field.get('input_type') === 'date')
             return Object.assign({}, acc, {
-              [index]: undefined
+              [index]: new Date()
             })
           return Object.assign({}, acc, {
             [index]: ''
