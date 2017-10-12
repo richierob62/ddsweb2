@@ -360,6 +360,8 @@ const pageChangeWatcher = function*() {
   while (forever) {
     yield take('PAGE_CHANGE')
 
+    yield call(() => window.scrollTo(0, 0))
+
     const forks = []
     const page = yield getNewPage()
     const reducer_name = page.replace('/', '')
