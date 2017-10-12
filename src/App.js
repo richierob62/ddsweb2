@@ -8,6 +8,10 @@ const theme = {}
 
 const MasterPageLayout = styled.div`
   display: grid;
+  max-width: 1200px;
+  border: 1px solid #d9ceca;
+  box-shadow: 10px 0px 44px rgba(118, 129, 141, 0.33);  
+  margin: auto;  
   grid-template-columns: 150px 1fr;
   grid-template-rows: 60px 1fr;
   grid-template-areas: 'header header' 'menu main';

@@ -89,13 +89,8 @@ const Menu = () => (
           </StyledNavLink>
         </li>
       </ul>
-      <h5>Other Files</h5>
+      <h5>References</h5>
       <ul>
-        <li>
-          <StyledNavLink to="/ad_types" activeClassName="active-navlink ">
-            AdTypes
-          </StyledNavLink>
-        </li>
         <li>
           <StyledNavLink to="/categories" activeClassName="active-navlink ">
             Categories
@@ -107,11 +102,6 @@ const Menu = () => (
             activeClassName="active-navlink "
           >
             Comp Plans
-          </StyledNavLink>
-        </li>
-        <li>
-          <StyledNavLink to="/fields" activeClassName="active-navlink ">
-            Data Fields (Ads)
           </StyledNavLink>
         </li>
         <li>
@@ -145,11 +135,6 @@ const Menu = () => (
           </StyledNavLink>
         </li>
         <li>
-          <StyledNavLink to="/permissions" activeClassName="active-navlink ">
-            Permissions
-          </StyledNavLink>
-        </li>
-        <li>
           <StyledNavLink to="/primary_books" activeClassName="active-navlink ">
             Primary Books
           </StyledNavLink>
@@ -164,9 +149,35 @@ const Menu = () => (
             Source Books
           </StyledNavLink>
         </li>
+      </ul>
+      <h5>Ad Definitions</h5>
+      <ul>
+        <li>
+          <StyledNavLink to="/ad_types" activeClassName="active-navlink ">
+            AdTypes
+          </StyledNavLink>
+        </li>
+        <li>
+          <StyledNavLink to="/schemas" activeClassName="active-navlink ">
+            Ad Schemas
+          </StyledNavLink>
+        </li>
         <li>
           <StyledNavLink to="/udacs" activeClassName="active-navlink ">
             Udacs
+          </StyledNavLink>
+        </li>
+        <li>
+          <StyledNavLink to="/fields" activeClassName="active-navlink ">
+            Available Fields
+          </StyledNavLink>
+        </li>
+        <li>
+          <br />
+        </li>
+        <li>
+          <StyledNavLink to="/permissions" activeClassName="active-navlink ">
+            Permissions
           </StyledNavLink>
         </li>
       </ul>

@@ -37,7 +37,7 @@ const initial_state = Immutable.fromJS({
     tabs: [
       {
         name: 'Main',
-        rows: [['code', 'name']]
+        rows: [['code'], ['name']]
       }
     ]
   },

@@ -56,7 +56,7 @@ const initial_state = Immutable.fromJS({
       ]
     },
     ref_table: {
-      label: 'Table',
+      label: 'Ref Table',
       input_type: 'text',
       ref_table: undefined
     },
@@ -77,7 +77,7 @@ const initial_state = Immutable.fromJS({
       { field_name: 'name', width: '30%' },
       { field_name: 'description', width: '50%' }
     ],
-    width: '40%'
+    width: '50%'
   },
   details_template: {
     current_tab: '',
