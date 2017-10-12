@@ -113,8 +113,8 @@ function* saveNewToDatabase(reducer) {
     yield put(act[closing_action](returned.errors))
   } else {
     closing_action = 'save' + proper_camel(reducer) + 'Completed'
-
     yield put(act[closing_action](returned.data))
+    yield loadFilteredAndSortedData(reducer) 
   }
 }
 
@@ -138,6 +138,7 @@ function* saveEditToDatabase(reducer) {
   } else {
     closing_action = 'save' + proper_camel(reducer) + 'Completed'
     yield put(act[closing_action](returned.data))
+    yield loadFilteredAndSortedData(reducer)     
   }
 }
 
@@ -157,6 +158,7 @@ function* deleteItem(reducer) {
   } else {
     closing_action = 'delete' + proper_camel(reducer) + 'Completed'
     yield put(act[closing_action](returned.data))
+    yield loadFilteredAndSortedData(reducer) 
   }
 }
 
@@ -212,8 +214,8 @@ function* handleSort(reducer, action) {
       : 'ASC'
 
   const sortFunc = (a, b) => {
-    const first = a.toUpperCase()
-    const second = b.toUpperCase()
+    const first = typeof a === 'string' ? a.toUpperCase() : a
+    const second = typeof b === 'string' ? b.toUpperCase() : b
     const multiplier = new_direction === 'ASC' ? 1 : -1
     if (first < second) {
       return -1 * multiplier
